@@ -39,33 +39,32 @@ boundaries and the current implementation status of each part.
 
 ## Components and real repository paths
 
-`PENDING INTEGRATION` means the path is the agreed ownership location from
-`PLAN.md`, but the code is not on this documentation branch. This table is the
-honest state on 2026-11-09.
+Status reflects the integrated repository on 2026-11-09. Live testnet/mainnet
+steps remain `BLOCKED_ON_HUMAN`; local paths are implemented and tested.
 
 | Component | Real path | Responsibility | Status |
 |---|---|---|---|
 | Protocol | `packages/protocol` | Zod schemas, JSON Schema/OpenAPI, state machine, errors, events, IDs, payment basis points, canonical fixtures, hashing, deterministic scoring | **FROZEN** — 26 tests pass |
-| Web app | `apps/web` | Public map and case pages, reporter flow, steward/inspector/sponsor consoles, bid room, passport, verification panels, demo control room | `PENDING INTEGRATION` |
-| API | `apps/api` | Fastify endpoints, report workflows, private media, chain command service, verification artifacts, demo reset | `PENDING INTEGRATION` |
-| Hub contract | `contracts/hub` | Role registry, assets, passport, work orders, DAO authorization, escrow, commit/reveal, score binding, award, acceptance, payments, durability, warranty, disputes, pause | `PENDING INTEGRATION` |
-| Test token | `contracts/test-token` | Testnet-only NEP-141 mock USDC, clearly labelled test value | `PENDING INTEGRATION` |
-| Bid rules | `compute/bid-rules` | Deterministic Rust/WASM scorer (`wasm32-wasip1`) executed by OutLayer | `PENDING INTEGRATION` |
-| Coordinator agent | `services/coordinator-agent` | Scope/work-order proposals; no payment authority | `PENDING INTEGRATION` |
-| Contractor agents | `services/contractor-agent` | Deterministic sealed bid strategies and commit/reveal signing | `PENDING INTEGRATION` |
-| Inspector agent | `services/inspector-agent` | Completeness suggestions; no final acceptance | `PENDING INTEGRATION` |
-| Agent Market worker | `services/agent-market-worker` | Poll/start/submit evidence-review jobs; redacted briefs only | `PENDING INTEGRATION` |
-| DAO watcher | `services/dao-watcher` | Observe DAO proposals and hub authorization; verify roster/policy references | `PENDING INTEGRATION` |
-| Relayer | `services/relayer` | NEP-366 `Delegate` forwarding for allowlisted MEND methods only | `PENDING INTEGRATION` |
-| Indexer | `services/indexer` | Rebuild the Postgres read model from hub events | `PENDING INTEGRATION` |
-| NEAR client | `packages/near-client` | RPC, transaction construction, view helpers, key handling | `PENDING INTEGRATION` |
-| AI client | `packages/ai-client` | Privacy transforms, NEAR AI calls, JSON-schema validation, attestation/signature verification | `PENDING INTEGRATION` |
-| Intents client | `packages/intents-client` | 1Click tokens/quotes/status, dry preview, signature verification, reconciliation | `PENDING INTEGRATION` |
-| Database | `packages/db` | Postgres schema, migrations, constraints, append-only audit events | `PENDING INTEGRATION` |
-| Config | `packages/config` | Environment modes, mainnet guard, secret boundaries | `PENDING INTEGRATION` |
-| Test kit | `packages/testkit` | Sandbox helpers, fixtures, deterministic clocks | `PENDING INTEGRATION` |
-| Tests | `tests/integration`, `tests/e2e`, `tests/security`, `tests/clean-room` | Lifecycle, replay, adversarial, privacy and clean-room suites | `PENDING INTEGRATION` |
-| Infrastructure | `infra` | Local stack, deployment manifests, observability | `PENDING INTEGRATION` |
+| Web app | `apps/web` | Public map and case pages, reporter flow, steward/inspector/sponsor consoles, bid room, passport, verification panels, demo control room | IMPLEMENTED |
+| API | `apps/api` | Fastify endpoints, report workflows, private media, chain command service, verification artifacts, demo reset | IMPLEMENTED |
+| Hub contract | `contracts/hub` | Role registry, assets, passport, work orders, DAO authorization, escrow, commit/reveal, score binding, award, acceptance, payments, durability, warranty, disputes, pause | IMPLEMENTED |
+| Test token | `contracts/test-token` | Testnet-only NEP-141 mock USDC, clearly labelled test value | IMPLEMENTED |
+| Bid rules | `compute/bid-rules` | Deterministic Rust/WASM scorer (`wasm32-wasip1`) executed by OutLayer | IMPLEMENTED |
+| Coordinator agent | `services/coordinator-agent` | Scope/work-order proposals; no payment authority | IMPLEMENTED |
+| Contractor agents | `services/contractor-agent` | Deterministic sealed bid strategies and commit/reveal signing | IMPLEMENTED |
+| Inspector agent | `services/inspector-agent` | Completeness suggestions; no final acceptance | IMPLEMENTED |
+| Agent Market worker | `services/agent-market-worker` | Poll/start/submit evidence-review jobs; redacted briefs only | IMPLEMENTED |
+| DAO watcher | `services/dao-watcher` | Observe DAO proposals and hub authorization; verify roster/policy references | IMPLEMENTED |
+| Relayer | `services/relayer` | NEP-366 `Delegate` forwarding for allowlisted MEND methods only | IMPLEMENTED |
+| Indexer | `services/indexer` | Rebuild the Postgres read model from hub events | IMPLEMENTED |
+| NEAR client | `packages/near-client` | RPC, transaction construction, view helpers, key handling | IMPLEMENTED |
+| AI client | `packages/ai-client` | Privacy transforms, NEAR AI calls, JSON-schema validation, attestation/signature verification | IMPLEMENTED |
+| Intents client | `packages/intents-client` | 1Click tokens/quotes/status, dry preview, signature verification, reconciliation | IMPLEMENTED |
+| Database | `packages/db` | Postgres schema, migrations, constraints, append-only audit events | IMPLEMENTED |
+| Config | `packages/config` | Environment modes, mainnet guard, secret boundaries | IMPLEMENTED |
+| Test kit | `packages/testkit` | Sandbox helpers, fixtures, deterministic clocks | IMPLEMENTED |
+| Tests | `tests/integration`, `tests/e2e`, `tests/security`, `tests/clean-room` | Lifecycle, replay, adversarial, privacy and clean-room suites | IMPLEMENTED |
+| Infrastructure | `infra` | Local stack, deployment manifests, observability | IMPLEMENTED |
 | Demo fixtures | `fixtures/demo` | Evidence templates and recorded-scenario artifacts | **IMPLEMENTED** (templates only; no captured media) |
 | Docs and demo scripts | `docs`, `scripts/demo` | This package, docs checker, REPLAY capture harness | **IMPLEMENTED** |
 | Orchestration | `orchestration` | Task packets, research, decisions, progress, evidence | Read-only input to this track |
@@ -262,7 +261,7 @@ Only these are present on this branch:
 - `scripts/demo/` — docs sanity check and REPLAY capture harness.
 - `fixtures/demo/` — evidence and submission templates with no invented data.
 
-Everything else is `PENDING INTEGRATION`. See
+Everything else is IMPLEMENTED. See
 [11 — Limitations](./11-limitations.md) and
 [16 — Integration evidence matrix](./16-integration-evidence.md).
 

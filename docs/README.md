@@ -6,13 +6,11 @@ This directory is the product documentation for MEND. It describes the intended
 integrated system, the frozen protocol, and — explicitly — which claims are proven
 today, which are unavailable, and which are waiting on a human.
 
-> **Repository status (2026-11-09):** this branch contains `packages/protocol`,
-> `docs/`, `scripts/demo/` and `fixtures/demo/`. The web app, API, contracts,
-> compute, services and infrastructure live in sibling worktrees and are
-> integrated by the orchestrator. Paths for those components are real repository
-> paths from `PLAN.md`, but they are labelled `PENDING INTEGRATION` until merged.
-> There are no live testnet transactions, no hosted demo, no demo video and no
-> collected repair media yet. Do not read this documentation as evidence that
+> **Repository status (2026-11-09):** the protocol, contracts, AI/compute, API,
+> web app, agents, payments client, infrastructure and docs are integrated on
+> this branch and covered by the evidence in `orchestration/reports/`. Live
+> testnet transactions, a hosted demo, a narrated demo video and collected
+> repair media do not exist yet. Do not read this documentation as evidence that
 > those exist.
 
 ## Start here
@@ -70,7 +68,6 @@ more fully in [16 — Integration evidence matrix](./16-integration-evidence.md)
 |---|---|
 | `FROZEN` | Protocol-level behaviour fixed and tested in this branch. |
 | `IMPLEMENTED` | Present in this branch and covered by the command named next to it. |
-| `PENDING INTEGRATION` | Owned by another worktree; path is specified, but the code is not on this branch. |
 | `BLOCKED_ON_HUMAN` | Requires a person to supply credentials, funds, consent, approval or a signature. |
 | `NOT COLLECTED` | Physical-world evidence or media that does not exist yet. |
 

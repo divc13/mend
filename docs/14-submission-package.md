@@ -51,7 +51,7 @@ honestly.
 
 | NEAR capability | How MEND uses it | Evidence label |
 |---|---|---|
-| **Hub contract** (`contracts/hub`) | Assets, work orders, role registry, DAO authorization, sealed bids, score hash binding, escrow, 90/10 payment, durability, warranty, disputes, pause | Design frozen; contract `PENDING INTEGRATION` |
+| **Hub contract** (`contracts/hub`) | Assets, work orders, role registry, DAO authorization, sealed bids, score hash binding, escrow, 90/10 payment, durability, warranty, disputes, pause | Implemented; 30 tests + WASM build |
 | **Non-transferable passport** | NEP-171 token owned by the hub; every transfer/approval/burn path fails; history is public; no legal title | Source-verified; runtime `BLOCKED_ON_HUMAN` |
 | **NEP-141 escrow** | `ft_transfer_call` into the hub; exact token/sponsor/amount; underfund refund, overfund excess refund, duplicate refund | Source-verified; testnet `BLOCKED_ON_HUMAN` |
 | **Sputnik DAO v2** | Approved `FunctionCall` proposal pushes `dao_authorize`; hub trusts only `config.dao` as predecessor | Live contracts/read path **VERIFIED**; DAO deployment `BLOCKED_ON_HUMAN` |

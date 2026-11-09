@@ -8,8 +8,8 @@ and what is **blocked on a human**. It never presents a pending path as working.
 | Environment | Status on 2026-11-09 | What exists |
 |---|---|---|
 | Docs/protocol checks | **VERIFIED NOW** | `npm ci`, protocol tests, typecheck, docs checker |
-| Local web/API/workers stack | `PENDING INTEGRATION` | Paths agreed; compose file and apps not on this branch |
-| REPLAY mode | `PENDING INTEGRATION` | Fixtures and design exist; UI/API not on this branch |
+| Local web/API/workers stack | **IMPLEMENTED** | Compose file and apps integrated; config validated |
+| REPLAY mode | **IMPLEMENTED** | Demo room, fixtures, 90s recording |
 | NEAR testnet deployment | `BLOCKED_ON_HUMAN` | No accounts, faucet funds, token or hub deployed |
 | OutLayer execution | `BLOCKED_ON_HUMAN` | No funded testnet execution or published MEND WASM |
 | Sputnik DAO | `BLOCKED_ON_HUMAN` | No DAO, proposal or council |
@@ -51,12 +51,11 @@ node scripts/demo/capture-replay-demo.mjs
 Expected results are recorded in the [root README](../README.md#do-x--see-y)
 and in [16 — Integration evidence](./16-integration-evidence.md).
 
-## Local stack (pending integration)
+## Local stack
 
-The intended one-command stack is:
+The one-command stack is:
 
 ```bash
-# PENDING INTEGRATION — file does not exist on this branch yet
 docker compose -f infra/docker-compose.yml up -d
 ```
 

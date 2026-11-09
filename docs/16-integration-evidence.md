@@ -166,7 +166,7 @@ Sources: `orchestration/research/R0-E-near-platform.md`. Access date 2026-11-09.
 | F11 | Runtime gas/meta-tx edge cases are proven | **UNAVAILABLE** | Source-verified only; no sandbox/testnet execution |
 | F12 | Hub must be registered with the token before funding | **VERIFIED** | Source; deployment prerequisite |
 | F13 | Target network supports protocol 85+ and gas keys | **BLOCKED_ON_HUMAN** | Must be queried before provisioning |
-| F14 | MEND contract unit/integration tests pass | **BLOCKED_ON_HUMAN** | Contracts are `PENDING INTEGRATION`; not on this branch |
+| F14 | MEND contract unit/integration tests pass | **VERIFIED (local)** | Hub 30 + token 5 tests; WASM builds |
 
 **Product rule:** call the flow “walletless reporting” and “gasless actions where
 valid”, not “gasless funding”. Never imply the passport is legal ownership.
@@ -177,10 +177,10 @@ valid”, not “gasless funding”. Never imply the passport is legal ownership
 |---|---|---|---|
 | G1 | Protocol schemas, state machine, accounting, scoring and fixtures pass locally | **VERIFIED (local)** | `npm test -w @mend/protocol` → 4 files, 26 tests passed |
 | G2 | Documentation and relative links are valid | **VERIFIED (local)** | `node scripts/demo/check-docs.mjs` |
-| G3 | Web app, API, contracts, compute, services | `PENDING INTEGRATION` | Not on this branch |
+| G3 | Web app, API, contracts, compute, services | **VERIFIED (local)** | Integrated on `main`; G1/G2/G4 evidence |
 | G4 | Live testnet lifecycle with real links | **BLOCKED_ON_HUMAN** | No accounts/funds/deployment |
 | G5 | Hosted demo | **BLOCKED_ON_HUMAN** | No deployment credentials |
-| G6 | Demo video | **BLOCKED_ON_HUMAN / NOT COLLECTED** | Capture depends on the integrated app and ffmpeg |
+| G6 | Demo video | **RECORDED (silent)** | `fixtures/demo/captures/mend-replay-demo.mp4`, 91.6 s; narration/captions pending human |
 | G7 | Real repair media and durability inspection | **BLOCKED_ON_HUMAN / NOT COLLECTED** | No repair performed; no consent |
 | G8 | Security audit or accessibility certification | **UNAVAILABLE** | None performed |
 | G9 | City adoption or partnership | **UNAVAILABLE** | No such relationship exists or is claimed |

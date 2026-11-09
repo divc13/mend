@@ -125,14 +125,14 @@ pending integration.
 
 | Test | Status |
 |---|---|
-| Automated axe scan on public pages | `PENDING INTEGRATION` |
-| Keyboard-only walkthrough | `PENDING INTEGRATION` |
-| Screen-reader smoke test | `PENDING INTEGRATION` |
-| 200% / 400% zoom | `PENDING INTEGRATION` |
-| Reduced-motion check | `PENDING INTEGRATION` |
-| Mobile viewport check | `PENDING INTEGRATION` |
-| Caption/transcript review | `PENDING INTEGRATION` |
-| Color-contrast audit | `PENDING INTEGRATION` |
+| Automated axe scan on public pages | **PASS** — no serious/critical violations (Playwright) |
+| Keyboard-only walkthrough | **PASS** — Playwright keyboard navigation |
+| Screen-reader smoke test | **NOT RUN** — manual human step |
+| 200% / 400% zoom | **NOT RUN** — manual human step |
+| Reduced-motion check | **IMPLEMENTED** — reduced-motion media query |
+| Mobile viewport check | **PASS** — 390×844 Playwright project |
+| Caption/transcript review | **PENDING** — demo video is silent |
+| Color-contrast audit | **PARTIAL** — axe contrast rules pass on public pages |
 
 ## Writing style
 

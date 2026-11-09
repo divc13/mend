@@ -1,19 +1,22 @@
 # 15 — Demo capture plan
 
-The demo is captured from the real integrated web app, not from slides. The
-capture harness is written; the recording is **PENDING** because the web app is not
-merged into this worktree and the Playwright package is not resolvable here.
+The demo was captured from the real integrated web app, not from slides. The
+recording is **RECORDED** in `fixtures/demo/captures/mend-replay-demo.mp4`
+(91.6 s, H.264, 1920×1080, silent). Narration, captions and real repair media
+remain human production steps.
 
 ## Current status (2026-11-09)
 
 | Prerequisite | Status | Evidence |
 |---|---|---|
-| Web app in this worktree | **MISSING** | `apps/web` is not on `track/docs-demo`; it is `PENDING INTEGRATION` |
-| Playwright module | **MISSING** | `require.resolve('playwright')` fails in this worktree and the main repo |
-| Playwright CLI | Available through `npx` only | `npx playwright --version` printed `1.65.0`, but it is not a project dependency |
-| ffmpeg | **MISSING** | `which ffmpeg` returned nothing; `ffmpeg -version` was not available |
-| REPLAY fixtures/UI | **PENDING INTEGRATION** | Fixtures exist in protocol; UI does not |
-| Recording | **PENDING** | No video file exists |
+| Web app in this worktree | **PRESENT** | `apps/web` integrated on `main`; build passes |
+| Playwright module | **PRESENT** | `tests/node_modules/playwright`; E2E 32 passed |
+| Playwright CLI | Available | `npm --prefix tests run test:e2e` |
+| ffmpeg | Available for capture via `ffmpeg-static` | MP4 produced locally; not a repo dependency |
+| REPLAY fixtures/UI | **PRESENT** | Demo room with 9 scenarios; mode badge verified |
+| Recording | **RECORDED** | `mend-replay-demo.mp4`, 5 scenarios, manifest |
+| Narration / captions | **PENDING (human)** | Silent recording only |
+| Real repair media | **BLOCKED_ON_HUMAN** | No repair performed; no consent |
 
 The harness is deliberately fail-soft: it reports `PENDING` with a reason instead
 of producing a fake recording.

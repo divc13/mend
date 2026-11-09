@@ -83,7 +83,7 @@ orchestrator actually verified from what still needs a human or a live network.
 | Request an Intents dry quote | Quote, fees and destination, labelled `DRY QUOTE — NOT A PAYMENT` | Read-only API **VERIFIED**; live deposit `BLOCKED_ON_HUMAN` |
 | Approve a tiny mainnet Intents deposit | Real mainnet execution with an explorer link | `BLOCKED_ON_HUMAN` |
 | Run an Agent Market evidence-review job | External completeness findings; a human still accepts | `BLOCKED_ON_HUMAN` |
-| Record the demo | A 90-second video from the integrated REPLAY app | `BLOCKED_ON_HUMAN` / `NOT COLLECTED` |
+| Record the demo | A 90-second video from the integrated REPLAY app | **RECORDED (silent)** — narration/captions pending human |
 
 ### REPLAY with no credentials
 

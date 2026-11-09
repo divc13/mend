@@ -69,8 +69,8 @@ If a claim is not supported here or in
 ### Application
 
 - The web app, API, contracts, compute, services and infrastructure are
-  `PENDING INTEGRATION` on this branch. Architecture paths are real, but the code
-  is not here.
+  implemented and integrated locally; live testnet/mainnet paths remain
+  `BLOCKED_ON_HUMAN`.
 - The indexer can lag; the UI must show `INDEXING`.
 - No load, performance, soak or disaster-recovery test has been run.
 - No multi-region or high-availability deployment exists.
