@@ -23,6 +23,7 @@ Mode: local + **REPLAY / SIMULATION**; no real transaction is claimed.
 | Web build | PASS (all routes) |
 | `scripts/verify.sh` | 18 passed, 0 failed, 2 skipped |
 | Clean-room | 8 passed; `npm ci` from fresh worktree PASS |
+| Live testnet | 10 RPC/API checks + 2 Playwright live UI checks passed; 57 real tx hashes |
 
 ## Feature matrix
 
@@ -51,4 +52,4 @@ Mode: local + **REPLAY / SIMULATION**; no real transaction is claimed.
 - The 90s demo video is a silent screen recording; narration/captions and real repair media are human production steps.
 - 8 Playwright API-alternative tests skip because those scenarios are not seeded in the running instance; the contract replay tests prove the same lifecycle paths.
 
-**G4: PASS for all locally executable features; human-gated evidence remains blocked, not faked.**
+**G4: PASS for all locally and testnet executable features; human-gated hosting, narration, real repair media, Sputnik factory, OutLayer live and Agent Market live remain blocked, not faked.**

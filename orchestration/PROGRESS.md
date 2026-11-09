@@ -1,7 +1,7 @@
 # MEND — Progress Tracker
 
 Last updated: 2026-11-09 18:30 (local)
-Overall: **98%** — full local product + real NEAR testnet lifecycle verified.
+Overall: **99%** — full local product + real NEAR testnet lifecycle + live wallet UI verified.
 Current wave / gate: **G3 PASS with caveats; G5 blocked on human**
 Leader: opencode-go/deepseek-v4.1-flash · Workers: #high, visible iTerm2 tabs (closed when done)
 
@@ -54,6 +54,7 @@ Leader: opencode-go/deepseek-v4.1-flash · Workers: #high, visible iTerm2 tabs (
 | Quality | 55 |
 | E2E | 32 passed, 8 honest skips |
 | Verify script | 18 passed, 0 failed, 2 skipped |
+| Live testnet suite | 10 RPC/API checks + 2 Playwright live UI checks passed |
 
 ## Gates
 
