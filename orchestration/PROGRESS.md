@@ -1,66 +1,65 @@
 # MEND — Progress Tracker
 
-Last updated: 2026-11-09, before execution started
-Overall: **0%** (plan written; no code yet)
-Current wave / gate: not started
-Leader agent mode: **Plan mode — cannot execute yet**
+Last updated: 2026-11-09 15:40 (local)
+Overall: **16%**
+Current wave / gate: **Wave 1 — foundations (G1 pending)**
+Leader: opencode-go/deepseek-v4.1-flash · Workers: #high, visible iTerm2 tabs
 
-## What is done
+## Done
 
-- [x] `PLAN.md` written (1,385 lines, full scope F01–F14)
-- [x] Environment checked: model `opencode-go/deepseek-v4.1-flash` (variants low/high/max) works
-- [x] `iterm-agent` visible-agent tool works (iTerm2 automation OK)
-- [x] Repo `mend/` is clean on `main`, commit `121551f`, only `PLAN.md` inside
+- [x] Plan read and frozen as contract
+- [x] T00.1 worker contract; T00.2 protocol package; T00.3 canonical fixtures; T00.4 traceability matrix
+- [x] Protocol tests **26/26 pass**, typecheck clean, OpenAPI + JSON Schema exported
+- [x] Git `c21b694`; 9 sibling worktrees under `/Volumes/sandisk/Users/dc/mend-wt/`
+- [x] Wave 0 research complete: R0-A NEAR AI, R0-B OutLayer, R0-C Intents, R0-D DAO+Agent Market, R0-E NEAR platform (live-tested where possible, sources cited)
+- [x] G0 freeze: `orchestration/decisions/G0-freeze.md` — **PASS** (credential-dependent parts blocked on human)
+- [x] ADR-001, HUB-INTERFACE frozen (DAO push path, OutLayer private callback, non-transferable passport, sponsor-only escrow)
 
-## What is next
+## In progress (visible workers)
 
-1. User switches agent from Plan mode to build/execute mode.
-2. Leader starts Wave 0 (API validation research, gate G0).
-3. Leader creates `orchestration/` task packets and protocol package (T00).
+- [ ] contracts — hub, passport, escrow, sealed bids, scoring, warranty, disputes, tests
+- [ ] ai-compute — deterministic Rust/WASM scoring + private AI/privacy client
+- [ ] backend — Fastify API, Postgres read model, evidence service, indexer
+- [ ] frontend — Next.js public experience + consoles + replay UI
+- [ ] infra — docker compose, CI, deploy runbook, verify scripts
+- [ ] payments — Intents client (spawns when R0-C agent closes)
+
+## Next
+
+- Review each worker diff + run acceptance commands independently (G1)
+- Merge in protocol → infra → contracts → AI/compute → payments → backend order
+- Wave 2: agents/DAO/relayer, Agent Market worker, security tests, docs/demo
 
 ## Gates
 
-| Gate | Meaning | Status |
-|---|---|---|
-| G0 | External APIs validated, protocol frozen | ⬜ not started |
-| G1 | Each foundation track passes local tests | ⬜ not started |
-| G2 | Local vertical slice works without hand-editing DB | ⬜ not started |
-| G3 | Testnet repair lifecycle with real tx links | ⬜ not started |
-| G4 | Every feature F01–F14 has passing evidence | ⬜ not started |
-| G5 | Human accepts full submission package | ⬜ not started |
+| Gate | Status |
+|---|---|
+| G0 external APIs validated / protocol frozen | ✅ PASS (conditions documented) |
+| G1 foundation tracks pass tests | 🟡 running |
+| G2 local vertical slice | ⬜ |
+| G3 testnet lifecycle | ⬜ blocked on human accounts/funds |
+| G4 F01–F14 evidence | ⬜ |
+| G5 human submission acceptance | ⬜ blocked on human |
 
 ## Tracks
 
-| Track | Work | Status | Evidence |
-|---|---|---|---|
-| T00 | Orchestrator foundation (protocol, fixtures, matrix) | ⬜ 0% | — |
-| T01 | Contracts (hub, passport, escrow, lifecycle) | ⬜ 0% | — |
-| T02 | AI & verifiable compute (triage, OutLayer) | ⬜ 0% | — |
-| T03 | Backend (API, DB, indexer, evidence) | ⬜ 0% | — |
-| T04 | Frontend (map, timeline, cons, sponsor UI) | ⬜ 0% | — |
-| T05 | Agents, DAO governance, relayer | ⬜ 0% | — |
-| T06 | Payments & Intents sponsorship | ⬜ 0% | — |
-| T07 | Quality & security tests | ⬜ 0% | — |
-| T08 | Infrastructure (local, CI, deploy) | ⬜ 0% | — |
-| T09 | Docs & demo production | ⬜ 0% | — |
+| Track | % | Evidence |
+|---|---|---|
+| T00 Orchestrator | 100% | protocol 26 tests, fixtures, matrix, G0 |
+| T01 Contracts | 5% | worker running |
+| T02 AI & Compute | 5% | worker running |
+| T03 Backend | 5% | worker running |
+| T04 Frontend | 5% | worker running |
+| T05 Agents/DAO/Relayer | 0% | task packet next |
+| T06 Payments | 0% | worker queued |
+| T07 Quality | 0% | — |
+| T08 Infra | 5% | worker running |
+| T09 Docs/Demo | 0% | — |
 
-## Blocked on human (plan §8)
+## Blocked on human
 
-- NEAR AI Cloud API key and credits
-- OutLayer credentials/payment
-- Agent Market account + token
-- Sputnik DAO testnet accounts/permissions
-- Testnet NEAR accounts + faucet funds
-- Intents partner JWT (or accept no-JWT fee)
-- Mainnet account + funds, with separate approval per transaction
-- Deployment and private storage credentials
-- Real repair location, steward, repairer, inspector, media consent
-- Public repo approval, X post, final submission approval
+- NEAR AI key/credits, OutLayer project+funds, Agent Market token/balance, Sputnik DAO testnet accounts, testnet funds, Intents JWT (or no-JWT fee), deployment/private storage credentials, real repair location/media consent, mainnet approval, public repo/post/submission approval.
 
-## Evidence log
+## Notes
 
-- none yet
-
-## Note
-
-This file lives in the plan folder while the agent is in Plan mode. After switching to build mode, the same tracker will be kept in the repo at `orchestration/PROGRESS.md` and updated after every work step.
+- `iterm-agent wait/status` has a JSON parsing bug with reasoning messages; using `iterm-agent list` + output files/commits to track completion. Tabs stay visible.

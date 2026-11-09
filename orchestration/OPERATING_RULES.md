@@ -51,3 +51,12 @@ Blocked on human: <list>
 Next: <list>
 Evidence: <test/command results>
 ```
+
+## 8. Close unneeded tabs
+
+- Visible worker tabs pile up and distract the user. Keep only active workers open.
+- As soon as a worker is finished and its report/commit/evidence is captured, close its tab:
+  `iterm-agent close <sessionID> --delete`
+- Never close a running worker without `iterm-agent stop` first.
+- Research/read-only agents are closed as soon as their output file is verified.
+- The user should only see tabs for work that is currently running.
