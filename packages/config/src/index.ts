@@ -6,6 +6,7 @@
  */
 export * from './mode.js';
 export * from './mainnet.js';
+export * from './mainnet-profile.js';
 export * from './types.js';
 export * from './env.js';
 export * from './secrets.js';
