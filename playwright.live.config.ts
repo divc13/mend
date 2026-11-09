@@ -83,7 +83,14 @@ export default {
       }),
     },
     {
-      command: 'npm --prefix apps/web run dev -- --port 3101',
+      // Turbopack persists HMR/chunk state under apps/web/.next/dev. A cache
+      // left behind by an older checkout or build can make the dev server
+      // serve stale chunk hashes, so the client receives
+      // reloadPage("HMR hash mismatch") and the page reloads in a tight loop.
+      // Always start the live UI from a fresh dev cache; build output in
+      // apps/web/.next is left untouched.
+      command:
+        'node -e "require(\'node:fs\').rmSync(\'apps/web/.next/dev\', { recursive: true, force: true })" && npm --prefix apps/web run dev -- --port 3101',
       url: `${webUrl}/api/config`,
       timeout: 180_000,
       reuseExistingServer: false,
