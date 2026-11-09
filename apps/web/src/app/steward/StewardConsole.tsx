@@ -315,6 +315,10 @@ export function StewardConsole() {
                         <th scope="col">Rank</th>
                         <th scope="col">Contractor</th>
                         <th scope="col">Price</th>
+                        <th scope="col">
+                          Availability
+                          <span className="field__hint" style={{ display: 'block' }}>Committed bid data, not scored</span>
+                        </th>
                         <th scope="col">Warranty</th>
                         <th scope="col">Duration</th>
                         <th scope="col">Score</th>
@@ -328,6 +332,9 @@ export function StewardConsole() {
                           </td>
                           <td className="mono">{shortAccount(bid.contractorId)}</td>
                           <td>{usdc(bid.priceMicro)}</td>
+                          <td>
+                            Available in {bid.availableInDays} {bid.availableInDays === 1 ? 'day' : 'days'}
+                          </td>
                           <td>{bid.warrantyDays}d</td>
                           <td>{bid.durationDays}d</td>
                           <td>{bid.scoreBps}</td>

@@ -52,6 +52,59 @@ export default async function AssetPage({ params }: { params: Promise<{ assetId:
   );
   const reopened = cases.some((caseData) => caseData.reopenCount > 0);
 
+  const inspections = cases.flatMap((caseData) =>
+    caseData.inspections.map((inspection) => ({
+      ...inspection,
+      workOrderId: caseData.id,
+      contractorId: caseData.contractorId,
+    })),
+  );
+  const completedRepairs = inspections.filter(
+    (inspection) =>
+      (inspection.kind === 'COMPLETION' || inspection.kind === 'REMEDIATION') &&
+      inspection.decision === 'APPROVED',
+  );
+
+  const contractorAccounts = Array.from(
+    new Set(cases.map((caseData) => caseData.contractorId).filter((id) => id !== undefined)),
+  ).map((account) => {
+    const accountCases = cases.filter((caseData) => caseData.contractorId === account);
+    const accountRepairs = completedRepairs.filter((repair) =>
+      accountCases.some((caseData) => caseData.id === repair.workOrderId),
+    );
+    const lastActivity = [...accountCases.map((caseData) => caseData.updatedAt), ...accountRepairs.map((repair) => repair.signedAt)]
+      .sort()
+      .at(-1);
+    return { account, workOrders: accountCases, completedRepairs: accountRepairs, lastActivity };
+  });
+
+  const inspectorAccounts = Array.from(new Set(inspections.map((inspection) => inspection.inspectorId))).map(
+    (account) => {
+      const accountInspections = inspections.filter((inspection) => inspection.inspectorId === account);
+      return {
+        account,
+        decisions: accountInspections.length,
+        approved: accountInspections.filter((inspection) => inspection.decision === 'APPROVED').length,
+        rejected: accountInspections.filter((inspection) => inspection.decision === 'REJECTED').length,
+        workOrderIds: Array.from(new Set(accountInspections.map((inspection) => inspection.workOrderId))),
+      };
+    },
+  );
+
+  const reopenings = cases
+    .filter((caseData) => caseData.reopenCount > 0 || Boolean(caseData.warranty))
+    .map((caseData) => {
+      const warrantyEvent = caseData.events.find((event) => event.kind === 'warranty');
+      return {
+        caseData,
+        openedAt: caseData.warranty?.openedAt ?? warrantyEvent?.at ?? caseData.updatedAt,
+        reason:
+          caseData.warranty?.note ??
+          warrantyEvent?.detail ??
+          'The work order history records a warranty reopening.',
+      };
+    });
+
   return (
     <div className="container">
       <div style={{ paddingTop: 'clamp(30px, 5vw, 54px)' }}>
@@ -153,6 +206,224 @@ export default async function AssetPage({ params }: { params: Promise<{ assetId:
                 <code>nft_approve</code> return <code>TRANSFER_DISABLED</code>. The passport does not imply legal ownership
                 of the physical asset.
               </span>
+            </div>
+          </section>
+
+          <section className="panel" aria-labelledby="actor-history-title">
+            <div className="panel__head">
+              <div>
+                <p className="eyebrow">Actor history</p>
+                <h2 id="actor-history-title">Contractors, inspectors and completed work</h2>
+                <p>
+                  Derived only from this passport&apos;s work orders and recorded human inspections. No account, decision
+                  or outcome is inferred.
+                </p>
+              </div>
+              <Badge tone="neutral">
+                {completedRepairs.length} completed repair{completedRepairs.length === 1 ? '' : 's'}
+              </Badge>
+            </div>
+
+            <dl className="facts-grid">
+              <div className="fact">
+                <dt>Contractor accounts</dt>
+                <dd>{contractorAccounts.length}</dd>
+              </div>
+              <div className="fact">
+                <dt>Inspector accounts</dt>
+                <dd>{inspectorAccounts.length}</dd>
+              </div>
+              <div className="fact">
+                <dt>Completed repairs</dt>
+                <dd>{completedRepairs.length}</dd>
+              </div>
+              <div className="fact">
+                <dt>Warranty reopenings</dt>
+                <dd>{reopenings.length}</dd>
+              </div>
+            </dl>
+
+            <h3 style={{ marginTop: 20, marginBottom: 8 }}>Contractor accounts</h3>
+            {contractorAccounts.length === 0 ? (
+              <p className="empty-state">No contractor has been awarded work on this asset.</p>
+            ) : (
+              <div style={{ overflowX: 'auto' }}>
+                <table className="data-table">
+                  <caption className="sr-only">Contractor history for {asset.id}</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Account</th>
+                      <th scope="col">Work orders</th>
+                      <th scope="col">Completed repairs</th>
+                      <th scope="col">Last recorded activity</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {contractorAccounts.map((contractor) => (
+                      <tr key={contractor.account}>
+                        <td data-label="Account">
+                          <span className="mono" title={contractor.account}>
+                            {contractor.account}
+                          </span>
+                        </td>
+                        <td data-label="Work orders">
+                          {contractor.workOrders.map((caseData) => (
+                            <Link
+                              key={caseData.id}
+                              className="text-link"
+                              href={`/cases/${caseData.id}`}
+                              style={{ display: 'block' }}
+                            >
+                              {caseData.id}
+                            </Link>
+                          ))}
+                        </td>
+                        <td data-label="Completed repairs">{contractor.completedRepairs.length}</td>
+                        <td data-label="Last recorded activity">
+                          {contractor.lastActivity ? formatDateTime(contractor.lastActivity) : 'No completed work'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <h3 style={{ marginTop: 20, marginBottom: 8 }}>Inspector accounts</h3>
+            {inspectorAccounts.length === 0 ? (
+              <p className="empty-state">
+                No human inspection decision has been recorded against this asset yet.
+              </p>
+            ) : (
+              <div style={{ overflowX: 'auto' }}>
+                <table className="data-table">
+                  <caption className="sr-only">Inspector history for {asset.id}</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Account</th>
+                      <th scope="col">Decisions</th>
+                      <th scope="col">Approved</th>
+                      <th scope="col">Rejected</th>
+                      <th scope="col">Work orders</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {inspectorAccounts.map((inspector) => (
+                      <tr key={inspector.account}>
+                        <td data-label="Account">
+                          <span className="mono" title={inspector.account}>
+                            {inspector.account}
+                          </span>
+                        </td>
+                        <td data-label="Decisions">{inspector.decisions}</td>
+                        <td data-label="Approved">{inspector.approved}</td>
+                        <td data-label="Rejected">{inspector.rejected}</td>
+                        <td data-label="Work orders">
+                          {inspector.workOrderIds.map((workOrderId) => (
+                            <Link
+                              key={workOrderId}
+                              className="text-link"
+                              href={`/cases/${workOrderId}`}
+                              style={{ display: 'block' }}
+                            >
+                              {workOrderId}
+                            </Link>
+                          ))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <h3 style={{ marginTop: 20, marginBottom: 8 }}>Completed repairs</h3>
+            {completedRepairs.length === 0 ? (
+              <p className="empty-state">
+                No completion or remediation inspection has been approved for this asset.
+              </p>
+            ) : (
+              <div style={{ overflowX: 'auto' }}>
+                <table className="data-table">
+                  <caption className="sr-only">Completed repairs for {asset.id}</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Work order</th>
+                      <th scope="col">Repair stage</th>
+                      <th scope="col">Completed</th>
+                      <th scope="col">Contractor</th>
+                      <th scope="col">Inspector</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {completedRepairs.map((repair) => (
+                      <tr key={`${repair.workOrderId}-${repair.id}`}>
+                        <td data-label="Work order">
+                          <Link className="text-link" href={`/cases/${repair.workOrderId}`}>
+                            {repair.workOrderId}
+                          </Link>
+                        </td>
+                        <td data-label="Repair stage">
+                          {repair.kind === 'REMEDIATION' ? 'Warranty remediation' : 'Completion'}
+                        </td>
+                        <td data-label="Completed">{formatDateTime(repair.signedAt)}</td>
+                        <td data-label="Contractor">
+                          <span className="mono">{repair.contractorId ?? 'Not recorded'}</span>
+                        </td>
+                        <td data-label="Inspector">
+                          <span className="mono">{repair.inspectorId}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <h3 style={{ marginTop: 20, marginBottom: 8 }}>Warranty reopenings</h3>
+            {reopenings.length === 0 ? (
+              <p className="empty-state">No warranty reopening is recorded for this asset.</p>
+            ) : (
+              <div style={{ overflowX: 'auto' }}>
+                <table className="data-table">
+                  <caption className="sr-only">Warranty reopenings for {asset.id}</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Work order</th>
+                      <th scope="col">Reopened</th>
+                      <th scope="col">Reason</th>
+                      <th scope="col">Current state</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {reopenings.map((reopening) => (
+                      <tr key={reopening.caseData.id}>
+                        <td data-label="Work order">
+                          <Link className="text-link" href={`/cases/${reopening.caseData.id}`}>
+                            {reopening.caseData.id}
+                          </Link>
+                        </td>
+                        <td data-label="Reopened">{formatDateTime(reopening.openedAt)}</td>
+                        <td data-label="Reason">{reopening.reason}</td>
+                        <td data-label="Current state">
+                          <StatusPill status={reopening.caseData.status} />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+
+            <div className="rule-note" style={{ marginTop: 18 }}>
+              <strong>Repair vs replacement.</strong>{' '}
+              {asset.replacementCount > 0
+                ? `History records ${asset.repairCount} repair${asset.repairCount === 1 ? '' : 's'} and ${asset.replacementCount} replacement${asset.replacementCount === 1 ? '' : 's'}.`
+                : completedRepairs.length > 0
+                  ? `History records ${completedRepairs.length} approved repair${completedRepairs.length === 1 ? '' : 's'} and no replacement.`
+                  : 'History records no completed repair and no replacement yet.'}{' '}
+              A scope that says “replace” a part is not counted as a full replacement. Only approved completion or
+              remediation inspections are counted as completed repair work; no replacement is inferred from scope wording.
             </div>
           </section>
 

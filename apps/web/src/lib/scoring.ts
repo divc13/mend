@@ -12,6 +12,8 @@ export interface ScoreBidInput {
   priceMicro: string;
   durationDays: number;
   warrantyDays: number;
+  /** Carried through for display only; the frozen policy does not weight availability. */
+  availableInDays: number;
   materialsScore: number;
   eligible: boolean;
 }
@@ -79,6 +81,7 @@ export function scoreBids(
       priceMicro: price.toString(),
       durationDays: bid.durationDays,
       warrantyDays: bid.warrantyDays,
+      availableInDays: bid.availableInDays,
       materialsScore: bid.materialsScore,
     };
   });
