@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "1",
+  "status": "NOT_COLLECTED",
+  "notice": "Template only. No repair has been performed for MEND and no media, consent or transaction exists. Do not replace placeholders with invented evidence.",
+  "generatedAt": null,
+  "asset": {
+    "assetId": "HUMAN_SUPPLIED",
+    "publicDescription": "HUMAN_SUPPLIED",
+    "assetType": "HUMAN_SUPPLIED",
+    "publicArea": "HUMAN_SUPPLIED",
+    "passportTokenId": null
+  },
+  "workOrder": {
+    "workOrderId": "HUMAN_SUPPLIED",
+    "mode": "HUMAN_SUPPLIED",
+    "daoAccount": "HUMAN_SUPPLIED",
+    "daoProposalId": null,
+    "contractorAccount": "HUMAN_SUPPLIED",
+    "inspectorAccount": "HUMAN_SUPPLIED"
+  },
+  "repair": {
+    "category": "NOT_COLLECTED",
+    "categoryValues": ["REAL", "STAGED", "REPLAY", "SIMULATED"],
+    "performedAt": null,
+    "performedBy": "HUMAN_SUPPLIED",
+    "consentRecordId": null,
+    "description": "HUMAN_SUPPLIED"
+  },
+  "durability": {
+    "status": "NOT_COLLECTED",
+    "inspectedAt": null,
+    "inspector": "HUMAN_SUPPLIED",
+    "result": null,
+    "resultValues": ["PASS", "FAIL"],
+    "configuredIntervalMinutes": null,
+    "notes": "Demo intervals are configured in minutes; they are not a real-world durability claim."
+  },
+  "consent": [],
+  "files": [],
+  "transactions": {
+    "funding": null,
+    "completion": null,
+    "holdback": null,
+    "refund": null,
+    "durability": null
+  },
+  "review": {
+    "reviewer": "HUMAN_SUPPLIED",
+    "reviewedAt": null,
+    "privacyApproved": false,
+    "accuracyApproved": false,
+    "consentComplete": false,
+    "notes": "A human must review privacy, consent and accuracy before publication."
+  }
+}

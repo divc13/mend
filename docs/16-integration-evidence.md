@@ -1,0 +1,213 @@
+# 16 — Integration evidence matrix
+
+Every external integration claim in MEND must match the Wave 0 research and carry
+one of three labels. Research was accessed **2026-11-09**; the source files are in
+`orchestration/research/`.
+
+## Label definitions
+
+| Label | Meaning |
+|---|---|
+| **VERIFIED** | Confirmed on 2026-11-09 by a live read-only request, official docs/OpenAPI, or pinned source. This does **not** mean MEND executed the full flow. |
+| **UNAVAILABLE** | The capability does not exist, is not a stable contract, or cannot be used as described. |
+| **BLOCKED_ON_HUMAN** | The capability exists, but MEND cannot exercise it without a human-supplied credential, funded account, consent, approval or signature. |
+
+Where the research used `UNVERIFIED` or `OBSERVED`, this matrix either maps it to
+**UNAVAILABLE as a contract** or states the observation explicitly. It never
+upgrades an observation to a guarantee.
+
+Rows marked **MEND DECISION** are internal product choices, not external claims.
+Every external claim uses one of the three labels above.
+
+## NEAR AI Cloud
+
+Sources: `orchestration/research/R0-A-near-ai.md`. Access date 2026-11-09.
+
+| # | Claim | Label | Evidence / note |
+|---|---|---|---|
+| A1 | API base is `https://cloud-api.near.ai/v1`, OpenAI-compatible | **VERIFIED** | Docs + SDK constant; old `api.near.ai` returns `410` (retired 2025-10-31) |
+| A2 | Auth is a bearer API key | **VERIFIED** | Missing/invalid key returns `401` live |
+| A3 | Public keyless endpoints expose models, pricing, health and attestation | **VERIFIED** | Live `200` responses |
+| A4 | `GET /v1/health` is the health path; `/health` returns `404` | **VERIFIED** | Live |
+| A5 | Canonical verifiable model `z-ai/glm-5.3-flash` is listed | **VERIFIED** | Live `/v1/models`, `/v1/model/list`; `verifiable: true` |
+| A6 | Send `x-no-aliasing: true` to keep the canonical model ID | **VERIFIED** | Docs; aliasing breaks `provider_tee` signature text |
+| A7 | Response signatures are fetched post-hoc from `GET /v1/signature/{chat_id}` | **VERIFIED** | Docs; not inline |
+| A8 | Signature verification covers exact request/response bytes | **VERIFIED** | Docs |
+| A9 | Gateway TEE and model TEE are separate; the chain is not complete end-to-end | **VERIFIED** | Provider docs explicitly say so |
+| A10 | Optional Intel Trust Authority token path exists | **VERIFIED** | Docs/live schema |
+| A11 | Signature can be unavailable (`404` or `200` + `error_code`) | **VERIFIED** | Docs; must be treated as unverified |
+| A12 | Streaming is gateway-signed by default | **VERIFIED** | Docs; gateway rewrites bytes |
+| A13 | Responses/Messages APIs are gateway-signed only | **VERIFIED** | Docs |
+| A14 | Structured output/`response_format` is a stable documented request contract | **UNAVAILABLE** | Not enumerated in the live OpenAPI request schema; must be probed; research marks it unverified |
+| A15 | The official JS SDK requires Node `>=24.22.1` | **VERIFIED** | npm metadata/docs; repo declares `>=22` |
+| A16 | Authenticated MEND inference, signature fetch and billing | **BLOCKED_ON_HUMAN** | No API key/credits; no fabricated calls |
+| A17 | MEND can claim a complete end-to-end AI attestation chain | **UNAVAILABLE** | Provider itself documents the gap |
+
+**Product rule:** show `INFERENCE EVIDENCE VERIFIED` only for verified bytes; show
+gateway and model evidence separately; show `UNAVAILABLE` for 404/error. Never say “AI approved”.
+
+## OutLayer
+
+Sources: `orchestration/research/R0-B-outlayer.md`. Access date 2026-11-09.
+
+| # | Claim | Label | Evidence / note |
+|---|---|---|---|
+| B1 | Testnet contract is `outlayer.testnet` | **VERIFIED** | Live RPC/docs |
+| B2 | Testnet API health is live | **VERIFIED** | `200`, version `0.1.0` on 2026-11-09 |
+| B3 | `request_execution` attaches NEAR and creates a yield | **VERIFIED** | Source/docs |
+| B4 | The caller's private promise callback receives the WASM stdout | **VERIFIED** | Source/docs; `promise_result(0)` |
+| B5 | There is no MEND webhook and no OutLayer-specific `near-sdk` crate | **VERIFIED** | Source/docs |
+| B6 | The callback does not contain the TEE attestation or request ID | **VERIFIED** | Source/docs |
+| B7 | Publish a hash-pinned `wasm32-wasip1` project | **VERIFIED** | Docs/source |
+| B8 | Keep output compact; under 900 bytes is recommended | **VERIFIED** | Docs; larger output takes a 2-call path |
+| B9 | TEE attestation proves which binary ran with which input/output | **VERIFIED** | Docs |
+| B10 | TEE attestation does not prove logic correctness or source provenance | **VERIFIED** | Docs |
+| B11 | Coordinator is closed source and can censor/delay | **VERIFIED** | Docs/source |
+| B12 | Exact deployed memory floor / WASM cap parity | **UNAVAILABLE** | Source says 1024 MB / 10 MiB; deployed parity unverified |
+| B13 | Independent `outlayer-verify` tool exists (Apache-2.0) | **VERIFIED** | Docs/source; not installed/run here |
+| B14 | MEND published WASM and funded testnet execution | **BLOCKED_ON_HUMAN** | No project/funds; no execution performed |
+| B15 | MEND TEE attestation verified for a real execution | **BLOCKED_ON_HUMAN** | No execution artifact to verify |
+| B16 | Mainnet stablecoin address for funding | **UNAVAILABLE** | Not verified; not needed for testnet |
+
+**Product rule:** on-chain hashes = `SCORE BOUND`; independently verified TEE =
+`OUTLAYER + TEE ATTESTED`; otherwise `LOCAL DETERMINISTIC — OUTLAYER UNAVAILABLE`.
+Never claim “provably fair” or “audited”.
+
+## NEAR Intents / 1Click
+
+Sources: `orchestration/research/R0-C-intents.md`. Access date 2026-11-09.
+
+| # | Claim | Label | Evidence / note |
+|---|---|---|---|
+| C1 | Base `https://1click.chaindefuser.com`, API v0, OpenAPI `0.1.10` | **VERIFIED** | Live docs/OpenAPI |
+| C2 | Intents is **mainnet only**; no testnet | **VERIFIED** | Official docs |
+| C3 | `GET /v0/tokens` works without auth; 216 tokens observed | **VERIFIED** | Live |
+| C4 | `POST /v0/quote` works without auth; success code 201 | **VERIFIED** | Live |
+| C5 | `dry: true` returns a quote but no deposit address/deadline/memo | **VERIFIED** | Live |
+| C6 | Base USDC → NEAR USDC minimum on the tested route is 0.15 USDC | **VERIFIED** | Live 400 at 149999, 201 at 150000 |
+| C7 | Quote deadline was request + 72 h on three samples | **UNAVAILABLE as a contract** | Observed, not documented; do not hard-code it |
+| C8 | Status enum is exactly `PENDING_DEPOSIT`, `KNOWN_DEPOSIT_TX`, `PROCESSING`, `SUCCESS`, `INCOMPLETE_DEPOSIT`, `REFUNDED`, `FAILED` | **VERIFIED** | Live + OpenAPI |
+| C9 | There is an API `EXPIRED` status | **UNAVAILABLE** | No such status; expiry is client-side |
+| C10 | Named NEAR recipients must exist | **VERIFIED** | Live: nonexistent names returned 400 |
+| C11 | Quote success proves NEP-141 storage registration | **UNAVAILABLE** | `mend.near` had `storage_balance_of: null` yet quoted |
+| C12 | Live status returns usable explorer URLs | **UNAVAILABLE** | `explorerUrl` strings were empty in a SUCCESS sample; build links yourself |
+| C13 | Quote signatures verify; tampering with recipient fails | **VERIFIED** | SDK 0.1.26 |
+| C14 | `sessionId` is returned by status | **UNAVAILABLE** | Echoed at quote time but not returned by status; reconcile by `depositAddress` |
+| C15 | Authenticated fee schedule 20/1 bps and no-JWT +25 bps | **UNAVAILABLE** | Not observed; docs/live differ; partner JWT is `BLOCKED_ON_HUMAN` |
+| C16 | Live `REFUNDED`/`FAILED`/`INCOMPLETE_DEPOSIT` bodies | **UNAVAILABLE** | Schema/docs only; no live sample |
+| C17 | MEND live deposit → SUCCESS → hub funding | **BLOCKED_ON_HUMAN** | No funds, no human approval; mainnet only |
+| C18 | Explorer API for historical swaps without partner auth | **UNAVAILABLE** | Requires JWT |
+
+**Product rule:** dry quotes are not payments; show fees and destination as
+estimates; label `MAINNET ONLY`; reconcile by deposit address; require explicit
+human approval for every deposit. Never claim a testnet Intents run.
+
+## Sputnik DAO v2
+
+Sources: `orchestration/research/R0-D-dao-agent-market.md`. Access date 2026-11-09.
+
+| # | Claim | Label | Evidence / note |
+|---|---|---|---|
+| D1 | Testnet factory is `sputnikv2.testnet`; DAOs are `<name>.sputnikv2.testnet` | **VERIFIED** | Live RPC/docs |
+| D2 | Mainnet factory is `sputnik-dao.near` | **VERIFIED** | Live RPC/docs |
+| D3 | `sputnik-dao.testnet` has no contract code | **VERIFIED** | Live RPC |
+| D4 | Proposal IDs are decimal `u64` indexes | **VERIFIED** | Source/docs |
+| D5 | `get_last_proposal_id()` is the next ID, not the highest | **VERIFIED** | Source/docs |
+| D6 | A view call cannot synchronously verify another contract | **VERIFIED** | NEAR execution model |
+| D7 | Authorization must be a push `FunctionCall` to the hub | **VERIFIED** | Source/docs |
+| D8 | The hub checks `predecessor_account_id == config.dao` | **MEND DECISION**, source-compatible | Hub interface freeze |
+| D9 | `act_proposal` requires the exact proposal kind | **VERIFIED** | Current source; README drift |
+| D10 | The bond must equal the policy bond exactly | **VERIFIED** | Source; README “at least 1 NEAR” is wrong for custom policies |
+| D11 | MEND DAO deployment, council and proposals | **BLOCKED_ON_HUMAN** | No DAO exists |
+| D12 | MEND DAO watcher verification against a live proposal | **BLOCKED_ON_HUMAN** | Depends on D11 |
+
+**Product rule:** `DAO AUTHORIZED` only after the hub records the authorization.
+A pending proposal is not an approval.
+
+## NEAR Agent Market
+
+Sources: `orchestration/research/R0-D-dao-agent-market.md`. Access date 2026-11-09.
+
+| # | Claim | Label | Evidence / note |
+|---|---|---|---|
+| E1 | Base `https://market.near.ai`, OpenAPI 3.1.0, API `2.0.0` | **VERIFIED** | Live docs |
+| E2 | Public read endpoints work without an account | **VERIFIED** | `/healthz`, `/v1/platform/*`, `/v1/agents` live |
+| E3 | Job reads require auth | **VERIFIED** | `401 unauthorized` live |
+| E4 | Worker auth uses `Bearer aat_...` | **VERIFIED** | Docs/source |
+| E5 | Worker API supports poll/start/submit/message/decline/progress | **VERIFIED** | Source |
+| E6 | Worker API has an accept endpoint | **UNAVAILABLE** | No accept path; token cannot accept its own work |
+| E7 | Acceptance is human/buyer-side | **VERIFIED** | Docs; MCP returns an approval URL |
+| E8 | Auto-accept after 3–7 days | **VERIFIED** | Docs/source |
+| E9 | Agent Market is a NEAR testnet | **UNAVAILABLE** | Production marketplace with USD/USDC |
+| E10 | Platform fee is 5% of builder payout | **VERIFIED** | Live config/docs |
+| E11 | Email verification is required | **VERIFIED** | Live config |
+| E12 | MEND live job, account, token or balance | **BLOCKED_ON_HUMAN** | None exists |
+| E13 | Self-hire is independent market reputation | **UNAVAILABLE** | Must be disclosed if tested |
+
+**Product rule:** `EXTERNAL REVIEW — NOT A SAFETY CERTIFICATION`; human acceptance
+stays separate; no self-accept claim.
+
+## NEAR platform
+
+Sources: `orchestration/research/R0-E-near-platform.md`. Access date 2026-11-09.
+
+| # | Claim | Label | Evidence / note |
+|---|---|---|---|
+| F1 | NEP-171 core can be implemented; no standard `non_transferable` flag | **VERIFIED** | Pinned source/docs |
+| F2 | Panic-on-transfer is a valid MEND-defined non-transferable implementation | **VERIFIED** | Source; custom behaviour |
+| F3 | Passport owner is the hub, not a user; no approvals/burn | **MEND DECISION** | Hub interface freeze |
+| F4 | NEP-141 `ft_transfer_call` receiver flow is `ft_on_transfer` | **VERIFIED** | Pinned source/docs |
+| F5 | Underfund = full refund; overfund = excess refund; duplicate/cancelled = full refund | **MEND DECISION**, source-compatible | Hub interface; needs contract tests |
+| F6 | No resolver is implemented; tokens are not spent in `ft_on_transfer` | **MEND DECISION** | Reduces refund edge cases |
+| F7 | Function-call keys have receiver, non-empty methods and allowance | **VERIFIED** | Pinned source |
+| F8 | Function-call keys reject attached deposits | **VERIFIED** | Source; `DepositWithFunctionCall` |
+| F9 | Gasless escrow funding with a function-call key | **UNAVAILABLE** | `ft_transfer_call` needs 1 yocto; keys reject deposits |
+| F10 | NEP-366 `Delegate` (not `DelegateV2`) is the meta-tx path | **VERIFIED** | Source; `DelegateV2` removed at protocol 87 |
+| F11 | Runtime gas/meta-tx edge cases are proven | **UNAVAILABLE** | Source-verified only; no sandbox/testnet execution |
+| F12 | Hub must be registered with the token before funding | **VERIFIED** | Source; deployment prerequisite |
+| F13 | Target network supports protocol 85+ and gas keys | **BLOCKED_ON_HUMAN** | Must be queried before provisioning |
+| F14 | MEND contract unit/integration tests pass | **BLOCKED_ON_HUMAN** | Contracts are `PENDING INTEGRATION`; not on this branch |
+
+**Product rule:** call the flow “walletless reporting” and “gasless actions where
+valid”, not “gasless funding”. Never imply the passport is legal ownership.
+
+## MEND project evidence
+
+| # | Claim | Label | Evidence |
+|---|---|---|---|
+| G1 | Protocol schemas, state machine, accounting, scoring and fixtures pass locally | **VERIFIED (local)** | `npm test -w @mend/protocol` → 4 files, 26 tests passed |
+| G2 | Documentation and relative links are valid | **VERIFIED (local)** | `node scripts/demo/check-docs.mjs` |
+| G3 | Web app, API, contracts, compute, services | `PENDING INTEGRATION` | Not on this branch |
+| G4 | Live testnet lifecycle with real links | **BLOCKED_ON_HUMAN** | No accounts/funds/deployment |
+| G5 | Hosted demo | **BLOCKED_ON_HUMAN** | No deployment credentials |
+| G6 | Demo video | **BLOCKED_ON_HUMAN / NOT COLLECTED** | Capture depends on the integrated app and ffmpeg |
+| G7 | Real repair media and durability inspection | **BLOCKED_ON_HUMAN / NOT COLLECTED** | No repair performed; no consent |
+| G8 | Security audit or accessibility certification | **UNAVAILABLE** | None performed |
+| G9 | City adoption or partnership | **UNAVAILABLE** | No such relationship exists or is claimed |
+
+## Claims we must not make
+
+| Forbidden claim | Correct alternative |
+|---|---|
+| “AI approved the repair” | “AI suggested; a human inspector decided” |
+| “Structurally safe / certified safe” | “Human inspector recorded completion; this is not a structural certification” |
+| “Guaranteed repair / guaranteed durability” | “A durability holdback and a later inspection create accountability” |
+| “The city adopted MEND” | “No city adoption; a low-risk community pilot is the scope” |
+| “Partnered with …” | Name only a real, documented relationship — currently none |
+| “OutLayer proved the best bidder” | “A hash-pinned deterministic policy ranked eligible bids; TEE evidence is separate” |
+| “End-to-end attested AI” | “Gateway/model evidence is shown separately; the chain is incomplete” |
+| “Live payment” for a dry quote | “DRY QUOTE — NOT A PAYMENT” |
+| “Live” for a replay | “REPLAY / SIMULATION” |
+| “Audited / production-ready” | “Protocol tested locally; application and audit pending” |
+
+## Related documents
+
+- [03 — Architecture](./03-architecture.md)
+- [08 — Oracle and human trust](./08-oracle-and-human-trust.md)
+- [09 — Failure cases](./09-failure-cases.md)
+- [11 — Limitations](./11-limitations.md)
+- [13 — Demo script](./13-demo-script.md)
+
+---
+
+[Docs index](./README.md) · [← Capture plan](./15-demo-capture-plan.md) · [Next: copy and accessibility →](./17-copy-and-accessibility.md)
