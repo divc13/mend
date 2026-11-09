@@ -1,0 +1,24 @@
+{
+  "name": "@mend/quality-tests",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "MEND independent quality and security suites (T07): integration, adversarial, privacy, authorization, e2e and clean-room.",
+  "scripts": {
+    "test": "vitest run --config vitest.config.ts",
+    "test:integration": "vitest run --config vitest.config.ts integration",
+    "test:security": "vitest run --config vitest.config.ts security",
+    "test:clean-room": "vitest run --config vitest.config.ts clean-room",
+    "test:contract": "cargo test --manifest-path integration/contract-adversarial/Cargo.toml",
+    "test:e2e": "playwright test --config ../playwright.config.ts",
+    "test:e2e:list": "playwright test --list --config ../playwright.config.ts",
+    "ci": "bash ci.sh"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
+    "@playwright/test": "^1.65.0",
+    "@types/node": "^24.10.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.1.0"
+  }
+}
