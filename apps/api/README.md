@@ -33,6 +33,143 @@ Key defaults:
 | `DEMO_DURABILITY_MINUTES` | `2` | Explicit demo durability window |
 | `INTENTS_ENABLED` | `false` | 1Click dry previews; live also needs `INTENTS_ALLOW_LIVE` plus `confirmLive: true` |
 
+## LIVE TESTNET — test value only, never mainnet
+
+MEND's live adapter only signs NEAR **testnet** transactions. `MEND_MODE=MAINNET`
+and any mainnet-looking `MEND_RPC_URL` are refused before a signer is loaded.
+Test mUSDC has no real-world value and must never be presented as a payment.
+
+### Human-supplied values
+
+1. **Role key file outside the repo.** It is read at runtime and never written
+   to logs, the database, audit events or API responses. Example path:
+   `/Users/you/.mend/testnet/keys.json`. Do not commit it.
+2. **Role account ids.** At minimum `deployer`, `steward`, `sponsor`, `dao`,
+   `contractor`, `inspector`. The defaults are:
+   `mend-deployer.testnet`, `mend-steward.testnet`, `mend-sponsor.testnet`,
+   `mend-dao.testnet`, `mend-contractor-a.testnet`, `mend-inspector.testnet`.
+   Override each with `MEND_*_ACCOUNT`.
+3. **Hub and token accounts.** `mend-hub.testnet` and `mend-usdc.testnet` by
+   default (`MEND_HUB_ACCOUNT`, `MEND_TOKEN_ACCOUNT`).
+4. **Testnet RPC.** `MEND_RPC_URL=https://rpc.testnet.near.org`.
+5. **NEAR CLI.** Wallet creation uses `near account create-account
+   sponsor-by-faucet-service ... print-to-terminal`. Install `near-cli-rs` or
+   set `MEND_NEAR_CLI_PATH` to the executable. The public faucet may return
+   HTTP 429; the API then returns a clear 429 with retry guidance and **does
+   not return the keys it generated**.
+6. **Faucet funding.** `POST /v1/testnet/faucet` registers token storage and
+   transfers exactly `100000000` micro (100 mUSDC) from the deployer account by
+   default. Change the amount with `MEND_TESTNET_FAUCET_AMOUNT_MICRO`.
+
+The key file is an object keyed by account id. Each value needs at least:
+
+```json
+{
+  "mend-deployer.testnet": {
+    "account": "mend-deployer.testnet",
+    "publicKey": "ed25519:...",
+    "secretKey": "ed25519:...",
+    "network": "testnet"
+  }
+}
+```
+
+Never paste real key material into a terminal transcript, issue, commit or log.
+
+### Exact live environment
+
+```bash
+cd apps/api
+export MEND_MODE=LIVE_TESTNET
+export CHAIN_ADAPTER=live
+export MEND_HUB_ACCOUNT=mend-hub.testnet
+export MEND_TOKEN_ACCOUNT=mend-usdc.testnet
+export MEND_RPC_URL=https://rpc.testnet.near.org
+export MEND_TESTNET_KEYS_FILE=/absolute/path/outside/repo/.mend/testnet/keys.json
+export MEND_DEPLOYER_ACCOUNT=mend-deployer.testnet
+export MEND_STEWARD_ACCOUNT=mend-steward.testnet
+export MEND_SPONSOR_ACCOUNT=mend-sponsor.testnet
+export MEND_DAO_ACCOUNT=mend-dao.testnet
+export MEND_CONTRACTOR_ACCOUNT=mend-contractor-a.testnet
+export MEND_INSPECTOR_ACCOUNT=mend-inspector.testnet
+export MEND_TESTNET_WALLET_ENABLED=true
+export MEND_TESTNET_FAUCET_ENABLED=true
+export MEND_TESTNET_FAUCET_AMOUNT_MICRO=100000000
+export MEND_LIVE_SCENARIO_ENABLED=true
+export MEND_LIVE_BID_PAYLOAD_VERSION=auto
+npm run dev
+```
+
+`MEND_TESTNET_KEYS_FILE` is the only secret-bearing input. `.env` must remain
+uncommitted (`apps/api/.env.example` contains placeholders only).
+
+### Testnet onboarding routes
+
+```bash
+# One-time wallet creation. The secretKey/seedPhrase appear ONCE in this
+# response and are never stored or logged. Save them now.
+curl -X POST http://127.0.0.1:4010/v1/testnet/wallet
+
+# Register storage + transfer 100 mUSDC (test value) from the deployer.
+# Returns the real ft_transfer tx hash, balance and explorer-friendly tx hash.
+curl -X POST http://127.0.0.1:4010/v1/testnet/faucet \
+  -H 'content-type: application/json' \
+  -d '{"accountId":"mend-wnew.testnet"}'
+
+# Read-only balance/storage status. Never returns secret material.
+curl http://127.0.0.1:4010/v1/testnet/wallet/mend-wnew.testnet
+```
+
+The wallet row stores only `accountId`, `publicKey`, `network` and `createdAt`
+(plus faucet counters/timestamps). The secret key and seed phrase are one-time
+response fields, not persistence fields. Faucet requests are rate-limited per
+account and per IP; wallet creation is rate-limited per IP.
+
+If the public faucet returns 429, or the CLI is unavailable, the endpoint
+returns HTTP 429/503 with retry guidance. It never fabricates a wallet and never
+returns keys for an account it cannot observe on testnet.
+
+### Live scenario runner
+
+`POST /v1/live/run-scenario` exists only when:
+`MEND_MODE=LIVE_TESTNET`, `CHAIN_ADAPTER=live`, `MEND_LIVE_SCENARIO_ENABLED=true`,
+and every required role signer is present in `MEND_TESTNET_KEYS_FILE`.
+It refuses mainnet, a paused hub, wrong hub token/DAO, missing hub roles, an
+unreachable RPC and any missing signer before starting. On success it returns an
+ordered `steps[]` of real transactions with `txHash` and
+`https://explorer.testnet.near.org/transactions/<hash>` URLs, then verifies the
+hub work order is `CLOSED`. A failure returns the already-confirmed steps and
+the failed step; no replay hash is ever returned by this route.
+
+Before committing a bid the runner reads the deployed hub code and detects
+whether it verifies `MEND_BID_V1` (the current shared testnet deployment) or
+`MEND_BID_V2` (this repository's current protocol). Override with
+`MEND_LIVE_BID_PAYLOAD_VERSION=v1|v2` only if RPC code inspection is unavailable.
+
+The scenario files a canonical repair: create asset, create work order, DAO
+authorize, fund via `ft_transfer_call`, open bidding, sealed commit/reveal,
+close, deterministic score, award, start work, submit completion, accept
+completion (90% + 10% holdback), then a real durability inspection after the
+hub's durability interval. This can take several minutes because it waits for
+the actual commit/reveal deadlines and durability window; the route timeout is
+raised only in this enabled mode (`MEND_LIVE_SCENARIO_TIMEOUT_MS`).
+
+### LIVE_TESTNET tests
+
+`npm test` is fully offline and uses a mocked signer/transport. Live checks are
+opt-in:
+
+```bash
+MEND_RUN_LIVE_TESTS=1 \
+MEND_TESTNET_KEYS_FILE=/absolute/path/outside/repo/.mend/testnet/keys.json \
+npm test
+
+# This one performs real testnet writes and waits for deadlines/durability.
+MEND_RUN_LIVE_TESTS=1 MEND_RUN_LIVE_SCENARIO=1 \
+MEND_TESTNET_KEYS_FILE=/absolute/path/outside/repo/.mend/testnet/keys.json \
+npm test -- -t "live testnet scenario"
+```
+
 ## DEMO AUTHORIZATION — replace in production
 
 Wave 1 uses two headers:
@@ -77,6 +214,8 @@ All routes are under `/v1` except `/health`.
 | Kill switch | `GET /v1/admin/kill-switch` (ADMIN/STEWARD/DAO), `POST /v1/admin/kill-switch` (ADMIN) |
 | Demo | `POST /v1/demo/reset`, `GET /v1/demo/state` (ADMIN + designated account) |
 | Intents | `GET /v1/intents/capabilities`, `POST /v1/intents/quote`, `GET /v1/intents/status/:quoteId` |
+| Testnet onboarding | `POST /v1/testnet/wallet`, `POST /v1/testnet/faucet`, `GET /v1/testnet/wallet/:accountId` (LIVE_TESTNET only) |
+| Live scenario | `POST /v1/live/run-scenario` (LIVE_TESTNET + `MEND_LIVE_SCENARIO_ENABLED=true` only) |
 
 `POST /v1/work-orders/:id/actions/:action` accepts:
 `dao_authorize`, `fund`, `open_bidding`, `close_bidding`, `award`, `start_work`,
@@ -127,8 +266,11 @@ Every lifecycle action first creates a `chain_commands` row in `INTENT`. Only an
 adapter result with `SUCCESS` and a transaction hash applies the state change.
 `PENDING` and `FAILED` never apply the transition. The default replay adapter
 returns `replay:<hash>` with `realTransaction: false` and the response label
-`REPLAY / SIMULATION`. A live adapter without a signer remains `INTENT` with
-`UPSTREAM_UNAVAILABLE`; it never reports an unsigned action as executed.
+`REPLAY / SIMULATION`. The LIVE_TESTNET adapter signs with the configured role
+account and returns the real NEAR transaction hash. A missing role signer, RPC
+failure or on-chain failure remains `FAILED`; an indeterminate broadcast remains
+`PENDING`. None of those apply the state transition, and no unsigned action is
+ever reported as executed. Mainnet is refused.
 
 ## Honest unavailable adapters
 

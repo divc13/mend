@@ -220,7 +220,22 @@ async function prepare(
       if (body.scopeHash !== undefined && body.scopeHash !== workOrder.scopeHash) {
         throw new MendError('DAO_APPROVAL_MISMATCH', 'DAO approval scope hash does not match the work order scope');
       }
-      return { args: { workOrderId: workOrder.id, daoApprovalId: workOrder.daoApprovalId, policyHash: workOrder.policyHash } };
+      return {
+        args: {
+          workOrderId: workOrder.id,
+          daoApprovalId: workOrder.daoApprovalId,
+          proposalId: approval.proposalId,
+          scopeHash: workOrder.scopeHash,
+          policyHash: workOrder.policyHash,
+          budgetMicro: workOrder.budgetMicro,
+          contractorRoster: approval.contractorRoster,
+          inspectorRoster: approval.inspectorRoster,
+          commitDeadline: workOrder.commitDeadline ?? new Date(now.getTime() + deps.config.bidding.commitWindowSeconds * 1000).toISOString(),
+          revealDeadline: workOrder.revealDeadline ?? new Date(
+            now.getTime() + (deps.config.bidding.commitWindowSeconds + deps.config.bidding.revealWindowSeconds) * 1000,
+          ).toISOString(),
+        },
+      };
     }
     case 'fund': {
       requireState(workOrder, ['POLICY_APPROVED'], action);
@@ -364,13 +379,19 @@ async function prepare(
       if (typeof body.targetState !== 'string') throw new MendError('VALIDATION_ERROR', 'targetState is required');
       const check = canTransition(workOrder.status, body.targetState as WorkOrderState, { humanResolution: true });
       if (!check.ok) throw new MendError('INVALID_TRANSITION', check.reason ?? 'invalid dispute resolution target');
-      return { args: { workOrderId: workOrder.id, targetState: body.targetState } };
+      return {
+        args: {
+          workOrderId: workOrder.id,
+          targetState: body.targetState,
+          resolutionHash: body.resolutionHash ?? null,
+        },
+      };
     }
     case 'cancel_work_order': {
       if (!(PRE_AWARD_STATES as readonly string[]).includes(workOrder.status)) {
         throw new MendError('INVALID_STATE', 'Only pre-award work orders can be cancelled');
       }
-      return { args: { workOrderId: workOrder.id } };
+      return { args: { workOrderId: workOrder.id, reasonHash: body.reasonHash ?? null } };
     }
     case 'refund': {
       requireState(workOrder, ['CANCELLED', 'FUNDED', 'SCORED'], action);
@@ -385,7 +406,12 @@ async function prepare(
       if (workOrder.status === 'PAUSED') throw new MendError('INVALID_STATE', 'Work order is already paused');
       const check = canTransition(workOrder.status, 'PAUSED');
       if (!check.ok) throw new MendError('INVALID_TRANSITION', check.reason ?? 'contract cannot be paused');
-      return { args: { workOrderId: workOrder.id, reasonHash: body.reasonHash ?? null } };
+      return {
+        args: {
+          workOrderId: workOrder.id,
+          reasonHash: body.reasonHash ?? body.reason ?? null,
+        },
+      };
     }
     case 'unpause': {
       requireState(workOrder, ['PAUSED'], action);

@@ -30,6 +30,8 @@ import type {
   ReportRecord,
   Repository,
   ScoreExecutionRecord,
+  TestnetWalletPatch,
+  TestnetWalletRecord,
   TriageSuggestionRecord,
   WarrantyCaseRecord,
   WarrantyPatch,
@@ -83,6 +85,7 @@ export class MemoryRepository implements Repository {
   private intentQuotes = new Map<string, IntentQuoteRecord>();
   private intentExecutions = new Map<string, IntentExecutionRecord>();
   private triage = new Map<string, TriageSuggestionRecord>();
+  private testnetWallets = new Map<string, TestnetWalletRecord>();
   private chainCommands = new Map<string, ChainCommandRecord>();
   private audits: AuditEventRecord[] = [];
   private sequences = new Map<string, number>();
@@ -463,6 +466,25 @@ export class MemoryRepository implements Repository {
     return Promise.resolve(page(items, filter).map(clone));
   }
 
+  createTestnetWallet(wallet: TestnetWalletRecord): Promise<TestnetWalletRecord> {
+    const record = clone(wallet);
+    this.testnetWallets.set(record.accountId, record);
+    return Promise.resolve(clone(record));
+  }
+
+  getTestnetWallet(accountId: string): Promise<TestnetWalletRecord | null> {
+    const value = this.testnetWallets.get(accountId);
+    return Promise.resolve(value ? clone(value) : null);
+  }
+
+  updateTestnetWallet(accountId: string, patch: TestnetWalletPatch): Promise<TestnetWalletRecord | null> {
+    const current = this.testnetWallets.get(accountId);
+    if (!current) return Promise.resolve(null);
+    const next = { ...current, ...patch };
+    this.testnetWallets.set(accountId, next);
+    return Promise.resolve(clone(next));
+  }
+
   createAttestation(attestation: AttestationRecord): Promise<AttestationRecord> {
     const record = clone(attestation);
     this.attestations.set(record.id, record);
@@ -713,6 +735,7 @@ export class MemoryRepository implements Repository {
       intentQuotes: cloneMap(this.intentQuotes),
       intentExecutions: cloneMap(this.intentExecutions),
       triage: cloneMap(this.triage),
+      testnetWallets: cloneMap(this.testnetWallets),
       chainCommands: cloneMap(this.chainCommands),
       audits: clone(this.audits),
       sequences: new Map(this.sequences),
@@ -742,6 +765,7 @@ export class MemoryRepository implements Repository {
     this.intentQuotes = snapshot.intentQuotes as Map<string, IntentQuoteRecord>;
     this.intentExecutions = snapshot.intentExecutions as Map<string, IntentExecutionRecord>;
     this.triage = snapshot.triage as Map<string, TriageSuggestionRecord>;
+    this.testnetWallets = snapshot.testnetWallets as Map<string, TestnetWalletRecord>;
     this.chainCommands = snapshot.chainCommands as Map<string, ChainCommandRecord>;
     this.audits = snapshot.audits as AuditEventRecord[];
     this.sequences = snapshot.sequences as Map<string, number>;

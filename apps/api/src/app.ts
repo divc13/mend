@@ -9,12 +9,16 @@ import { createEvidenceStore, type PrivateEvidenceStore } from './services/evide
 import { createIntentsAdapter, type IntentsAdapter, type IntentsCapabilities } from './services/intents.js';
 import { createTriageAdapter, type TriageAdapter } from './services/triage.js';
 import { KillSwitchService, KILL_SWITCH_SCOPE, restoreKillSwitch } from './services/kill-switch.js';
+import { NearLiveChain, type LiveChainExecutor } from './services/testnet-chain.js';
+import { NearTestnetOnboarding, type TestnetOnboarding } from './services/testnet-onboarding.js';
+import { LiveScenarioRunner } from './services/live-scenario.js';
 import { registerPublicRoutes } from './routes/public.js';
 import { registerAssetRoutes } from './routes/assets.js';
 import { registerReportRoutes } from './routes/reports.js';
 import { registerWorkOrderRoutes } from './routes/work-orders.js';
 import { registerEvidenceRoutes } from './routes/evidence.js';
 import { registerAdminRoutes } from './routes/admin.js';
+import { registerTestnetRoutes } from './routes/testnet.js';
 
 export interface BuildAppOptions {
   config?: AppConfig;
@@ -25,6 +29,10 @@ export interface BuildAppOptions {
   intents?: IntentsAdapter;
   clock?: Clock;
   killSwitch?: KillSwitchService;
+  /** Offline tests can inject a fake testnet transport without touching RPC. */
+  liveChain?: LiveChainExecutor;
+  testnet?: TestnetOnboarding;
+  liveScenario?: LiveScenarioRunner;
   logger?: boolean;
 }
 
@@ -38,11 +46,20 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<BuiltApp>
   const repo = options.repo
     ?? (config.databaseUrl ? PgRepository.fromConnectionString(config.databaseUrl) : new MemoryRepository());
   const evidenceStore = options.evidenceStore ?? createEvidenceStore(config.evidence);
-  const commands = options.commands ?? new ChainCommandService(createChainAdapter(config), config, options.clock ?? systemClock);
+  const clock = options.clock ?? systemClock;
+  const liveChain = options.liveChain
+    ?? (config.mode === 'LIVE_TESTNET' && config.chain.adapter === 'live' && config.chain.keysFile
+      ? new NearLiveChain(config.chain)
+      : undefined);
+  const commands = options.commands
+    ?? new ChainCommandService(createChainAdapter(config, liveChain), config, clock);
   const triage = options.triage ?? createTriageAdapter(config.triage);
   const intents = options.intents ?? createIntentsAdapter(config.intents);
-  const clock = options.clock ?? systemClock;
   const killSwitch = options.killSwitch ?? await restoreKillSwitch(repo, clock);
+  const testnet = options.testnet
+    ?? (liveChain ? new NearTestnetOnboarding(liveChain, config) : undefined);
+  const liveScenario = options.liveScenario
+    ?? (liveChain ? new LiveScenarioRunner(liveChain, config, repo, undefined, () => clock.now()) : undefined);
 
   const deps: AppDeps = {
     config,
@@ -53,6 +70,8 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<BuiltApp>
     intents,
     clock,
     killSwitch,
+    ...(testnet ? { testnet } : {}),
+    ...(liveScenario ? { liveScenario } : {}),
     triageInfo: () => ({
       provider: triage.provider,
       available: triage.available,
@@ -65,10 +84,13 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<BuiltApp>
     intentsCapabilities: (): IntentsCapabilities => intents.capabilities(),
   };
 
+  const requestTimeout = config.mode === 'LIVE_TESTNET' && config.liveScenario.enabled
+    ? Math.max(30_000, config.liveScenario.timeoutMs)
+    : 30_000;
   const app = Fastify({
     logger: options.logger ?? false,
     bodyLimit: config.evidence.maxBytes * 2,
-    requestTimeout: 30_000,
+    requestTimeout,
   });
 
   app.addHook('onSend', async (_request, reply, payload) => {
@@ -119,6 +141,7 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<BuiltApp>
   await registerWorkOrderRoutes(app, deps);
   await registerEvidenceRoutes(app, deps);
   await registerAdminRoutes(app, deps);
+  await registerTestnetRoutes(app, deps);
 
   app.addHook('onClose', async () => {
     await repo.close();

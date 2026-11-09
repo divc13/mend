@@ -271,6 +271,26 @@ export interface TriageSuggestionRecord {
   isDemo: boolean;
 }
 
+/**
+ * Server-side record for a testnet onboarding wallet. Only the public account
+ * id and public key are stored; the one-time secret key is never persisted.
+ */
+export interface TestnetWalletRecord {
+  accountId: string;
+  publicKey: string;
+  network: 'testnet';
+  createdAt: string;
+  lastFaucetAt?: string;
+  lastFaucetIpHash?: string;
+  faucetCount: number;
+}
+
+export interface TestnetWalletPatch {
+  lastFaucetAt?: string;
+  lastFaucetIpHash?: string;
+  faucetCount?: number;
+}
+
 export interface ChainCommandRecord {
   id: string;
   workOrderId?: string;
@@ -502,6 +522,10 @@ export interface Repository {
   createTriageSuggestion(suggestion: TriageSuggestionRecord): Promise<TriageSuggestionRecord>;
   getTriageSuggestion(id: string): Promise<TriageSuggestionRecord | null>;
   listTriageSuggestions(reportId: string): Promise<TriageSuggestionRecord[]>;
+
+  createTestnetWallet(wallet: TestnetWalletRecord): Promise<TestnetWalletRecord>;
+  getTestnetWallet(accountId: string): Promise<TestnetWalletRecord | null>;
+  updateTestnetWallet(accountId: string, patch: TestnetWalletPatch): Promise<TestnetWalletRecord | null>;
 
   createChainCommand(command: ChainCommandRecord): Promise<ChainCommandRecord>;
   getChainCommand(id: string): Promise<ChainCommandRecord | null>;

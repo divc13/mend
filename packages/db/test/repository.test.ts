@@ -94,6 +94,27 @@ describe('MemoryRepository', () => {
     expect(JSON.stringify(publicReport)).not.toContain('reporterCaseLink');
   });
 
+  it('stores only testnet account/public-key onboarding metadata', async () => {
+    const repo = new MemoryRepository();
+    const created = await repo.createTestnetWallet({
+      accountId: 'mend-wnew.testnet',
+      publicKey: 'ed25519:11111111111111111111111111111111',
+      network: 'testnet',
+      createdAt: at,
+      faucetCount: 0,
+    });
+    expect(created.accountId).toBe('mend-wnew.testnet');
+    const updated = await repo.updateTestnetWallet('mend-wnew.testnet', {
+      lastFaucetAt: at,
+      faucetCount: 1,
+    });
+    expect(updated?.faucetCount).toBe(1);
+    const stored = await repo.getTestnetWallet('mend-wnew.testnet');
+    expect(stored?.publicKey).toBe('ed25519:11111111111111111111111111111111');
+    expect(JSON.stringify(stored)).not.toContain('secretKey');
+    expect(JSON.stringify(stored)).not.toContain('seedPhrase');
+  });
+
   it('keeps audit events append-only in the interface and preserves order', async () => {
     const repo = new MemoryRepository();
     const events: AuditEventRecord[] = [
