@@ -9,11 +9,13 @@ const primary = [
   { href: '/', label: 'Map' },
   { href: '/report', label: 'Report a problem' },
   { href: '/dashboard', label: 'Dashboard' },
+  { href: '/live', label: 'Live' },
+  { href: '/wallet', label: 'Wallet' },
   { href: '/trust', label: 'Trust' },
-  { href: '/demo', label: 'Demo' },
 ];
 
 const consoles = [
+  { href: '/demo', label: 'Demo control room' },
   { href: '/steward', label: 'Steward console' },
   { href: '/bids/WO-BENCH-001-0001', label: 'Sealed bid room' },
   { href: '/inspector/WO-GATE-006-0001', label: 'Inspector console' },

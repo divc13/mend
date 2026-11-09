@@ -127,6 +127,13 @@ export const Clock = (props: IconProps) => (
   </Icon>
 );
 
+export const CircleDot = (props: IconProps) => (
+  <Icon {...props}>
+    <circle cx="12" cy="12" r="8.5" />
+    <circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none" />
+  </Icon>
+);
+
 export const AlertTriangle = (props: IconProps) => (
   <Icon {...props}>
     <path d="M10.3 4.2 2.8 17.5A2 2 0 0 0 4.5 20h15a2 2 0 0 0 1.7-2.5L13.7 4.2a2 2 0 0 0-3.4 0Z" />
