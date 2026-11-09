@@ -30,10 +30,33 @@ Browser code calls the same-origin proxy at `/api/mend/*`. The upstream base URL
 private evidence URLs never enter the browser bundle. When the API is unreachable, pages label the
 fallback and keep replay fixtures visible.
 
-## Build check
+## Testnet wallet and live run
+
+`/wallet` and `/live` call the testnet API through the same-origin proxy:
+
+| UI action | API |
+| --- | --- |
+| Create testnet wallet | `POST /v1/testnet/wallet` |
+| Read balance/storage | `GET /v1/testnet/wallet/:accountId` |
+| Faucet (100 mUSDC) | `POST /v1/testnet/faucet` |
+| Live scenario | `POST /v1/live/run-scenario` |
+
+Testnet contracts are `mend-hub.testnet` and `mend-usdc.testnet`; explorer links target
+`https://explorer.testnet.near.org`. Responses are normalised in `src/lib/testnet.ts`, which accepts
+camelCase, snake_case and `{ data: ... }` wrappers.
+
+The wallet page remembers only the public account ID in `sessionStorage`. A secret key is kept in
+React state after creation, can be downloaded once as JSON, and is discarded when the panel is
+hidden or the page is left. It is never written to local storage, cookies or the URL.
+
+When LIVE TESTNET is not selected, or the API is unavailable, `/live` shows the recorded replay
+path instead. REPLAY never produces a wallet, faucet call or explorer link.
+
+## Build and test
 
 ```bash
 npm run build
+npm test
 ```
 
 ## Safety boundaries

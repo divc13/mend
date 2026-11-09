@@ -17,7 +17,10 @@ export function DataSourceNote({
     return (
       <p className="source-note source-note--live">
         <Info size={16} />
-        <span>Data source: live {MODE_META[mode].short} API. Only real transaction hashes receive explorer links.</span>
+        <span>
+          Data source: {mode === 'LIVE_TESTNET' ? 'live testnet API' : 'live API'}. Only real transaction hashes receive
+          explorer links.
+        </span>
       </p>
     );
   }

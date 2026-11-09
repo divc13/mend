@@ -28,6 +28,8 @@ export function SiteFooter() {
           <Link href="/">Public map</Link>
           <Link href="/report">Report a problem</Link>
           <Link href="/dashboard">Public dashboard</Link>
+          <Link href="/wallet">Testnet wallet</Link>
+          <Link href="/live">Live testnet run</Link>
           <Link href="/trust">Privacy & trust</Link>
         </nav>
 

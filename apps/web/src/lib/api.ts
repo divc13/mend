@@ -11,6 +11,8 @@ export interface ApiFailure {
   code: string;
   message: string;
   replayFallback: true;
+  /** Present on 429 responses when the upstream sends Retry-After. */
+  retryAfterSeconds?: number;
 }
 
 export interface ApiSuccess<T> {
@@ -22,8 +24,23 @@ export interface ApiSuccess<T> {
 
 export type ApiResult<T> = ApiSuccess<T> | ApiFailure;
 
-function failure(status: number, code: string, message: string): ApiFailure {
-  return { ok: false, status, code, message, replayFallback: true };
+function failure(
+  status: number,
+  code: string,
+  message: string,
+  retryAfterSeconds?: number,
+): ApiFailure {
+  return { ok: false, status, code, message, replayFallback: true, retryAfterSeconds };
+}
+
+function parseRetryAfter(response: Response): number | undefined {
+  const raw = response.headers.get('retry-after');
+  if (!raw) return undefined;
+  const seconds = Number(raw);
+  if (Number.isFinite(seconds) && seconds >= 0) return Math.ceil(seconds);
+  const date = Date.parse(raw);
+  if (Number.isNaN(date)) return undefined;
+  return Math.max(0, Math.ceil((date - Date.now()) / 1_000));
 }
 
 export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise<ApiResult<T>> {
@@ -52,6 +69,7 @@ export async function apiFetch<T>(path: string, init: RequestInit = {}): Promise
         response.status,
         payload?.error?.code ?? `HTTP_${response.status}`,
         payload?.error?.message ?? 'The API did not return a usable response.',
+        parseRetryAfter(response),
       );
     }
 
@@ -100,6 +118,35 @@ export function getWorkOrderBids(id: string) {
 
 export function getWorkOrderScore(id: string) {
   return apiFetch<Record<string, unknown>>(apiEndpoints.score(id));
+}
+
+/**
+ * Testnet-only operations. These are never called while REPLAY is selected and
+ * they never touch MAINNET. The raw payload is normalised in `lib/testnet.ts`.
+ */
+export function createTestnetWallet() {
+  return apiFetch<unknown>('/v1/testnet/wallet', {
+    method: 'POST',
+    body: JSON.stringify({}),
+  });
+}
+
+export function getTestnetWallet(accountId: string) {
+  return apiFetch<unknown>(`/v1/testnet/wallet/${encodeURIComponent(accountId)}`);
+}
+
+export function requestTestnetFaucet(accountId: string) {
+  return apiFetch<unknown>('/v1/testnet/faucet', {
+    method: 'POST',
+    body: JSON.stringify({ accountId }),
+  });
+}
+
+export function runLiveTestnetScenario() {
+  return apiFetch<unknown>('/v1/live/run-scenario', {
+    method: 'POST',
+    body: JSON.stringify({}),
+  });
 }
 
 export interface ReportSubmission {
