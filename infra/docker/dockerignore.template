@@ -1,0 +1,54 @@
+# Template for the repository-root .dockerignore.
+#
+# The infrastructure track owns only infra/**, so it cannot create the root
+# file. The orchestrator should copy this file to `.dockerignore` at the repo
+# root (or merge these lines into an existing one) before building images.
+#
+# Keeping this list accurate prevents local node_modules, secrets, test output
+# and private evidence from entering the build context.
+
+.git
+.gitignore
+.github
+node_modules
+**/node_modules
+
+# Secrets and local environment files
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+!**/.env.example
+*.pem
+*.key
+**/id_ed25519
+**/id_rsa
+
+# Build output and caches
+dist
+**/dist
+build
+**/build
+.next
+**/.next
+coverage
+**/coverage
+*.tsbuildinfo
+**/*.tsbuildinfo
+target
+**/target
+.cargo
+**/.cargo
+
+# Test / tool output and logs
+playwright-report
+test-results
+*.log
+**/*.log
+
+# Local private evidence must never be baked into an image
+private-evidence
+**/private-evidence
+evidence-private
+**/evidence-private
