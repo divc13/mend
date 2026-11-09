@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "recorded": true,
+    "replayLabel": "REPLAY / SIMULATION",
+    "kind": "redacted-market-brief"
+  },
+  "brief": {
+    "workOrderId": "WO-BENCH-001-0001",
+    "assetPublicId": "BENCH-001",
+    "evidenceChecklist": ["before_photo", "after_photo", "fastener_closeup", "materials_receipt", "completion_note"],
+    "submittedItems": [
+      {
+        "kind": "photo",
+        "sha256": "1111111111111111111111111111111111111111111111111111111111111111",
+        "redacted": true,
+        "capturedAt": "2026-11-10T10:55:00.000Z"
+      },
+      {
+        "kind": "photo",
+        "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "redacted": true,
+        "capturedAt": "2026-11-10T11:00:00.000Z"
+      }
+    ],
+    "notes": "Redacted manifest prepared for completeness review."
+  }
+}

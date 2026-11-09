@@ -1,0 +1,21 @@
+{
+  "meta": {
+    "recorded": true,
+    "replayLabel": "REPLAY / SIMULATION",
+    "kind": "redacted-market-brief-private-data-rejected"
+  },
+  "brief": {
+    "workOrderId": "WO-BENCH-001-0001",
+    "assetPublicId": "BENCH-001",
+    "evidenceChecklist": ["after_photo"],
+    "submittedItems": [
+      {
+        "kind": "photo",
+        "sha256": "2222222222222222222222222222222222222222222222222222222222222222",
+        "redacted": true
+      }
+    ],
+    "privateMediaUrl": "https://private.example/evidence/full-resolution.jpg",
+    "preciseLocation": { "lat": 52.520001, "lng": 13.405001 }
+  }
+}

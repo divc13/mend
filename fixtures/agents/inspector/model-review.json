@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "recorded": true,
+    "replayLabel": "REPLAY / SIMULATION",
+    "kind": "evidence-completeness-review",
+    "note": "Deterministic offline review output. Advisory completeness only; not a physical inspection."
+  },
+  "output": {
+    "missingChecklistItems": ["fastener_closeup", "materials_receipt", "completion_note"],
+    "limitations": [
+      "Evidence text and redacted hashes were reviewed for checklist presence only",
+      "Physical condition was not inspected",
+      "A human inspector must make the final decision"
+    ],
+    "humanDecisionRequired": true
+  }
+}

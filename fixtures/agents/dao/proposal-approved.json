@@ -1,0 +1,62 @@
+{
+  "meta": {
+    "recorded": true,
+    "replayLabel": "REPLAY / SIMULATION",
+    "kind": "sputnik-function-call-proposal",
+    "note": "Deterministic dao_authorize proposal generated from the frozen payload builder. No proposal was created on-chain."
+  },
+  "expected": {
+    "work_order_id": "WO-BENCH-001-0001",
+    "proposal_id": "42",
+    "scope_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "policy_hash": "1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d",
+    "budget": "100000000",
+    "contractor_roster": [
+      "contractor-a.mend.testnet",
+      "contractor-b.mend.testnet",
+      "contractor-c.mend.testnet"
+    ],
+    "inspector_roster": [
+      "inspector.mend.testnet",
+      "inspector-2.mend.testnet"
+    ],
+    "commit_deadline": "1794301800000000000",
+    "reveal_deadline": "1794302400000000000"
+  },
+  "payload": {
+    "argsBase64": "eyJidWRnZXQiOiIxMDAwMDAwMDAiLCJjb21taXRfZGVhZGxpbmUiOjE3OTQzMDE4MDAwMDAwMDAwMDAsImNvbnRyYWN0b3Jfcm9zdGVyIjpbImNvbnRyYWN0b3ItYS5tZW5kLnRlc3RuZXQiLCJjb250cmFjdG9yLWIubWVuZC50ZXN0bmV0IiwiY29udHJhY3Rvci1jLm1lbmQudGVzdG5ldCJdLCJpbnNwZWN0b3Jfcm9zdGVyIjpbImluc3BlY3Rvci5tZW5kLnRlc3RuZXQiLCJpbnNwZWN0b3ItMi5tZW5kLnRlc3RuZXQiXSwicG9saWN5X2hhc2giOiIxYThhOTg1ODc4ZWJiMDllYmJhZDgxN2VjZDE3YWQ5M2IzZmYxZDhiNDIxYTgzMGZiMzM0MmMxNWM5NDIzNTdkIiwicHJvcG9zYWxfaWQiOiI0MiIsInJldmVhbF9kZWFkbGluZSI6MTc5NDMwMjQwMDAwMDAwMDAwMCwic2NvcGVfaGFzaCI6ImNjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2MiLCJ3b3JrX29yZGVyX2lkIjoiV08tQkVOQ0gtMDAxLTAwMDEifQ==",
+    "argsHash": "9b8b84a361598e11f78c9390584a600161f028c212f837cb06f673ab4f619e99",
+    "canonicalArgsJson": "{\"budget\":\"100000000\",\"commit_deadline\":1794301800000000000,\"contractor_roster\":[\"contractor-a.mend.testnet\",\"contractor-b.mend.testnet\",\"contractor-c.mend.testnet\"],\"inspector_roster\":[\"inspector.mend.testnet\",\"inspector-2.mend.testnet\"],\"policy_hash\":\"1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d\",\"proposal_id\":\"42\",\"reveal_deadline\":1794302400000000000,\"scope_hash\":\"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\",\"work_order_id\":\"WO-BENCH-001-0001\"}"
+  },
+  "proposal": {
+    "id": 42,
+    "proposer": "steward.mend.testnet",
+    "description": "MEND WO-BENCH-001-0001: authorize 100000000 micro-USDC budget, contractor/inspector rosters, policy 1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d",
+    "kind": {
+      "FunctionCall": {
+        "receiver_id": "mend-hub.testnet",
+        "actions": [
+          {
+            "method_name": "dao_authorize",
+            "args": "eyJidWRnZXQiOiIxMDAwMDAwMDAiLCJjb21taXRfZGVhZGxpbmUiOjE3OTQzMDE4MDAwMDAwMDAwMDAsImNvbnRyYWN0b3Jfcm9zdGVyIjpbImNvbnRyYWN0b3ItYS5tZW5kLnRlc3RuZXQiLCJjb250cmFjdG9yLWIubWVuZC50ZXN0bmV0IiwiY29udHJhY3Rvci1jLm1lbmQudGVzdG5ldCJdLCJpbnNwZWN0b3Jfcm9zdGVyIjpbImluc3BlY3Rvci5tZW5kLnRlc3RuZXQiLCJpbnNwZWN0b3ItMi5tZW5kLnRlc3RuZXQiXSwicG9saWN5X2hhc2giOiIxYThhOTg1ODc4ZWJiMDllYmJhZDgxN2VjZDE3YWQ5M2IzZmYxZDhiNDIxYTgzMGZiMzM0MmMxNWM5NDIzNTdkIiwicHJvcG9zYWxfaWQiOiI0MiIsInJldmVhbF9kZWFkbGluZSI6MTc5NDMwMjQwMDAwMDAwMDAwMCwic2NvcGVfaGFzaCI6ImNjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2MiLCJ3b3JrX29yZGVyX2lkIjoiV08tQkVOQ0gtMDAxLTAwMDEifQ==",
+            "deposit": "0",
+            "gas": "30000000000000"
+          }
+        ]
+      }
+    },
+    "status": "Approved",
+    "vote_counts": {
+      "council": [
+        2,
+        0,
+        0
+      ]
+    },
+    "votes": {
+      "steward.mend.testnet": "Approve",
+      "backup.mend.testnet": "Approve"
+    },
+    "submission_time": "1794301200000000000"
+  }
+}
