@@ -1,0 +1,122 @@
+{
+  "meta": {
+    "recorded": true,
+    "replayLabel": "REPLAY / SIMULATION",
+    "kind": "agent-market-recorded-routes",
+    "apiVersion": "2.0.0",
+    "baseUrl": "https://market.near.ai",
+    "note": "Hand-authored offline fixtures based on the frozen OpenAPI 2.0.0 worker surface. Not live marketplace responses."
+  },
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/v1/platform/config",
+      "status": 200,
+      "body": {
+        "platform_fee_bps": 500,
+        "email_verification_required": true,
+        "public_host": "market.near.ai"
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/v1/agents/me/assignments",
+      "status": 200,
+      "body": {
+        "assignments": [
+          {
+            "assignment": {
+              "assignmentId": "asg-0001",
+              "jobId": "job-0001",
+              "status": "in_progress",
+              "escrowAmount": "0.100000000000",
+              "escrowToken": "USDC",
+              "slaSeconds": 300,
+              "slaDeadlineAt": "2026-11-10T12:00:00Z",
+              "startedAt": null,
+              "submittedAt": null,
+              "deliverableUrl": null,
+              "bidId": "bid-0001"
+            },
+            "job": {
+              "jobId": "job-0001",
+              "title": "Evidence completeness review for WO-BENCH-001-0001",
+              "description": "Redacted manifest only.",
+              "tags": ["evidence-review"],
+              "status": "in_progress"
+            },
+            "latestMessage": null,
+            "autoAcceptAt": "2026-11-13T12:00:00Z"
+          }
+        ]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/assignments/asg-0001/start",
+      "status": 200,
+      "body": { "startedAt": "2026-11-10T11:15:00.000Z" }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/assignments/asg-0001/progress",
+      "status": 200,
+      "body": {}
+    },
+    {
+      "method": "POST",
+      "path": "/v1/assignments/asg-0001/messages",
+      "status": 200,
+      "body": { "messageId": "msg-0001", "body": "Reviewing the redacted manifest." }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/assignments/asg-0001/submit",
+      "status": 200,
+      "body": {
+        "assignmentId": "asg-0001",
+        "jobId": "job-0001",
+        "status": "submitted",
+        "escrowAmount": "0.100000000000",
+        "escrowToken": "USDC",
+        "slaSeconds": 300,
+        "startedAt": "2026-11-10T11:15:00.000Z",
+        "submittedAt": "2026-11-10T11:20:00.000Z",
+        "deliverableUrl": null,
+        "bidId": "bid-0001"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/accounts/account-0001/agents",
+      "status": 201,
+      "body": {
+        "agentId": "agent-0001",
+        "accountId": "account-0001",
+        "handle": "mend-evidence-review",
+        "listing_status": "draft"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/v1/agents/agent-0001/pricing-plans",
+      "status": 201,
+      "body": {
+        "planId": "plan-0001",
+        "model": "per_call",
+        "price_amount": "0.10",
+        "sla_seconds": 300
+      }
+    },
+    {
+      "method": "PATCH",
+      "path": "/v1/agents/agent-0001",
+      "status": 200,
+      "body": {
+        "agentId": "agent-0001",
+        "handle": "mend-evidence-review",
+        "listing_status": "live"
+      }
+    }
+  ]
+}

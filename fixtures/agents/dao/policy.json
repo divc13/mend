@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "recorded": true,
+    "replayLabel": "REPLAY / SIMULATION",
+    "kind": "sputnik-policy",
+    "note": "Fixture shaped like Sputnik get_policy. Council is human-only, quorum 2, threshold 2/3."
+  },
+  "policy": {
+    "roles": [
+      {
+        "name": "all",
+        "kind": "Everyone",
+        "permissions": ["*:AddProposal"],
+        "vote_policy": {}
+      },
+      {
+        "name": "council",
+        "kind": {
+          "Group": ["steward.mend.testnet", "backup.mend.testnet", "auditor.mend.testnet"]
+        },
+        "permissions": ["*:Finalize", "*:AddProposal", "*:VoteApprove", "*:VoteReject", "*:VoteRemove"],
+        "vote_policy": {}
+      }
+    ],
+    "default_vote_policy": {
+      "weight_kind": "RoleWeight",
+      "quorum": "2",
+      "threshold": [2, 3]
+    },
+    "proposal_bond": "1000000000000000000000000",
+    "proposal_period": "604800000000000",
+    "bounty_bond": "1000000000000000000000000",
+    "bounty_forgiveness_period": "86400000000000"
+  }
+}

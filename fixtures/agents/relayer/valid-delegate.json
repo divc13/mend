@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "recorded": true,
+    "replayLabel": "REPLAY / SIMULATION",
+    "kind": "nep366-signed-delegate",
+    "note": "Offline fixture only. Signature bytes are a placeholder; a live relayer must verify the real ed25519 signature and the on-chain key before sponsoring."
+  },
+  "accessKey": {
+    "public_key": "ed25519:5BZbX1hYq8m9N2vR4tL7cK3pQ6sD8fG1jHaZxCvBnMq",
+    "access_key": {
+      "nonce": 4,
+      "permission": {
+        "FunctionCall": {
+          "allowance": "250000000000000000000000",
+          "receiver_id": "mend-hub.testnet",
+          "method_names": [
+            "create_work_order"
+          ]
+        }
+      }
+    }
+  },
+  "signedDelegate": {
+    "delegateAction": {
+      "senderId": "coordinator-ai.mend.testnet",
+      "receiverId": "mend-hub.testnet",
+      "actions": [
+        {
+          "functionCall": {
+            "methodName": "create_work_order",
+            "args": "eyJ3b3JrX29yZGVyX2lkIjoiV08tQkVOQ0gtMDAxLTAwMDEiLCJhc3NldF9pZCI6IkJFTkNILTAwMSIsImNsdXN0ZXJfaGFzaCI6ImFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWFhYWEiLCJzY29wZV9oYXNoIjoiY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjY2NjYyIsImRhb19wcm9wb3NhbF9pZCI6IjQyIiwicG9saWN5X2hhc2giOiIxYThhOTg1ODc4ZWJiMDllYmJhZDgxN2VjZDE3YWQ5M2IzZmYxZDhiNDIxYTgzMGZiMzM0MmMxNWM5NDIzNTdkIiwiYnVkZ2V0IjoiMTAwMDAwMDAwIiwic3BvbnNvciI6InNwb25zb3IubWVuZC50ZXN0bmV0IiwiY29udHJhY3Rvcl9yb3N0ZXIiOlsiY29udHJhY3Rvci1hLm1lbmQudGVzdG5ldCIsImNvbnRyYWN0b3ItYi5tZW5kLnRlc3RuZXQiLCJjb250cmFjdG9yLWMubWVuZC50ZXN0bmV0Il0sImluc3BlY3Rvcl9yb3N0ZXIiOlsiaW5zcGVjdG9yLm1lbmQudGVzdG5ldCIsImluc3BlY3Rvci0yLm1lbmQudGVzdG5ldCJdLCJjb21taXRfZGVhZGxpbmUiOjE3OTQzMDE4MDAwMDAwMDAwMDAsInJldmVhbF9kZWFkbGluZSI6MTc5NDMwMjQwMDAwMDAwMDAwMH0=",
+            "gas": "100000000000000",
+            "deposit": "0"
+          }
+        }
+      ],
+      "nonce": "5",
+      "maxBlockHeight": 1005,
+      "publicKey": "ed25519:5BZbX1hYq8m9N2vR4tL7cK3pQ6sD8fG1jHaZxCvBnMq"
+    },
+    "signature": "ed25519:fixture-signature-not-a-real-signature"
+  }
+}
