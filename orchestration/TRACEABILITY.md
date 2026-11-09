@@ -27,7 +27,7 @@ Status values: `PASS`, `PASS_LIVE_BLOCKED_ON_HUMAN`, `PARTIAL`, `BLOCKED_ON_HUMA
 | G0 | Research docs + decisions frozen | PASS — `decisions/G0-freeze.md` |
 | G1 | Foundation tracks pass tests | PASS — `reports/G1-evidence.md` |
 | G2 | Local vertical slice without hand-editing DB | PASS — `reports/G2-evidence.md` |
-| G3 | Testnet lifecycle with real transaction links | BLOCKED_ON_HUMAN — no accounts/funds/credentials |
+| G3 | Testnet lifecycle with real transaction links | **PASS with caveats** — `reports/G3-evidence.md` (Sputnik factory/OutLayer live/wallet rate-limit documented) |
 | G4 | F01–F14 passing evidence | PASS for local features — `reports/G4-evidence.md` |
 | G5 | Human accepts submission package | BLOCKED_ON_HUMAN |
 

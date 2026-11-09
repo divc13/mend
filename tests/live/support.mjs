@@ -15,7 +15,9 @@ export const REPO_ROOT = path.resolve(HERE, '../..');
  */
 export const LIVE_STATE_PATH =
   process.env.MEND_LIVE_STATE ??
-  path.resolve(REPO_ROOT, '..', 'testnet', 'infra', 'testnet', 'live-state.json');
+  (existsSync(path.resolve(REPO_ROOT, 'infra', 'testnet', 'live-state.json'))
+    ? path.resolve(REPO_ROOT, 'infra', 'testnet', 'live-state.json')
+    : path.resolve(REPO_ROOT, '..', 'testnet', 'infra', 'testnet', 'live-state.json'));
 
 /**
  * Human-managed testnet keys live outside every repository. Only the path is

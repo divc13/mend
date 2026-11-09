@@ -197,6 +197,7 @@ export function replayEvents(): IndexedHubEvent[] {
       warrantyDays: bid.warrantyDays,
       materials: key === 'B' ? 'Marine-grade stainless hardware and sealed timber' : 'Fixture materials',
       materialsScore: bid.materialsScore,
+      availableInDays: bid.availableInDays,
       evidenceChecklistAccepted: bid.evidenceChecklistAccepted,
       nonce: bid.nonce,
       revealedAt: FIXTURE_TIMESTAMPS.revealStart,

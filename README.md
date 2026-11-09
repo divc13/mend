@@ -18,11 +18,12 @@ disappear.
 
 > **Honest status (2026-11-09).** The protocol, contracts, AI/compute, API,
 > web app, agents, payments client, infra and docs are implemented and
-> integrated on this branch. There are still no live testnet transactions, no
-> hosted demo, no video and no collected repair media. External claims are
-> labelled **VERIFIED**, **UNAVAILABLE** or **BLOCKED_ON_HUMAN**. See
-> [Limitations](./docs/11-limitations.md) and
-> [G2 evidence](./orchestration/reports/G2-evidence.md).
+> integrated. A real NEAR **testnet** repair lifecycle completed with 57
+> transactions and exact 100/20/72/8 accounting (`WO-BENCH-001-0003`, final
+> `CLOSED`). The wallet/faucet UI is live against testnet. Hosted demo,
+> narrated video, real repair media and the final submission remain
+> human-gated. See [G3 evidence](./orchestration/reports/G3-evidence.md) and
+> [Limitations](./docs/11-limitations.md).
 
 ## Modes
 
@@ -102,6 +103,24 @@ Status: `IMPLEMENTED — verified locally in REPLAY` (see
 
 Expected: the same five scenarios run from recorded artifacts. A replay is never
 shown as a live transaction, and a dry quote is never shown as a payment.
+
+### Live testnet
+
+A real lifecycle already ran on NEAR testnet: `WO-BENCH-001-0003`, final `CLOSED`,
+57 transactions, exact 100/20/72/8 accounting. See
+[G3 evidence](./orchestration/reports/G3-evidence.md) and
+`infra/testnet/live-state.json`.
+
+| Do X | See Y |
+|---|---|
+| Open `http://localhost:3000/wallet` | Create a testnet wallet, get test mUSDC, see balance/storage; secret shown once |
+| Open `http://localhost:3000/live` | Run the live testnet scenario or see the honest unavailable state |
+| `npm run test:live` | RPC + live API + headless wallet/live UI checks |
+| Open `https://explorer.testnet.near.org/accounts/mend-hub.testnet` | Real hub contract and transaction history |
+| Read `infra/testnet/LIVE-DEPLOYMENT.md` | Exact deployment commands and caveats |
+
+Testnet only. Test mUSDC and testnet NEAR have no real value. Wallet creation may
+be rate-limited by the public NEAR faucet; the UI shows the exact retry guidance.
 
 ### Local stack and tests
 

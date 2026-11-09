@@ -17,6 +17,7 @@
     "test:quality": "npm --prefix tests test",
     "test:e2e": "npm --prefix tests run test:e2e",
     "test:contract:adversarial": "npm --prefix tests run test:contract",
+    "test:live": "npm --prefix tests/live run test:live",
     "demo:capture": "node scripts/demo/capture-replay-demo.mjs",
     "verify": "bash scripts/verify.sh"
   },
