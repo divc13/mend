@@ -1,0 +1,7 @@
+{
+  "schema": "mend.cancel-reason.v1",
+  "workOrderId": "WO-BENCH-001-0001",
+  "reason": "The first work order was created with a 180s commit window during deployment debugging; no commitments were possible before the commit deadline. It is cancelled and refunded, and a fresh replacement work order is used for the live lifecycle.",
+  "replacementWorkOrderId": "WO-BENCH-001-0002",
+  "at": "2026-11-09T17:04:46.212Z"
+}

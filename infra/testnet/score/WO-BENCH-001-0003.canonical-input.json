@@ -1,0 +1,45 @@
+{
+  "schema": "mend.bid-rules.v1",
+  "work_order_id": "WO-BENCH-001-0003",
+  "policy_hash": "1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d",
+  "policy": {
+    "version": "mend-bid-policy-v1",
+    "price_weight_bp": 4500,
+    "warranty_weight_bp": 2500,
+    "duration_weight_bp": 2000,
+    "materials_weight_bp": 1000
+  },
+  "bids": [
+    {
+      "bid_id": "BID-A-BENCH-001",
+      "contractor": "mend-contractor-a.testnet",
+      "price_micro": "95000000",
+      "duration_days": 14,
+      "warranty_days": 90,
+      "materials_score": 60,
+      "eligible": true,
+      "commitment_hash": "d5ad096bb8cdbd537f61aa48f569344ec51fc6a538b8ec1982231a344267f17f"
+    },
+    {
+      "bid_id": "BID-B-BENCH-001",
+      "contractor": "mend-contractor-b.testnet",
+      "price_micro": "80000000",
+      "duration_days": 10,
+      "warranty_days": 180,
+      "materials_score": 80,
+      "eligible": true,
+      "commitment_hash": "27fd0ad27046ecd6fa0239ed53565378c3ec25653b30ac5ad3deeb84460d1490"
+    },
+    {
+      "bid_id": "BID-C-BENCH-001",
+      "contractor": "mend-contractor-c.testnet",
+      "price_micro": "78000000",
+      "duration_days": 21,
+      "warranty_days": 30,
+      "materials_score": 70,
+      "eligible": true,
+      "commitment_hash": "058423c9999c09b2a86a41233e3559de45043a94b0fd1cfcaa52434a58a86e2e"
+    }
+  ],
+  "tie_break": "score_desc_price_asc_warranty_desc_duration_asc_bid_id_asc"
+}

@@ -1,0 +1,8 @@
+{
+  "schema": "mend.asset.v1",
+  "assetId": "BENCH-001",
+  "assetType": "bench",
+  "publicDescription": "Public park bench with a split seat plank and loose armrest.",
+  "publicLocation": "Riverside Park, bench near east gate",
+  "note": "Testnet deployment evidence. The location is a coarse public label; no private address is stored."
+}

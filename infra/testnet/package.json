@@ -1,0 +1,10 @@
+{
+  "name": "@mend/testnet-live",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Repeatable MEND NEAR testnet live deployment and lifecycle driver.",
+  "dependencies": {
+    "near-api-js": "^7.4.0"
+  }
+}
