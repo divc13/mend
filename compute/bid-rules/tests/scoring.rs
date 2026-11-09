@@ -232,7 +232,7 @@ fn commitment_hashes_drive_the_protocol_compatible_input_hash() {
     let output = evaluate_ok(&input);
     assert_eq!(
         output.input_hash,
-        "7955aa55803ed501b00dcf95f1559a90fc4403fd859264b1029aa3cdcaa8d6c8"
+        "b06906891107bc8171b2a99c6b561fd31e917cf54368e8ac5363028d4c583244"
     );
     assert_eq!(
         output.output_hash,

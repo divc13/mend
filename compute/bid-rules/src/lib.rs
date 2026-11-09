@@ -21,6 +21,7 @@
 //!       "durationDays": 10,
 //!       "warrantyDays": 180,
 //!       "materialsScore": 80,
+//!       "availableInDays": 2,
 //!       "eligible": true,
 //!       "evidenceChecklistAccepted": true,
 //!       "nonce": "nonce-b-0002"
@@ -71,6 +72,10 @@ pub struct BidInput {
     pub duration_days: i64,
     pub warranty_days: i64,
     pub materials_score: i64,
+    /// Whole days until the contractor can start after award. Committed with
+    /// the bid; missing defaults to 0 for `MEND_BID_V1`-era inputs.
+    #[serde(default)]
+    pub available_in_days: i64,
     /// Missing is treated as false: an omitted eligibility flag can never win.
     #[serde(default)]
     pub eligible: bool,
@@ -203,13 +208,14 @@ pub fn policy_hash(weights: &WeightsBps) -> String {
 pub fn bid_commitment_payload(bid: &BidInput) -> Option<String> {
     let nonce = bid.nonce.as_ref()?;
     Some(format!(
-        "MEND_BID_V1|{}|{}|{}|{}|{}|{}|{}|{}",
+        "MEND_BID_V2|{}|{}|{}|{}|{}|{}|{}|{}|{}",
         bid.bid_id,
         bid.contractor_id,
         bid.price_micro,
         bid.duration_days,
         bid.warranty_days,
         bid.materials_score,
+        bid.available_in_days,
         if bid.evidence_checklist_accepted.unwrap_or(false) {
             "1"
         } else {
@@ -522,6 +528,7 @@ mod tests {
             duration_days: 10,
             warranty_days: 180,
             materials_score: 80,
+            available_in_days: 2,
             eligible: true,
             evidence_checklist_accepted: Some(true),
             nonce: Some("nonce-b-0002".into()),
@@ -529,7 +536,26 @@ mod tests {
         };
         assert_eq!(
             bid_commitment_payload(&bid).unwrap(),
-            "MEND_BID_V1|BID-B-BENCH-001|contractor-b.mend.testnet|80000000|10|180|80|1|nonce-b-0002"
+            "MEND_BID_V2|BID-B-BENCH-001|contractor-b.mend.testnet|80000000|10|180|80|2|1|nonce-b-0002"
+        );
+    }
+
+    #[test]
+    fn commitment_payload_defaults_availability_to_zero() {
+        let json = r#"{
+            "bidId": "BID-B-BENCH-001",
+            "contractorId": "contractor-b.mend.testnet",
+            "priceMicro": "80000000",
+            "durationDays": 10,
+            "warrantyDays": 180,
+            "materialsScore": 80,
+            "nonce": "nonce-b-0002"
+        }"#;
+        let bid: BidInput = serde_json::from_str(json).expect("bid without availableInDays");
+        assert_eq!(bid.available_in_days, 0);
+        assert_eq!(
+            bid_commitment_payload(&bid).unwrap(),
+            "MEND_BID_V2|BID-B-BENCH-001|contractor-b.mend.testnet|80000000|10|180|80|0|0|nonce-b-0002"
         );
     }
 }
