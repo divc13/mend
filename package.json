@@ -14,6 +14,10 @@
     "typecheck": "npm run typecheck --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
     "protocol:export": "npm run export --workspace @mend/protocol",
+    "test:quality": "npm --prefix tests test",
+    "test:e2e": "npm --prefix tests run test:e2e",
+    "test:contract:adversarial": "npm --prefix tests run test:contract",
+    "demo:capture": "node scripts/demo/capture-replay-demo.mjs",
     "verify": "bash scripts/verify.sh"
   },
   "devDependencies": {

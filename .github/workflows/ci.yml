@@ -44,6 +44,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install quality-test dependencies
+        run: npm ci --prefix tests
+
       - name: Formatting
         shell: bash
         run: |
@@ -115,16 +118,20 @@ jobs:
             echo "SKIP: no services/* test scripts present in this checkout"
           fi
 
+      - name: Quality suites (integration, security, clean-room)
+        run: npm --prefix tests test
+
       - name: E2E tests
         shell: bash
         run: |
           set -euo pipefail
-          if node -e 'const p=require("./package.json");process.exit(p.scripts&&p.scripts["test:e2e"]?0:1)'; then
+          if [ -f tests/package.json ]; then
+            npx --prefix tests playwright install --with-deps chromium
+            npm --prefix tests run test:e2e
+          elif node -e 'const p=require("./package.json");process.exit(p.scripts&&p.scripts["test:e2e"]?0:1)'; then
             npm run test:e2e
-          elif ls playwright.config.* >/dev/null 2>&1; then
-            npx --no-install playwright test
           else
-            echo "SKIP: no E2E script or Playwright config present"
+            echo "SKIP: no E2E script or tests/ package present"
           fi
 
       - name: Validate docker compose configuration

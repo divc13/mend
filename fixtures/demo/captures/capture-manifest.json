@@ -1,0 +1,43 @@
+{
+  "status": "RECORDED",
+  "mode": "REPLAY / SIMULATION",
+  "baseUrl": "http://localhost:3000",
+  "startedAt": "2026-11-09T11:37:49.679Z",
+  "finishedAt": "2026-11-09T11:39:10.246Z",
+  "scenariosRequested": [
+    "successful-repair",
+    "failed-durability",
+    "prompt-injection",
+    "sponsorship-uncertainty",
+    "judge-replay"
+  ],
+  "scenariosRecorded": [
+    "successful-repair",
+    "failed-durability",
+    "prompt-injection",
+    "sponsorship-uncertainty",
+    "judge-replay"
+  ],
+  "scenariosMissing": [],
+  "checks": [
+    "mode badge visible and reads REPLAY / SIMULATION",
+    "no MAINNET \u2014 REAL FUNDS label appeared during REPLAY"
+  ],
+  "screenshots": [
+    "fixtures/demo/captures/scenario-successful-repair.png",
+    "fixtures/demo/captures/scenario-failed-durability.png",
+    "fixtures/demo/captures/scenario-prompt-injection.png",
+    "fixtures/demo/captures/scenario-sponsorship-uncertainty.png",
+    "fixtures/demo/captures/scenario-judge-replay.png"
+  ],
+  "video": "fixtures/demo/captures/mend-replay-demo.mp4",
+  "ffmpegAvailable": false,
+  "notes": "No narration, music, captions or physical media were added by this harness. MP4 conversion is pending the ffmpeg dependency.",
+  "mp4": {
+    "path": "fixtures/demo/captures/mend-replay-demo.mp4",
+    "durationSeconds": 91.64,
+    "codec": "h264",
+    "audio": "none",
+    "note": "Silent screen recording of REPLAY scenarios; narration/captions are a human production step."
+  }
+}

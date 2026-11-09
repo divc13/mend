@@ -95,7 +95,7 @@ async function main() {
   const screenshots = [];
 
   try {
-    await page.goto(BASE_URL, { waitUntil: 'domcontentloaded', timeout: 30000 });
+    await page.goto(`${BASE_URL.replace(/\/+$/, '')}/demo`, { waitUntil: 'domcontentloaded', timeout: 30000 });
     await page.waitForTimeout(1200);
 
     const badge = page.locator('[data-testid="mode-badge"]');
@@ -118,9 +118,9 @@ async function main() {
       await button.first().click();
       await page.waitForTimeout(perScenarioMs);
 
-      const bodyText = await page.locator('body').innerText();
-      if (/MAINNET\s*—\s*REAL FUNDS/i.test(bodyText)) {
-        throw new Error(`scenario ${scenario} showed a MAINNET label inside REPLAY; refusing to record`);
+      const badgeNow = (await badge.first().innerText()).trim();
+      if (/MAINNET\s*—\s*REAL FUNDS/i.test(badgeNow)) {
+        throw new Error(`scenario ${scenario} switched the mode badge to MAINNET inside REPLAY; refusing to record`);
       }
       const shot = path.join(OUT_DIR, `scenario-${scenario}.png`);
       await page.screenshot({ path: shot, fullPage: false });

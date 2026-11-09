@@ -210,7 +210,12 @@ export function DemoRoom() {
                     ))}
                   </div>
                   <div className="scenario-card__actions">
-                    <button type="button" className="button button--small" onClick={() => runScenario(scenario.id)}>
+                    <button
+                      type="button"
+                      className="button button--small"
+                      data-testid={`scenario-${scenario.id}`}
+                      onClick={() => runScenario(scenario.id)}
+                    >
                       <Play size={14} aria-hidden="true" /> Run replay
                     </button>
                     {linkedCase ? (

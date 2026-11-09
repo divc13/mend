@@ -10,7 +10,12 @@ export function ModeBanner() {
   const meta = MODE_META[mode];
 
   return (
-    <div className={`mode-banner mode-banner--${meta.tone}`} role="region" aria-label="Environment mode">
+    <div
+      className={`mode-banner mode-banner--${meta.tone}`}
+      role="region"
+      aria-label="Environment mode"
+      data-testid="mode-badge"
+    >
       <div className="mode-banner__inner">
         <p className="mode-banner__label">
           <span className="mode-banner__dot" aria-hidden="true" />
