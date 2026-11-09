@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+.next/
+coverage/
+*.log
+.env
+.env.*
+!.env.example
+target/
+*.wasm
+!fixtures/**/*.wasm
+*.tsbuildinfo
+.DS_Store
+playwright-report/
+test-results/
+orchestration/reports/tmp/

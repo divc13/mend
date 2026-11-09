@@ -1,0 +1,1179 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mend.local/schemas/protocol.json",
+  "title": "MEND Protocol Schemas",
+  "version": "0.1.0",
+  "components": {
+    "schemas": {
+      "Asset": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[A-Z]{2,12}-\\d{3}$"
+          },
+          "publicDescription": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 2000
+          },
+          "assetType": {
+            "type": "string",
+            "enum": [
+              "bench",
+              "bicycle_rack",
+              "fence",
+              "door",
+              "playground",
+              "other"
+            ]
+          },
+          "publicLocation": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "coarseLat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              },
+              "coarseLng": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              },
+              "area": {
+                "type": "string",
+                "maxLength": 200
+              }
+            },
+            "required": [
+              "label",
+              "coarseLat",
+              "coarseLng"
+            ],
+            "additionalProperties": false
+          },
+          "passportTokenId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "publicDescription",
+          "assetType",
+          "publicLocation",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "Report": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^R-\\d{3}$"
+          },
+          "assetId": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4000
+          },
+          "publicLocation": {
+            "type": "object",
+            "properties": {
+              "label": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "coarseLat": {
+                "type": "number",
+                "minimum": -90,
+                "maximum": 90
+              },
+              "coarseLng": {
+                "type": "number",
+                "minimum": -180,
+                "maximum": 180
+              },
+              "area": {
+                "type": "string",
+                "maxLength": 200
+              }
+            },
+            "required": [
+              "label",
+              "coarseLat",
+              "coarseLng"
+            ],
+            "additionalProperties": false
+          },
+          "preciseLocationRef": {
+            "type": "string"
+          },
+          "reporterCaseLink": {
+            "type": "string",
+            "minLength": 16
+          },
+          "redactedMediaHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "perceptualHash": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          },
+          "exifStripped": {
+            "type": "boolean"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SUBMITTED",
+              "TRIAGED",
+              "CLUSTERED",
+              "DUPLICATE",
+              "ACCEPTED"
+            ]
+          },
+          "clusterId": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "assetId",
+          "description",
+          "publicLocation",
+          "reporterCaseLink",
+          "exifStripped",
+          "status",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "ReportCluster": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^CL-\\d{4}$"
+          },
+          "reportIds": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "confidenceBps": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 10000
+          },
+          "rationale": {
+            "type": "string",
+            "maxLength": 2000
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SUGGESTED",
+              "CONFIRMED",
+              "REJECTED"
+            ]
+          },
+          "confirmedBy": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "reportIds",
+          "confidenceBps",
+          "rationale",
+          "status",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "DaoApproval": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "daoAccount": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "proposalId": {
+            "type": "string",
+            "pattern": "^\\d{1,10}$"
+          },
+          "budgetMicro": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "contractorRoster": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 64,
+              "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+            }
+          },
+          "inspectorRoster": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 64,
+              "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+            }
+          },
+          "policyHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "PROPOSED",
+              "APPROVED",
+              "REJECTED",
+              "EXPIRED"
+            ]
+          },
+          "approvedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "daoAccount",
+          "proposalId",
+          "budgetMicro",
+          "contractorRoster",
+          "inspectorRoster",
+          "policyHash",
+          "state"
+        ],
+        "additionalProperties": false
+      },
+      "WorkOrder": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^WO-[A-Z0-9-]+-\\d{4}$"
+          },
+          "assetId": {
+            "type": "string"
+          },
+          "reportClusterId": {
+            "type": "string"
+          },
+          "scopeHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "daoApprovalId": {
+            "type": "string"
+          },
+          "policyHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "budgetMicro": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "DRAFT",
+              "POLICY_APPROVED",
+              "FUNDED",
+              "BIDDING_OPEN",
+              "BIDDING_REVEAL",
+              "SCORED",
+              "AWARDED",
+              "IN_PROGRESS",
+              "COMPLETION_SUBMITTED",
+              "COMPLETION_ACCEPTED",
+              "DURABILITY_PENDING",
+              "CLOSED",
+              "WARRANTY_REOPENED",
+              "DISPUTED",
+              "CANCELLED",
+              "REFUNDED",
+              "FUNDING_FAILED",
+              "PAUSED"
+            ]
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "LIVE_TESTNET",
+              "MAINNET",
+              "REPLAY"
+            ]
+          },
+          "awardedBidId": {
+            "type": "string"
+          },
+          "contractorId": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "inspectorId": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "fundingToken": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "fundingTxHash": {
+            "type": "string"
+          },
+          "durabilityDueAt": {
+            "type": "string"
+          },
+          "reopenCount": {
+            "default": 0,
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "assetId",
+          "reportClusterId",
+          "scopeHash",
+          "daoApprovalId",
+          "policyHash",
+          "budgetMicro",
+          "status",
+          "mode",
+          "fundingToken",
+          "reopenCount",
+          "createdAt",
+          "updatedAt"
+        ],
+        "additionalProperties": false
+      },
+      "BidCommitment": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "workOrderId": {
+            "type": "string"
+          },
+          "bidId": {
+            "type": "string",
+            "pattern": "^BID-[A-Z]-[A-Z0-9-]+$"
+          },
+          "contractorId": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "commitmentHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "committedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "workOrderId",
+          "bidId",
+          "contractorId",
+          "commitmentHash",
+          "committedAt"
+        ],
+        "additionalProperties": false
+      },
+      "BidReveal": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "workOrderId": {
+            "type": "string"
+          },
+          "bidId": {
+            "type": "string"
+          },
+          "contractorId": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "priceMicro": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "durationDays": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "warrantyDays": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "materials": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "materialsScore": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 100
+          },
+          "evidenceChecklistAccepted": {
+            "type": "boolean"
+          },
+          "nonce": {
+            "type": "string",
+            "minLength": 8,
+            "maxLength": 128
+          },
+          "revealedAt": {
+            "type": "string"
+          },
+          "commitmentHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          }
+        },
+        "required": [
+          "workOrderId",
+          "bidId",
+          "contractorId",
+          "priceMicro",
+          "durationDays",
+          "warrantyDays",
+          "materials",
+          "materialsScore",
+          "evidenceChecklistAccepted",
+          "nonce",
+          "revealedAt",
+          "commitmentHash"
+        ],
+        "additionalProperties": false
+      },
+      "ScoreExecution": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "workOrderId": {
+            "type": "string"
+          },
+          "policyHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "wasmHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "inputHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "outputHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "ranking": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "rank": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0,
+                  "maximum": 9007199254740991
+                },
+                "bidId": {
+                  "type": "string"
+                },
+                "contractorId": {
+                  "type": "string",
+                  "minLength": 2,
+                  "maxLength": 64,
+                  "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+                },
+                "scoreBps": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10000
+                }
+              },
+              "required": [
+                "rank",
+                "bidId",
+                "contractorId",
+                "scoreBps"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "executionRef": {
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "unavailableReason": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workOrderId",
+          "policyHash",
+          "wasmHash",
+          "inputHash",
+          "outputHash",
+          "ranking",
+          "verified",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "EvidencePackage": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "workOrderId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "COMPLETION",
+              "REMEDIATION",
+              "DURABILITY"
+            ]
+          },
+          "evidenceHashes": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          },
+          "checklist": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {
+              "type": "boolean"
+            }
+          },
+          "redacted": {
+            "type": "boolean",
+            "const": true
+          },
+          "submittedBy": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "submittedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workOrderId",
+          "kind",
+          "evidenceHashes",
+          "checklist",
+          "redacted",
+          "submittedBy",
+          "submittedAt"
+        ],
+        "additionalProperties": false
+      },
+      "Inspection": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "workOrderId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "COMPLETION",
+              "DURABILITY",
+              "REMEDIATION"
+            ]
+          },
+          "inspectorId": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "decision": {
+            "type": "string",
+            "enum": [
+              "APPROVED",
+              "REJECTED"
+            ]
+          },
+          "evidencePackageId": {
+            "type": "string"
+          },
+          "notesHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "signedAt": {
+            "type": "string"
+          },
+          "txHash": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workOrderId",
+          "kind",
+          "inspectorId",
+          "decision",
+          "evidencePackageId",
+          "signedAt"
+        ],
+        "additionalProperties": false
+      },
+      "EscrowAccount": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "workOrderId": {
+            "type": "string"
+          },
+          "token": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "fundedMicro": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "refundedMicro": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "completionPaidMicro": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "holdbackHeldMicro": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "holdbackReleasedMicro": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          }
+        },
+        "required": [
+          "workOrderId",
+          "token",
+          "fundedMicro",
+          "refundedMicro",
+          "completionPaidMicro",
+          "holdbackHeldMicro",
+          "holdbackReleasedMicro"
+        ],
+        "additionalProperties": false
+      },
+      "Payment": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "workOrderId": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "COMPLETION",
+              "HOLDBACK",
+              "REFUND"
+            ]
+          },
+          "amountMicro": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "recipient": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "INTENT",
+              "PENDING",
+              "SUCCESS",
+              "FAILED"
+            ]
+          },
+          "txHash": {
+            "type": "string"
+          },
+          "releasedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workOrderId",
+          "kind",
+          "amountMicro",
+          "recipient",
+          "status"
+        ],
+        "additionalProperties": false
+      },
+      "WarrantyCase": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "workOrderId": {
+            "type": "string"
+          },
+          "failedInspectionId": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "enum": [
+              "OPEN",
+              "REMEDIATING",
+              "CLOSED"
+            ]
+          },
+          "openedAt": {
+            "type": "string"
+          },
+          "closedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "workOrderId",
+          "failedInspectionId",
+          "state",
+          "openedAt"
+        ],
+        "additionalProperties": false
+      },
+      "AgentIdentity": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "account": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "REPORTER",
+              "STEWARD",
+              "SPONSOR",
+              "CONTRACTOR",
+              "INSPECTOR",
+              "DAO",
+              "COORDINATOR_AI",
+              "REVIEWER_AI",
+              "RELAYER",
+              "ADMIN"
+            ]
+          },
+          "keyKind": {
+            "type": "string",
+            "enum": [
+              "FUNCTION_CALL",
+              "HUMAN_WALLET",
+              "CONTRACT"
+            ]
+          },
+          "allowedReceiver": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "allowedMethods": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "allowanceMicro": {
+            "type": "string",
+            "pattern": "^\\d+$"
+          },
+          "canReleaseEscrow": {
+            "type": "boolean",
+            "const": false
+          },
+          "label": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "account",
+          "role",
+          "keyKind",
+          "allowedReceiver",
+          "allowedMethods",
+          "canReleaseEscrow",
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "Attestation": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "NEAR_AI",
+              "OUTLAYER",
+              "DAO",
+              "TRANSACTION",
+              "HUMAN"
+            ]
+          },
+          "subjectHash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "evidence": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          },
+          "signature": {
+            "type": "string"
+          },
+          "verified": {
+            "type": "boolean"
+          },
+          "unavailableReason": {
+            "type": "string"
+          },
+          "createdAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "subjectHash",
+          "evidence",
+          "verified",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "IntentQuote": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "dry": {
+            "type": "boolean"
+          },
+          "srcChain": {
+            "type": "string"
+          },
+          "srcAsset": {
+            "type": "string"
+          },
+          "dstChain": {
+            "type": "string",
+            "const": "near"
+          },
+          "dstAsset": {
+            "type": "string"
+          },
+          "amountIn": {
+            "type": "string"
+          },
+          "amountOut": {
+            "type": "string"
+          },
+          "feesUsd": {
+            "type": "number",
+            "minimum": 0
+          },
+          "recipient": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 64,
+            "pattern": "^(([a-z\\d]+[-_])*[a-z\\d]+)(\\.([a-z\\d]+[-_])*[a-z\\d]+)*$"
+          },
+          "depositAddress": {
+            "type": "string"
+          },
+          "depositMemo": {
+            "type": "string"
+          },
+          "deadline": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "SUCCESS",
+              "FAILED",
+              "REFUNDED",
+              "INCOMPLETE",
+              "EXPIRED"
+            ]
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "raw": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "id",
+          "dry",
+          "srcChain",
+          "srcAsset",
+          "dstChain",
+          "dstAsset",
+          "amountIn",
+          "amountOut",
+          "recipient",
+          "status",
+          "createdAt"
+        ],
+        "additionalProperties": false
+      },
+      "IntentExecution": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "quoteId": {
+            "type": "string"
+          },
+          "workOrderId": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "PENDING",
+              "SUCCESS",
+              "FAILED",
+              "REFUNDED",
+              "INCOMPLETE",
+              "EXPIRED"
+            ]
+          },
+          "destinationTxHash": {
+            "type": "string"
+          },
+          "explorerUrl": {
+            "type": "string",
+            "format": "uri"
+          },
+          "updatedAt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "quoteId",
+          "workOrderId",
+          "status",
+          "updatedAt"
+        ],
+        "additionalProperties": false
+      },
+      "AuditEvent": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "actor": {
+            "type": "string"
+          },
+          "workOrderId": {
+            "type": "string"
+          },
+          "assetId": {
+            "type": "string"
+          },
+          "at": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string"
+            },
+            "additionalProperties": {}
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "actor",
+          "at",
+          "data"
+        ],
+        "additionalProperties": false
+      },
+      "ApiError": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              },
+              "details": {
+                "type": "object",
+                "propertyNames": {
+                  "type": "string"
+                },
+                "additionalProperties": {}
+              }
+            },
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false
+      }
+    }
+  }
+}
