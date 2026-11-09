@@ -66,10 +66,11 @@ dropped.
       "durationDays": 10,
       "warrantyDays": 180,
       "materialsScore": 80,
+      "availableInDays": 2,
       "eligible": true,
       "evidenceChecklistAccepted": true,
       "nonce": "nonce-b-0002",
-      "commitmentHash": "93f4672142373218444617f40f093268b7b01167592aaf648ea17141134a35ef"
+      "commitmentHash": "fcb0780b0d1f1dbccd9fdcefa5627c24b227636ee414a8c618077f0df079d968"
     }
   ]
 }
@@ -78,9 +79,12 @@ dropped.
 - `policyHash`, `policyVersion` and `weightsBps` are optional but if supplied
   must match `mend-bid-policy-v1` exactly, otherwise `SCORE_POLICY_MISMATCH`.
 - `eligible` defaults to `false`; an omitted eligibility flag cannot win.
+- `availableInDays` (whole days until the contractor can start after award) is
+  committed with the bid. It defaults to `0` when omitted, for
+  `MEND_BID_V1`-era inputs; the canonical fixtures carry real values.
 - `commitmentHash` may be supplied, or computed from `nonce` +
   `evidenceChecklistAccepted` using the protocol payload:
-  `MEND_BID_V1|bidId|contractorId|priceMicro|durationDays|warrantyDays|materialsScore|checklist?1:0|nonce`.
+  `MEND_BID_V2|bidId|contractorId|priceMicro|durationDays|warrantyDays|materialsScore|availableInDays|checklist?1:0|nonce`.
 - If neither is present, `inputHash` falls back to a hash of the canonical bid
   list. The on-chain canonical form is the commitment-hash form used by
   `@mend/protocol` `scoreInputHash`.
@@ -108,7 +112,7 @@ dropped.
   ],
   "excluded": [],
   "winnerBidId": "BID-B-BENCH-001",
-  "inputHash": "7955aa55803ed501b00dcf95f1559a90fc4403fd859264b1029aa3cdcaa8d6c8",
+  "inputHash": "b06906891107bc8171b2a99c6b561fd31e917cf54368e8ac5363028d4c583244",
   "outputHash": "905950627b0c7b870fdfc96034f1168bd4654cd6497d443debe6162e6efef134"
 }
 ```

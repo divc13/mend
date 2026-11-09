@@ -9,7 +9,7 @@ Command (OutLayer target):
 Artifact:
   compute/bid-rules/target/wasm32-wasip1/release/mend-bid-rules.wasm
 SHA-256:
-  2d8e5adb069e19d46864dea6d5a1a2988e528df45828ac884856b5d1be44a3e3
+  640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55
 Size:
   128 KiB approx
 
@@ -18,7 +18,7 @@ Command (common CI/build target):
 Artifact:
   compute/bid-rules/target/wasm32-unknown-unknown/release/mend-bid-rules.wasm
 SHA-256:
-  4a38a7c13d3c1c1fbec30516ac76da423ce63502ed4f535097cf8e3b48c0f214
+  3580fb6e71eb644ad05a2b10bec3465ea6da712dd9600bc96f96a1e2efa999a8
 
 WASM binaries are build outputs and are not committed. Rebuild and hash before
 registering a version; pin the exact hash in every OutLayer request.

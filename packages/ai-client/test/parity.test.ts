@@ -26,6 +26,7 @@ interface CanonicalBid {
   durationDays: number;
   warrantyDays: number;
   materialsScore: number;
+  availableInDays: number;
   eligible: boolean;
   evidenceChecklistAccepted: boolean;
   nonce: string;
@@ -96,6 +97,12 @@ describe('Rust ↔ TypeScript canonical parity', () => {
 
   it('recomputes the Rust inputHash and outputHash from protocol hashing', () => {
     const { input, output } = loadFixtures();
+    const availability = Object.fromEntries(input.bids.map((bid) => [bid.bidId, bid.availableInDays]));
+    expect(availability).toEqual({
+      'BID-A-BENCH-001': 3,
+      'BID-B-BENCH-001': 2,
+      'BID-C-BENCH-001': 5,
+    });
     const commitmentHashes = input.bids.map((bid) =>
       bidCommitmentHash({
         bidId: bid.bidId,
@@ -104,6 +111,7 @@ describe('Rust ↔ TypeScript canonical parity', () => {
         durationDays: bid.durationDays,
         warrantyDays: bid.warrantyDays,
         materialsScore: bid.materialsScore,
+        availableInDays: bid.availableInDays,
         evidenceChecklistAccepted: bid.evidenceChecklistAccepted,
         nonce: bid.nonce,
       }),
