@@ -1,0 +1,14 @@
+{
+  "name": "@mend/live-quality",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Independent LIVE_TESTNET verification: real RPC views/transactions, live API checks and headless wallet/live UI.",
+  "scripts": {
+    "test:live": "node --test --test-concurrency=1 --test-timeout=240000 rpc-verification.test.mjs api-checks.test.mjs && node ../node_modules/@playwright/test/cli.js test --config ../../playwright.live.config.ts",
+    "test:live:rpc": "node --test --test-concurrency=1 --test-timeout=240000 rpc-verification.test.mjs",
+    "test:live:api": "node --test --test-concurrency=1 --test-timeout=240000 api-checks.test.mjs",
+    "test:live:ui": "node ../node_modules/@playwright/test/cli.js test --config ../../playwright.live.config.ts",
+    "test:live:list": "node ../node_modules/@playwright/test/cli.js test --config ../../playwright.live.config.ts --list"
+  }
+}
