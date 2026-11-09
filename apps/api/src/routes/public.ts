@@ -37,6 +37,7 @@ export async function registerPublicRoutes(app: FastifyInstance, deps: AppDeps):
       time: deps.clock.now().toISOString(),
       chainAdapter: deps.commands.adapterInfo,
       intents: deps.intentsCapabilities(),
+      triage: deps.triageInfo(),
       evidenceAdapter: {
         kind: deps.evidenceStore.kind,
         available: deps.evidenceStore.available,

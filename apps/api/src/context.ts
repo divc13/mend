@@ -13,6 +13,13 @@ export interface AppDeps {
   triage: TriageAdapter;
   intents: IntentsAdapter;
   clock: Clock;
-  triageInfo(): { provider: string; available: boolean; reason?: string };
+  triageInfo(): {
+    provider: string;
+    available: boolean;
+    model?: string;
+    apiKeyConfigured: boolean;
+    verificationPolicy: string;
+    reason?: string;
+  };
   intentsCapabilities(): IntentsCapabilities;
 }

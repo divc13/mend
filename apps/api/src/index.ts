@@ -29,7 +29,10 @@ try {
       repository: repo?.kind ?? 'memory',
       chainAdapter: config.chain.adapter,
       evidenceAdapter: config.evidence.adapter,
+      triageConfigured: Boolean(config.triage.apiKey),
       intentsEnabled: config.intents.enabled,
+      intentsAllowLive: config.intents.allowLive,
+      intentsApiKeyConfigured: Boolean(config.intents.apiKey),
     },
     'MEND API listening',
   );
