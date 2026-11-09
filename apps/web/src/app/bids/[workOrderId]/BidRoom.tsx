@@ -98,8 +98,8 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
           <Lock size={17} aria-hidden="true" />
           <span>
             {revealed
-              ? 'Reveal phase shown. Every revealed value below matched its earlier commitment hash and came from the approved roster.'
-              : 'Sealed phase. Only commitment hashes and contractor accounts are visible. No price, duration, warranty or material value is rendered in this view.'}
+              ? 'Reveal phase shown. Every revealed value below matched its earlier commitment hash and came from the approved roster. Availability is committed bid data, revealed with the rest of the offer.'
+              : 'Sealed phase. Only commitment hashes and contractor accounts are visible. No price, availability, duration, warranty or material value is rendered in this view.'}
           </span>
         </div>
 
@@ -131,13 +131,17 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
                   {revealed ? (
                     <>
                       <th scope="col">Price</th>
+                      <th scope="col">
+                        Availability
+                        <span className="field__hint" style={{ display: 'block' }}>Committed bid data</span>
+                      </th>
                       <th scope="col">Duration</th>
                       <th scope="col">Warranty</th>
                       <th scope="col">Materials</th>
                       <th scope="col">Checklist</th>
                     </>
                   ) : (
-                    <th scope="col">Price · duration · warranty</th>
+                    <th scope="col">Price · availability · duration · warranty</th>
                   )}
                 </tr>
               </thead>
@@ -164,6 +168,12 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
                           <td>
                             <strong>{usdc(reveal.priceMicro)}</strong>
                           </td>
+                          <td>
+                            Available in {reveal.availableInDays} {reveal.availableInDays === 1 ? 'day' : 'days'}
+                            <span className="field__hint" style={{ display: 'block' }}>
+                              Committed bid data
+                            </span>
+                          </td>
                           <td>{reveal.durationDays} days</td>
                           <td>{reveal.warrantyDays} days</td>
                           <td>
@@ -187,6 +197,13 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
               </tbody>
             </table>
           </div>
+
+          {revealed ? (
+            <p className="field__hint" style={{ marginTop: 10 }}>
+              Availability is committed bid data: each contractor sealed it inside the commitment hash, and it is shown
+              only after reveal. It is separate from the scoring inputs below.
+            </p>
+          ) : null}
 
           {!revealed && hasReveals ? (
             <div className="bid-actions">
@@ -251,6 +268,10 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
                       <th scope="col">Rank</th>
                       <th scope="col">Contractor</th>
                       <th scope="col">Price</th>
+                      <th scope="col">
+                        Availability
+                        <span className="field__hint" style={{ display: 'block' }}>Committed bid data, not scored</span>
+                      </th>
                       <th scope="col">Warranty</th>
                       <th scope="col">Duration</th>
                       <th scope="col">Materials</th>
@@ -272,6 +293,9 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
                           ) : null}
                         </td>
                         <td>${microToUsdc(bid.priceMicro, 0)}</td>
+                        <td>
+                          Available in {bid.availableInDays} {bid.availableInDays === 1 ? 'day' : 'days'}
+                        </td>
                         <td>{bid.warrantyDays}d</td>
                         <td>{bid.durationDays}d</td>
                         <td>{bid.materialsScore}/100</td>

@@ -99,6 +99,8 @@ export interface BidRevealView extends BidCommitmentView {
   priceMicro: string;
   durationDays: number;
   warrantyDays: number;
+  /** Whole days until the contractor can start after award. Committed with the bid. */
+  availableInDays: number;
   materials: string;
   materialsScore: number;
   evidenceChecklistAccepted: boolean;
@@ -121,6 +123,8 @@ export interface ScoredBidView {
   priceMicro: string;
   durationDays: number;
   warrantyDays: number;
+  /** Whole days until the contractor can start after award. Committed with the bid. */
+  availableInDays: number;
   materialsScore: number;
 }
 
