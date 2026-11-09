@@ -210,11 +210,13 @@ export async function registerReportRoutes(app: FastifyInstance, deps: AppDeps):
     const report = await deps.repo.getReport(request.params.reportId);
     if (!report) throw new MendError('NOT_FOUND', 'Report not found');
     const privateRecord = await deps.repo.getReportPrivate(report.id);
+    const asset = await deps.repo.getAsset(report.assetId);
     const existing = await deps.repo.listReports({ assetId: report.assetId });
     const result = await deps.triage.inspect({
       report,
       existingReports: existing,
       hasPreciseLocation: Boolean(privateRecord?.preciseLocation),
+      ...(asset ? { assetType: asset.assetType } : {}),
     });
     const now = deps.clock.now().toISOString();
     let attestationId: string | undefined;
@@ -263,6 +265,7 @@ export async function registerReportRoutes(app: FastifyInstance, deps: AppDeps):
     return reply.status(201).send({
       suggestion: triageView(suggestion),
       verified: result.verified,
+      verification: result.verification,
       label: result.available
         ? (result.verified ? 'VERIFIED_INFERENCE' : 'UNVERIFIED_INFERENCE')
         : 'UNAVAILABLE — deterministic duplicate heuristic only',

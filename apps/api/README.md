@@ -31,7 +31,7 @@ Key defaults:
 | `DEMO_RESET_ENABLED` | true outside production | Demo control availability |
 | `DEMO_ADMIN_ACCOUNT` | `demo-admin.mend.testnet` | Only account allowed to reset demo data |
 | `DEMO_DURABILITY_MINUTES` | `2` | Explicit demo durability window |
-| `INTENTS_ENABLED` | `false` | 1Click adapter; disabled until validated |
+| `INTENTS_ENABLED` | `false` | 1Click dry previews; live also needs `INTENTS_ALLOW_LIVE` plus `confirmLive: true` |
 
 ## DEMO AUTHORIZATION — replace in production
 
@@ -113,12 +113,18 @@ returns `replay:<hash>` with `realTransaction: false` and the response label
 
 - **NEAR AI triage:** without `NEAR_AI_API_KEY`, suggestions are stored with
   `available: false` and only deterministic duplicate heuristics are shown. No
-  confidence score or rationale is invented. Response signatures are not
-  fetched in this wave, so AI output is never marked verified.
-- **NEAR Intents/1Click:** research `R0-C-intents.md` was missing when this
-  adapter was built. The adapter is disabled and returns a labelled
-  `UPSTREAM_UNAVAILABLE`; no endpoint or request field is invented. Mainnet-only
-  is always displayed.
+  confidence score or rationale is invented. With a key, the merged
+  `@mend/ai-client` client is used with strict schemas, request/response hashes
+  and the deterministic duplicate engine. Output is only `VERIFIED` when a
+  response signature and matching attestation report are fetched and checked;
+  otherwise the returned/stored verification artifact is `UNAVAILABLE`.
+- **NEAR Intents/1Click:** the merged `@mend/intents-client` client is wired for
+  capabilities, dry previews and status. Dry quotes are enabled with
+  `INTENTS_ENABLED=true` and are always labelled previews with
+  `isPayment: false` and no deposit address. Live deposit requests additionally
+  require `INTENTS_ALLOW_LIVE=true` plus an explicit per-call `confirmLive:
+  true`; the client also requires a NEAR recipient readiness proof. Mainnet-only
+  is always displayed. This service has no signing or transfer capability.
 - **OutLayer scoring:** deterministic local integer scoring is labelled
   `LOCAL_DETERMINISTIC_REPLAY`, `verified: false`, never an OutLayer attestation.
 - **S3-compatible evidence:** the interface exists, but it reports unavailable

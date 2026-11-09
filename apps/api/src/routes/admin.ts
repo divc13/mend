@@ -30,6 +30,8 @@ const quoteInput = z.object({
   recipient: z.string().min(2).max(64),
   workOrderId: z.string().min(1).optional(),
   refundTo: z.string().min(2).max(64).optional(),
+  /** Explicit human confirmation for a live/mainnet deposit request. */
+  confirmLive: z.boolean().optional(),
 });
 
 const daoApprovalInput = z.object({
@@ -197,11 +199,30 @@ export async function registerAdminRoutes(app: FastifyInstance, deps: AppDeps): 
   app.post('/v1/intents/quote', async (request, reply) => {
     const auth = requireRole(authFromHeaders(request.headers, deps.config), ROLE_MATRIX['intents:quote'], 'intents:quote');
     const input = quoteInput.parse(request.body);
-    if (!input.dry && !deps.config.intents.allowLive) {
-      throw new MendError('UPSTREAM_UNAVAILABLE', 'Live Intents quotes are disabled; only dry previews may be requested', {
+    if (!deps.config.intents.enabled) {
+      throw new MendError('UPSTREAM_UNAVAILABLE', 'NEAR Intents 1Click is disabled (INTENTS_ENABLED is not true)', {
+        provider: deps.intents.provider,
+        available: false,
         mainnetOnly: true,
-        allowLive: false,
+        dryQuotesEnabled: false,
+        liveExecutionEnabled: false,
       });
+    }
+    if (!input.dry) {
+      if (!deps.config.intents.allowLive) {
+        throw new MendError('UPSTREAM_UNAVAILABLE', 'Live Intents quotes are disabled; only dry previews may be requested', {
+          mainnetOnly: true,
+          allowLive: false,
+          humanConfirmationRequired: true,
+        });
+      }
+      if (input.confirmLive !== true) {
+        throw new MendError('INVALID_STATE', 'Live Intents execution requires explicit human confirmation (confirmLive: true)', {
+          mainnetOnly: true,
+          humanConfirmationRequired: true,
+          allowLive: true,
+        });
+      }
     }
     if (input.workOrderId) {
       const workOrder = await deps.repo.getWorkOrder(input.workOrderId);
@@ -216,6 +237,7 @@ export async function registerAdminRoutes(app: FastifyInstance, deps: AppDeps): 
       recipient: input.recipient,
       ...(input.workOrderId ? { workOrderId: input.workOrderId } : {}),
       ...(input.refundTo ? { refundTo: input.refundTo } : {}),
+      ...(input.confirmLive !== undefined ? { confirmLive: input.confirmLive } : {}),
     });
     const seq = await deps.repo.nextSequence('intent-quote');
     const quote = await deps.repo.createIntentQuote({
@@ -246,8 +268,15 @@ export async function registerAdminRoutes(app: FastifyInstance, deps: AppDeps): 
     });
     return reply.status(201).send({
       ...quote,
+      quoteKind: result.quoteKind,
+      label: result.label,
+      signatureVerified: result.signatureVerified,
       mainnetOnly: true,
-      note: 'NEAR Intents operates on mainnet only. A dry quote is not a payment and no transfer is initiated here.',
+      mainnetLabel: result.mainnetLabel,
+      isPayment: false,
+      canBePresentedAsPayment: false,
+      preview: result.view,
+      note: 'NEAR Intents operates on mainnet only. A dry quote is a preview, not a payment, and no transfer is initiated here.',
     });
   });
 
@@ -257,10 +286,18 @@ export async function registerAdminRoutes(app: FastifyInstance, deps: AppDeps): 
     if (!quote) throw new MendError('NOT_FOUND', 'Intent quote not found', { quoteId: request.params.quoteId });
     let adapterStatus: Record<string, unknown>;
     try {
-      const status = await deps.intents.status(quote.id);
+      const status = await deps.intents.status({
+        quoteId: quote.id,
+        ...(quote.depositAddress ? { depositAddress: quote.depositAddress } : {}),
+        ...(quote.depositMemo ? { depositMemo: quote.depositMemo } : {}),
+        ...(quote.deadline ? { deadline: quote.deadline } : {}),
+      });
       adapterStatus = {
         live: true,
         status: status.status,
+        flowState: status.flowState,
+        rawStatus: status.rawStatus,
+        verified: status.verified,
         ...(status.destinationTxHash ? { destinationTxHash: status.destinationTxHash } : {}),
         ...(status.explorerUrl ? { explorerUrl: status.explorerUrl } : {}),
         raw: status.raw,

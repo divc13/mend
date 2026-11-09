@@ -58,6 +58,8 @@ export interface AppConfig {
     baseUrl: string;
     allowLive: boolean;
     provider: string;
+    /** Partner JWT for 1Click. Server-side only; never serialized. */
+    apiKey?: string;
     unavailableReason?: string;
   };
   demo: {
@@ -101,7 +103,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   const evidenceAdapter = (env.EVIDENCE_ADAPTER as EvidenceAdapterKind | undefined) ?? 'local';
   const intentsEnabled = bool(env.INTENTS_ENABLED, false);
   const intentsUnavailable = !intentsEnabled
-    ? 'NEAR Intents 1Click is disabled (INTENTS_ENABLED is not true). Research R0-C-intents.md was not available when this adapter was built; no endpoint is invented or simulated as live.'
+    ? 'NEAR Intents 1Click is disabled (INTENTS_ENABLED is not true). Dry previews are disabled until it is enabled; live execution additionally requires INTENTS_ALLOW_LIVE=true and explicit human confirmation.'
     : undefined;
 
   return {
@@ -157,8 +159,9 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     intents: {
       enabled: intentsEnabled,
       baseUrl: env.INTENTS_API_URL ?? 'https://1click.chaindefuser.com',
-      allowLive: bool(env.INTENTS_ALLOW_LIVE, false),
+      allowLive: intentsEnabled && bool(env.INTENTS_ALLOW_LIVE, false),
       provider: 'NEAR Intents / 1Click',
+      apiKey: env.INTENTS_API_KEY,
       unavailableReason: intentsUnavailable,
     },
     demo: {

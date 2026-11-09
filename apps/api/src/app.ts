@@ -52,15 +52,13 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<BuiltApp>
     triageInfo: () => ({
       provider: triage.provider,
       available: triage.available,
+      ...(triage.model ? { model: triage.model } : {}),
+      apiKeyConfigured: Boolean(config.triage.apiKey),
+      verificationPolicy:
+        'VERIFIED only with a fetched NEAR AI response signature and matching attestation report; hashes alone remain UNAVAILABLE.',
       ...(triage.unavailableReason ? { reason: triage.unavailableReason } : {}),
     }),
-    intentsCapabilities: (): IntentsCapabilities => ({
-      provider: intents.provider,
-      available: intents.available,
-      mainnetOnly: true,
-      ...(intents.unavailableReason ? { reason: intents.unavailableReason } : {}),
-      disclaimer: 'NEAR Intents operates on mainnet only. This service exposes capability and status metadata; it does not initiate transfers.',
-    }),
+    intentsCapabilities: (): IntentsCapabilities => intents.capabilities(),
   };
 
   const app = Fastify({
