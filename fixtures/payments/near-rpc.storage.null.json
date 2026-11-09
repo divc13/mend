@@ -1,0 +1,10 @@
+{
+  "jsonrpc": "2.0",
+  "id": "mend-storage-balance",
+  "result": {
+    "result": [110, 117, 108, 108],
+    "logs": [],
+    "block_height": 100000000,
+    "block_hash": "11111111111111111111111111111111"
+  }
+}

@@ -1,0 +1,78 @@
+{
+  "status": "FAILED",
+  "updatedAt": "2026-11-09T10:40:00.000Z",
+  "correlationId": "synthetic-failed",
+  "swapDetails": {
+    "depositedAmount": "10000000",
+    "depositedAmountUsd": "9.994320000000",
+    "depositedAmountFormatted": "10.0",
+    "intentHashes": [],
+    "nearTxHashes": [],
+    "amountIn": "10000000",
+    "amountInFormatted": "10.0",
+    "amountInUsd": "9.994320000000",
+    "amountOut": null,
+    "amountOutFormatted": null,
+    "amountOutUsd": null,
+    "slippage": null,
+    "refundedAmount": "0",
+    "refundedAmountFormatted": "0",
+    "refundedAmountUsd": "0",
+    "refundReason": "SWAP_FAILED",
+    "refundFee": "2400",
+    "withdrawFee": "4428",
+    "originChainTxHashes": [
+      {
+        "hash": "0x3333333333333333333333333333333333333333333333333333333333333333",
+        "explorerUrl": ""
+      }
+    ],
+    "destinationChainTxHashes": []
+  },
+  "quoteResponse": {
+    "quote": {
+      "amountIn": "10000000",
+      "amountInFormatted": "10.0",
+      "amountInUsd": "9.994320000000",
+      "minAmountIn": "10000000",
+      "amountOut": "9993652",
+      "amountOutFormatted": "9.993652",
+      "amountOutUsd": "9.987975605664",
+      "minAmountOut": "9893715",
+      "timeEstimate": 35,
+      "refundFee": "2400",
+      "withdrawFee": "4428",
+      "deadline": "2026-11-12T10:10:22.000Z",
+      "timeWhenInactive": "2026-11-12T10:10:22.000Z",
+      "depositAddress": "0x5eFF1eda63DF64B9831483888702e56Ea62Def95"
+    },
+    "quoteRequest": {
+      "dry": false,
+      "depositMode": "SIMPLE",
+      "swapType": "EXACT_INPUT",
+      "slippageTolerance": 100,
+      "originAsset": "nep141:base-0x833589fcd6edb6e08f4c7c32d4f71b54bda02913.omft.near",
+      "depositType": "ORIGIN_CHAIN",
+      "destinationAsset": "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+      "amount": "10000000",
+      "refundTo": "0x1111111111111111111111111111111111111111",
+      "refundType": "ORIGIN_CHAIN",
+      "recipient": "mend.near",
+      "recipientType": "DESTINATION_CHAIN",
+      "deadline": "2026-11-09T10:10:22.000Z",
+      "confidentiality": "public",
+      "quoteWaitingTimeMs": 0,
+      "insured": false,
+      "appFees": [
+        {
+          "recipient": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+          "fee": 1,
+          "limitOrderId": null
+        }
+      ]
+    },
+    "signature": "ed25519:4hiuK1GGCJW9SMQRTC9q2BZCTmFEEsxMH9jviQ3F4uCD4N91tzSw7s33ZaGwP9pq8Z6fLbTiNQMYxfCXqQeP55CY",
+    "timestamp": "2026-11-09T09:40:22.967Z",
+    "correlationId": "068d5f47-1f92-44de-a1c7-910bfd02bfde"
+  }
+}
