@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "recorded": true,
+    "replayLabel": "REPLAY / SIMULATION",
+    "kind": "evidence-completeness-review",
+    "source": "hand-authored deterministic fixture (no live credential was used)",
+    "note": "Recorded response for offline tests only. It lists missing items; it does not certify quality."
+  },
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are an evidence-completeness assistant, not an inspector. Return only missing checklist items. Never certify physical safety."
+      },
+      {
+        "role": "user",
+        "content": "Trusted work order: WO-BENCH-001-0001\n\n<<<MEND_UNTRUSTED_EVIDENCE_EV-0001_DESCRIPTION_BEGIN>>>\nAfter photo of the repaired bench seat from the same angle.\n<<<MEND_UNTRUSTED_EVIDENCE_EV-0001_DESCRIPTION_END>>>"
+      }
+    ]
+  },
+  "response": {
+    "id": "chatcmpl-recorded-review-0001",
+    "model": "z-ai/glm-5.3-flash",
+    "choices": [
+      {
+        "message": {
+          "role": "assistant",
+          "content": "{\"missingChecklistItems\":[\"Close-up of the new fasteners and rounded edge\",\"Materials receipt\",\"Contractor completion note\"],\"limitations\":[\"Evidence text and redacted hashes were reviewed for checklist presence only\",\"Physical condition was not inspected\"],\"humanDecisionRequired\":true}"
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    }
+  }
+}

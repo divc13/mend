@@ -1,0 +1,49 @@
+{
+  "schema": "mend.bid-rules.v1",
+  "policyHash": "1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d",
+  "policyVersion": "mend-bid-policy-v1",
+  "weightsBps": {
+    "price": 4500,
+    "warranty": 2500,
+    "duration": 2000,
+    "materials": 1000
+  },
+  "bids": [
+    {
+      "bidId": "BID-A-BENCH-001",
+      "contractorId": "contractor-a.mend.testnet",
+      "priceMicro": "95000000",
+      "durationDays": 14,
+      "warrantyDays": 90,
+      "materialsScore": 60,
+      "eligible": true,
+      "evidenceChecklistAccepted": true,
+      "nonce": "nonce-a-0001",
+      "commitmentHash": "cd29d92f976e6da51730bc5da5a87e129b61f6dbd5fb72e7871ce6e6809645c5"
+    },
+    {
+      "bidId": "BID-B-BENCH-001",
+      "contractorId": "contractor-b.mend.testnet",
+      "priceMicro": "80000000",
+      "durationDays": 10,
+      "warrantyDays": 180,
+      "materialsScore": 80,
+      "eligible": true,
+      "evidenceChecklistAccepted": true,
+      "nonce": "nonce-b-0002",
+      "commitmentHash": "93f4672142373218444617f40f093268b7b01167592aaf648ea17141134a35ef"
+    },
+    {
+      "bidId": "BID-C-BENCH-001",
+      "contractorId": "contractor-c.mend.testnet",
+      "priceMicro": "78000000",
+      "durationDays": 21,
+      "warrantyDays": 30,
+      "materialsScore": 70,
+      "eligible": true,
+      "evidenceChecklistAccepted": true,
+      "nonce": "nonce-c-0003",
+      "commitmentHash": "669166ecc5cbaa1a0aebb7ae52b092eea8fb6ef61369669b0737e062bb67a488"
+    }
+  ]
+}

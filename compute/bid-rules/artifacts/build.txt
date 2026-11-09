@@ -1,0 +1,24 @@
+MEND bid-rules WASM build record
+================================
+Built: 2026-11-09
+Toolchain: rustc 1.99.1 (58cf8f9c3 2026-10-13)
+Profile: release (opt-level z, lto, codegen-units 1, strip, panic abort)
+
+Command (OutLayer target):
+  cargo build --manifest-path compute/bid-rules/Cargo.toml --target wasm32-wasip1 --release
+Artifact:
+  compute/bid-rules/target/wasm32-wasip1/release/mend-bid-rules.wasm
+SHA-256:
+  2d8e5adb069e19d46864dea6d5a1a2988e528df45828ac884856b5d1be44a3e3
+Size:
+  128 KiB approx
+
+Command (common CI/build target):
+  cargo build --manifest-path compute/bid-rules/Cargo.toml --target wasm32-unknown-unknown --release
+Artifact:
+  compute/bid-rules/target/wasm32-unknown-unknown/release/mend-bid-rules.wasm
+SHA-256:
+  4a38a7c13d3c1c1fbec30516ac76da423ce63502ed4f535097cf8e3b48c0f214
+
+WASM binaries are build outputs and are not committed. Rebuild and hash before
+registering a version; pin the exact hash in every OutLayer request.

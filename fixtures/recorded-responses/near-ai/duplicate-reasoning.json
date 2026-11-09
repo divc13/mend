@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "recorded": true,
+    "replayLabel": "REPLAY / SIMULATION",
+    "kind": "duplicate-reasoning",
+    "source": "hand-authored deterministic fixture (no live credential was used)",
+    "note": "Private rationale only. The deterministic engine decides confidence and never auto-merges."
+  },
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You explain a deterministic duplicate-report signal. Do not decide the merge."
+      },
+      {
+        "role": "user",
+        "content": "Deterministic duplicate confidence: 9400 bps.\n\n<<<MEND_UNTRUSTED_REPORT_A_BEGIN>>>\nThe seat plank is cracked and one armrest is loose. Sharp edge exposed.\n<<<MEND_UNTRUSTED_REPORT_A_END>>>\n\n<<<MEND_UNTRUSTED_REPORT_B_BEGIN>>>\nBench by the east gate has a broken slat and the left arm is wobbling.\n<<<MEND_UNTRUSTED_REPORT_B_END>>>"
+      }
+    ]
+  },
+  "response": {
+    "id": "chatcmpl-recorded-duplicate-0001",
+    "model": "z-ai/glm-5.3-flash",
+    "choices": [
+      {
+        "message": {
+          "role": "assistant",
+          "content": "{\"rationale\":\"Both reports describe the same east-gate bench, with matching perceptual hashes, a 12 metre separation and very similar damage wording. A steward should confirm the merge.\",\"keyFactors\":[\"distance\",\"perceptualHash\",\"textSimilarity\"]}"
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    }
+  }
+}
