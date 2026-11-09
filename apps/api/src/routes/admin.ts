@@ -1,11 +1,12 @@
 import type { FastifyInstance } from 'fastify';
 import { z } from 'zod';
-import { MendError, ROLES } from '@mend/protocol';
+import { HUB_METHODS, MendError, ROLES } from '@mend/protocol';
 import type { AppDeps } from '../context.js';
 import { authFromHeaders, requireRole, ROLE_MATRIX } from '../auth.js';
-import { agentView } from '../serializers.js';
+import { agentView, chainCommandView } from '../serializers.js';
 import { auditEvent } from '../services/audit.js';
 import { demoStateFingerprint, isDemoScenario, resetDemoState } from '../services/demo-reset.js';
+import { KILL_SWITCH_SCOPE } from '../services/kill-switch.js';
 
 const agentInput = z.object({
   account: z.string().min(2).max(64),
@@ -19,6 +20,11 @@ const agentInput = z.object({
 
 const demoResetInput = z.object({
   scenario: z.string().min(1).optional(),
+});
+
+const killSwitchInput = z.object({
+  enabled: z.boolean(),
+  reason: z.string().trim().min(1).max(1000),
 });
 
 const quoteInput = z.object({
@@ -115,6 +121,93 @@ export async function registerAdminRoutes(app: FastifyInstance, deps: AppDeps): 
       canReleaseEscrow: false,
     });
     return reply.status(201).send(agentView(agent));
+  });
+
+  app.get('/v1/admin/kill-switch', async (request) => {
+    requireRole(
+      authFromHeaders(request.headers, deps.config),
+      ROLE_MATRIX['kill_switch:read'],
+      'kill_switch:read',
+    );
+    return {
+      ...deps.killSwitch.status,
+      mutatingRoutesPaused: deps.killSwitch.enabled,
+      scope: KILL_SWITCH_SCOPE,
+      readsRemainAvailable: true,
+    };
+  });
+
+  app.post('/v1/admin/kill-switch', async (request, reply) => {
+    const auth = requireRole(
+      authFromHeaders(request.headers, deps.config),
+      ROLE_MATRIX['kill_switch:write'],
+      'kill_switch:write',
+    );
+    const input = killSwitchInput.parse(request.body);
+    const previous = deps.killSwitch.status;
+    const status = deps.killSwitch.set(input.enabled, input.reason, auth.account);
+
+    // Always persist the explicit chain intent first. The command service only
+    // reports SUCCESS when the adapter returns a transaction hash; replay hashes
+    // stay labelled and are never presented as a real hub transaction.
+    const command = await deps.commands.submit(deps.repo, {
+      action: input.enabled ? 'pause' : 'unpause',
+      method: input.enabled ? HUB_METHODS.pause : HUB_METHODS.unpause,
+      args: {
+        scope: 'hub',
+        enabled: input.enabled,
+        reason: input.reason,
+        apiKillSwitch: true,
+      },
+      isDemo: false,
+    });
+    const adapterSucceeded = command.state === 'SUCCESS' && Boolean(command.txHash);
+    const executed = adapterSucceeded && command.realTransaction;
+
+    await auditEvent(
+      deps,
+      input.enabled ? 'kill_switch_enabled' : 'kill_switch_disabled',
+      auth.account,
+      {},
+      {
+        enabled: input.enabled,
+        previousEnabled: previous.enabled,
+        reason: input.reason,
+        scope: KILL_SWITCH_SCOPE,
+        readsRemainAvailable: true,
+        chainCommandId: command.id,
+        chainAction: command.action,
+        chainMethod: command.method,
+        chainState: command.state,
+        chainTxHash: command.txHash ?? null,
+        chainRealTransaction: command.realTransaction,
+        adapterSucceeded,
+        hubPauseExecuted: executed,
+      },
+    );
+
+    return reply.status(200).send({
+      ...status,
+      mutatingRoutesPaused: status.enabled,
+      scope: KILL_SWITCH_SCOPE,
+      readsRemainAvailable: true,
+      chainCommand: chainCommandView(command),
+      hubPause: {
+        action: command.action,
+        method: command.method,
+        commandId: command.id,
+        state: command.state,
+        ...(command.txHash ? { txHash: command.txHash } : {}),
+        realTransaction: command.realTransaction,
+        adapterSucceeded,
+        executed,
+        note: executed
+          ? 'Hub pause/unpause transaction confirmed by the chain adapter.'
+          : adapterSucceeded
+            ? 'Adapter returned a labelled replay hash; no real hub transaction was executed.'
+            : 'Chain command stored as an intent; the hub pause/unpause is not confirmed.',
+      },
+    });
   });
 
   app.get('/v1/audit', async (request) => {

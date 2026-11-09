@@ -8,6 +8,7 @@ import { ChainCommandService, createChainAdapter, systemClock, type Clock } from
 import { createEvidenceStore, type PrivateEvidenceStore } from './services/evidence.js';
 import { createIntentsAdapter, type IntentsAdapter, type IntentsCapabilities } from './services/intents.js';
 import { createTriageAdapter, type TriageAdapter } from './services/triage.js';
+import { KillSwitchService, KILL_SWITCH_SCOPE, restoreKillSwitch } from './services/kill-switch.js';
 import { registerPublicRoutes } from './routes/public.js';
 import { registerAssetRoutes } from './routes/assets.js';
 import { registerReportRoutes } from './routes/reports.js';
@@ -23,6 +24,7 @@ export interface BuildAppOptions {
   triage?: TriageAdapter;
   intents?: IntentsAdapter;
   clock?: Clock;
+  killSwitch?: KillSwitchService;
   logger?: boolean;
 }
 
@@ -40,6 +42,7 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<BuiltApp>
   const triage = options.triage ?? createTriageAdapter(config.triage);
   const intents = options.intents ?? createIntentsAdapter(config.intents);
   const clock = options.clock ?? systemClock;
+  const killSwitch = options.killSwitch ?? await restoreKillSwitch(repo, clock);
 
   const deps: AppDeps = {
     config,
@@ -49,6 +52,7 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<BuiltApp>
     triage,
     intents,
     clock,
+    killSwitch,
     triageInfo: () => ({
       provider: triage.provider,
       available: triage.available,
@@ -71,6 +75,30 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<BuiltApp>
     reply.header('x-mend-mode', config.mode);
     reply.header('x-mend-service', config.serviceName);
     return payload;
+  });
+
+  // Human kill switch: pause every mutating /v1 route. Reads keep working.
+  // The kill-switch control route itself stays reachable so an operator can
+  // always release the pause.
+  const MUTATING_METHODS = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
+  app.addHook('onRequest', async (request, reply) => {
+    if (!deps.killSwitch.enabled) return;
+    if (!MUTATING_METHODS.has(request.method)) return;
+    const pathname = request.url.split('?')[0] ?? '';
+    if (!pathname.startsWith('/v1/')) return;
+    if (pathname === '/v1/admin/kill-switch') return;
+    const status = deps.killSwitch.status;
+    return reply.status(423).send(apiErrorBody(
+      'CONTRACT_PAUSED',
+      `MEND is paused by the human kill switch: ${status.reason}. All mutating /v1 routes are blocked; reads remain available.`,
+      {
+        enabled: true,
+        reason: status.reason,
+        updatedAt: status.updatedAt,
+        updatedBy: status.updatedBy,
+        scope: KILL_SWITCH_SCOPE,
+      },
+    ));
   });
 
   app.setErrorHandler((error, request, reply) => {
