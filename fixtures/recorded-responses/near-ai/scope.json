@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "recorded": true,
+    "replayLabel": "REPLAY / SIMULATION",
+    "kind": "scope-suggestion",
+    "source": "hand-authored deterministic fixture (no live credential was used)",
+    "note": "Recorded response for offline tests only. Not a live NEAR AI result."
+  },
+  "request": {
+    "model": "z-ai/glm-5.3-flash",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You draft a repair scope for a low-risk community asset. Return strict JSON only. You have no authority to approve, choose a contractor, set a recipient or accept work."
+      },
+      {
+        "role": "user",
+        "content": "Draft a scope for BENCH-001.\n\n<<<MEND_UNTRUSTED_REPORT_DESCRIPTION_BEGIN>>>\nThe seat plank is cracked and one armrest is loose. Sharp edge exposed.\n<<<MEND_UNTRUSTED_REPORT_DESCRIPTION_END>>>"
+      }
+    ]
+  },
+  "response": {
+    "id": "chatcmpl-recorded-scope-0001",
+    "model": "z-ai/glm-5.3-flash",
+    "choices": [
+      {
+        "message": {
+          "role": "assistant",
+          "content": "{\"summary\":\"Replace the split seat plank and re-secure the loose armrest on the public park bench.\",\"tasks\":[\"Measure the seat plank and armrest mounting points\",\"Remove the damaged plank and exposed fasteners\",\"Fit and fix a replacement plank with rounded edges\",\"Tighten or replace the loose armrest bracket\",\"Clean the work area and remove debris\"],\"safetyExclusions\":[\"No electrical, gas, structural or load-bearing work\",\"No work on adjacent assets outside this scope\",\"Stop and escalate if hidden structural damage is found\"],\"requiredEvidence\":[\"Before photo of the damaged seat and armrest\",\"After photo from the same angle\",\"Close-up of the new fasteners and rounded edge\",\"Materials receipt\",\"Contractor completion note\"],\"budgetRecommendationMicro\":\"80000000\",\"assumptions\":[\"Standard park bench with accessible fasteners\",\"Replacement materials are available locally\"],\"humanReviewRequired\":true}"
+        }
+      }
+    ],
+    "usage": {
+      "prompt_tokens": 0,
+      "completion_tokens": 0,
+      "total_tokens": 0
+    }
+  }
+}

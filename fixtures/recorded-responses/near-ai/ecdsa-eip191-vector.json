@@ -1,0 +1,17 @@
+{
+  "meta": {
+    "recorded": true,
+    "replayLabel": "REPLAY / SIMULATION",
+    "kind": "ecdsa-eip191-verification-vector",
+    "source": "generated once with an ephemeral throwaway signer; private key was discarded and is not committed",
+    "note": "Independent EIP-191 signature vector for the canonical scope fixture request/response bytes."
+  },
+  "modelId": "z-ai/glm-5.3-flash",
+  "signatureKind": "gateway",
+  "signingAlgo": "ecdsa",
+  "signingAddress": "0x1cd8a6e1c069d73e7f78361f8832631e3b1c47cf",
+  "requestHash": "397b929d82eb1be7eac61da5c4d69ae0a46abb59678406549069b7b6f8f5d371",
+  "responseHash": "b49d2f20b7172d872223ff7a76ff751e94c26662e4ce2e35f30350d8c4c65863",
+  "text": "397b929d82eb1be7eac61da5c4d69ae0a46abb59678406549069b7b6f8f5d371:b49d2f20b7172d872223ff7a76ff751e94c26662e4ce2e35f30350d8c4c65863",
+  "signature": "0x31276ccbe62628e4d131a6f2e49f61ae1d0ab16fb3d7f691262aa4f074f3abcc563f252247c51cad45c6a4d0c2995556c57eee0a637e7c53cf1b4bbe5c0b48df1c"
+}
