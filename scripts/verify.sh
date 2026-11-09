@@ -113,8 +113,9 @@ pkg_has_script() {
 
 pkg_name() {
   node -e '
+    const path = require("path");
     try {
-      process.stdout.write(require(process.argv[1] + "/package.json").name || "");
+      process.stdout.write(require(path.resolve(process.argv[1], "package.json")).name || "");
     } catch {
       process.exit(1);
     }
