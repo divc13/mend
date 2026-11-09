@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1",
+  "status": "NOT_COLLECTED",
+  "notice": "Template only. Insert a link only after the transaction exists and has been independently inspected. Never invent a hash, explorer URL or quote ID.",
+  "network": "HUMAN_SUPPLIED",
+  "mode": "REPLAY / SIMULATION",
+  "recordedBy": "HUMAN_SUPPLIED",
+  "recordedAt": null,
+  "transactions": [
+    {
+      "id": "funding",
+      "label": "Sponsor funding",
+      "expectedCanonicalMicro": "100000000",
+      "txHash": null,
+      "explorerUrl": null,
+      "status": "NOT_RECORDED",
+      "verifiedBy": null,
+      "notes": "Only a confirmed hub funding record counts; a quote or intent does not."
+    },
+    {
+      "id": "award-refund",
+      "label": "Unallocated budget refund",
+      "expectedCanonicalMicro": "20000000",
+      "txHash": null,
+      "explorerUrl": null,
+      "status": "NOT_RECORDED",
+      "verifiedBy": null,
+      "notes": "The 20 refund is recorded when the award is made."
+    },
+    {
+      "id": "completion",
+      "label": "90% completion payment",
+      "expectedCanonicalMicro": "72000000",
+      "txHash": null,
+      "explorerUrl": null,
+      "status": "NOT_RECORDED",
+      "verifiedBy": null,
+      "notes": "Paid once after independent acceptance."
+    },
+    {
+      "id": "holdback-release",
+      "label": "10% durability holdback release",
+      "expectedCanonicalMicro": "8000000",
+      "txHash": null,
+      "explorerUrl": null,
+      "status": "NOT_RECORDED",
+      "verifiedBy": null,
+      "notes": "Released at most once after a passing durability inspection."
+    },
+    {
+      "id": "durability-failure",
+      "label": "Durability failure / warranty reopen",
+      "expectedCanonicalMicro": null,
+      "txHash": null,
+      "explorerUrl": null,
+      "status": "NOT_RECORDED",
+      "verifiedBy": null,
+      "notes": "No funds move on a warranty reopen."
+    }
+  ],
+  "dryQuotes": [
+    {
+      "id": "intents-dry-quote",
+      "label": "1Click dry quote",
+      "quoteId": null,
+      "srcAsset": null,
+      "dstAsset": null,
+      "amountIn": null,
+      "estimatedOutput": null,
+      "fees": null,
+      "depositAddress": null,
+      "status": "NOT_RECORDED",
+      "notes": "A dry quote has no deposit address and is not a payment. Intents is mainnet-only."
+    }
+  ]
+}

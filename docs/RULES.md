@@ -101,3 +101,17 @@ The hub stores policy hash, WASM hash, input hash and output hash. A score with 
 ## 8. Human role
 
 The steward confirms the deterministic top-ranked eligible bid. The steward cannot pick a different bid. AI agents may explain the result using only the structured values above; they cannot change it.
+
+## 9. Related documents
+
+- [Docs index](./README.md)
+- [Architecture](./03-architecture.md)
+- [State machine](./04-state-machine.md)
+- [Payment accounting](./05-payment-accounting.md)
+- [Oracle and human trust](./08-oracle-and-human-trust.md)
+- [Integration evidence](./16-integration-evidence.md)
+- [Root README](../README.md)
+
+---
+
+[Docs index](./README.md) · [Root README](../README.md)
