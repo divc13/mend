@@ -1,0 +1,41 @@
+{
+  "status": "SUCCESS",
+  "updatedAt": "2026-11-08T18:04:29.000Z",
+  "correlationId": "public-btc-success-excerpt",
+  "swapDetails": {
+    "depositedAmount": "1000000000000",
+    "depositedAmountFormatted": "1000000.0",
+    "depositedAmountUsd": null,
+    "amountIn": "1000000000000",
+    "amountInFormatted": "1000000.0",
+    "amountInUsd": null,
+    "amountOut": "1299242119",
+    "amountOutFormatted": "12.99242119",
+    "amountOutUsd": null,
+    "slippage": 17,
+    "refundedAmount": "0",
+    "refundReason": null,
+    "intentHashes": [
+      "FkGZnt7g1Pp1SEjgiEC8KR2dZriTAiz2Kvt5sK5HsVJt",
+      "AVFwyVc5QdztmicMxDGgLEFyNR7PYB6K5yi4he7z9pwT"
+    ],
+    "nearTxHashes": [
+      "6jM13rfyLVXnpTW9PVpHZ8PYmDcTqjcG4m9kTbmnVK7i",
+      "G4eySJ3iGoB2RG6XHyQSrny59MQvSRnWnopos7iJhRFw",
+      "N8Wotvwadba4CFv34axBCpAniPSZRVJmEbfYHfT9WG6",
+      "DTQKKnVum2oJ2vMZJrc2iMv63QsmCcp4MN4k9WGpb9pB"
+    ],
+    "originChainTxHashes": [
+      {
+        "hash": "0xfd2929751f6f80c1bec2f3f2c3e38958cff202a8d98de2810d13fc403504660e",
+        "explorerUrl": ""
+      }
+    ],
+    "destinationChainTxHashes": [
+      {
+        "hash": "f2e2647f61553f9c38822d5920f5fa897e5bb0cd7982d34a1cd20feb936f718b",
+        "explorerUrl": ""
+      }
+    ]
+  }
+}

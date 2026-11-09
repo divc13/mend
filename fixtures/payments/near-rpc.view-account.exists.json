@@ -1,0 +1,13 @@
+{
+  "jsonrpc": "2.0",
+  "id": "mend-view-account",
+  "result": {
+    "amount": "6000000000000000000000000",
+    "block_hash": "11111111111111111111111111111111",
+    "block_height": 100000000,
+    "code_hash": "11111111111111111111111111111111",
+    "locked": "0",
+    "storage_paid_at": 0,
+    "storage_usage": 182
+  }
+}

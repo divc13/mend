@@ -1,0 +1,79 @@
+{
+  "network": "mainnet",
+  "mainnetOnly": true,
+  "recordedAt": "2026-11-09T09:38:00.000Z",
+  "baseUrl": "https://1click.chaindefuser.com",
+  "openapiVersion": "0.1.10",
+  "sdkVersion": "0.1.26",
+  "note": "1Click/NEAR Intents has no testnet. Every quote, deposit address and status is a real mainnet object. These files are for offline tests and judging; they are not payments.",
+  "files": {
+    "tokens.snapshot.json": {
+      "provenance": "RECORDED_SUBSET",
+      "detail": "Five relevant rows from the live GET /v0/tokens response (216 tokens total) recorded 2026-11-09."
+    },
+    "quote.dry.base-usdc-near-usdc.json": {
+      "provenance": "RECORDED",
+      "detail": "Live HTTP 201 dry quote, Base USDC to NEAR USDC, 0.15 USDC. Signature verifies with SDK 0.1.26."
+    },
+    "quote.live.base-usdc-near-usdc.json": {
+      "provenance": "RECORDED",
+      "detail": "Live HTTP 201 non-dry quote allocating 0x5eFF1eda63DF64B9831483888702e56Ea62Def95. It was never funded. Signature verifies with SDK 0.1.26."
+    },
+    "quote.dry.tampered-recipient.json": {
+      "provenance": "DERIVED_TAMPERED",
+      "detail": "Recorded dry quote with recipient changed to attacker.near. Signature must fail verification."
+    },
+    "status.pending-deposit.json": {
+      "provenance": "RECORDED",
+      "detail": "Live GET /v0/status for the unfunded non-dry quote. PENDING_DEPOSIT, signed quoteResponse verifies."
+    },
+    "status.success.near.synthetic.json": {
+      "provenance": "COMPOSED_SYNTHETIC",
+      "detail": "Real signed non-dry quoteResponse plus synthetic NEAR-destination swapDetails. The destination tx hash 11111111111111111111111111111111 is NOT a real transaction. No live NEAR-destination SUCCESS sample exists."
+    },
+    "status.success.public-btc-sample.json": {
+      "provenance": "RECORDED_EXCERPT",
+      "detail": "Key fields from a public live SUCCESS status (ETH USDT to BTC) observed 2026-11-09. quoteResponse is omitted because the recorded excerpt did not include it. explorerUrl was empty."
+    },
+    "status.refunded.synthetic.json": {
+      "provenance": "SCHEMA_SYNTHETIC",
+      "detail": "Documented-shape REFUNDED response. No live REFUNDED sample was available. Uses the real signed quoteResponse for signature tests."
+    },
+    "status.failed.synthetic.json": {
+      "provenance": "SCHEMA_SYNTHETIC",
+      "detail": "Documented-shape FAILED response. No live FAILED sample was available."
+    },
+    "status.incomplete-deposit.synthetic.json": {
+      "provenance": "SCHEMA_SYNTHETIC",
+      "detail": "Documented-shape INCOMPLETE_DEPOSIT response. No live sample was available."
+    },
+    "status.known-deposit-tx.synthetic.json": {
+      "provenance": "SCHEMA_SYNTHETIC",
+      "detail": "Documented-shape KNOWN_DEPOSIT_TX response. No live sample was available."
+    },
+    "status.processing.synthetic.json": {
+      "provenance": "SCHEMA_SYNTHETIC",
+      "detail": "Documented-shape PROCESSING response. No live sample was available."
+    },
+    "status.unknown.synthetic.json": {
+      "provenance": "SCHEMA_SYNTHETIC",
+      "detail": "Undocumented FUTURE_STATUS_NOT_IN_DOCS used to prove fail-closed INCOMPLETE mapping with raw preservation."
+    },
+    "near-rpc.view-account.exists.json": {
+      "provenance": "RECORDED_SHAPE",
+      "detail": "NEAR RPC view_account shape for an existing named account."
+    },
+    "near-rpc.view-account.unknown.json": {
+      "provenance": "RECORDED_SHAPE",
+      "detail": "NEAR RPC UNKNOWN_ACCOUNT error shape."
+    },
+    "near-rpc.storage.registered.json": {
+      "provenance": "RECORDED_SHAPE",
+      "detail": "NEAR RPC storage_balance_of result bytes for a registered account."
+    },
+    "near-rpc.storage.null.json": {
+      "provenance": "RECORDED_SHAPE",
+      "detail": "NEAR RPC storage_balance_of result bytes for null (not registered)."
+    }
+  }
+}

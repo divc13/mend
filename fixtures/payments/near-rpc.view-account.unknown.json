@@ -1,0 +1,15 @@
+{
+  "jsonrpc": "2.0",
+  "id": "mend-view-account",
+  "error": {
+    "code": -32000,
+    "message": "Server error",
+    "data": "account mend-hub.near does not exist while viewing",
+    "cause": {
+      "name": "UNKNOWN_ACCOUNT",
+      "info": {
+        "account_id": "mend-hub.near"
+      }
+    }
+  }
+}
