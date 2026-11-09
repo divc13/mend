@@ -54,6 +54,7 @@ export class ContractorBidder {
       priceMicro: this.strategy.bid.priceMicro,
       durationDays: this.strategy.bid.durationDays,
       warrantyDays: this.strategy.bid.warrantyDays,
+      availableInDays: this.strategy.bid.availableInDays,
       materials: this.strategy.materialsDescription,
       materialsScore: this.strategy.bid.materialsScore,
       evidenceChecklistAccepted: this.strategy.bid.evidenceChecklistAccepted,

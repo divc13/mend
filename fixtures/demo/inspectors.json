@@ -1,0 +1,48 @@
+{
+  "version": "1.0.0",
+  "dataset": "mend-demo-inspectors",
+  "rosterSource": "FIXTURE_INSPECTORS",
+  "synthetic": true,
+  "inspectors": [
+    {
+      "account": "inspector.mend.testnet",
+      "role": "INSPECTOR",
+      "canonical": true,
+      "human": true,
+      "independentOfContractor": true,
+      "permissions": [
+        "accept_completion",
+        "inspect_durability",
+        "record_remediation_decision"
+      ],
+      "note": "Primary human inspector for the canonical bench work order."
+    },
+    {
+      "account": "inspector-2.mend.testnet",
+      "role": "INSPECTOR",
+      "canonical": true,
+      "human": true,
+      "independentOfContractor": true,
+      "permissions": [
+        "accept_completion",
+        "inspect_durability",
+        "record_remediation_decision"
+      ],
+      "note": "Second human inspector used for durability review and dispute separation."
+    }
+  ],
+  "disclosures": [
+    {
+      "id": "self-hire-is-not-independent-reputation",
+      "text": "A self-hire test is a demonstration only. It is not independent reputation and must be disclosed wherever it appears."
+    },
+    {
+      "id": "inspector-contractor-separation",
+      "text": "An inspector account must differ from the awarded contractor account; the hub rejects self-acceptance."
+    },
+    {
+      "id": "human-decision-not-safety-certification",
+      "text": "HUMAN ACCEPTED records a named account decision at a known time, not an engineering safety certification."
+    }
+  ]
+}
