@@ -16,12 +16,13 @@ holdback release OR warranty reopening → permanent asset history
 same warranty history. It does not create a fresh bounty that lets the failure
 disappear.
 
-> **Honest status (2026-11-09).** This branch contains the frozen protocol, docs
-> and demo harness. The web app, API, contracts, compute and services are in
-> sibling worktrees and are `PENDING INTEGRATION`. There are no live testnet
-> transactions, no hosted demo, no video and no collected repair media yet.
-> External claims are labelled **VERIFIED**, **UNAVAILABLE** or
-> **BLOCKED_ON_HUMAN**. See [Limitations](./docs/11-limitations.md).
+> **Honest status (2026-11-09).** The protocol, contracts, AI/compute, API,
+> web app, agents, payments client, infra and docs are implemented and
+> integrated on this branch. There are still no live testnet transactions, no
+> hosted demo, no video and no collected repair media. External claims are
+> labelled **VERIFIED**, **UNAVAILABLE** or **BLOCKED_ON_HUMAN**. See
+> [Limitations](./docs/11-limitations.md) and
+> [G2 evidence](./orchestration/reports/G2-evidence.md).
 
 ## Modes
 
@@ -50,26 +51,27 @@ after the orchestrator integrates the application and contracts.
 | Open [fixtures/demo/README.md](./fixtures/demo/README.md) | Evidence, consent and real-vs-staged templates; all `NOT COLLECTED` |
 | Open [docs/16-integration-evidence.md](./docs/16-integration-evidence.md) | Every external claim with `VERIFIED / UNAVAILABLE / BLOCKED_ON_HUMAN` |
 
-### Pending integration
+### Integrated flows
 
-These commands describe the intended integrated repository. They do **not** work
-on this branch yet. Do not claim they do.
+These commands work in the integrated repository. Statuses distinguish what the
+orchestrator actually verified from what still needs a human or a live network.
 
 | Do X | See Y | Status |
 |---|---|---|
-| `docker compose -f infra/docker-compose.yml up -d` | Local Postgres, private object storage, API, workers and web | `PENDING INTEGRATION` |
-| Open `http://localhost:3000` | Public map, report flow and mode badge | `PENDING INTEGRATION` |
-| Select `REPLAY / SIMULATION` | Scenario A (successful repair), B (failed durability), C (prompt injection), D (sponsorship uncertainty), E (judge replay) with no credentials | `PENDING INTEGRATION` |
-| Run scenario A | 100 budget → 80 award → 20 refund → 72 paid → 8 held → 8 released; passport `CLOSED` | `PENDING INTEGRATION` |
-| Run scenario B | Durability fails; same work order becomes `WARRANTY_REOPENED`; no new funds; holdback released once after a remedy | `PENDING INTEGRATION` |
-| Run scenario C | Injected instruction is blocked; no recipient, role, scope or payment change | `PENDING INTEGRATION` |
-| Run scenario D | Dry quote, pending, underpayment, failure, refund and success are all labelled honestly; a quote is never a payment | `PENDING INTEGRATION` |
-| Run scenario E | Every scenario plays from recorded artifacts with a replay watermark and no live transaction links | `PENDING INTEGRATION` |
-| Run `npm test` (all workspaces) | Currently only the protocol workspace runs (26 tests); contract, API, agent and E2E suites are `PENDING INTEGRATION` | `PENDING INTEGRATION` |
-| Run `bash scripts/verify.sh` | Full local verification including clean-room checks | `PENDING INTEGRATION` |
-| Run `npm run demo:reset` | Deterministic reset of designated demo data only | `PENDING INTEGRATION` |
-| Open the inspector console | Redacted evidence, checklist, AI completeness suggestions, human acceptance controls | `PENDING INTEGRATION` |
-| Open the verification panel | AI evidence, OutLayer score binding, DAO authorization and transaction links, each labelled honestly | `PENDING INTEGRATION` |
+| `git clone <repo> && cd mend && npm ci` | Deterministic install from the committed lockfile | IMPLEMENTED |
+| `docker compose -f infra/docker-compose.yml up -d` | Local Postgres, private object storage, API, workers and web | CONFIG VALIDATED; full compose run pending |
+| Open `http://localhost:3000` | Public map, report flow and mode badge | IMPLEMENTED — verified 200 |
+| Select `REPLAY / SIMULATION` | Scenario A (successful repair), B (failed durability), C (prompt injection), D (sponsorship uncertainty), E (judge replay) with no credentials | IMPLEMENTED |
+| Run scenario A | 100 budget → 80 award → 20 refund → 72 paid → 8 held → 8 released; passport `CLOSED` | VERIFIED — G2 evidence |
+| Run scenario B | Durability fails; same work order becomes `WARRANTY_REOPENED`; no new funds; holdback released once after a remedy | CONTRACT VERIFIED; UI flow partial |
+| Run scenario C | Injected instruction is blocked; no recipient, role, scope or payment change | PARTIAL — guard fix in progress |
+| Run scenario D | Dry quote, pending, underpayment, failure, refund and success are all labelled honestly; a quote is never a payment | IMPLEMENTED — 99 client tests + live dry smoke |
+| Run scenario E | Every scenario plays from recorded artifacts with a replay watermark and no live transaction links | PARTIAL — recording pending |
+| Run `npm test` (all workspaces) | Protocol, AI, Intents, API, DB, indexer, agents and web build pass | IMPLEMENTED |
+| Run `bash scripts/verify.sh` | Full local verification including contracts and secret scan | PASS — 17 checks |
+| Run `npm run demo:reset` | Deterministic reset of designated demo data only | IMPLEMENTED |
+| Open the inspector console | Redacted evidence, checklist, AI completeness suggestions, human acceptance controls | IMPLEMENTED |
+| Open the verification panel | AI evidence, OutLayer score binding, DAO authorization and transaction links, each labelled honestly | IMPLEMENTED |
 
 ### Human-gated flows
 
@@ -85,7 +87,9 @@ on this branch yet. Do not claim they do.
 
 ### REPLAY with no credentials
 
-Status: `PENDING INTEGRATION`. When the app is merged, the exact flow is:
+Status: `IMPLEMENTED — verified locally in REPLAY` (see
+[G2 evidence](./orchestration/reports/G2-evidence.md)). From a fresh clone, run
+`git clone <repository-url>` then follow the steps below.
 
 1. `npm ci`
 2. `docker compose -f infra/docker-compose.yml up -d`
@@ -101,15 +105,18 @@ shown as a live transaction, and a dry quote is never shown as a payment.
 
 ### Local stack and tests
 
-Status: `PENDING INTEGRATION` except for the protocol workspace.
+Status: `IMPLEMENTED` — all local suites run without credentials.
 
 ```bash
 npm ci
-npm test -w @mend/protocol          # works today: 26 tests
-npm run typecheck -w @mend/protocol # works today
-npm test                            # currently protocol only; full suites pending
-bash scripts/verify.sh              # full verification; pending integration
+npm test                            # all workspaces
+bash scripts/verify.sh              # 17 checks: typecheck, protocol, API,
+                                    # agents, contracts, WASM, secret scan, compose
+docker compose -f infra/docker-compose.yml up -d
 ```
+
+The contract replay, API, agents and web build are verified. Live testnet,
+mainnet, hosted demo and physical repair evidence remain `BLOCKED_ON_HUMAN`.
 
 ## Why the winner is not an AI choice
 
@@ -134,14 +141,14 @@ winner. See [`RULES.md`](./docs/RULES.md) and
 | `docs/` | Product, privacy, threat model, demo and submission docs | **IMPLEMENTED** |
 | `scripts/demo/` | Docs checker and REPLAY capture harness | **IMPLEMENTED** |
 | `fixtures/demo/` | Evidence, consent, transaction and submission templates | **IMPLEMENTED** (no collected media) |
-| `apps/web` | Next.js public case experience and consoles | `PENDING INTEGRATION` |
-| `apps/api` | Fastify API, private media and chain commands | `PENDING INTEGRATION` |
-| `contracts/hub` | Registry, passport, work orders, escrow, warranty | `PENDING INTEGRATION` |
-| `contracts/test-token` | Testnet-only NEP-141 mock USDC | `PENDING INTEGRATION` |
-| `compute/bid-rules` | Deterministic Rust/WASM scorer | `PENDING INTEGRATION` |
-| `services/` | Agents, DAO watcher, relayer, indexer | `PENDING INTEGRATION` |
-| `tests/` | Integration, E2E, security and clean-room suites | `PENDING INTEGRATION` |
-| `infra/` | Local stack and deployment | `PENDING INTEGRATION` |
+| `apps/web` | Next.js public case experience and consoles | **IMPLEMENTED** — build passes |
+| `apps/api` | Fastify API, private media and chain commands | **IMPLEMENTED** — 31 tests |
+| `contracts/hub` | Registry, passport, work orders, escrow, warranty | **IMPLEMENTED** — 30 tests |
+| `contracts/test-token` | Testnet-only NEP-141 mock USDC | **IMPLEMENTED** — 5 tests |
+| `compute/bid-rules` | Deterministic Rust/WASM scorer | **IMPLEMENTED** — 12 tests + WASM |
+| `services/` | Agents, DAO watcher, relayer, indexer | **IMPLEMENTED** — 90 tests |
+| `tests/` | Integration, E2E, security and clean-room suites | **IMPLEMENTED** — see tests/README |
+| `infra/` | Local stack and deployment | **IMPLEMENTED** — compose/CI validated |
 | `orchestration/` | Research, decisions, task packets and evidence | Read-only input |
 
 ## Evidence labels
