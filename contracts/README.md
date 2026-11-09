@@ -123,14 +123,17 @@ Funding uses NEP-141 `ft_transfer_call`:
 Commitment hash (identical to `packages/protocol/src/hashing.ts`):
 
 ```text
-sha256("MEND_BID_V1|bidId|contractorId|priceMicro|durationDays|warrantyDays|materialsScore|checklistAccepted?1:0|nonce")
+sha256("MEND_BID_V2|bidId|contractorId|priceMicro|durationDays|warrantyDays|materialsScore|availableInDays|checklistAccepted?1:0|nonce")
 ```
+
+`available_in_days` is a whole-day `u32` (0..=365) committed with the bid and
+disclosed only at reveal; values above 365 fail with `VALIDATION_ERROR`.
 
 `commit_bid` is allowed only while `BIDDING_OPEN` and before `commit_deadline`.
 `reveal_bid` is allowed only from `commit_deadline` until `reveal_deadline`.
 Early reveal, late reveal, hash mismatch, duplicate bid/reveal and non-roster
-bidders fail. `get_bids` and `get_revealed_bid` hide reveals until the reveal
-phase begins.
+bidders fail. `get_bids` and `get_revealed_bid` hide reveals (including
+availability) until the reveal phase begins.
 
 ## Deterministic scoring
 

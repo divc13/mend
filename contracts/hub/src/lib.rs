@@ -52,6 +52,10 @@ pub const MIN_OUTLAYER_DEPOSIT_YOCTO: u128 = 3_000_000_000_000_000_000_000;
 pub const MAX_SCORE_BIDS: usize = 16;
 pub const MAX_SCORE_INPUT_BYTES: usize = 16 * 1024;
 
+/// Upper bound for the committed availability window. Anything longer is not a
+/// credible repair commitment and is rejected at reveal time.
+pub const MAX_AVAILABLE_IN_DAYS: u32 = 365;
+
 pub const DRAFT: &str = "DRAFT";
 pub const POLICY_APPROVED: &str = "POLICY_APPROVED";
 pub const FUNDED: &str = "FUNDED";
@@ -219,6 +223,9 @@ pub struct BidReveal {
     pub duration_days: u32,
     pub warranty_days: u32,
     pub materials_score: u32,
+    /// Whole days until the contractor can start after award. Committed with
+    /// the bid and only disclosed at reveal.
+    pub available_in_days: u32,
     pub checklist_accepted: bool,
     pub nonce: String,
     pub commitment_hash: String,
@@ -471,6 +478,7 @@ pub struct BidRevealView {
     pub duration_days: u32,
     pub warranty_days: u32,
     pub materials_score: u32,
+    pub available_in_days: u32,
     pub checklist_accepted: bool,
     pub nonce: String,
     pub commitment_hash: String,
@@ -1238,6 +1246,7 @@ impl Contract {
         duration_days: u32,
         warranty_days: u32,
         materials_score: u32,
+        available_in_days: u32,
         checklist_accepted: bool,
         nonce: String,
     ) {
@@ -1270,6 +1279,15 @@ impl Contract {
         if price.0 == 0 || duration_days == 0 || materials_score > 100 {
             fail("VALIDATION_ERROR", "invalid revealed bid values");
         }
+        if available_in_days > MAX_AVAILABLE_IN_DAYS {
+            fail(
+                "VALIDATION_ERROR",
+                format!(
+                    "available_in_days must be <= {} days (got {})",
+                    MAX_AVAILABLE_IN_DAYS, available_in_days
+                ),
+            );
+        }
         let payload = bid_commitment_payload(
             &bid_id,
             &caller,
@@ -1277,6 +1295,7 @@ impl Contract {
             duration_days,
             warranty_days,
             materials_score,
+            available_in_days,
             checklist_accepted,
             &nonce,
         );
@@ -1295,6 +1314,7 @@ impl Contract {
             duration_days,
             warranty_days,
             materials_score,
+            available_in_days,
             checklist_accepted,
             nonce: nonce.clone(),
             commitment_hash: commitment.commitment_hash.clone(),
@@ -1319,6 +1339,7 @@ impl Contract {
                 "duration_days": duration_days,
                 "warranty_days": warranty_days,
                 "materials_score": materials_score,
+                "available_in_days": available_in_days,
                 "checklist_accepted": checklist_accepted,
             }),
         );
@@ -2987,17 +3008,19 @@ pub fn bid_commitment_payload(
     duration_days: u32,
     warranty_days: u32,
     materials_score: u32,
+    available_in_days: u32,
     checklist_accepted: bool,
     nonce: &str,
 ) -> String {
     format!(
-        "MEND_BID_V1|{}|{}|{}|{}|{}|{}|{}|{}",
+        "MEND_BID_V2|{}|{}|{}|{}|{}|{}|{}|{}|{}",
         bid_id,
         contractor_id,
         price,
         duration_days,
         warranty_days,
         materials_score,
+        available_in_days,
         if checklist_accepted { "1" } else { "0" },
         nonce
     )
@@ -3261,6 +3284,7 @@ fn reveal_view(reveal: &BidReveal) -> BidRevealView {
         duration_days: reveal.duration_days,
         warranty_days: reveal.warranty_days,
         materials_score: reveal.materials_score,
+        available_in_days: reveal.available_in_days,
         checklist_accepted: reveal.checklist_accepted,
         nonce: reveal.nonce.clone(),
         commitment_hash: reveal.commitment_hash.clone(),

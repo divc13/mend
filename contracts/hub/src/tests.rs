@@ -208,6 +208,11 @@ fn commit(contract: &mut Contract, bid_id: &str, contractor: &str, commitment: &
     );
 }
 
+const AVAILABLE_A: u32 = 5;
+const AVAILABLE_B: u32 = 2;
+const AVAILABLE_C: u32 = 30;
+
+#[allow(clippy::too_many_arguments)]
 fn commitment(
     bid_id: &str,
     contractor: &str,
@@ -215,6 +220,7 @@ fn commitment(
     duration: u32,
     warranty: u32,
     materials: u32,
+    available_in_days: u32,
     nonce: &str,
 ) -> String {
     sha256_hex(
@@ -225,6 +231,7 @@ fn commitment(
             duration,
             warranty,
             materials,
+            available_in_days,
             true,
             nonce,
         )
@@ -237,19 +244,46 @@ fn commit_all(contract: &mut Contract) {
         contract,
         BID_A,
         CONTRACTOR_A,
-        &commitment(BID_A, CONTRACTOR_A, PRICE_A, 14, 90, 60, "nonce-a-0001"),
+        &commitment(
+            BID_A,
+            CONTRACTOR_A,
+            PRICE_A,
+            14,
+            90,
+            60,
+            AVAILABLE_A,
+            "nonce-a-0001",
+        ),
     );
     commit(
         contract,
         BID_B,
         CONTRACTOR_B,
-        &commitment(BID_B, CONTRACTOR_B, PRICE_B, 10, 180, 80, "nonce-b-0002"),
+        &commitment(
+            BID_B,
+            CONTRACTOR_B,
+            PRICE_B,
+            10,
+            180,
+            80,
+            AVAILABLE_B,
+            "nonce-b-0002",
+        ),
     );
     commit(
         contract,
         BID_C,
         CONTRACTOR_C,
-        &commitment(BID_C, CONTRACTOR_C, PRICE_C, 21, 30, 70, "nonce-c-0003"),
+        &commitment(
+            BID_C,
+            CONTRACTOR_C,
+            PRICE_C,
+            21,
+            30,
+            70,
+            AVAILABLE_C,
+            "nonce-c-0003",
+        ),
     );
 }
 
@@ -262,6 +296,7 @@ fn reveal(
     duration: u32,
     warranty: u32,
     materials: u32,
+    available_in_days: u32,
     nonce: &str,
 ) {
     set_ctx(contractor, T0 + 110_000_000_000);
@@ -272,6 +307,7 @@ fn reveal(
         duration,
         warranty,
         materials,
+        available_in_days,
         true,
         nonce.to_string(),
     );
@@ -286,6 +322,7 @@ fn reveal_all(contract: &mut Contract) {
         14,
         90,
         60,
+        AVAILABLE_A,
         "nonce-a-0001",
     );
     reveal(
@@ -296,6 +333,7 @@ fn reveal_all(contract: &mut Contract) {
         10,
         180,
         80,
+        AVAILABLE_B,
         "nonce-b-0002",
     );
     reveal(
@@ -306,6 +344,7 @@ fn reveal_all(contract: &mut Contract) {
         21,
         30,
         70,
+        AVAILABLE_C,
         "nonce-c-0003",
     );
 }
@@ -889,7 +928,16 @@ fn commit_and_reveal_validate_roster_duplicates_and_windows() {
         "NOT_ROSTERED",
     );
 
-    let commitment_a = commitment(BID_A, CONTRACTOR_A, PRICE_A, 14, 90, 60, "nonce-a-0001");
+    let commitment_a = commitment(
+        BID_A,
+        CONTRACTOR_A,
+        PRICE_A,
+        14,
+        90,
+        60,
+        AVAILABLE_A,
+        "nonce-a-0001",
+    );
     commit(&mut contract, BID_A, CONTRACTOR_A, &commitment_a);
 
     // Duplicate bid / contractor fails.
@@ -916,6 +964,7 @@ fn commit_and_reveal_validate_roster_duplicates_and_windows() {
                 14,
                 90,
                 60,
+                AVAILABLE_A,
                 true,
                 "nonce-a-0001".to_string(),
             );
@@ -934,6 +983,7 @@ fn commit_and_reveal_validate_roster_duplicates_and_windows() {
                 14,
                 90,
                 60,
+                AVAILABLE_A,
                 true,
                 "nonce-a-0001".to_string(),
             );
@@ -950,6 +1000,7 @@ fn commit_and_reveal_validate_roster_duplicates_and_windows() {
         14,
         90,
         60,
+        AVAILABLE_A,
         "nonce-a-0001",
     );
     set_ctx(CONTRACTOR_A, T0 + 111_000_000_000);
@@ -962,6 +1013,7 @@ fn commit_and_reveal_validate_roster_duplicates_and_windows() {
                 14,
                 90,
                 60,
+                AVAILABLE_A,
                 true,
                 "nonce-a-0001".to_string(),
             );
@@ -980,6 +1032,7 @@ fn commit_and_reveal_validate_roster_duplicates_and_windows() {
                 10,
                 180,
                 80,
+                AVAILABLE_B,
                 true,
                 "nonce-b-0002".to_string(),
             );
@@ -1015,6 +1068,202 @@ fn reveals_are_invisible_before_reveal_phase() {
         .unwrap();
     assert_eq!(revealed.price.0, PRICE_B);
     assert_eq!(revealed.contractor_id, acct(CONTRACTOR_B));
+}
+
+#[test]
+fn revealed_availability_is_stored_and_exposed() {
+    let mut contract = setup();
+    make_work_order(&mut contract);
+    assert_eq!(fund(&mut contract, BUDGET), U128(0));
+    open_and_bid(&mut contract);
+
+    // The commit view must never expose availability.
+    set_ctx(STEWARD, T0 + 50_000_000_000);
+    let bids_json =
+        near_sdk::serde_json::to_string(&contract.get_bids(WORK_ORDER.to_string()).unwrap())
+            .unwrap();
+    assert!(
+        !bids_json.contains("availableInDays"),
+        "availability must not leak before reveal: {}",
+        bids_json
+    );
+
+    reveal_all(&mut contract);
+
+    // The reveal event carries the committed availability.
+    let logs = near_sdk::test_utils::get_logs();
+    assert!(
+        logs.iter().any(|line| {
+            line.contains("\"event\":\"bid_revealed\"")
+                && line.contains("\"available_in_days\":30")
+        }),
+        "bid_revealed event must expose availability: {:?}",
+        logs
+    );
+
+    set_ctx(STEWARD, T0 + 110_000_000_000);
+    let revealed = contract
+        .get_revealed_bid(WORK_ORDER.to_string(), BID_B.to_string())
+        .unwrap();
+    assert_eq!(revealed.available_in_days, AVAILABLE_B);
+    assert_eq!(revealed.price.0, PRICE_B);
+    assert_eq!(revealed.duration_days, 10);
+    assert_eq!(revealed.warranty_days, 180);
+
+    // The same value is visible in the batch view.
+    let bids = contract.get_bids(WORK_ORDER.to_string()).unwrap();
+    let all = bids.reveals.expect("reveals visible after commit deadline");
+    let bid_b = all.iter().find(|r| r.bid_id == BID_B).unwrap();
+    assert_eq!(bid_b.available_in_days, AVAILABLE_B);
+
+    // The canonical preimage matches packages/protocol/src/hashing.ts exactly.
+    let payload = bid_commitment_payload(
+        BID_B,
+        &acct(CONTRACTOR_B),
+        PRICE_B,
+        10,
+        180,
+        80,
+        AVAILABLE_B,
+        true,
+        "nonce-b-0002",
+    );
+    assert_eq!(
+        payload,
+        "MEND_BID_V2|BID-B-BENCH-001|contractor-b.mend.testnet|80000000|10|180|80|2|1|nonce-b-0002"
+    );
+}
+
+#[test]
+fn changing_availability_after_commit_fails_hash() {
+    let mut contract = setup();
+    make_work_order(&mut contract);
+    assert_eq!(fund(&mut contract, BUDGET), U128(0));
+
+    set_ctx(STEWARD, T0 + 1_000_000_000);
+    contract.open_bidding(WORK_ORDER.to_string());
+
+    let committed = commitment(
+        BID_B,
+        CONTRACTOR_B,
+        PRICE_B,
+        10,
+        180,
+        80,
+        AVAILABLE_B,
+        "nonce-b-0002",
+    );
+    commit(&mut contract, BID_B, CONTRACTOR_B, &committed);
+
+    set_ctx(CONTRACTOR_B, T0 + 110_000_000_000);
+    expect_panic(
+        || {
+            contract.reveal_bid(
+                WORK_ORDER.to_string(),
+                BID_B.to_string(),
+                U128(PRICE_B),
+                10,
+                180,
+                80,
+                AVAILABLE_B + 1,
+                true,
+                "nonce-b-0002".to_string(),
+            );
+        },
+        "BID_HASH_MISMATCH",
+    );
+
+    // Correct availability still reveals.
+    reveal(
+        &mut contract,
+        BID_B,
+        CONTRACTOR_B,
+        PRICE_B,
+        10,
+        180,
+        80,
+        AVAILABLE_B,
+        "nonce-b-0002",
+    );
+    let revealed = contract
+        .get_revealed_bid(WORK_ORDER.to_string(), BID_B.to_string())
+        .unwrap();
+    assert_eq!(revealed.available_in_days, AVAILABLE_B);
+}
+
+#[test]
+fn absurd_availability_is_rejected() {
+    let mut contract = setup();
+    make_work_order(&mut contract);
+    assert_eq!(fund(&mut contract, BUDGET), U128(0));
+
+    set_ctx(STEWARD, T0 + 1_000_000_000);
+    contract.open_bidding(WORK_ORDER.to_string());
+
+    let too_far = MAX_AVAILABLE_IN_DAYS + 1;
+    let committed = commitment(
+        BID_B,
+        CONTRACTOR_B,
+        PRICE_B,
+        10,
+        180,
+        80,
+        too_far,
+        "nonce-b-0002",
+    );
+    commit(&mut contract, BID_B, CONTRACTOR_B, &committed);
+
+    set_ctx(CONTRACTOR_B, T0 + 110_000_000_000);
+    expect_panic(
+        || {
+            contract.reveal_bid(
+                WORK_ORDER.to_string(),
+                BID_B.to_string(),
+                U128(PRICE_B),
+                10,
+                180,
+                80,
+                too_far,
+                true,
+                "nonce-b-0002".to_string(),
+            );
+        },
+        "available_in_days must be <= 365 days",
+    );
+    assert!(contract
+        .get_revealed_bid(WORK_ORDER.to_string(), BID_B.to_string())
+        .is_none());
+
+    // The boundary value is accepted when it was committed.
+    let boundary = commitment(
+        BID_A,
+        CONTRACTOR_A,
+        PRICE_A,
+        14,
+        90,
+        60,
+        MAX_AVAILABLE_IN_DAYS,
+        "nonce-a-0001",
+    );
+    commit(&mut contract, BID_A, CONTRACTOR_A, &boundary);
+    reveal(
+        &mut contract,
+        BID_A,
+        CONTRACTOR_A,
+        PRICE_A,
+        14,
+        90,
+        60,
+        MAX_AVAILABLE_IN_DAYS,
+        "nonce-a-0001",
+    );
+    assert_eq!(
+        contract
+            .get_revealed_bid(WORK_ORDER.to_string(), BID_A.to_string())
+            .unwrap()
+            .available_in_days,
+        MAX_AVAILABLE_IN_DAYS
+    );
 }
 
 // ---------------------------------------------------------------------------
