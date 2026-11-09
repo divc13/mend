@@ -23,7 +23,7 @@ function keyView(overrides: Partial<AccessKeyView['access_key']> = {}, permissio
             FunctionCall: {
               allowance: '250000000000000000000000',
               receiver_id: HUB,
-              method_names: ['commit_bid', 'reveal_bid', 'start_work', 'submit_completion'],
+              method_names: ['commit_bid', 'reveal_bid', 'submit_completion'],
             },
           }
         : 'FullAccess',
@@ -41,7 +41,7 @@ describe('function-call key provisioning', () => {
       receiverId: HUB,
       network: 'testnet',
     });
-    expect(plan.spec.methodNames).toEqual(['commit_bid', 'reveal_bid', 'start_work', 'submit_completion']);
+    expect(plan.spec.methodNames).toEqual(['commit_bid', 'reveal_bid', 'submit_completion']);
     expect(plan.json.permission.FunctionCall.receiver_id).toBe(HUB);
     expect(plan.commands.join('\n')).toContain('grant-function-call-access');
     expect(JSON.stringify(plan)).not.toMatch(/BEGIN (RSA |ED25519 )?PRIVATE KEY|"private_key"|"secretKey"/i);
@@ -92,10 +92,11 @@ describe('function-call key provisioning', () => {
 
   it('accepts a correct restricted key and proves it cannot accept or release escrow', () => {
     const spec: FunctionCallKeySpec = {
+      role: 'CONTRACTOR',
       accountId: ACCOUNT,
       publicKey: PUBLIC_KEY,
       receiverId: HUB,
-      methodNames: ['commit_bid', 'reveal_bid', 'start_work', 'submit_completion'],
+      methodNames: ['commit_bid', 'reveal_bid', 'submit_completion'],
       allowanceYocto: '250000000000000000000000',
       network: 'testnet',
     };
@@ -106,8 +107,31 @@ describe('function-call key provisioning', () => {
     expect(() => assertCannotCall(verification, 'award')).not.toThrow();
   });
 
+  it('accepts an inspector key that can accept completion but cannot award or bid', () => {
+    const spec: FunctionCallKeySpec = {
+      role: 'INSPECTOR',
+      accountId: 'mend-inspector.testnet',
+      publicKey: PUBLIC_KEY,
+      receiverId: HUB,
+      methodNames: ['accept_completion', 'inspect_durability'],
+      allowanceYocto: '250000000000000000000000',
+      network: 'testnet',
+    };
+    const view = keyView();
+    const fc = view.access_key.permission;
+    if (fc !== 'FullAccess' && fc.FunctionCall) {
+      fc.FunctionCall.method_names = ['accept_completion', 'inspect_durability'];
+    }
+    const verification = verifyFunctionCallKey(view, spec);
+    expect(verification.ok).toBe(true);
+    expect(verification.canReleaseEscrow).toBe(true);
+    expect(() => assertCannotCall(verification, 'award')).not.toThrow();
+    expect(() => assertCannotCall(verification, 'commit_bid')).not.toThrow();
+  });
+
   it('rejects full-access keys', () => {
     const spec: FunctionCallKeySpec = {
+      role: 'CONTRACTOR',
       accountId: ACCOUNT,
       publicKey: PUBLIC_KEY,
       receiverId: HUB,
@@ -123,6 +147,7 @@ describe('function-call key provisioning', () => {
 
   it('rejects empty method lists, wrong receiver and unlimited allowance', () => {
     const spec: FunctionCallKeySpec = {
+      role: 'CONTRACTOR',
       accountId: ACCOUNT,
       publicKey: PUBLIC_KEY,
       receiverId: HUB,

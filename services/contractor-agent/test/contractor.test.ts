@@ -141,7 +141,7 @@ describe('contractor agents', () => {
 
   it('cannot award, accept, inspect or pay', () => {
     const bidder = new ContractorBidder('A');
-    for (const method of ['award', 'accept_completion', 'inspect_durability', 'refund', 'set_role', 'fund_work_order']) {
+    for (const method of ['start_work', 'award', 'accept_completion', 'inspect_durability', 'refund', 'set_role', 'fund_work_order']) {
       expect(() => bidder.performAction(method)).toThrow(MendError);
     }
     expect(bidder.performAction('commit_bid')).toEqual({

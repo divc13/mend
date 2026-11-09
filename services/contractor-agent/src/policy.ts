@@ -1,14 +1,18 @@
 import { MendError } from '@mend/protocol';
 
-/** A contractor agent may bid on and perform awarded work, never inspect or move money. */
+/**
+ * A contractor agent may bid and submit completion, never inspect or move money.
+ * This list mirrors the live function-call key exactly; `start_work` is not in
+ * the scoped key, so the agent must not claim it can start work.
+ */
 export const CONTRACTOR_ALLOWED_METHODS: readonly string[] = [
   'commit_bid',
   'reveal_bid',
-  'start_work',
   'submit_completion',
 ];
 
 export const CONTRACTOR_FORBIDDEN_METHODS: readonly string[] = [
+  'start_work',
   'award',
   'accept_completion',
   'inspect_durability',
