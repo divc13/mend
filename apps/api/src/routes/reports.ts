@@ -218,6 +218,15 @@ export async function registerReportRoutes(app: FastifyInstance, deps: AppDeps):
       hasPreciseLocation: Boolean(privateRecord?.preciseLocation),
       ...(asset ? { assetType: asset.assetType } : {}),
     });
+    if (result.injectionScan.detected) {
+      // Append-only security trail: the raw attack text and matches are never
+      // written here, only the detection categories and the safe action.
+      await auditEvent(deps, 'prompt_injection_blocked', auth.account, { assetId: report.assetId }, {
+        reportId: report.id,
+        categories: result.injectionScan.categories,
+        action: 'treated-as-untrusted-data',
+      });
+    }
     const now = deps.clock.now().toISOString();
     let attestationId: string | undefined;
     if (result.attestation) {
@@ -264,6 +273,12 @@ export async function registerReportRoutes(app: FastifyInstance, deps: AppDeps):
     });
     return reply.status(201).send({
       suggestion: triageView(suggestion),
+      // Detection metadata only: raw matches stay out of the response so the
+      // attack text cannot be echoed back as an instruction or a leak.
+      injectionScan: {
+        detected: result.injectionScan.detected,
+        categories: result.injectionScan.categories,
+      },
       verified: result.verified,
       verification: result.verification,
       label: result.available
