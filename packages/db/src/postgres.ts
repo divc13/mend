@@ -188,6 +188,7 @@ function revealFromRow(row: Row): BidRevealRecord {
     priceMicro: row.price_micro,
     durationDays: num(row.duration_days),
     warrantyDays: num(row.warranty_days),
+    availableInDays: num(row.available_in_days),
     materials: row.materials ?? '',
     materialsScore: num(row.materials_score),
     evidenceChecklistAccepted: Boolean(row.evidence_checklist_accepted),
@@ -811,12 +812,12 @@ export class PgRepository implements Repository {
   async createBidReveal(reveal: BidRevealRecord): Promise<BidRevealRecord> {
     const result = await this.executor.query(
       `INSERT INTO bid_reveals (work_order_id, bid_id, contractor_id, price_micro, duration_days,
-         warranty_days, materials, materials_score, evidence_checklist_accepted, nonce, revealed_at,
-         commitment_hash, is_demo)
-       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) RETURNING *`,
+         warranty_days, available_in_days, materials, materials_score, evidence_checklist_accepted, nonce,
+         revealed_at, commitment_hash, is_demo)
+       VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14) RETURNING *`,
       [reveal.workOrderId, reveal.bidId, reveal.contractorId, reveal.priceMicro,
-        reveal.durationDays, reveal.warrantyDays, reveal.materials, reveal.materialsScore,
-        reveal.evidenceChecklistAccepted, reveal.nonce, reveal.revealedAt,
+        reveal.durationDays, reveal.warrantyDays, reveal.availableInDays, reveal.materials,
+        reveal.materialsScore, reveal.evidenceChecklistAccepted, reveal.nonce, reveal.revealedAt,
         reveal.commitmentHash, reveal.isDemo],
     );
     return revealFromRow(result.rows[0] as Row);

@@ -72,6 +72,7 @@ describe('MEND API — work-order lifecycle, sealed bids and honest chain comman
               priceMicro: bid.priceMicro,
               durationDays: bid.durationDays,
               warrantyDays: bid.warrantyDays,
+              availableInDays: bid.availableInDays,
               materials: 'fixture materials',
               materialsScore: bid.materialsScore,
               evidenceChecklistAccepted: bid.evidenceChecklistAccepted,
@@ -100,6 +101,7 @@ describe('MEND API — work-order lifecycle, sealed bids and honest chain comman
             priceMicro: bid.priceMicro,
             durationDays: bid.durationDays,
             warrantyDays: bid.warrantyDays,
+            availableInDays: bid.availableInDays,
             materials: 'fixture materials',
             materialsScore: bid.materialsScore,
             evidenceChecklistAccepted: bid.evidenceChecklistAccepted,
@@ -107,6 +109,7 @@ describe('MEND API — work-order lifecycle, sealed bids and honest chain comman
           },
         });
         expect(revealed.status).toBe(201);
+        expect(revealed.body.availableInDays).toBe(bid.availableInDays);
       }
 
       const stillHidden = await call(target.app, 'GET', '/v1/work-orders/WO-BENCH-001-0002/bids');
@@ -127,6 +130,8 @@ describe('MEND API — work-order lifecycle, sealed bids and honest chain comman
       expect(publicBids.body.reveals.map((r: any) => r.priceMicro).sort()).toEqual(
         ['78000000', '80000000', '95000000'],
       );
+      expect(publicBids.body.reveals.map((r: any) => r.availableInDays).sort((a: number, b: number) => a - b))
+        .toEqual([2, 3, 5]);
 
       const scored = await call(target.app, 'POST', '/v1/work-orders/WO-BENCH-001-0002/score', {
         headers: steward,

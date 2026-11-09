@@ -128,6 +128,7 @@ CREATE TABLE IF NOT EXISTS bid_reveals (
   price_micro     TEXT NOT NULL CHECK (price_micro ~ '^[0-9]+$' AND price_micro::numeric > 0),
   duration_days   INTEGER NOT NULL CHECK (duration_days > 0),
   warranty_days   INTEGER NOT NULL CHECK (warranty_days >= 0),
+  available_in_days INTEGER NOT NULL DEFAULT 0 CHECK (available_in_days BETWEEN 0 AND 365),
   materials       TEXT NOT NULL DEFAULT '' CHECK (length(materials) <= 1000),
   materials_score INTEGER NOT NULL CHECK (materials_score BETWEEN 0 AND 100),
   evidence_checklist_accepted BOOLEAN NOT NULL,

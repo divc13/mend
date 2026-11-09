@@ -170,6 +170,7 @@ async function seedBase(repo: Repository): Promise<WorkOrderRecord> {
       priceMicro: bid.priceMicro,
       durationDays: bid.durationDays,
       warrantyDays: bid.warrantyDays,
+      availableInDays: bid.availableInDays,
       materials: key === 'A' ? 'Standard galvanised bolts' : key === 'B' ? 'Marine-grade stainless hardware and sealed timber' : 'Recycled composite plank',
       materialsScore: bid.materialsScore,
       evidenceChecklistAccepted: bid.evidenceChecklistAccepted,

@@ -45,6 +45,12 @@ export async function registerPublicRoutes(app: FastifyInstance, deps: AppDeps):
       },
       demoResetEnabled: deps.config.demo.resetEnabled && deps.config.nodeEnv !== 'production',
       durabilityIntervalMinutes: deps.config.durabilityMinutes,
+      killSwitch: {
+        enabled: deps.killSwitch.enabled,
+        reason: deps.killSwitch.status.reason,
+        updatedAt: deps.killSwitch.status.updatedAt,
+        updatedBy: deps.killSwitch.status.updatedBy,
+      },
     };
   });
 

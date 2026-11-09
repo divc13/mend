@@ -74,6 +74,7 @@ All routes are under `/v1` except `/health`.
 | Payments | `GET/POST /v1/work-orders/:id/payments`, `GET /v1/work-orders/:id/warranty` |
 | Verification | `POST /v1/verification`, `GET /v1/verification/:subjectHash`, `GET /v1/verification/artifact/:id` |
 | Agents / audit | `GET/POST /v1/agents`, `GET /v1/agents/:account`, `GET /v1/audit` |
+| Kill switch | `GET /v1/admin/kill-switch` (ADMIN/STEWARD/DAO), `POST /v1/admin/kill-switch` (ADMIN) |
 | Demo | `POST /v1/demo/reset`, `GET /v1/demo/state` (ADMIN + designated account) |
 | Intents | `GET /v1/intents/capabilities`, `POST /v1/intents/quote`, `GET /v1/intents/status/:quoteId` |
 
@@ -84,6 +85,26 @@ All routes are under `/v1` except `/health`.
 
 Bids are sealed: public bid responses expose commitments and hide all reveal
 values until bidding closes. Reveals are verified against the commitment hash.
+Both commit and reveal carry `availableInDays` (integer 0–365), which is bound
+into the canonical commitment hash and returned in the public reveal view.
+
+## Human kill switch
+
+`POST /v1/admin/kill-switch` with `{ "enabled": true, "reason": "..." }`
+requires `ADMIN` and immediately pauses every mutating `/v1/*` route with HTTP
+`423 CONTRACT_PAUSED`; reads, `/health` and the kill-switch control route keep
+working so an operator can release the pause. Each transition:
+
+- appends an immutable `kill_switch_enabled` / `kill_switch_disabled` audit event
+  with the actor and reason;
+- submits an explicit hub `pause` / `unpause` chain command through the existing
+  adapter. The response distinguishes a stored `INTENT` from an adapter
+  `SUCCESS` with a transaction hash, and a replay hash is never presented as a
+  real transaction.
+
+On startup the last audited decision is restored, so a restart does not silently
+resume writes. `GET /v1/admin/kill-switch` is available to `ADMIN`, `STEWARD`
+and `DAO` staff.
 
 ## Privacy and evidence
 

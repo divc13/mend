@@ -114,6 +114,8 @@ export const ROLE_MATRIX = {
   'verification:read': ['STEWARD', 'DAO', 'ADMIN', 'INSPECTOR', 'REVIEWER_AI', 'COORDINATOR_AI'],
   'intents:quote': ['SPONSOR', 'ADMIN'],
   'audit:read': ['ADMIN', 'DAO', 'STEWARD'],
+  'kill_switch:read': ['ADMIN', 'STEWARD', 'DAO'],
+  'kill_switch:write': ['ADMIN'],
   'demo:reset': ['ADMIN'],
 } as const satisfies Record<string, readonly Role[]>;
 

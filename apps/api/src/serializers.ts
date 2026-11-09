@@ -114,6 +114,7 @@ export function revealView(reveal: BidRevealRecord): Record<string, unknown> {
     priceMicro: reveal.priceMicro,
     durationDays: reveal.durationDays,
     warrantyDays: reveal.warrantyDays,
+    availableInDays: reveal.availableInDays,
     materials: reveal.materials,
     materialsScore: reveal.materialsScore,
     evidenceChecklistAccepted: reveal.evidenceChecklistAccepted,

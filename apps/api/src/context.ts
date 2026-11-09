@@ -4,6 +4,7 @@ import type { ChainCommandService, Clock } from './services/chain.js';
 import type { PrivateEvidenceStore } from './services/evidence.js';
 import type { IntentsAdapter, IntentsCapabilities } from './services/intents.js';
 import type { TriageAdapter } from './services/triage.js';
+import type { KillSwitchService } from './services/kill-switch.js';
 
 export interface AppDeps {
   config: AppConfig;
@@ -13,6 +14,7 @@ export interface AppDeps {
   triage: TriageAdapter;
   intents: IntentsAdapter;
   clock: Clock;
+  killSwitch: KillSwitchService;
   triageInfo(): {
     provider: string;
     available: boolean;
