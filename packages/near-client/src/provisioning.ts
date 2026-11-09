@@ -7,17 +7,21 @@ const NEAR_DECIMALS = 24n;
 const NEAR_PER_YOCTO = 10n ** NEAR_DECIMALS;
 const MAX_DEFAULT_ALLOWANCE = 250_000_000_000_000_000_000_000n; // 0.25 NEAR
 
-/** Roles that may hold a hub-scoped function-call key, with explicit method lists. */
-export const AGENT_KEY_METHODS: Readonly<Record<'COORDINATOR_AI' | 'CONTRACTOR', readonly string[]>> = {
+/** Roles that may hold a hub-scoped function-call key. */
+export type AgentKeyRole = 'COORDINATOR_AI' | 'CONTRACTOR' | 'INSPECTOR';
+
+/** Explicit method lists for each agent key. No method list is ever empty. */
+export const AGENT_KEY_METHODS: Readonly<Record<AgentKeyRole, readonly string[]>> = {
   COORDINATOR_AI: ['create_asset', 'create_work_order'],
-  CONTRACTOR: ['commit_bid', 'reveal_bid', 'start_work', 'submit_completion'],
+  CONTRACTOR: ['commit_bid', 'reveal_bid', 'submit_completion'],
+  INSPECTOR: ['accept_completion', 'inspect_durability'],
 };
 
-/** The reviewer agent deliberately has no on-chain hub key. */
+/** The reviewer/evidence assistant deliberately has no on-chain hub key. */
 export const NO_ONCHAIN_KEY_ROLES: readonly Role[] = ['REVIEWER_AI'];
 
-/** Methods no agent key may ever call. */
-export const FORBIDDEN_AGENT_METHODS: readonly string[] = [
+/** Administrative and money-moving methods that no agent key may ever call. */
+export const NEVER_AGENT_METHODS: readonly string[] = [
   'set_role',
   'pause',
   'unpause',
@@ -27,18 +31,71 @@ export const FORBIDDEN_AGENT_METHODS: readonly string[] = [
   'ft_transfer',
   'ft_transfer_call',
   'storage_deposit',
-  'award',
-  'accept_completion',
-  'inspect_durability',
   'resolve_dispute',
-  'refund',
   'mint_passport',
   'nft_transfer',
   'nft_transfer_call',
   'nft_approve',
 ];
 
+/**
+ * Role-specific denials. The human inspector key is the only agent key allowed
+ * to call `accept_completion`; it must not be able to award, bid or refund.
+ */
+export const AGENT_FORBIDDEN_METHODS: Readonly<Record<AgentKeyRole, readonly string[]>> = {
+  COORDINATOR_AI: [
+    ...NEVER_AGENT_METHODS,
+    'award',
+    'accept_completion',
+    'inspect_durability',
+    'refund',
+    'open_dispute',
+    'cancel_work_order',
+    'record_score',
+    'open_bidding',
+    'close_bidding',
+  ],
+  CONTRACTOR: [
+    ...NEVER_AGENT_METHODS,
+    'award',
+    'accept_completion',
+    'inspect_durability',
+    'refund',
+    'open_dispute',
+    'cancel_work_order',
+    'record_score',
+    'open_bidding',
+    'close_bidding',
+  ],
+  INSPECTOR: [
+    ...NEVER_AGENT_METHODS,
+    'award',
+    'commit_bid',
+    'reveal_bid',
+    'start_work',
+    'submit_completion',
+    'refund',
+    'open_dispute',
+    'cancel_work_order',
+    'record_score',
+    'open_bidding',
+    'close_bidding',
+  ],
+};
+
+/** Payment/acceptance methods that can move or release escrow. */
+export const ESCROW_METHODS: readonly string[] = [
+  'award',
+  'accept_completion',
+  'refund',
+  'fund_work_order',
+  'resolve_dispute',
+  'ft_transfer',
+  'ft_transfer_call',
+];
+
 export interface FunctionCallKeySpec {
+  role: AgentKeyRole;
   accountId: string;
   publicKey: string;
   receiverId: string;
@@ -48,7 +105,7 @@ export interface FunctionCallKeySpec {
 }
 
 export interface FunctionCallKeyPlan {
-  role: 'COORDINATOR_AI' | 'CONTRACTOR';
+  role: AgentKeyRole;
   spec: FunctionCallKeySpec;
   json: {
     account_id: string;
@@ -89,8 +146,9 @@ function allowanceToYocto(allowanceNear: string): string {
 }
 
 function methodsForRole(role: Role): readonly string[] {
-  if (role === 'COORDINATOR_AI') return AGENT_KEY_METHODS.COORDINATOR_AI;
-  if (role === 'CONTRACTOR') return AGENT_KEY_METHODS.CONTRACTOR;
+  if (role === 'COORDINATOR_AI' || role === 'CONTRACTOR' || role === 'INSPECTOR') {
+    return AGENT_KEY_METHODS[role];
+  }
   if (NO_ONCHAIN_KEY_ROLES.includes(role)) {
     throw new NearClientError(
       'NO_ONCHAIN_KEY',
@@ -121,13 +179,15 @@ export function buildFunctionCallKeyPlan(input: KeyPlanInput): FunctionCallKeyPl
   if (methodNames.length === 0) {
     throw new NearClientError('KEY_NOT_ALLOWED', 'method list must be explicit and non-empty');
   }
-  const overlap = methodNames.filter((method) => FORBIDDEN_AGENT_METHODS.includes(method));
+  const role = input.role as AgentKeyRole;
+  const overlap = methodNames.filter((method) => AGENT_FORBIDDEN_METHODS[role].includes(method));
   if (overlap.length > 0) {
     throw new NearClientError('KEY_NOT_ALLOWED', 'agent key method list contains a forbidden method', { overlap });
   }
   const allowanceYocto = allowanceToYocto(input.allowanceNear ?? '0.25');
 
   const spec: FunctionCallKeySpec = {
+    role,
     accountId: input.accountId,
     publicKey: input.publicKey,
     receiverId: input.receiverId,
@@ -185,6 +245,7 @@ export interface KeyVerification {
   ok: boolean;
   isFullAccess: boolean;
   permittedMethods: string[];
+  /** True when the key can call a method that moves or releases escrow. */
   canReleaseEscrow: boolean;
   violations: KeyViolation[];
 }
@@ -195,14 +256,16 @@ function functionCallPermission(view: AccessKeyView): AccessKeyPermissionView | 
 }
 
 /**
- * Asserts an RPC access-key view is a restricted function-call key and cannot
- * release escrow or call any non-allowlisted method.
+ * Asserts an RPC access-key view is a restricted function-call key, matches the
+ * approved method list for its role and cannot call any role-forbidden method.
  */
 export function verifyFunctionCallKey(view: AccessKeyView, spec: FunctionCallKeySpec): KeyVerification {
   const violations: KeyViolation[] = [];
   const isFullAccess = view.access_key.permission === 'FullAccess';
   const permission = functionCallPermission(view);
   const fc = permission?.FunctionCall;
+  const role = spec.role;
+  const roleForbidden = AGENT_FORBIDDEN_METHODS[role] ?? [];
 
   if (isFullAccess) {
     violations.push({ code: 'FULL_ACCESS', message: 'key is full access; agent keys must be function-call scoped' });
@@ -224,9 +287,9 @@ export function verifyFunctionCallKey(view: AccessKeyView, spec: FunctionCallKey
       if (actual.join('|') !== expected.join('|')) {
         violations.push({ code: 'METHOD_MISMATCH', message: 'method list differs from the approved plan' });
       }
-      const forbidden = fc.method_names.filter((method) => FORBIDDEN_AGENT_METHODS.includes(method));
+      const forbidden = fc.method_names.filter((method) => roleForbidden.includes(method));
       if (forbidden.length > 0) {
-        violations.push({ code: 'FORBIDDEN_METHOD', message: `forbidden methods: ${forbidden.join(',')}` });
+        violations.push({ code: 'FORBIDDEN_METHOD', message: `forbidden methods for ${role}: ${forbidden.join(',')}` });
       }
     }
     if (fc.allowance === null) {
@@ -247,8 +310,11 @@ export function verifyFunctionCallKey(view: AccessKeyView, spec: FunctionCallKey
   }
 
   const permittedMethods = fc ? [...fc.method_names] : [];
-  const canReleaseEscrow = isFullAccess || permittedMethods.some((method) => FORBIDDEN_AGENT_METHODS.includes(method));
-  if (canReleaseEscrow) {
+  const escrowMethods = permittedMethods.filter((method) => ESCROW_METHODS.includes(method));
+  const canReleaseEscrow = isFullAccess || escrowMethods.length > 0;
+  // Only the inspector key may hold acceptance authority. Any other agent key
+  // that can touch escrow is a separation-of-duties violation.
+  if (canReleaseEscrow && role !== 'INSPECTOR') {
     violations.push({ code: 'CAN_RELEASE_ESCROW', message: 'key scope can call a payment/acceptance method' });
   }
 

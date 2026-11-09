@@ -17,7 +17,11 @@ Five isolated, deterministic contractor strategies with separate sub-accounts:
 - Reveals are checked against the commitment and the reveal deadline.
 - The optional explanation is the frozen fixture sentence over structured values only.
 - Agents cannot award, accept, inspect, refund or fund.
+- Live testnet mode reads only an external key path from env (`MEND_CONTRACTOR_KEY_PATH`) and binds A/B/C to `mend-contractor-a..c.testnet`; no secret is read from env or logged.
+- `scripts/live-agents/run-agent-dry.mjs` prints the exact commit/reveal payloads and hashes for A/B/C, including `availableInDays`.
 
 ```bash
 npm test && npm run typecheck
+MEND_CONTRACTOR_KEY_PATH=/Volumes/sandisk/Users/dc/.mend/testnet/scoped-keys.json \
+  node scripts/live-agents/run-agent-dry.mjs
 ```

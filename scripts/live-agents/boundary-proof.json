@@ -1,0 +1,65 @@
+{
+  "generatedAt": "2026-11-09T16:52:53.426Z",
+  "network": "testnet",
+  "hubAccount": "mend-hub.testnet",
+  "rpcUrl": "https://rpc.testnet.fastnear.com",
+  "note": "A rejected transaction is evidence that the access-key scope is enforced by the network.",
+  "results": [
+    {
+      "accountId": "mend-contractor-a.testnet",
+      "role": "CONTRACTOR",
+      "method": "accept_completion",
+      "status": "REJECTED_BY_KEY",
+      "error": "Access key does not allow method accept_completion"
+    },
+    {
+      "accountId": "mend-contractor-a.testnet",
+      "role": "CONTRACTOR",
+      "method": "inspect_durability",
+      "status": "REJECTED_BY_KEY",
+      "error": "Access key does not allow method inspect_durability"
+    },
+    {
+      "accountId": "mend-contractor-a.testnet",
+      "role": "CONTRACTOR",
+      "method": "refund",
+      "status": "REJECTED_BY_KEY",
+      "error": "Access key does not allow method refund"
+    },
+    {
+      "accountId": "mend-inspector.testnet",
+      "role": "INSPECTOR",
+      "method": "award",
+      "status": "REJECTED_BY_KEY",
+      "error": "Access key does not allow method award"
+    },
+    {
+      "accountId": "mend-inspector.testnet",
+      "role": "INSPECTOR",
+      "method": "commit_bid",
+      "status": "REJECTED_BY_KEY",
+      "error": "Access key does not allow method commit_bid"
+    },
+    {
+      "accountId": "mend-coordinator-ai.testnet",
+      "role": "COORDINATOR_AI",
+      "method": "award",
+      "status": "REJECTED_BY_KEY",
+      "error": "Access key does not allow method award"
+    },
+    {
+      "accountId": "mend-coordinator-ai.testnet",
+      "role": "COORDINATOR_AI",
+      "method": "accept_completion",
+      "status": "REJECTED_BY_KEY",
+      "error": "Access key does not allow method accept_completion"
+    },
+    {
+      "accountId": "mend-coordinator-ai.testnet",
+      "role": "COORDINATOR_AI",
+      "method": "refund",
+      "status": "REJECTED_BY_KEY",
+      "error": "Access key does not allow method refund"
+    }
+  ]
+}
