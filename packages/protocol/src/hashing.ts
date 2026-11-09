@@ -20,6 +20,8 @@ export interface BidCommitmentInput {
   durationDays: number;
   warrantyDays: number;
   materialsScore: number;
+  /** Whole days until the contractor can start after award. Committed with the bid. */
+  availableInDays: number;
   evidenceChecklistAccepted: boolean;
   nonce: string;
 }
@@ -27,13 +29,14 @@ export interface BidCommitmentInput {
 /** Canonical, contract-reproducible commitment string. Mirrored in Rust. */
 export function bidCommitmentPayload(input: BidCommitmentInput): string {
   return [
-    'MEND_BID_V1',
+    'MEND_BID_V2',
     input.bidId,
     input.contractorId,
     input.priceMicro,
     String(input.durationDays),
     String(input.warrantyDays),
     String(input.materialsScore),
+    String(input.availableInDays),
     input.evidenceChecklistAccepted ? '1' : '0',
     input.nonce,
   ].join('|');

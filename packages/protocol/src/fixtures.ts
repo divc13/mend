@@ -17,9 +17,13 @@ export const FIXTURE_ACCOUNTS = {
   contractorA: 'contractor-a.mend.testnet',
   contractorB: 'contractor-b.mend.testnet',
   contractorC: 'contractor-c.mend.testnet',
+  contractorD: 'contractor-d.mend.testnet',
+  contractorE: 'contractor-e.mend.testnet',
   inspector: 'inspector.mend.testnet',
   inspector2: 'inspector-2.mend.testnet',
 } as const;
+
+export const FIXTURE_INSPECTORS = [FIXTURE_ACCOUNTS.inspector, FIXTURE_ACCOUNTS.inspector2] as const;
 
 export const FIXTURE_IDS = {
   assetBench: 'BENCH-001',
@@ -33,6 +37,8 @@ export const FIXTURE_IDS = {
   bidA: 'BID-A-BENCH-001',
   bidB: 'BID-B-BENCH-001',
   bidC: 'BID-C-BENCH-001',
+  bidD: 'BID-D-BENCH-001',
+  bidE: 'BID-E-BENCH-001',
   scoreExecution: 'SX-0001',
   evidenceCompletion: 'EV-0001',
   evidenceRemediation: 'EV-0002',
@@ -160,6 +166,7 @@ export const FIXTURE_BID_INPUTS: Record<'A' | 'B' | 'C', BidCommitmentInput> = {
     durationDays: 14,
     warrantyDays: 90,
     materialsScore: 60,
+    availableInDays: 3,
     evidenceChecklistAccepted: true,
     nonce: 'nonce-a-0001',
   },
@@ -170,6 +177,7 @@ export const FIXTURE_BID_INPUTS: Record<'A' | 'B' | 'C', BidCommitmentInput> = {
     durationDays: 10,
     warrantyDays: 180,
     materialsScore: 80,
+    availableInDays: 2,
     evidenceChecklistAccepted: true,
     nonce: 'nonce-b-0002',
   },
@@ -180,9 +188,41 @@ export const FIXTURE_BID_INPUTS: Record<'A' | 'B' | 'C', BidCommitmentInput> = {
     durationDays: 21,
     warrantyDays: 30,
     materialsScore: 70,
+    availableInDays: 5,
     evidenceChecklistAccepted: true,
     nonce: 'nonce-c-0003',
   },
+};
+
+/** Extra demo strategies for F13 (five contractor strategies). Not part of the canonical 3-bid scenario. */
+export const FIXTURE_EXTRA_BID_INPUTS: Record<'D' | 'E', BidCommitmentInput> = {
+  D: {
+    bidId: FIXTURE_IDS.bidD,
+    contractorId: FIXTURE_ACCOUNTS.contractorD,
+    priceMicro: '85000000',
+    durationDays: 12,
+    warrantyDays: 120,
+    materialsScore: 75,
+    availableInDays: 1,
+    evidenceChecklistAccepted: true,
+    nonce: 'nonce-d-0004',
+  },
+  E: {
+    bidId: FIXTURE_IDS.bidE,
+    contractorId: FIXTURE_ACCOUNTS.contractorE,
+    priceMicro: '90000000',
+    durationDays: 7,
+    warrantyDays: 60,
+    materialsScore: 90,
+    availableInDays: 7,
+    evidenceChecklistAccepted: true,
+    nonce: 'nonce-e-0005',
+  },
+};
+
+export const FIXTURE_EXTRA_EXPLANATIONS: Record<'D' | 'E', string> = {
+  D: 'Starts almost immediately with a balanced price and warranty.',
+  E: 'Premium materials and the fastest completion, at a higher price and shorter warranty.',
 };
 
 export const FIXTURE_BIDS: ScoreBidInput[] = (['A', 'B', 'C'] as const).map((key) => {

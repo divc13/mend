@@ -104,6 +104,8 @@ export const BidRevealSchema = z.object({
   priceMicro: microAmount,
   durationDays: z.number().int().positive(),
   warrantyDays: z.number().int().nonnegative(),
+  /** Whole days until the contractor can start after award. */
+  availableInDays: z.number().int().nonnegative(),
   materials: z.string().max(1000),
   materialsScore: z.number().int().min(0).max(100),
   evidenceChecklistAccepted: z.boolean(),

@@ -92,7 +92,7 @@ Ranking: **B (9270) > C (5200) > A (2873)**. B wins even though C is cheaper, be
 ## 7. Hash binding
 
 - Policy hash: `sha256("MEND_POLICY_V1|version|price|warranty|duration|materials")`
-- Commitment hash: `sha256("MEND_BID_V1|bidId|contractorId|priceMicro|durationDays|warrantyDays|materialsScore|checklistAccepted?1:0|nonce")`
+- Commitment hash: `sha256("MEND_BID_V2|bidId|contractorId|priceMicro|durationDays|warrantyDays|materialsScore|availableInDays|checklistAccepted?1:0|nonce")`
 - Score input hash: `sha256("MEND_SCORE_INPUT_V1|policyHash|sortedBidCommitmentHashes...")`
 - Score output hash: `sha256("MEND_SCORE_OUTPUT_V1|canonicalRankingJson")`
 

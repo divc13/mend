@@ -47,6 +47,7 @@ describe('canonical fixtures and schemas', () => {
     const hashB = bidCommitmentHash({ ...FIXTURE_BID_INPUTS.B });
     expect(hashA).toBe(hashB);
     expect(hashA).toMatch(/^[a-f0-9]{64}$/);
+    expect(bidCommitmentHash({ ...FIXTURE_BID_INPUTS.B, availableInDays: 99 })).not.toBe(hashA);
     expect(policyHash(FIXTURE_POLICY)).toMatch(/^[a-f0-9]{64}$/);
     expect(stableStringify({ b: 1, a: 2 })).toBe('{"a":2,"b":1}');
     expect(scoreInputHash('a'.repeat(64), ['b'.repeat(64), 'c'.repeat(64)])).toBe(
