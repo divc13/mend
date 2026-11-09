@@ -1,0 +1,121 @@
+# Prometheus alert rules for MEND transaction reconciliation.
+#
+# Metrics are emitted by apps/api, services/indexer, services/relayer and the
+# agents. Labels must never contain secrets, case links, signed URLs, raw
+# evidence or precise locations.
+#
+# Load with:
+#   prometheus --config.file=... (rule_files: infra/observability/alerts/*.rules.yml)
+
+groups:
+  - name: mend-transaction-reconciliation
+    interval: 30s
+    rules:
+      - alert: MendReconciliationMismatch
+        expr: increase(mend_reconciliation_mismatches_total[15m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          team: mend
+        annotations:
+          summary: "Chain/read-model reconciliation mismatch"
+          description: >-
+            At least one work order differs between hub contract state and the
+            Postgres read model. Freeze the affected work order and follow
+            infra/observability/transaction-reconciliation.md. Do not retry payments.
+
+      - alert: MendEscrowAccountingMismatch
+        expr: increase(mend_escrow_accounting_mismatch_total[5m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          team: mend
+        annotations:
+          summary: "Escrow accounting invariant violated"
+          description: >-
+            funding != completion paid + holdback + refunds + remaining escrow.
+            Pause the work order and escalate to the human steward/DAO path.
+
+      - alert: MendDuplicatePaymentSuspected
+        expr: increase(mend_duplicate_payment_suspected_total[1h]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          team: mend
+        annotations:
+          summary: "Duplicate completion or holdback payment suspected"
+          description: >-
+            More than one completion/holdback payout was observed for a work
+            order. Freeze funds, open a dispute and escalate. Never auto-compensate.
+
+      - alert: MendIntentPendingStale
+        expr: max by (workOrderId) (mend_intent_pending_seconds) > 1800
+        for: 10m
+        labels:
+          severity: warning
+          team: mend
+        annotations:
+          summary: "Intent settlement pending for more than 30 minutes"
+          description: >-
+            Poll the documented Intents status endpoint and keep the work order
+            in PENDING. A quote is not a payment.
+
+      - alert: MendIntentFailedNotSurfaced
+        expr: increase(mend_intent_terminal_not_surfaced_total{status=~"FAILED|REFUNDED"}[15m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+          team: mend
+        annotations:
+          summary: "Failed/refunded Intent not reflected in work-order state"
+          description: >-
+            The UI must never show a failed or refunded sponsorship as funded.
+            Reconcile the intent execution and update the read model.
+
+      - alert: MendIndexerLagHigh
+        expr: max(mend_indexer_lag_blocks) > 50
+        for: 10m
+        labels:
+          severity: warning
+          team: mend
+        annotations:
+          summary: "Indexer is more than 50 blocks behind"
+          description: >-
+            Read-model state may be stale. Check indexer health and RPC, then
+            rebuild from hub events before running any demo.
+
+      - alert: MendOutLayerVerificationFailure
+        expr: increase(mend_outlayer_verification_failures_total[15m]) > 0
+        for: 1m
+        labels:
+          severity: warning
+          team: mend
+        annotations:
+          summary: "OutLayer score evidence failed verification"
+          description: >-
+            A score execution has a wrong code/input/output hash or an invalid
+            attestation. Do not award from unverified scoring evidence.
+
+      - alert: MendAIAttestationUnavailable
+        expr: increase(mend_ai_attestation_unavailable_total[1h]) > 0
+        for: 5m
+        labels:
+          severity: info
+          team: mend
+        annotations:
+          summary: "AI attestation evidence unavailable"
+          description: >-
+            The UI and logs must label AI evidence as unavailable rather than
+            verified. This is not a payment failure by itself.
+
+      - alert: MendApiReadinessFailing
+        expr: up{job="mend-api"} == 0
+        for: 5m
+        labels:
+          severity: critical
+          team: mend
+        annotations:
+          summary: "MEND API is not ready"
+          description: >-
+            Check /health/ready, Postgres, object storage and RPC. Do not claim
+            transactions are executing while the API is down.

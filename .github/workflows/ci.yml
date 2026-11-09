@@ -1,0 +1,202 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - "track/**"
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CI: "true"
+  NPM_CONFIG_FUND: "false"
+  NPM_CONFIG_UPDATE_NOTIFIER: "false"
+
+jobs:
+  secret-scan:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan tracked files for credentials
+        run: bash scripts/secret-scan.sh
+
+  node:
+    name: Node / TypeScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Formatting
+        shell: bash
+        run: |
+          set -euo pipefail
+          if node -e 'const p=require("./package.json");process.exit(p.scripts&&p.scripts["format:check"]?0:1)'; then
+            npm run format:check
+          else
+            echo "SKIP: no format:check script in root package.json"
+          fi
+
+      - name: Lint
+        shell: bash
+        run: |
+          set -euo pipefail
+          has_lint=0
+          for pkgjson in packages/*/package.json apps/*/package.json services/*/package.json; do
+            [ -f "$pkgjson" ] || continue
+            dir="${pkgjson%/package.json}"
+            if node -e 'const p=require("./"+process.argv[1]+"/package.json");process.exit(p.scripts&&p.scripts.lint?0:1)' "$dir"; then
+              has_lint=1
+            fi
+          done
+          if [ "$has_lint" -eq 1 ] && node -e 'const p=require("./package.json");process.exit(p.scripts&&p.scripts.lint?0:1)'; then
+            npm run lint
+          else
+            echo "SKIP: no workspace defines a lint script"
+          fi
+
+      - name: Typecheck
+        shell: bash
+        run: |
+          set -euo pipefail
+          if node -e 'const p=require("./package.json");process.exit(p.scripts&&p.scripts.typecheck?0:1)'; then
+            npm run typecheck
+          else
+            echo "SKIP: no typecheck script in root package.json"
+          fi
+
+      - name: Protocol tests
+        run: npm test --workspace @mend/protocol
+
+      - name: API tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f apps/api/package.json ] && node -e 'const p=require("./apps/api/package.json");process.exit(p.scripts&&p.scripts.test?0:1)'; then
+            name="$(node -p 'require("./apps/api/package.json").name')"
+            npm test --workspace "$name"
+          else
+            echo "SKIP: apps/api or its test script is not present in this checkout"
+          fi
+
+      - name: Agent and service tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          found=0
+          for pkgjson in services/*/package.json; do
+            [ -f "$pkgjson" ] || continue
+            dir="${pkgjson%/package.json}"
+            if node -e 'const p=require("./"+process.argv[1]+"/package.json");process.exit(p.scripts&&p.scripts.test?0:1)' "$dir"; then
+              name="$(node -p 'require("./"+process.argv[1]+"/package.json").name' "$dir")"
+              echo "Testing $name"
+              npm test --workspace "$name"
+              found=1
+            fi
+          done
+          if [ "$found" -eq 0 ]; then
+            echo "SKIP: no services/* test scripts present in this checkout"
+          fi
+
+      - name: E2E tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          if node -e 'const p=require("./package.json");process.exit(p.scripts&&p.scripts["test:e2e"]?0:1)'; then
+            npm run test:e2e
+          elif ls playwright.config.* >/dev/null 2>&1; then
+            npx --no-install playwright test
+          else
+            echo "SKIP: no E2E script or Playwright config present"
+          fi
+
+      - name: Validate docker compose configuration
+        run: docker compose -f infra/docker-compose.yml config --quiet
+
+      - name: Shell script syntax
+        run: |
+          set -euo pipefail
+          for f in scripts/*.sh; do bash -n "$f"; done
+          for f in infra/docker/*.sh; do sh -n "$f"; done
+
+  rust:
+    name: Contracts / Rust
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: contracts
+      - name: Detect contracts workspace
+        id: contracts
+        shell: bash
+        run: |
+          manifest=""
+          if [ -f contracts/Cargo.toml ]; then
+            manifest="contracts/Cargo.toml"
+          else
+            manifest="$(find contracts -maxdepth 3 -name Cargo.toml 2>/dev/null | sort | head -n 1 || true)"
+          fi
+          if [ -n "$manifest" ]; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+            echo "manifest=$manifest" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::SKIP: no contracts Cargo.toml is present in this checkout"
+          fi
+      - name: Cargo tests
+        if: steps.contracts.outputs.present == 'true'
+        run: cargo test --manifest-path "${{ steps.contracts.outputs.manifest }}" --workspace
+      - name: WASM release build
+        if: steps.contracts.outputs.present == 'true'
+        run: cargo build --manifest-path "${{ steps.contracts.outputs.manifest }}" --workspace --release --target wasm32-unknown-unknown
+
+  audit:
+    name: Dependency audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Production dependency audit (blocking)
+        run: npm audit --omit=dev --audit-level=high
+
+      # The only permitted non-blocking case is an advisory that exists solely in
+      # devDependencies. Because the blocking production audit above must pass
+      # first, any high/critical advisory reported here is by definition dev-only.
+      - name: Dev-only advisories (non-blocking, explicit note)
+        continue-on-error: true
+        shell: bash
+        run: |
+          set -uo pipefail
+          if npm audit --audit-level=high; then
+            echo "No high/critical advisories in any dependency."
+          else
+            echo "::warning::High/critical advisories exist only in devDependencies. This step is non-blocking because the production audit passed."
+            echo "NOTE: Non-blocking exception applies only to known dev-only advisories; runtime advisories fail the previous step."
+          fi
