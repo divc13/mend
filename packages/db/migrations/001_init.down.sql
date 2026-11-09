@@ -1,0 +1,31 @@
+-- LOCAL DEVELOPMENT ONLY. Production migrations are forward-only.
+-- Run manually against a disposable database after `DROP SCHEMA public CASCADE`.
+DROP TRIGGER IF EXISTS audit_events_no_truncate ON audit_events;
+DROP TRIGGER IF EXISTS audit_events_no_update_delete ON audit_events;
+DROP FUNCTION IF EXISTS mend_reject_audit_mutation();
+DROP TABLE IF EXISTS processed_events;
+DROP TABLE IF EXISTS indexer_cursors;
+DROP TABLE IF EXISTS audit_events;
+DROP TABLE IF EXISTS chain_commands;
+DROP TABLE IF EXISTS triage_suggestions;
+DROP TABLE IF EXISTS intent_executions;
+DROP TABLE IF EXISTS intent_quotes;
+DROP TABLE IF EXISTS attestations;
+DROP TABLE IF EXISTS agent_identities;
+DROP TABLE IF EXISTS warranty_cases;
+DROP TABLE IF EXISTS payments;
+DROP TABLE IF EXISTS escrow_accounts;
+DROP TABLE IF EXISTS inspections;
+DROP TABLE IF EXISTS evidence_objects;
+DROP TABLE IF EXISTS evidence_packages;
+DROP TABLE IF EXISTS score_executions;
+DROP TABLE IF EXISTS bid_reveals;
+DROP TABLE IF EXISTS bid_commitments;
+DROP TABLE IF EXISTS work_orders;
+DROP TABLE IF EXISTS dao_approvals;
+DROP TABLE IF EXISTS report_private;
+DROP TABLE IF EXISTS reports;
+DROP TABLE IF EXISTS report_clusters;
+DROP TABLE IF EXISTS assets;
+DROP TABLE IF EXISTS id_sequences;
+DROP TABLE IF EXISTS schema_migrations;
