@@ -16,6 +16,7 @@ Mode: local + **REPLAY / SIMULATION**; no real transaction is claimed.
 | DB (with Postgres 16) | 14 passed |
 | Indexer | 4 passed |
 | Agents/services | 90 passed (near-client 31, coordinator 7, contractor 8, inspector 9, market 11, DAO 10, relayer 14) |
+| Config + Testkit | 20 + 32 passed (mainnet guard, secret boundary, clock, fake adapters, ledger) |
 | Contracts | 35 passed (hub 30, token 5); both WASM builds |
 | Quality suites | 55 passed (8 files) incl. independent adversarial Rust crate |
 | Playwright E2E | 32 passed, 8 skipped (honest seed/API-state skips) |

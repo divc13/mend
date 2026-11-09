@@ -1,7 +1,7 @@
 # MEND — Progress Tracker
 
 Last updated: 2026-11-09 17:45 (local)
-Overall: **92%** — everything locally executable is implemented and verified.
+Overall: **95%** — everything locally executable is implemented and verified.
 Current wave / gate: **G4 complete for local features; G3/G5 blocked on human**
 Leader: opencode-go/deepseek-v4.1-flash · Workers: #high, visible iTerm2 tabs (closed when done)
 
@@ -44,6 +44,7 @@ Leader: opencode-go/deepseek-v4.1-flash · Workers: #high, visible iTerm2 tabs (
 | API | 33 (+1 skipped) / with Postgres 34 |
 | DB + indexer | 14 + 4 |
 | Agents/services | 90 |
+| Config + Testkit | 20 + 32 |
 | Contracts | 35 + 2 WASM builds |
 | Quality | 55 |
 | E2E | 32 passed, 8 honest skips |
