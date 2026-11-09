@@ -182,7 +182,7 @@ describe('MEND API — merged AI and Intents wiring', () => {
   });
 
   it('mocked AI client returns a strict-schema suggestion, hashes and an UNAVAILABLE verification artifact', async () => {
-    const config = await testConfig({ NEAR_AI_API_KEY: 'test-only-ai-key' });
+    const config = await testConfig({ NEAR_AI_API_KEY: 'test-key-not-real' });
     const triage = new NearAiTriageAdapter(config.triage, { client: mockAiClient() });
     const target = await makeTestApp({ config, triage });
     try {
@@ -215,7 +215,7 @@ describe('MEND API — merged AI and Intents wiring', () => {
   });
 
   it('rejects AI output that fails the strict schema instead of inventing a confidence score', async () => {
-    const config = await testConfig({ NEAR_AI_API_KEY: 'test-only-ai-key' });
+    const config = await testConfig({ NEAR_AI_API_KEY: 'test-key-not-real' });
     const triage = new NearAiTriageAdapter(config.triage, {
       client: mockAiClient({
         classification: { ...validClassification, inventedConfidence: 9_999 },
