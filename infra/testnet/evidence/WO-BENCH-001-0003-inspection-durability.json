@@ -1,0 +1,12 @@
+{
+  "schema": "mend.evidence.v1",
+  "kind": "INSPECTION_DURABILITY",
+  "workOrderId": "WO-BENCH-001-0003",
+  "assetId": "BENCH-001",
+  "network": "testnet",
+  "note": "Testnet-only lifecycle evidence. No real-world repair, payment or legal ownership is asserted.",
+  "inspectionId": "INS-LIVE-0002",
+  "inspectorId": "mend-inspector-2.testnet",
+  "decision": "APPROVED",
+  "statement": "Durability interval elapsed; repair remains stable on testnet demo asset BENCH-001."
+}

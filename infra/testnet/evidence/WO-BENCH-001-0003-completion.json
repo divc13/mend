@@ -1,0 +1,13 @@
+{
+  "schema": "mend.evidence.v1",
+  "kind": "COMPLETION",
+  "workOrderId": "WO-BENCH-001-0003",
+  "assetId": "BENCH-001",
+  "network": "testnet",
+  "note": "Testnet-only lifecycle evidence. No real-world repair, payment or legal ownership is asserted.",
+  "evidenceId": "EV-LIVE-0001",
+  "contractorId": "mend-contractor-b.testnet",
+  "afterPhotoHash": "3d914ba043aacc9893511d6f78e19803dd3587a4c8ffb19a6eda09e65668722d",
+  "materialsReceiptHash": "3bdde4ee72a442aeb5c351f6d2f160c5d87a8c0fe1d44d995f58f60b57d12a41",
+  "statement": "Seat plank replaced and armrest re-fixed on testnet demo asset BENCH-001."
+}

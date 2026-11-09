@@ -1,0 +1,1708 @@
+{
+  "schema": "mend.live-testnet.v1",
+  "network": "testnet",
+  "rpcUrl": "https://rpc.testnet.fastnear.com",
+  "explorerBase": "https://explorer.testnet.near.org",
+  "generatedAt": "2026-11-09T16:44:43.781Z",
+  "updatedAt": "2026-11-09T17:27:49.819Z",
+  "token": {
+    "accountId": "mend-usdc.testnet",
+    "metadata": {
+      "spec": "ft-1.0.0",
+      "name": "MEND Test USDC (test value only)",
+      "symbol": "mUSDC",
+      "icon": null,
+      "reference": null,
+      "reference_hash": null,
+      "decimals": 6
+    },
+    "totalSupply": "1000000000000",
+    "balances": {
+      "mend-deployer.testnet": "999400000000",
+      "mend-usdc.testnet": "0",
+      "mend-hub.testnet": "400000000",
+      "mend-dao.testnet": "0",
+      "mend-sponsor.testnet": "40000000",
+      "mend-contractor-a.testnet": "80000000",
+      "mend-contractor-b.testnet": "80000000",
+      "mend-contractor-c.testnet": "0",
+      "mend-contractor-d.testnet": "0",
+      "mend-contractor-e.testnet": "0",
+      "mend-inspector.testnet": "0",
+      "mend-inspector-2.testnet": "0",
+      "mend-steward.testnet": "0",
+      "mend-coordinator-ai.testnet": "0",
+      "mend-reviewer-ai.testnet": "0",
+      "mend-relayer.testnet": "0"
+    },
+    "note": "Balances are live testnet balances and include other concurrent testnet work orders sharing hub/sponsor/contractor accounts. They are informational; per-work-order escrow and NEP-141 events are the proof.",
+    "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-usdc.testnet"
+  },
+  "hub": {
+    "keyAvailable": false,
+    "keyMismatch": {
+      "storedPublicKey": "ed25519:2pGKUVrf9xjNn97JL2ZRYcHYfAfM9BuPMe8NNzfLkpRe",
+      "onchainPublicKeys": [
+        "ed25519:HmpT5PK7WRTkDRjN54zsmpXDUXZebxfMPZatsA37ZVVY"
+      ],
+      "note": "The hub signing key in MEND_TESTNET_KEYS_FILE is not an on-chain access key. The hub cannot be deleted or redeployed from this file. The hub is usable through its owner account for non-destructive calls, but a destructive re-init is impossible until the original hub key is restored."
+    },
+    "accountId": "mend-hub.testnet",
+    "contractId": "mend-hub.testnet",
+    "config": {
+      "owner": "mend-deployer.testnet",
+      "token": "mend-usdc.testnet",
+      "dao": "mend-dao.testnet",
+      "policyHash": "1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d",
+      "durabilityMinutes": 2,
+      "paused": false,
+      "scoringEnabled": false,
+      "outlayerAccount": "outlayer.testnet",
+      "outlayerProjectId": "mend.testnet/bid-rules",
+      "scoringWasmHash": ""
+    },
+    "wasmSha256": "0ae083b03c8ff6646b9e429af41666469e103d266f46484c6f004f83d77986e0",
+    "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-hub.testnet",
+    "codeHashBase58": "jTe3SrzYFzhW2KJ7MVhsyrkacLc7fPUoAhiaFTENfF5",
+    "wasmVersion": "V1"
+  },
+  "dao": {
+    "accountId": "mend-dao.testnet",
+    "kind": "plain-account-fallback",
+    "factoryId": "sputnikv2.testnet",
+    "attemptedAccountId": "mend-dao.sputnikv2.testnet",
+    "failureReason": "{\"jsonrpc\": \"2.0\", \"error\": {\"code\": -429, \"message\": \"WARNING! THIS ENDPOINT IS DEPRECATED! STOP USING IT NOW! Switch to https://fastnear.com or alternative RPC providers at https://docs.near.org/api/rpc/providers\"}, \"id\": \"1\"}",
+    "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-dao.testnet",
+    "note": "The Sputnik DAO factory create transaction was not submitted: the RPC endpoint rejected the request with HTTP 429 (deprecated endpoint). No Sputnik DAO exists. The existing plain testnet account mend-dao.testnet is used as the DAO signer; this is a documented fallback, not a Sputnik DAO.",
+    "proposalId": "local-dao-approval-0003",
+    "proposalPath": {
+      "method": "dao_authorize",
+      "note": "Sputnik factory call was not submitted (RPC 429). The plain testnet DAO account signed directly. This is a documented fallback, not a Sputnik DAO.",
+      "tx": "51E4s7s7zyqrCNgEKtNM1g8YGufm9SpJP6e4BQvWKU1z"
+    },
+    "factoryCallSubmitted": false,
+    "failedRpcUrl": "https://rpc.testnet.near.org"
+  },
+  "accounts": {
+    "mend-deployer.testnet": {
+      "accountId": "mend-deployer.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9982571396037664599999998",
+      "codeHash": null,
+      "role": [
+        "ADMIN"
+      ],
+      "ftBalanceMicro": "999400000000",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-deployer.testnet"
+    },
+    "mend-usdc.testnet": {
+      "accountId": "mend-usdc.testnet",
+      "exists": true,
+      "nearBalanceYocto": "10006336672196239300000018",
+      "codeHash": null,
+      "role": [],
+      "ftBalanceMicro": "0",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-usdc.testnet"
+    },
+    "mend-hub.testnet": {
+      "accountId": "mend-hub.testnet",
+      "publicKey": "ed25519:2pGKUVrf9xjNn97JL2ZRYcHYfAfM9BuPMe8NNzfLkpRe",
+      "createTx": "9KaNByreYZhsiyfD8HzdcHvmeVYZFARE5t8ZXEv9DFP5",
+      "createTxExplorerUrl": "https://explorer.testnet.near.org/transactions/9KaNByreYZhsiyfD8HzdcHvmeVYZFARE5t8ZXEv9DFP5",
+      "createdBy": "testnet-faucet",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-hub.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9993449078102799699999992",
+      "codeHash": null,
+      "role": [],
+      "ftBalanceMicro": "400000000"
+    },
+    "mend-dao.testnet": {
+      "accountId": "mend-dao.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9997263088231611500000000",
+      "codeHash": null,
+      "role": [
+        "DAO"
+      ],
+      "ftBalanceMicro": "0",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-dao.testnet"
+    },
+    "mend-sponsor.testnet": {
+      "accountId": "mend-sponsor.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9994006287774041299999992",
+      "codeHash": null,
+      "role": [
+        "SPONSOR"
+      ],
+      "ftBalanceMicro": "40000000",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-sponsor.testnet"
+    },
+    "mend-contractor-a.testnet": {
+      "accountId": "mend-contractor-a.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9994931524144921800000000",
+      "codeHash": null,
+      "role": [
+        "CONTRACTOR"
+      ],
+      "ftBalanceMicro": "80000000",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-contractor-a.testnet"
+    },
+    "mend-contractor-b.testnet": {
+      "accountId": "mend-contractor-b.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9997646660970834500000000",
+      "codeHash": null,
+      "role": [
+        "CONTRACTOR"
+      ],
+      "ftBalanceMicro": "80000000",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-contractor-b.testnet"
+    },
+    "mend-contractor-c.testnet": {
+      "accountId": "mend-contractor-c.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9998498471250488200000000",
+      "codeHash": null,
+      "role": [
+        "CONTRACTOR"
+      ],
+      "ftBalanceMicro": "0",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-contractor-c.testnet"
+    },
+    "mend-contractor-d.testnet": {
+      "accountId": "mend-contractor-d.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9999709913014408000000000",
+      "codeHash": null,
+      "role": [
+        "CONTRACTOR"
+      ],
+      "ftBalanceMicro": "0",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-contractor-d.testnet"
+    },
+    "mend-contractor-e.testnet": {
+      "accountId": "mend-contractor-e.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9999792585067056000000000",
+      "codeHash": null,
+      "role": [
+        "CONTRACTOR"
+      ],
+      "ftBalanceMicro": "0",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-contractor-e.testnet"
+    },
+    "mend-inspector.testnet": {
+      "accountId": "mend-inspector.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9997632131071674400000000",
+      "codeHash": null,
+      "role": [
+        "INSPECTOR"
+      ],
+      "ftBalanceMicro": "0",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-inspector.testnet"
+    },
+    "mend-inspector-2.testnet": {
+      "accountId": "mend-inspector-2.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9999149933102305200000000",
+      "codeHash": null,
+      "role": [
+        "INSPECTOR"
+      ],
+      "ftBalanceMicro": "0",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-inspector-2.testnet"
+    },
+    "mend-steward.testnet": {
+      "accountId": "mend-steward.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9985273068230119200000000",
+      "codeHash": null,
+      "role": [
+        "STEWARD"
+      ],
+      "ftBalanceMicro": "0",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-steward.testnet"
+    },
+    "mend-coordinator-ai.testnet": {
+      "accountId": "mend-coordinator-ai.testnet",
+      "exists": true,
+      "nearBalanceYocto": "9999875264050895600000000",
+      "codeHash": null,
+      "role": [
+        "COORDINATOR_AI"
+      ],
+      "ftBalanceMicro": "0",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-coordinator-ai.testnet"
+    },
+    "mend-reviewer-ai.testnet": {
+      "accountId": "mend-reviewer-ai.testnet",
+      "exists": true,
+      "nearBalanceYocto": "10000000000000000000000000",
+      "codeHash": null,
+      "role": [
+        "REVIEWER_AI"
+      ],
+      "ftBalanceMicro": "0",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-reviewer-ai.testnet"
+    },
+    "mend-relayer.testnet": {
+      "accountId": "mend-relayer.testnet",
+      "exists": true,
+      "nearBalanceYocto": "10000000000000000000000000",
+      "codeHash": null,
+      "role": [
+        "RELAYER"
+      ],
+      "ftBalanceMicro": "0",
+      "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-relayer.testnet"
+    }
+  },
+  "asset": {
+    "assetId": "BENCH-001",
+    "description": "Public park bench with a split seat plank and loose armrest.",
+    "location": "Riverside Park, bench near east gate",
+    "descriptionHash": "7325a1adb2fe9ab9a503f758ab25d26f5cc5c7388b82904b1a8a238a6fb9133c",
+    "locationHash": "9e21d8a75e911f492f90e092cc4236dfc4055a189fa5a8c0f8e5e7cef9aeb370",
+    "file": "infra/testnet/asset/BENCH-001.json",
+    "passportTokenId": "BENCH-001",
+    "passportOwner": "mend-hub.testnet",
+    "transferable": false,
+    "legalOwnership": false,
+    "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-hub.testnet",
+    "id": "BENCH-001",
+    "createdAt": 1794243371866909000,
+    "createdBy": "mend-steward.testnet",
+    "workOrderIds": [
+      "WO-BENCH-001-0001",
+      "WO-BENCH-001-0002",
+      "WO-BENCH-001-0003"
+    ],
+    "passportMetadata": {
+      "title": "BENCH-001",
+      "description": "MEND maintenance passport; not a title deed or legal ownership record.",
+      "media": null,
+      "media_hash": null,
+      "copies": 1,
+      "issued_at": null,
+      "expires_at": null,
+      "starts_at": null,
+      "updated_at": null,
+      "extra": "{\"schema\":\"mend.passport.v1\",\"transferable\":false,\"legal_ownership\":false,\"asset_id\":\"BENCH-001\"}",
+      "reference": null,
+      "reference_hash": null
+    }
+  },
+  "workOrder": {
+    "workOrderId": "WO-BENCH-001-0003",
+    "assetId": "BENCH-001",
+    "status": "CLOSED",
+    "scopeHash": "4c211a017e14749ed4bb8b5966381101b6c3cdf5f24965f58b2cdec847a4ed5e",
+    "scopeFile": "infra/testnet/scope/WO-BENCH-001-0003.scope.json",
+    "policyHash": "1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d",
+    "policyVersion": "mend-bid-policy-v1",
+    "budgetMicro": "100000000",
+    "sponsor": "mend-sponsor.testnet",
+    "contractorRoster": [
+      "mend-contractor-a.testnet",
+      "mend-contractor-b.testnet",
+      "mend-contractor-c.testnet"
+    ],
+    "inspectorRoster": [
+      "mend-inspector.testnet",
+      "mend-inspector-2.testnet"
+    ],
+    "daoProposalId": "local-dao-approval-0003",
+    "commitDeadline": "2026-11-09T17:13:33.824Z",
+    "revealDeadline": "2026-11-09T17:16:33.824Z",
+    "commitDeadlineNs": 1794244413824000000,
+    "revealDeadlineNs": 1794244593824000000,
+    "explorerUrl": "https://explorer.testnet.near.org/accounts/mend-hub.testnet",
+    "requestedWorkOrderId": "WO-BENCH-001-0001",
+    "awardedBidId": "BID-B-BENCH-001",
+    "awardedContractor": "mend-contractor-b.testnet",
+    "inspector": "mend-inspector.testnet",
+    "durabilityDueAt": "2026-11-09T17:20:08.963Z",
+    "durabilityDueAtNs": 1794244808963852500,
+    "fundedMicro": "100000000",
+    "completionPaid": true,
+    "holdbackReleased": true,
+    "bids": {
+      "commitments": [
+        {
+          "bidId": "BID-A-BENCH-001",
+          "contractorId": "mend-contractor-a.testnet",
+          "commitmentHash": "d5ad096bb8cdbd537f61aa48f569344ec51fc6a538b8ec1982231a344267f17f",
+          "committedAt": 1794244295106568400
+        },
+        {
+          "bidId": "BID-B-BENCH-001",
+          "contractorId": "mend-contractor-b.testnet",
+          "commitmentHash": "27fd0ad27046ecd6fa0239ed53565378c3ec25653b30ac5ad3deeb84460d1490",
+          "committedAt": 1794244299443311600
+        },
+        {
+          "bidId": "BID-C-BENCH-001",
+          "contractorId": "mend-contractor-c.testnet",
+          "commitmentHash": "058423c9999c09b2a86a41233e3559de45043a94b0fd1cfcaa52434a58a86e2e",
+          "committedAt": 1794244303044895700
+        }
+      ],
+      "reveals": [
+        {
+          "bidId": "BID-A-BENCH-001",
+          "contractorId": "mend-contractor-a.testnet",
+          "price": "95000000",
+          "durationDays": 14,
+          "warrantyDays": 90,
+          "materialsScore": 60,
+          "checklistAccepted": true,
+          "nonce": "nonce-a-live-0001",
+          "commitmentHash": "d5ad096bb8cdbd537f61aa48f569344ec51fc6a538b8ec1982231a344267f17f",
+          "revealedAt": 1794244420754165500
+        },
+        {
+          "bidId": "BID-B-BENCH-001",
+          "contractorId": "mend-contractor-b.testnet",
+          "price": "80000000",
+          "durationDays": 10,
+          "warrantyDays": 180,
+          "materialsScore": 80,
+          "checklistAccepted": true,
+          "nonce": "nonce-b-live-0002",
+          "commitmentHash": "27fd0ad27046ecd6fa0239ed53565378c3ec25653b30ac5ad3deeb84460d1490",
+          "revealedAt": 1794244424896437800
+        },
+        {
+          "bidId": "BID-C-BENCH-001",
+          "contractorId": "mend-contractor-c.testnet",
+          "price": "78000000",
+          "durationDays": 21,
+          "warrantyDays": 30,
+          "materialsScore": 70,
+          "checklistAccepted": true,
+          "nonce": "nonce-c-live-0003",
+          "commitmentHash": "058423c9999c09b2a86a41233e3559de45043a94b0fd1cfcaa52434a58a86e2e",
+          "revealedAt": 1794244428538810400
+        }
+      ]
+    },
+    "escrow": {
+      "funding": "100000000",
+      "refunded": "20000000",
+      "escrowed": "0",
+      "completionPaid": "72000000",
+      "holdbackHeld": "0",
+      "holdbackReleased": "8000000"
+    },
+    "payments": [
+      {
+        "id": "WO-BENCH-001-0003-refund-award",
+        "kind": "REFUND",
+        "amount": "20000000",
+        "recipient": "mend-sponsor.testnet",
+        "status": "PENDING",
+        "createdAt": 1794244674505789400
+      },
+      {
+        "id": "WO-BENCH-001-0003-completion",
+        "kind": "COMPLETION",
+        "amount": "72000000",
+        "recipient": "mend-contractor-b.testnet",
+        "status": "PENDING",
+        "createdAt": 1794244688963852500
+      },
+      {
+        "id": "WO-BENCH-001-0003-holdback",
+        "kind": "HOLDBACK",
+        "amount": "8000000",
+        "recipient": "mend-contractor-b.testnet",
+        "status": "PENDING",
+        "createdAt": 1794244814997991000
+      }
+    ],
+    "warranty": {
+      "workOrderId": "WO-BENCH-001-0003",
+      "state": "NONE",
+      "workOrderState": "CLOSED",
+      "reopenCount": 0,
+      "durabilityDueAt": 1794244808963852500,
+      "completionPaid": true,
+      "holdbackReleased": true,
+      "holdbackHeld": "0",
+      "holdbackReleasedAmount": "8000000",
+      "failedInspectionId": null
+    },
+    "history": [
+      {
+        "workOrderId": "",
+        "action": "passport_minted",
+        "actor": "mend-steward.testnet",
+        "at": 1794243403356350700,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0001",
+        "action": "work_order_created",
+        "actor": "mend-steward.testnet",
+        "at": 1794243605812283100,
+        "detailHash": "5b68f1468f3041d9f8ebc2b692c827402ddbdd05236931ce45928669f0a47b4a"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0001",
+        "action": "policy_approved",
+        "actor": "mend-dao.testnet",
+        "at": 1794243610580551700,
+        "detailHash": "1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0001",
+        "action": "work_order_funded",
+        "actor": "mend-sponsor.testnet",
+        "at": 1794243615518992100,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0001",
+        "action": "bidding_opened",
+        "actor": "mend-steward.testnet",
+        "at": 1794243620314703400,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0001",
+        "action": "work_order_cancelled",
+        "actor": "mend-steward.testnet",
+        "at": 1794243888778282200,
+        "detailHash": "c9c53a814067e0b513a6b149443d0c9c118e247e2c9e229689e0bf4e41686744"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0001",
+        "action": "work_order_refunded",
+        "actor": "mend-steward.testnet",
+        "at": 1794243892972646100,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0002",
+        "action": "work_order_created",
+        "actor": "mend-steward.testnet",
+        "at": 1794243898420735700,
+        "detailHash": "ae9e9cc75d0d215f7514e736ca80a72e6a8375f9a753870ba2f360edf2ffc606"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0002",
+        "action": "policy_approved",
+        "actor": "mend-dao.testnet",
+        "at": 1794243902795143200,
+        "detailHash": "1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0002",
+        "action": "work_order_funded",
+        "actor": "mend-sponsor.testnet",
+        "at": 1794243908118913000,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0002",
+        "action": "bidding_opened",
+        "actor": "mend-steward.testnet",
+        "at": 1794243913523767000,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0002",
+        "action": "bid_committed",
+        "actor": "mend-contractor-a.testnet",
+        "at": 1794243951735261400,
+        "detailHash": "4e14135b8948feb3efcdc02fa3a30f5961ec9103623db37a9f9a43fef7adc00c"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0002",
+        "action": "bid_committed",
+        "actor": "mend-contractor-b.testnet",
+        "at": 1794243956121872400,
+        "detailHash": "af3a82527266e94656d175830b4a7ebad0de2fd37ddd5e74055efcbdf52e18a4"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0002",
+        "action": "bid_committed",
+        "actor": "mend-contractor-c.testnet",
+        "at": 1794243960282827000,
+        "detailHash": "5bbb0a4d8e96cdf0544bff18372a52adadfaec69318dd7f68947e11e4c807d28"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0002",
+        "action": "work_order_cancelled",
+        "actor": "mend-steward.testnet",
+        "at": 1794244227807291400,
+        "detailHash": "1c02a6f4218aa118c2759b08e01d9376519e07281a62b0ff7c0e04715b870823"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0002",
+        "action": "work_order_refunded",
+        "actor": "mend-steward.testnet",
+        "at": 1794244231962943200,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "work_order_created",
+        "actor": "mend-steward.testnet",
+        "at": 1794244238090202400,
+        "detailHash": "4c211a017e14749ed4bb8b5966381101b6c3cdf5f24965f58b2cdec847a4ed5e"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "policy_approved",
+        "actor": "mend-dao.testnet",
+        "at": 1794244242895484700,
+        "detailHash": "1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "work_order_funded",
+        "actor": "mend-sponsor.testnet",
+        "at": 1794244247749964300,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "bidding_opened",
+        "actor": "mend-steward.testnet",
+        "at": 1794244253352421600,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "bid_committed",
+        "actor": "mend-contractor-a.testnet",
+        "at": 1794244295106568400,
+        "detailHash": "d5ad096bb8cdbd537f61aa48f569344ec51fc6a538b8ec1982231a344267f17f"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "bid_committed",
+        "actor": "mend-contractor-b.testnet",
+        "at": 1794244299443311600,
+        "detailHash": "27fd0ad27046ecd6fa0239ed53565378c3ec25653b30ac5ad3deeb84460d1490"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "bid_committed",
+        "actor": "mend-contractor-c.testnet",
+        "at": 1794244303044895700,
+        "detailHash": "058423c9999c09b2a86a41233e3559de45043a94b0fd1cfcaa52434a58a86e2e"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "bid_revealed",
+        "actor": "mend-contractor-a.testnet",
+        "at": 1794244420754165500,
+        "detailHash": "d5ad096bb8cdbd537f61aa48f569344ec51fc6a538b8ec1982231a344267f17f"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "bid_revealed",
+        "actor": "mend-contractor-b.testnet",
+        "at": 1794244424896437800,
+        "detailHash": "27fd0ad27046ecd6fa0239ed53565378c3ec25653b30ac5ad3deeb84460d1490"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "bid_revealed",
+        "actor": "mend-contractor-c.testnet",
+        "at": 1794244428538810400,
+        "detailHash": "058423c9999c09b2a86a41233e3559de45043a94b0fd1cfcaa52434a58a86e2e"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "bidding_closed",
+        "actor": "mend-steward.testnet",
+        "at": 1794244599389681000,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "score_recorded",
+        "actor": "mend-steward.testnet",
+        "at": 1794244669600562400,
+        "detailHash": "031421ab242b475579e45e4c3140ee6a9b93d289668f5942aadb03f3e89f9fb6"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "payment_released",
+        "actor": "mend-steward.testnet",
+        "at": 1794244674505789400,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "work_order_awarded",
+        "actor": "mend-steward.testnet",
+        "at": 1794244674505789400,
+        "detailHash": "BID-B-BENCH-001"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "work_started",
+        "actor": "mend-contractor-b.testnet",
+        "at": 1794244679915752700,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "completion_submitted",
+        "actor": "mend-contractor-b.testnet",
+        "at": 1794244684536117800,
+        "detailHash": "5de5a4207105c024af104707ab5e9379f721c790c8a548272e7d1288959b8ed7"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "payment_released",
+        "actor": "mend-inspector.testnet",
+        "at": 1794244688963852500,
+        "detailHash": null
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "completion_accepted",
+        "actor": "mend-inspector.testnet",
+        "at": 1794244688963852500,
+        "detailHash": "2a7da46b90d2af8a017efeee81004aa85d39887a34d1862a519127e00221709b"
+      },
+      {
+        "workOrderId": "WO-BENCH-001-0003",
+        "action": "durability_passed",
+        "actor": "mend-inspector-2.testnet",
+        "at": 1794244814997991000,
+        "detailHash": "623e00e6ecc05044960a0dc975bf65e8489d21502f9f5b25c05324995c2bdad3"
+      }
+    ],
+    "awardTx": "4bDqwmwW67iBq6Sx7NDM2hcf7LPZQrMGxEBQrv5paJb6",
+    "createTx": "DtjFvAUg9UJmozU5UbEviQzoYYXsVucozJkD61LhtHqe",
+    "authorizeTx": "51E4s7s7zyqrCNgEKtNM1g8YGufm9SpJP6e4BQvWKU1z",
+    "fundTx": "8qUzjZs3UNzGtGUptRfTRWPpgjdDvV6MREcGeJMDfbGx",
+    "openBiddingTx": "FG6hgssGsKqLiE8Fu9qeTF1ikR4rWk5YM2nGNvh4N8jQ",
+    "closeBiddingTx": "4vqBBDcfaxwR3tj9gz2puViq6LPsP2J6kSg8VhqPQHjH",
+    "scoreTx": "9QnV14jDwfTXFdy56PJQ4N63QAF7xQcDR4nDVUguGiqd",
+    "startWorkTx": "4SAghtUqHMjCMbqgUdckMcbPM7w3qeE6KjqhiKvH6Vk4",
+    "completionSubmitTx": "2HQ2DLMiz2rtM4QtupZCzCeQxhUXvrqcqYfEVYzYub4K",
+    "completionAcceptTx": "45gE2NTM2fvi9bPpbSyKqiU9EbBa4CeHyLZdiqNosryL",
+    "durabilityTx": "Cf4Z3jaGbgVjx8jzfE13gPFRkzJAPwY4fkpz4wFzhBWz",
+    "paymentNote": "PaymentRecord.status is PENDING by contract design: the hub issues the NEP-141 transfer but cannot observe the token receipt synchronously. The corresponding ft_transfer events are verified from transaction receipts by --check."
+  },
+  "lifecycle": {
+    "bids": [
+      {
+        "label": "A",
+        "bidId": "BID-A-BENCH-001",
+        "contractorId": "mend-contractor-a.testnet",
+        "commitmentHash": "d5ad096bb8cdbd537f61aa48f569344ec51fc6a538b8ec1982231a344267f17f",
+        "committedAt": 1794244295106568400,
+        "commitmentTx": "E4rp6A1fehEHzBkeegyXtQK9MMfPEdqfF5Dmo9y2PTY6",
+        "revealed": true,
+        "revealTx": "8BPecP1tgjk2bXWxKy2eQVe92k2agZXeqmGHRuKZtSiC",
+        "priceMicro": "95000000",
+        "durationDays": 14,
+        "warrantyDays": 90,
+        "materialsScore": 60,
+        "availableInDays": 3,
+        "availabilityRecordedOnchain": false,
+        "checklistAccepted": true
+      },
+      {
+        "label": "B",
+        "bidId": "BID-B-BENCH-001",
+        "contractorId": "mend-contractor-b.testnet",
+        "commitmentHash": "27fd0ad27046ecd6fa0239ed53565378c3ec25653b30ac5ad3deeb84460d1490",
+        "committedAt": 1794244299443311600,
+        "commitmentTx": "LvGB9VTCfwSpEN37FmqQraHymxa89EZEH2aRDsw6Whx",
+        "revealed": true,
+        "revealTx": "4eD3bQoLDdrzDPCYzAsgfAXRKQ4VZfLdspE4ZekXNf3N",
+        "priceMicro": "80000000",
+        "durationDays": 10,
+        "warrantyDays": 180,
+        "materialsScore": 80,
+        "availableInDays": 2,
+        "availabilityRecordedOnchain": false,
+        "checklistAccepted": true
+      },
+      {
+        "label": "C",
+        "bidId": "BID-C-BENCH-001",
+        "contractorId": "mend-contractor-c.testnet",
+        "commitmentHash": "058423c9999c09b2a86a41233e3559de45043a94b0fd1cfcaa52434a58a86e2e",
+        "committedAt": 1794244303044895700,
+        "commitmentTx": "2Q52fAgmdahvafhD5nwSBeSene8QrRjZAi42i8FzBddy",
+        "revealed": true,
+        "revealTx": "7TKU7tjbmddAJwWmdNbMDjV8AZDA5vnvTLRczocEiyAL",
+        "priceMicro": "78000000",
+        "durationDays": 21,
+        "warrantyDays": 30,
+        "materialsScore": 70,
+        "availableInDays": 5,
+        "availabilityRecordedOnchain": false,
+        "checklistAccepted": true
+      }
+    ],
+    "score": {
+      "executionId": "SX-LIVE-0001",
+      "mode": "LOCAL_DETERMINISTIC",
+      "outlayerUsed": false,
+      "outlayerReason": "OutLayer live publish is not funded/configured; no OutLayer execution is claimed.",
+      "policyHash": "1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d",
+      "policyVersion": "mend-bid-policy-v1",
+      "weightsBps": {
+        "price": 4500,
+        "warranty": 2500,
+        "duration": 2000,
+        "materials": 1000
+      },
+      "inputHash": "2de5d992808f5f6fdf69608fdd4a360d6566e0d2c3d9c2618b82d2b857a70f9f",
+      "outputHash": "031421ab242b475579e45e4c3140ee6a9b93d289668f5942aadb03f3e89f9fb6",
+      "wasmHash": "b926ea28934014ab0cbf55ff0090466274c64cf608fdac5a98521ae01eac0db7",
+      "winnerBidId": "BID-B-BENCH-001",
+      "ranking": [
+        {
+          "rank": 1,
+          "bidId": "BID-B-BENCH-001",
+          "contractorId": "mend-contractor-b.testnet",
+          "scoreBps": 9270
+        },
+        {
+          "rank": 2,
+          "bidId": "BID-C-BENCH-001",
+          "contractorId": "mend-contractor-c.testnet",
+          "scoreBps": 5200
+        },
+        {
+          "rank": 3,
+          "bidId": "BID-A-BENCH-001",
+          "contractorId": "mend-contractor-a.testnet",
+          "scoreBps": 2873
+        }
+      ],
+      "inputFile": "infra/testnet/score/WO-BENCH-001-0003.canonical-input.json",
+      "outputFile": "infra/testnet/score/WO-BENCH-001-0003.score.json",
+      "recordTx": "9QnV14jDwfTXFdy56PJQ4N63QAF7xQcDR4nDVUguGiqd",
+      "onchainMode": "recorded"
+    },
+    "evidence": [
+      {
+        "evidenceId": "EV-LIVE-0001",
+        "kind": "COMPLETION",
+        "file": "infra/testnet/evidence/WO-BENCH-001-0003-completion.json",
+        "hash": "5de5a4207105c024af104707ab5e9379f721c790c8a548272e7d1288959b8ed7",
+        "tx": "2HQ2DLMiz2rtM4QtupZCzCeQxhUXvrqcqYfEVYzYub4K"
+      }
+    ],
+    "inspections": [
+      {
+        "inspectionId": "INS-LIVE-0001",
+        "kind": "COMPLETION",
+        "inspectorId": "mend-inspector.testnet",
+        "decision": "APPROVED",
+        "file": "infra/testnet/evidence/WO-BENCH-001-0003-inspection-completion.json",
+        "hash": "2a7da46b90d2af8a017efeee81004aa85d39887a34d1862a519127e00221709b",
+        "tx": "45gE2NTM2fvi9bPpbSyKqiU9EbBa4CeHyLZdiqNosryL",
+        "amountMicro": "72000000"
+      },
+      {
+        "inspectionId": "INS-LIVE-0002",
+        "kind": "DURABILITY",
+        "inspectorId": "mend-inspector-2.testnet",
+        "decision": "APPROVED",
+        "file": "infra/testnet/evidence/WO-BENCH-001-0003-inspection-durability.json",
+        "hash": "623e00e6ecc05044960a0dc975bf65e8489d21502f9f5b25c05324995c2bdad3",
+        "tx": "Cf4Z3jaGbgVjx8jzfE13gPFRkzJAPwY4fkpz4wFzhBWz",
+        "amountMicro": "8000000"
+      }
+    ],
+    "payments": [
+      {
+        "id": "WO-BENCH-001-0003-refund-award",
+        "kind": "REFUND",
+        "amount": "20000000",
+        "recipient": "mend-sponsor.testnet",
+        "status": "PENDING",
+        "createdAt": 1794244674505789400
+      },
+      {
+        "id": "WO-BENCH-001-0003-completion",
+        "kind": "COMPLETION",
+        "amount": "72000000",
+        "recipient": "mend-contractor-b.testnet",
+        "status": "PENDING",
+        "createdAt": 1794244688963852500
+      },
+      {
+        "id": "WO-BENCH-001-0003-holdback",
+        "kind": "HOLDBACK",
+        "amount": "8000000",
+        "recipient": "mend-contractor-b.testnet",
+        "status": "PENDING",
+        "createdAt": 1794244814997991000
+      }
+    ],
+    "finalStatus": "CLOSED",
+    "scoringMode": "LOCAL_DETERMINISTIC",
+    "outlayer": {
+      "used": false,
+      "reason": "OutLayer live publish is not funded/configured on this deployment; the steward recorded a deterministic local score with mode LOCAL_DETERMINISTIC."
+    },
+    "bidPayloadVersion": "V1",
+    "availabilityOnchain": false,
+    "availabilityNote": "The deployed hub is the older MEND_BID_V1 format: available_in_days is recorded off-chain in this file and the scope/evidence JSON, but the on-chain reveal cannot carry it without a hub redeploy (explicitly not performed)."
+  },
+  "transactions": [
+    {
+      "step": "hub_set_role:mend-steward.testnet:STEWARD",
+      "hash": "8k5pyuJr7XhjJcUbiLbKqUAhRnqkoDbMENj3YnbQK4uc",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/8k5pyuJr7XhjJcUbiLbKqUAhRnqkoDbMENj3YnbQK4uc",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:53:44.352Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "7a79cf7bcd006b4be288d607f6baee142dc6ec8f989e17cd0dee27479e3ab654",
+      "depositYocto": "0",
+      "accountId": "mend-steward.testnet",
+      "role": "STEWARD"
+    },
+    {
+      "step": "hub_set_role:mend-sponsor.testnet:SPONSOR",
+      "hash": "5Jh7JnYKvsQfBUoxN3ETYLAdLKPymFJ7g4GWHcbBiMM",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/5Jh7JnYKvsQfBUoxN3ETYLAdLKPymFJ7g4GWHcbBiMM",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:53:49.151Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "7aa963f8c145fc662a569769eb9d670d995f746d246761f0e24da7af5363db35",
+      "depositYocto": "0",
+      "accountId": "mend-sponsor.testnet",
+      "role": "SPONSOR"
+    },
+    {
+      "step": "hub_set_role:mend-coordinator-ai.testnet:COORDINATOR_AI",
+      "hash": "CfNyvjTjjKZviRsKnTnWjuv2Bki15osLRR6J3pNSFWgQ",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/CfNyvjTjjKZviRsKnTnWjuv2Bki15osLRR6J3pNSFWgQ",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:53:53.635Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "d1e6089f7cb40ef694e33ed5650dd456da863004ebae6579216cad22b0cbc1a1",
+      "depositYocto": "0",
+      "accountId": "mend-coordinator-ai.testnet",
+      "role": "COORDINATOR_AI"
+    },
+    {
+      "step": "hub_set_role:mend-reviewer-ai.testnet:REVIEWER_AI",
+      "hash": "6eBkuJRPo6M2bZME8gLtTqbxfSD8oWX9mtXhB2x9pojN",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/6eBkuJRPo6M2bZME8gLtTqbxfSD8oWX9mtXhB2x9pojN",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:53:58.788Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "5537d006759caef2d630773e0150dd7b3c3762e12c7392d2847548bdee7ee7f3",
+      "depositYocto": "0",
+      "accountId": "mend-reviewer-ai.testnet",
+      "role": "REVIEWER_AI"
+    },
+    {
+      "step": "hub_set_role:mend-relayer.testnet:RELAYER",
+      "hash": "8iuQVWJnzCF2D4c9apdjMHDF3P5oLNNioxAsUwNM6QWM",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/8iuQVWJnzCF2D4c9apdjMHDF3P5oLNNioxAsUwNM6QWM",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:54:03.754Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "50f265747bfef505ed6d3ac8a9d89068f45fc914cb3ea80ce71598bed1f950fa",
+      "depositYocto": "0",
+      "accountId": "mend-relayer.testnet",
+      "role": "RELAYER"
+    },
+    {
+      "step": "hub_set_role:mend-contractor-a.testnet:CONTRACTOR",
+      "hash": "9Dg7wFo6MKntqF57UFuWkVZgYy9LPqy7iDwgZF5UdWnS",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/9Dg7wFo6MKntqF57UFuWkVZgYy9LPqy7iDwgZF5UdWnS",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:54:08.186Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "d6bad2a7fc761dfb1a7ff27d152567c833bbacf4b533b4e5210681b8572a16cd",
+      "depositYocto": "0",
+      "accountId": "mend-contractor-a.testnet",
+      "role": "CONTRACTOR"
+    },
+    {
+      "step": "hub_set_role:mend-contractor-b.testnet:CONTRACTOR",
+      "hash": "FfRfQ6ZRG3WbPNtsJeAFZV73YUR3ZBfYpkKTm7Xo1svw",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/FfRfQ6ZRG3WbPNtsJeAFZV73YUR3ZBfYpkKTm7Xo1svw",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:54:12.583Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "3d4c36245608e753cfa4aa90abd8fdc0c770ef845833ce3f54a90725799bb23d",
+      "depositYocto": "0",
+      "accountId": "mend-contractor-b.testnet",
+      "role": "CONTRACTOR"
+    },
+    {
+      "step": "hub_set_role:mend-contractor-c.testnet:CONTRACTOR",
+      "hash": "EVeZ5ia8GMjrXgZqBz9JgDPgwWbAUaTbHWEsvXPhZsFz",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/EVeZ5ia8GMjrXgZqBz9JgDPgwWbAUaTbHWEsvXPhZsFz",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:54:17.262Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "112ba080ef003ffbfcb960a0ea1fc682809a9a56a68261270af4c033dd120b1a",
+      "depositYocto": "0",
+      "accountId": "mend-contractor-c.testnet",
+      "role": "CONTRACTOR"
+    },
+    {
+      "step": "hub_set_role:mend-contractor-d.testnet:CONTRACTOR",
+      "hash": "GzSgcEfqMrxfwhEcHZiSuXnurfEMfDhMHpDotc6vkVLp",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/GzSgcEfqMrxfwhEcHZiSuXnurfEMfDhMHpDotc6vkVLp",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:54:21.846Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "90407220e3f70922d03365c2e0fbe3f32aed2abb531781f1b2ac14d0953843a5",
+      "depositYocto": "0",
+      "accountId": "mend-contractor-d.testnet",
+      "role": "CONTRACTOR"
+    },
+    {
+      "step": "hub_set_role:mend-contractor-e.testnet:CONTRACTOR",
+      "hash": "6gKWrQ4h4ERWFKZTpFT8TPCkLpBZnhXJjMSusjQffz7w",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/6gKWrQ4h4ERWFKZTpFT8TPCkLpBZnhXJjMSusjQffz7w",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:54:26.476Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "cb5c10ff4bbf977ae313ca042fa7b2f60c464a392068798a169b90220402d789",
+      "depositYocto": "0",
+      "accountId": "mend-contractor-e.testnet",
+      "role": "CONTRACTOR"
+    },
+    {
+      "step": "hub_set_role:mend-inspector.testnet:INSPECTOR",
+      "hash": "GH2oZjuxoAPxTfSQakjymVt9iXdAv62QNCzhyLBo4ry9",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/GH2oZjuxoAPxTfSQakjymVt9iXdAv62QNCzhyLBo4ry9",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:54:30.556Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "12dc6343faec98b239376f75d6315d0008b53e2f10e72d3f68160e675700af02",
+      "depositYocto": "0",
+      "accountId": "mend-inspector.testnet",
+      "role": "INSPECTOR"
+    },
+    {
+      "step": "hub_set_role:mend-inspector-2.testnet:INSPECTOR",
+      "hash": "9J7HPcLMiPjVbxkAxGnYWixpXTeGs4vigyi6hKqW2RQN",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/9J7HPcLMiPjVbxkAxGnYWixpXTeGs4vigyi6hKqW2RQN",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:54:34.659Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "f3023c004e14a34f1b1351b8cb0db27a0175e002e29701459c1d07c2ca6062f0",
+      "depositYocto": "0",
+      "accountId": "mend-inspector-2.testnet",
+      "role": "INSPECTOR"
+    },
+    {
+      "step": "hub_set_role:mend-dao.testnet:DAO",
+      "hash": "FfqKxUaG85qRC1fkawKzQ4ZW171jjwKACrusJFo3KodC",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/FfqKxUaG85qRC1fkawKzQ4ZW171jjwKACrusJFo3KodC",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "set_role",
+      "at": "2026-11-09T16:54:38.807Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "f6e8f491f6f6bd0ddca3a5f3530bf7fc1c4da8e8f615b1ecc58f2827a29a280f",
+      "depositYocto": "0",
+      "accountId": "mend-dao.testnet",
+      "role": "DAO"
+    },
+    {
+      "step": "token_storage_deposit:mend-dao.testnet",
+      "hash": "6tZR4v5DeyvvMJkWdvvApdvmnySJGtAS7Jd7JW5K6eTV",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/6tZR4v5DeyvvMJkWdvvApdvmnySJGtAS7Jd7JW5K6eTV",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "storage_deposit",
+      "at": "2026-11-09T16:55:21.215Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "0cbf5283647d1fd33826071561eb5214f1014debb63cd3207eea6116d7d1e984",
+      "depositYocto": "2000000000000000000000",
+      "accountId": "mend-dao.testnet"
+    },
+    {
+      "step": "token_storage_deposit:mend-sponsor.testnet",
+      "hash": "FsQLeRZCisXcQGaQKd8BFZnyJGCWBA6qXud5MfE499Px",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/FsQLeRZCisXcQGaQKd8BFZnyJGCWBA6qXud5MfE499Px",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "storage_deposit",
+      "at": "2026-11-09T16:55:26.073Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "ae3a444b9d2012ccf184be11cbe9f6db980137bfe0b2ad2953af17e621997c08",
+      "depositYocto": "2000000000000000000000",
+      "accountId": "mend-sponsor.testnet"
+    },
+    {
+      "step": "token_storage_deposit:mend-contractor-a.testnet",
+      "hash": "6rxncx2fE15ea1WP6R1SvdcxoB84ejP1TfLnqCLKStUK",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/6rxncx2fE15ea1WP6R1SvdcxoB84ejP1TfLnqCLKStUK",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "storage_deposit",
+      "at": "2026-11-09T16:55:30.983Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "5f2ad38c813f914ac730158d801ebf2649dcc595fcc066a47881aa873f047558",
+      "depositYocto": "2000000000000000000000",
+      "accountId": "mend-contractor-a.testnet"
+    },
+    {
+      "step": "token_storage_deposit:mend-contractor-b.testnet",
+      "hash": "H2Hy4yPQx2HqEs7Gv9wJW7dCsB2ypSN9gSx7yVbQEAzz",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/H2Hy4yPQx2HqEs7Gv9wJW7dCsB2ypSN9gSx7yVbQEAzz",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "storage_deposit",
+      "at": "2026-11-09T16:55:36.073Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "d69e320e59733f61375d396e6544000647b7629917d2f9725990d4492c6b562d",
+      "depositYocto": "2000000000000000000000",
+      "accountId": "mend-contractor-b.testnet"
+    },
+    {
+      "step": "token_storage_deposit:mend-contractor-c.testnet",
+      "hash": "7etdTSYM6fZRD73vKKo3B7EZ7Pn4RTP75xyc6fHqBHe6",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/7etdTSYM6fZRD73vKKo3B7EZ7Pn4RTP75xyc6fHqBHe6",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "storage_deposit",
+      "at": "2026-11-09T16:55:41.474Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "0fb8d9070ba3bc28413c36088e1e0bd412d0343989d056a5a6a32af23812af4f",
+      "depositYocto": "2000000000000000000000",
+      "accountId": "mend-contractor-c.testnet"
+    },
+    {
+      "step": "token_storage_deposit:mend-contractor-d.testnet",
+      "hash": "4793G4mR3qwqdXfgwYcTzqroBDS9Z7eWp9sy1HJce7u4",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/4793G4mR3qwqdXfgwYcTzqroBDS9Z7eWp9sy1HJce7u4",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "storage_deposit",
+      "at": "2026-11-09T16:55:46.714Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "5c5fb1ba8772a95e3098c597602135041bb88501bbcab22da1a418c06ea68224",
+      "depositYocto": "2000000000000000000000",
+      "accountId": "mend-contractor-d.testnet"
+    },
+    {
+      "step": "token_storage_deposit:mend-contractor-e.testnet",
+      "hash": "3hGAubmWR8BjLcXg2kaVCBRHimDTeK3mhwKhNhKxycdp",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/3hGAubmWR8BjLcXg2kaVCBRHimDTeK3mhwKhNhKxycdp",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "storage_deposit",
+      "at": "2026-11-09T16:55:51.150Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "9ce735de90303943a2046c7c43b098e1ad7291ac3efacbae7bd4a73c863768e2",
+      "depositYocto": "2000000000000000000000",
+      "accountId": "mend-contractor-e.testnet"
+    },
+    {
+      "step": "token_storage_deposit:mend-inspector.testnet",
+      "hash": "BTJ9zxdRB94LJjfdnmwzqWnMer3mNeGEXhcWvJUrbjT5",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/BTJ9zxdRB94LJjfdnmwzqWnMer3mNeGEXhcWvJUrbjT5",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "storage_deposit",
+      "at": "2026-11-09T16:55:56.315Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "612bed7669a75be14baeb537b2888ef8aa7bfad06806de2b0025bceaa1f4f6ff",
+      "depositYocto": "2000000000000000000000",
+      "accountId": "mend-inspector.testnet"
+    },
+    {
+      "step": "token_storage_deposit:mend-inspector-2.testnet",
+      "hash": "36LaBfvPPiVMKAjqrTbjSysxgzggqdxArktqs1D4M2of",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/36LaBfvPPiVMKAjqrTbjSysxgzggqdxArktqs1D4M2of",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "storage_deposit",
+      "at": "2026-11-09T16:56:01.130Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "c1e484b18ee7d6f0367f307c5aeb473c1566c4dedd23e5b677fcc3254f38cf69",
+      "depositYocto": "2000000000000000000000",
+      "accountId": "mend-inspector-2.testnet"
+    },
+    {
+      "step": "sponsor_grant_500_musdc",
+      "hash": "Edt1Ek5sTndMjQic2hFBn2fS5rocGXSChmvyPqJmuDFg",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/Edt1Ek5sTndMjQic2hFBn2fS5rocGXSChmvyPqJmuDFg",
+      "signer": "mend-deployer.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "ft_transfer",
+      "at": "2026-11-09T16:56:09.390Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "b44306c00dde075a01f123756ac87341b8cb8780d3071da95fb459ac701429ea",
+      "depositYocto": "1",
+      "amountMicro": "500000000"
+    },
+    {
+      "step": "asset_create_BENCH-001",
+      "hash": "ChhVakDg91jgKq2RXNYYREVVsrNogBXkvCFGmy2wqHuN",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/ChhVakDg91jgKq2RXNYYREVVsrNogBXkvCFGmy2wqHuN",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "create_asset",
+      "at": "2026-11-09T16:56:13.991Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "c52ccee4d18be42bdea2edfb654d889195410eaa475549fce35d2b93b653632f",
+      "depositYocto": "0",
+      "assetId": "BENCH-001",
+      "descriptionHash": "7325a1adb2fe9ab9a503f758ab25d26f5cc5c7388b82904b1a8a238a6fb9133c",
+      "locationHash": "9e21d8a75e911f492f90e092cc4236dfc4055a189fa5a8c0f8e5e7cef9aeb370"
+    },
+    {
+      "step": "passport_mint_BENCH-001",
+      "hash": "GVCdWQ69Rp8XCKVkXTFoMkxXKUVyTzD3SxNSZiMyVkvc",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/GVCdWQ69Rp8XCKVkXTFoMkxXKUVyTzD3SxNSZiMyVkvc",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "mint_passport",
+      "at": "2026-11-09T16:56:45.487Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "cc4ea9e639be3182f86232f6046792b8808e29f8c9a38dab6d2ea310187544cc",
+      "depositYocto": "0"
+    },
+    {
+      "step": "work_order_create",
+      "hash": "6mcB9XihVViUuUCm7Zu6dDrbALSJ6Mv4GwbB9kQgPW6W",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/6mcB9XihVViUuUCm7Zu6dDrbALSJ6Mv4GwbB9kQgPW6W",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "create_work_order",
+      "at": "2026-11-09T17:00:08.585Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "9d0af681af749b81628f0d5c35869c1b0a6fdee3acee90def07bf0aa2ceb6c7c",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0001",
+      "scopeHash": "5b68f1468f3041d9f8ebc2b692c827402ddbdd05236931ce45928669f0a47b4a",
+      "proposalId": "local-dao-approval-1"
+    },
+    {
+      "step": "dao_authorize_fallback",
+      "hash": "HqEhrGUPy2zUcvKWjxMTE2jDcZB2FG2DLZ3hkuxw4yBt",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/HqEhrGUPy2zUcvKWjxMTE2jDcZB2FG2DLZ3hkuxw4yBt",
+      "signer": "mend-dao.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "dao_authorize",
+      "at": "2026-11-09T17:00:13.183Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "4e1e617f99a63c65c83301836dfe79dabd310d130e06eae8762ffec40a394f75",
+      "depositYocto": "0",
+      "proposalId": "local-dao-approval-1"
+    },
+    {
+      "step": "work_order_fund_100_musdc",
+      "hash": "61scdMHeMWgLJNb7WRaeYFjWURQ7urnpFr1sjBmXKPEV",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/61scdMHeMWgLJNb7WRaeYFjWURQ7urnpFr1sjBmXKPEV",
+      "signer": "mend-sponsor.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "ft_transfer_call",
+      "at": "2026-11-09T17:00:18.488Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "997b1a17181f7c36fc5df9fdeeba7bcf80990cd753f49c7a1e08e4634cd21bfd",
+      "depositYocto": "1",
+      "workOrderId": "WO-BENCH-001-0001"
+    },
+    {
+      "step": "work_order_open_bidding",
+      "hash": "5F9xfoZADQQ3tAEhhQ5tWcg9Ym4dXgiyAsd9WMMNy2KA",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/5F9xfoZADQQ3tAEhhQ5tWcg9Ym4dXgiyAsd9WMMNy2KA",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "open_bidding",
+      "at": "2026-11-09T17:00:22.783Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "467cb16566c2b838163b6c1da30dca1aa9cf4f7b8fdc47246918da49f431ff47",
+      "depositYocto": "0"
+    },
+    {
+      "step": "old_work_order_cancel",
+      "hash": "BdCkNAXM8ZmCL6yRmBJ6zcksbgweg2hTecJiapoESmJt",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/BdCkNAXM8ZmCL6yRmBJ6zcksbgweg2hTecJiapoESmJt",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "cancel_work_order",
+      "at": "2026-11-09T17:04:51.065Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "60a1c82289765c9d48fb23ec7de6e2fb5cac2c1abeb24756efbe544e82b61856",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0001",
+      "reasonHash": "c9c53a814067e0b513a6b149443d0c9c118e247e2c9e229689e0bf4e41686744"
+    },
+    {
+      "step": "old_work_order_refund",
+      "hash": "4gjqPkW7HNqHCPiijk2tk2RCjXhMKySq6zJqhbgGayh8",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/4gjqPkW7HNqHCPiijk2tk2RCjXhMKySq6zJqhbgGayh8",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "refund",
+      "at": "2026-11-09T17:04:55.894Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "467cb16566c2b838163b6c1da30dca1aa9cf4f7b8fdc47246918da49f431ff47",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0001"
+    },
+    {
+      "step": "work_order_create",
+      "hash": "CxWWR9k3ZbArwrNV42w6Kr9c8vncHrYLmNVDQ5mhEpvi",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/CxWWR9k3ZbArwrNV42w6Kr9c8vncHrYLmNVDQ5mhEpvi",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "create_work_order",
+      "at": "2026-11-09T17:05:00.779Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "e85922d0e1009be852d9fc3b8a002d3766b3e594f6a0d6b5989a2233b79ea4d5",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0002",
+      "scopeHash": "ae9e9cc75d0d215f7514e736ca80a72e6a8375f9a753870ba2f360edf2ffc606",
+      "proposalId": "local-dao-approval-0002"
+    },
+    {
+      "step": "dao_authorize_fallback",
+      "hash": "2ZFPesWgL9ecoyNv5WHdCc1jZVumKLo6uzzByoDWSmTS",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/2ZFPesWgL9ecoyNv5WHdCc1jZVumKLo6uzzByoDWSmTS",
+      "signer": "mend-dao.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "dao_authorize",
+      "at": "2026-11-09T17:05:05.304Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "710b58e337215328dcaf88ec05b7fa92d9bb17d2f76ac2721fd6f597328f5936",
+      "depositYocto": "0",
+      "proposalId": "local-dao-approval-0002"
+    },
+    {
+      "step": "work_order_fund_100_musdc",
+      "hash": "J1X2m6oSbTwmXYrzi4FRPsYKcndoQuc5dfxbHzjgunTy",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/J1X2m6oSbTwmXYrzi4FRPsYKcndoQuc5dfxbHzjgunTy",
+      "signer": "mend-sponsor.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "ft_transfer_call",
+      "at": "2026-11-09T17:05:11.382Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "51e250fe737982ce41e275a04bc67bc49a4b5ae1af3847f27c2bf3dfffd57cd0",
+      "depositYocto": "1",
+      "workOrderId": "WO-BENCH-001-0002"
+    },
+    {
+      "step": "work_order_open_bidding",
+      "hash": "DXP4bXzZL2i8D8KKASpEotb7zu3xL2xcT874iuRXaW3Y",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/DXP4bXzZL2i8D8KKASpEotb7zu3xL2xcT874iuRXaW3Y",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "open_bidding",
+      "at": "2026-11-09T17:05:15.982Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "86a2bf9aa68c4cb933a25cb1ee96d4a5dc3cc2a357c00d08039ba00578c14a25",
+      "depositYocto": "0"
+    },
+    {
+      "step": "bid_commit_A",
+      "hash": "2ED6zEmTHLc7TPjR5F7DACv29wz9aLtgoBaBNk6cQJBR",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/2ED6zEmTHLc7TPjR5F7DACv29wz9aLtgoBaBNk6cQJBR",
+      "signer": "mend-contractor-a.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "commit_bid",
+      "at": "2026-11-09T17:05:54.589Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "bfc1bf28d70bc2c823b223452128494d0fb1910a648d19856898b6a1a4b425af",
+      "depositYocto": "0",
+      "bidId": "BID-A-BENCH-001",
+      "commitmentHash": "4e14135b8948feb3efcdc02fa3a30f5961ec9103623db37a9f9a43fef7adc00c",
+      "contractorId": "mend-contractor-a.testnet"
+    },
+    {
+      "step": "bid_commit_B",
+      "hash": "76hTfN8oZm1UjMV8A4sMet54eegVXVk2p7xAxXvpy7Jg",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/76hTfN8oZm1UjMV8A4sMet54eegVXVk2p7xAxXvpy7Jg",
+      "signer": "mend-contractor-b.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "commit_bid",
+      "at": "2026-11-09T17:05:58.797Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "03fd081c8b4f9d937cd82e52e0a302165583e2f813798232e8a460de52f6c3aa",
+      "depositYocto": "0",
+      "bidId": "BID-B-BENCH-001",
+      "commitmentHash": "af3a82527266e94656d175830b4a7ebad0de2fd37ddd5e74055efcbdf52e18a4",
+      "contractorId": "mend-contractor-b.testnet"
+    },
+    {
+      "step": "bid_commit_C",
+      "hash": "HRHQS3TPmoszzvEViz4oqqPDZUSeZpWUgTJrjGQRcXo2",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/HRHQS3TPmoszzvEViz4oqqPDZUSeZpWUgTJrjGQRcXo2",
+      "signer": "mend-contractor-c.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "commit_bid",
+      "at": "2026-11-09T17:06:02.954Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "4b0ccc5e7eb146db919afdc60202859218589ca6d8119a80dd1df2f48f8ef97e",
+      "depositYocto": "0",
+      "bidId": "BID-C-BENCH-001",
+      "commitmentHash": "5bbb0a4d8e96cdf0544bff18372a52adadfaec69318dd7f68947e11e4c807d28",
+      "contractorId": "mend-contractor-c.testnet"
+    },
+    {
+      "step": "cleanup_cancel:WO-BENCH-001-0002",
+      "hash": "H1e2UV4aHtZHn7Wgjrd3ey9izK6fFBw37qLeiNwaci3C",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/H1e2UV4aHtZHn7Wgjrd3ey9izK6fFBw37qLeiNwaci3C",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "cancel_work_order",
+      "at": "2026-11-09T17:10:30.126Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "503886f8a4bb0ff0cd345b072c2a345befe3275936b11020de7c9e976b2c9b7f",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0002",
+      "reasonHash": "1c02a6f4218aa118c2759b08e01d9376519e07281a62b0ff7c0e04715b870823"
+    },
+    {
+      "step": "cleanup_refund:WO-BENCH-001-0002",
+      "hash": "B2otm231ZKj4WLT4HoQCN5FGS4rLQJzS8xCx831SXNtC",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/B2otm231ZKj4WLT4HoQCN5FGS4rLQJzS8xCx831SXNtC",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "refund",
+      "at": "2026-11-09T17:10:35.027Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "86a2bf9aa68c4cb933a25cb1ee96d4a5dc3cc2a357c00d08039ba00578c14a25",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0002"
+    },
+    {
+      "step": "work_order_create",
+      "hash": "DtjFvAUg9UJmozU5UbEviQzoYYXsVucozJkD61LhtHqe",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/DtjFvAUg9UJmozU5UbEviQzoYYXsVucozJkD61LhtHqe",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "create_work_order",
+      "at": "2026-11-09T17:10:40.616Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "7722528fab9520d6f44ddeeb6adac1acdfc559caced610a01492082705114ed9",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "scopeHash": "4c211a017e14749ed4bb8b5966381101b6c3cdf5f24965f58b2cdec847a4ed5e",
+      "proposalId": "local-dao-approval-0003"
+    },
+    {
+      "step": "dao_authorize_fallback",
+      "hash": "51E4s7s7zyqrCNgEKtNM1g8YGufm9SpJP6e4BQvWKU1z",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/51E4s7s7zyqrCNgEKtNM1g8YGufm9SpJP6e4BQvWKU1z",
+      "signer": "mend-dao.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "dao_authorize",
+      "at": "2026-11-09T17:10:45.316Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "5c80de4c1e3899702b47637eb2542dc8a345443445ee7524ab3396eaafc8a839",
+      "depositYocto": "0",
+      "proposalId": "local-dao-approval-0003"
+    },
+    {
+      "step": "work_order_fund_100_musdc",
+      "hash": "8qUzjZs3UNzGtGUptRfTRWPpgjdDvV6MREcGeJMDfbGx",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/8qUzjZs3UNzGtGUptRfTRWPpgjdDvV6MREcGeJMDfbGx",
+      "signer": "mend-sponsor.testnet",
+      "receiver": "mend-usdc.testnet",
+      "method": "ft_transfer_call",
+      "at": "2026-11-09T17:10:51.126Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "589851db249b1dc1441a0c96859caa723bbc2094a5a07848f70ed5a29e04cb42",
+      "depositYocto": "1",
+      "workOrderId": "WO-BENCH-001-0003"
+    },
+    {
+      "step": "work_order_open_bidding",
+      "hash": "FG6hgssGsKqLiE8Fu9qeTF1ikR4rWk5YM2nGNvh4N8jQ",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/FG6hgssGsKqLiE8Fu9qeTF1ikR4rWk5YM2nGNvh4N8jQ",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "open_bidding",
+      "at": "2026-11-09T17:10:55.715Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "09d1a4a35a8228f872e5dabb7e0fd683036775ae86094c72d01e91763a51f01c",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003"
+    },
+    {
+      "step": "bid_commit_A",
+      "hash": "E4rp6A1fehEHzBkeegyXtQK9MMfPEdqfF5Dmo9y2PTY6",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/E4rp6A1fehEHzBkeegyXtQK9MMfPEdqfF5Dmo9y2PTY6",
+      "signer": "mend-contractor-a.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "commit_bid",
+      "at": "2026-11-09T17:11:37.818Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "8def3d067d9b8a38fcdf9783b6767c852dfbb1ed98285419d2a6290345bda9dc",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "bidId": "BID-A-BENCH-001",
+      "commitmentHash": "d5ad096bb8cdbd537f61aa48f569344ec51fc6a538b8ec1982231a344267f17f",
+      "contractorId": "mend-contractor-a.testnet"
+    },
+    {
+      "step": "bid_commit_B",
+      "hash": "LvGB9VTCfwSpEN37FmqQraHymxa89EZEH2aRDsw6Whx",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/LvGB9VTCfwSpEN37FmqQraHymxa89EZEH2aRDsw6Whx",
+      "signer": "mend-contractor-b.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "commit_bid",
+      "at": "2026-11-09T17:11:41.503Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "c67c5f978a0fd99c98176062d7c61f9589bf5695e9227c06c05c3662864a178b",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "bidId": "BID-B-BENCH-001",
+      "commitmentHash": "27fd0ad27046ecd6fa0239ed53565378c3ec25653b30ac5ad3deeb84460d1490",
+      "contractorId": "mend-contractor-b.testnet"
+    },
+    {
+      "step": "bid_commit_C",
+      "hash": "2Q52fAgmdahvafhD5nwSBeSene8QrRjZAi42i8FzBddy",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/2Q52fAgmdahvafhD5nwSBeSene8QrRjZAi42i8FzBddy",
+      "signer": "mend-contractor-c.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "commit_bid",
+      "at": "2026-11-09T17:11:45.114Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "5e427ab8f125f6d9dbd7bcb7525d22ea08bbf18a81a1c4c91408f4077e0ad469",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "bidId": "BID-C-BENCH-001",
+      "commitmentHash": "058423c9999c09b2a86a41233e3559de45043a94b0fd1cfcaa52434a58a86e2e",
+      "contractorId": "mend-contractor-c.testnet"
+    },
+    {
+      "step": "bid_reveal_A",
+      "hash": "8BPecP1tgjk2bXWxKy2eQVe92k2agZXeqmGHRuKZtSiC",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/8BPecP1tgjk2bXWxKy2eQVe92k2agZXeqmGHRuKZtSiC",
+      "signer": "mend-contractor-a.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "reveal_bid",
+      "at": "2026-11-09T17:13:43.154Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "e96039adfcc2724d4038622d29ff9b586922ad7d44e6959e4fd131dee40ed4bc",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "bidId": "BID-A-BENCH-001",
+      "contractorId": "mend-contractor-a.testnet",
+      "availableInDays": 3,
+      "availabilityRecordedOnchain": false
+    },
+    {
+      "step": "bid_reveal_B",
+      "hash": "4eD3bQoLDdrzDPCYzAsgfAXRKQ4VZfLdspE4ZekXNf3N",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/4eD3bQoLDdrzDPCYzAsgfAXRKQ4VZfLdspE4ZekXNf3N",
+      "signer": "mend-contractor-b.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "reveal_bid",
+      "at": "2026-11-09T17:13:47.058Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "970eb267e39b0c91d6333c2d721b83eb348a1bdf2c5c41783ad8d7cf9624b482",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "bidId": "BID-B-BENCH-001",
+      "contractorId": "mend-contractor-b.testnet",
+      "availableInDays": 2,
+      "availabilityRecordedOnchain": false
+    },
+    {
+      "step": "bid_reveal_C",
+      "hash": "7TKU7tjbmddAJwWmdNbMDjV8AZDA5vnvTLRczocEiyAL",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/7TKU7tjbmddAJwWmdNbMDjV8AZDA5vnvTLRczocEiyAL",
+      "signer": "mend-contractor-c.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "reveal_bid",
+      "at": "2026-11-09T17:13:50.782Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "8ed754c26e3e409bb50b824da2b8405be77a678c326c8bcf700a812bfb781491",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "bidId": "BID-C-BENCH-001",
+      "contractorId": "mend-contractor-c.testnet",
+      "availableInDays": 5,
+      "availabilityRecordedOnchain": false
+    },
+    {
+      "step": "bidding_close",
+      "hash": "4vqBBDcfaxwR3tj9gz2puViq6LPsP2J6kSg8VhqPQHjH",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/4vqBBDcfaxwR3tj9gz2puViq6LPsP2J6kSg8VhqPQHjH",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "close_bidding",
+      "at": "2026-11-09T17:16:41.544Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "09d1a4a35a8228f872e5dabb7e0fd683036775ae86094c72d01e91763a51f01c",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003"
+    },
+    {
+      "step": "score_record_LOCAL_DETERMINISTIC",
+      "hash": "9QnV14jDwfTXFdy56PJQ4N63QAF7xQcDR4nDVUguGiqd",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/9QnV14jDwfTXFdy56PJQ4N63QAF7xQcDR4nDVUguGiqd",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "record_score",
+      "at": "2026-11-09T17:17:51.705Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "2a05715067157e8bf7cbd9dcc296d15740d66a977b015baf59e0a3903fbff176",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "executionId": "SX-LIVE-0001",
+      "mode": "LOCAL_DETERMINISTIC",
+      "inputHash": "2de5d992808f5f6fdf69608fdd4a360d6566e0d2c3d9c2618b82d2b857a70f9f",
+      "outputHash": "031421ab242b475579e45e4c3140ee6a9b93d289668f5942aadb03f3e89f9fb6"
+    },
+    {
+      "step": "award_winner_B",
+      "hash": "4bDqwmwW67iBq6Sx7NDM2hcf7LPZQrMGxEBQrv5paJb6",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/4bDqwmwW67iBq6Sx7NDM2hcf7LPZQrMGxEBQrv5paJb6",
+      "signer": "mend-steward.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "award",
+      "at": "2026-11-09T17:17:57.711Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "5ede7051caebc52dfbe81a14b6a8e29b93e3fb8ebe856ab1a86b820afe55a358",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "bidId": "BID-B-BENCH-001",
+      "contractorId": "mend-contractor-b.testnet"
+    },
+    {
+      "step": "work_start_B",
+      "hash": "4SAghtUqHMjCMbqgUdckMcbPM7w3qeE6KjqhiKvH6Vk4",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/4SAghtUqHMjCMbqgUdckMcbPM7w3qeE6KjqhiKvH6Vk4",
+      "signer": "mend-contractor-b.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "start_work",
+      "at": "2026-11-09T17:18:02.372Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "09d1a4a35a8228f872e5dabb7e0fd683036775ae86094c72d01e91763a51f01c",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003"
+    },
+    {
+      "step": "completion_submit_EV-LIVE-0001",
+      "hash": "2HQ2DLMiz2rtM4QtupZCzCeQxhUXvrqcqYfEVYzYub4K",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/2HQ2DLMiz2rtM4QtupZCzCeQxhUXvrqcqYfEVYzYub4K",
+      "signer": "mend-contractor-b.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "submit_completion",
+      "at": "2026-11-09T17:18:06.700Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "8b3753ed9d2f2521621c8ecacf2be6c7a6db7e1140598d5aa58d13b457476cfb",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "evidenceId": "EV-LIVE-0001",
+      "evidenceHash": "5de5a4207105c024af104707ab5e9379f721c790c8a548272e7d1288959b8ed7"
+    },
+    {
+      "step": "completion_accept_INS-LIVE-0001",
+      "hash": "45gE2NTM2fvi9bPpbSyKqiU9EbBa4CeHyLZdiqNosryL",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/45gE2NTM2fvi9bPpbSyKqiU9EbBa4CeHyLZdiqNosryL",
+      "signer": "mend-inspector.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "accept_completion",
+      "at": "2026-11-09T17:18:12.324Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "f2e53a8bc1a3b4fb94f65e1ac1977ab8cd88cbea8963561bc39f7eb4083b2474",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "inspectionId": "INS-LIVE-0001",
+      "notesHash": "2a7da46b90d2af8a017efeee81004aa85d39887a34d1862a519127e00221709b"
+    },
+    {
+      "step": "durability_pass_INS-LIVE-0002",
+      "hash": "Cf4Z3jaGbgVjx8jzfE13gPFRkzJAPwY4fkpz4wFzhBWz",
+      "explorerUrl": "https://explorer.testnet.near.org/transactions/Cf4Z3jaGbgVjx8jzfE13gPFRkzJAPwY4fkpz4wFzhBWz",
+      "signer": "mend-inspector-2.testnet",
+      "receiver": "mend-hub.testnet",
+      "method": "inspect_durability",
+      "at": "2026-11-09T17:20:18.478Z",
+      "finalStatus": "SuccessValue",
+      "argsHash": "bf668fb62b0950bdbeef0e70edaae3faf6db8635deb5c86a3bc61f3de03a51db",
+      "depositYocto": "0",
+      "workOrderId": "WO-BENCH-001-0003",
+      "inspectionId": "INS-LIVE-0002",
+      "notesHash": "623e00e6ecc05044960a0dc975bf65e8489d21502f9f5b25c05324995c2bdad3"
+    }
+  ],
+  "limitations": [
+    "NEAR testnet only. Test mUSDC and testnet NEAR have no real value. No mainnet deployment was attempted.",
+    "The hub signing key in MEND_TESTNET_KEYS_FILE is not an on-chain access key. The hub remains deployed and usable through owner/role accounts, but it cannot be deleted, redeployed or re-initialised without the original hub key. No destructive hub call was made.",
+    "Sputnik DAO v2 factory creation was not submitted: the first attempt used https://rpc.testnet.near.org and received HTTP 429 (deprecated endpoint) before submission. No Sputnik DAO exists; mend-dao.testnet is a documented plain-account fallback, not a Sputnik DAO. Subsequent operations used https://rpc.testnet.fastnear.com.",
+    "The deployed hub WASM is the older MEND_BID_V1 commitment format: the contract does not accept available_in_days. Availability values are recorded off-chain in this file and the bid manifest, but not in the on-chain reveal. A hub redeploy was explicitly not performed.",
+    "OutLayer live execution was not used: it is not funded/configured on this deployment. The score was computed by the steward with the deterministic local algorithm and recorded on-chain with mode \"recorded\"; the deployment labels it LOCAL_DETERMINISTIC.",
+    "The passport NFT is non-transferable and held by the hub registry account; it is not a title deed, legal ownership record, or evidence of a real repair.",
+    "The hub, sponsor and some contractor accounts are shared with concurrent testnet work orders. Absolute token balances include that activity; per-work-order escrow, payment rows and NEP-141 transfer events are the authoritative evidence for this work order."
+  ],
+  "replacedWorkOrder": {
+    "workOrderId": "WO-BENCH-001-0001",
+    "status": "REFUNDED",
+    "reasonFile": "infra/testnet/scope/WO-BENCH-001-0001-cancel.json",
+    "reasonHash": "c9c53a814067e0b513a6b149443d0c9c118e247e2c9e229689e0bf4e41686744",
+    "cancelTx": "BdCkNAXM8ZmCL6yRmBJ6zcksbgweg2hTecJiapoESmJt",
+    "refundTx": "4gjqPkW7HNqHCPiijk2tk2RCjXhMKySq6zJqhbgGayh8",
+    "funded": "100000000",
+    "note": "The requested WO-BENCH-001-0001 is preserved on-chain as CANCELLED/REFUNDED. The completed lifecycle is the replacement work order recorded in workOrder.workOrderId."
+  },
+  "reconciliation": {
+    "totalFunding": "800000000",
+    "totalRefunded": "240000000",
+    "totalCompletionPaid": "144000000",
+    "totalHoldbackReleased": "16000000"
+  },
+  "replacedWorkOrders": [
+    {
+      "workOrderId": "WO-BENCH-001-0001",
+      "status": "REFUNDED",
+      "funded": "100000000",
+      "note": "Pre-award replacement work order; preserved on-chain for audit."
+    },
+    {
+      "workOrderId": "WO-BENCH-001-0002",
+      "status": "REFUNDED",
+      "funded": "100000000",
+      "reasonFile": "infra/testnet/scope/WO-BENCH-001-0002-cancel.json",
+      "reasonHash": "1c02a6f4218aa118c2759b08e01d9376519e07281a62b0ff7c0e04715b870823",
+      "cancelTx": "H1e2UV4aHtZHn7Wgjrd3ey9izK6fFBw37qLeiNwaci3C",
+      "refundTx": "B2otm231ZKj4WLT4HoQCN5FGS4rLQJzS8xCx831SXNtC",
+      "note": "Pre-award replacement work order; preserved on-chain for audit."
+    }
+  ],
+  "reconciliationNote": "Global reconciliation covers every work order on the shared testnet hub, including concurrent work orders created by other workers; it is not specific to this work order. Use workOrder.escrow and workOrder.payments for per-work-order proof."
+}

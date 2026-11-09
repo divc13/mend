@@ -1,0 +1,7 @@
+{
+  "schema": "mend.cancel-reason.v1",
+  "workOrderId": "WO-BENCH-001-0002",
+  "reason": "This pre-award work order could not be used for the live lifecycle (expired commitment window or an earlier commitment-format mismatch). It is cancelled and refunded; the completed lifecycle is the active replacement work order recorded in workOrder.workOrderId.",
+  "replacementWorkOrderId": "WO-BENCH-001-0003",
+  "at": "2026-11-09T17:10:25.933Z"
+}

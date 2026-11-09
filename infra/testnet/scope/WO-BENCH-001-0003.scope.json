@@ -1,0 +1,33 @@
+{
+  "schema": "mend.work-order.scope.v1",
+  "workOrderId": "WO-BENCH-001-0003",
+  "assetId": "BENCH-001",
+  "reportClusterId": "CL-0001",
+  "title": "BENCH-001 seat plank and armrest repair",
+  "publicScope": "Replace the split seat plank with a matching weather-treated plank, re-fix the loose armrest, and leave the bench safe and usable.",
+  "deliverable": "Completed repair with after-photo evidence hashes, materials receipt hash and an inspector-approved durability check.",
+  "evidenceChecklist": [
+    "after-photo hash",
+    "materials receipt hash",
+    "contractor completion note hash",
+    "inspector notes hash"
+  ],
+  "budgetMicro": "100000000",
+  "policyHash": "1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d",
+  "policyVersion": "mend-bid-policy-v1",
+  "contractorRoster": [
+    "mend-contractor-a.testnet",
+    "mend-contractor-b.testnet",
+    "mend-contractor-c.testnet"
+  ],
+  "inspectorRoster": [
+    "mend-inspector.testnet",
+    "mend-inspector-2.testnet"
+  ],
+  "daoProposalId": "local-dao-approval-0003",
+  "commitDeadlineNs": "1794244413824000000",
+  "revealDeadlineNs": "1794244593824000000",
+  "commitDeadline": "2026-11-09T17:13:33.824Z",
+  "revealDeadline": "2026-11-09T17:16:33.824Z",
+  "note": "Testnet demo work order. No real repair is asserted; evidence is testnet-only."
+}

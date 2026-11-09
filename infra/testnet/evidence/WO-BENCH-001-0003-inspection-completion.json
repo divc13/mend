@@ -1,0 +1,12 @@
+{
+  "schema": "mend.evidence.v1",
+  "kind": "INSPECTION_COMPLETION",
+  "workOrderId": "WO-BENCH-001-0003",
+  "assetId": "BENCH-001",
+  "network": "testnet",
+  "note": "Testnet-only lifecycle evidence. No real-world repair, payment or legal ownership is asserted.",
+  "inspectionId": "INS-LIVE-0001",
+  "inspectorId": "mend-inspector.testnet",
+  "decision": "APPROVED",
+  "statement": "Completion evidence reviewed; repair meets the agreed scope on testnet."
+}
