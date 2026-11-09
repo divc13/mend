@@ -43,8 +43,44 @@ export interface AppConfig {
     hubAccount: string;
     tokenAccount: string;
     rpcUrl?: string;
+    /**
+     * Absolute path to the human-managed testnet key file. The file is read at
+     * runtime by the signer provider; its contents are never logged or
+     * serialized into an API response.
+     */
+    keysFile?: string;
+    roleAccounts: {
+      deployer: string;
+      steward: string;
+      sponsor: string;
+      dao: string;
+      contractor: string;
+      inspector: string;
+      admin: string;
+    };
     signerConfigured: boolean;
     unavailableReason?: string;
+  };
+  testnet: {
+    walletEnabled: boolean;
+    faucetEnabled: boolean;
+    faucetAmountMicro: string;
+    faucetCooldownSeconds: number;
+    walletCreatesPerIpHour: number;
+    faucetsPerIpHour: number;
+    cliPath: string;
+    cliTimeoutMs: number;
+  };
+  liveScenario: {
+    enabled: boolean;
+    timeoutMs: number;
+    commitWindowSeconds: number;
+    revealWindowSeconds: number;
+    /**
+     * auto reads the deployed hub code and uses the payload version it verifies.
+     * v1/v2 are explicit overrides for operators who already know the deployment.
+     */
+    bidPayloadVersion: 'auto' | 'v1' | 'v2';
   };
   triage: {
     provider: string;
@@ -105,6 +141,20 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   const intentsUnavailable = !intentsEnabled
     ? 'NEAR Intents 1Click is disabled (INTENTS_ENABLED is not true). Dry previews are disabled until it is enabled; live execution additionally requires INTENTS_ALLOW_LIVE=true and explicit human confirmation.'
     : undefined;
+  const keysFile = env.MEND_TESTNET_KEYS_FILE ?? env.NEAR_KEYS_FILE;
+  const legacySignerConfigured = Boolean(env.NEAR_SIGNER_ACCOUNT && env.NEAR_SIGNER_SECRET);
+  const signerConfigured = Boolean(keysFile) || legacySignerConfigured;
+  const liveScenarioEnabled = bool(env.MEND_LIVE_SCENARIO_ENABLED, false);
+  const testnetWalletEnabled = bool(env.MEND_TESTNET_WALLET_ENABLED, apiMode === 'LIVE_TESTNET');
+  const testnetFaucetEnabled = bool(env.MEND_TESTNET_FAUCET_ENABLED, apiMode === 'LIVE_TESTNET');
+  let chainUnavailable: string | undefined;
+  if (apiMode === 'MAINNET') {
+    chainUnavailable = 'MAINNET is refused by this build. The live adapter only signs NEAR testnet transactions; no mainnet key or transfer path exists.';
+  } else if (!signerConfigured) {
+    chainUnavailable = 'No NEAR testnet signer is configured (MEND_TESTNET_KEYS_FILE). Chain actions remain INTENT and are never reported as executed.';
+  } else if (!keysFile && chainAdapter === 'live') {
+    chainUnavailable = 'CHAIN_ADAPTER=live requires MEND_TESTNET_KEYS_FILE pointing outside the repository. NEAR_SIGNER_ACCOUNT/NEAR_SIGNER_SECRET alone are not used by the role signer provider.';
+  }
 
   return {
     nodeEnv,
@@ -141,13 +191,43 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     chain: {
       adapter: chainAdapter,
       network: apiMode === 'MAINNET' ? 'mainnet' : 'testnet',
-      hubAccount: env.HUB_ACCOUNT ?? TESTNET_HUB_ACCOUNT,
-      tokenAccount: env.TOKEN_ACCOUNT ?? TESTNET_TOKEN_ACCOUNT,
-      rpcUrl: env.NEAR_RPC_URL,
-      signerConfigured: Boolean(env.NEAR_SIGNER_ACCOUNT && env.NEAR_SIGNER_SECRET),
-      unavailableReason: !env.NEAR_SIGNER_ACCOUNT
-        ? 'No NEAR signer is configured (NEAR_SIGNER_ACCOUNT/NEAR_SIGNER_SECRET). Chain actions remain INTENT and are never reported as executed.'
-        : undefined,
+      hubAccount: env.MEND_HUB_ACCOUNT ?? env.HUB_ACCOUNT ?? TESTNET_HUB_ACCOUNT,
+      tokenAccount: env.MEND_TOKEN_ACCOUNT ?? env.TOKEN_ACCOUNT ?? TESTNET_TOKEN_ACCOUNT,
+      rpcUrl: env.MEND_RPC_URL ?? env.NEAR_RPC_URL ?? 'https://rpc.testnet.near.org',
+      ...(keysFile ? { keysFile } : {}),
+      roleAccounts: {
+        deployer: env.MEND_DEPLOYER_ACCOUNT ?? 'mend-deployer.testnet',
+        steward: env.MEND_STEWARD_ACCOUNT ?? 'mend-steward.testnet',
+        sponsor: env.MEND_SPONSOR_ACCOUNT ?? 'mend-sponsor.testnet',
+        dao: env.MEND_DAO_ACCOUNT ?? 'mend-dao.testnet',
+        contractor: env.MEND_CONTRACTOR_ACCOUNT ?? 'mend-contractor-a.testnet',
+        inspector: env.MEND_INSPECTOR_ACCOUNT ?? 'mend-inspector.testnet',
+        admin: env.MEND_ADMIN_ACCOUNT ?? env.MEND_DEPLOYER_ACCOUNT ?? 'mend-deployer.testnet',
+      },
+      signerConfigured,
+      ...(chainUnavailable ? { unavailableReason: chainUnavailable } : {}),
+    },
+    testnet: {
+      walletEnabled: testnetWalletEnabled,
+      faucetEnabled: testnetFaucetEnabled,
+      faucetAmountMicro: env.MEND_TESTNET_FAUCET_AMOUNT_MICRO ?? '100000000',
+      faucetCooldownSeconds: int(env.MEND_TESTNET_FAUCET_COOLDOWN_SECONDS, 3600),
+      walletCreatesPerIpHour: int(env.MEND_TESTNET_WALLET_CREATES_PER_IP_HOUR, 3),
+      faucetsPerIpHour: int(env.MEND_TESTNET_FAUCETS_PER_IP_HOUR, 10),
+      cliPath: env.MEND_NEAR_CLI_PATH ?? 'near',
+      cliTimeoutMs: int(env.MEND_NEAR_CLI_TIMEOUT_MS, 120_000),
+    },
+    liveScenario: {
+      enabled: liveScenarioEnabled,
+      timeoutMs: int(env.MEND_LIVE_SCENARIO_TIMEOUT_MS, 600_000),
+      // Transaction finality on the public testnet RPC takes several seconds
+      // per step. Keep a generous commit window; the runner waits for real
+      // deadlines rather than shortening them.
+      commitWindowSeconds: int(env.MEND_LIVE_SCENARIO_COMMIT_SECONDS, 90),
+      revealWindowSeconds: int(env.MEND_LIVE_SCENARIO_REVEAL_SECONDS, 60),
+      bidPayloadVersion: env.MEND_LIVE_BID_PAYLOAD_VERSION === 'v1' || env.MEND_LIVE_BID_PAYLOAD_VERSION === 'v2'
+        ? env.MEND_LIVE_BID_PAYLOAD_VERSION
+        : 'auto',
     },
     triage: {
       provider: 'NEAR AI Cloud',

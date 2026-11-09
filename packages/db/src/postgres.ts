@@ -32,6 +32,8 @@ import type {
   ReportRecord,
   Repository,
   ScoreExecutionRecord,
+  TestnetWalletPatch,
+  TestnetWalletRecord,
   TriageSuggestionRecord,
   WarrantyCaseRecord,
   WarrantyPatch,
@@ -379,6 +381,18 @@ function triageFromRow(row: Row): TriageSuggestionRecord {
     unavailableReason: opt(row.unavailable_reason),
     createdAt: requiredIso(row.created_at),
     isDemo: Boolean(row.is_demo),
+  };
+}
+
+function testnetWalletFromRow(row: Row): TestnetWalletRecord {
+  return {
+    accountId: row.account_id,
+    publicKey: row.public_key,
+    network: 'testnet',
+    createdAt: requiredIso(row.created_at),
+    ...(opt(iso(row.last_faucet_at)) ? { lastFaucetAt: iso(row.last_faucet_at) } : {}),
+    ...(opt(row.last_faucet_ip_hash) ? { lastFaucetIpHash: row.last_faucet_ip_hash } : {}),
+    faucetCount: num(row.faucet_count),
   };
 }
 
@@ -1091,6 +1105,51 @@ export class PgRepository implements Repository {
       params,
     );
     return result.rows.map((row) => agentFromRow(row as Row));
+  }
+
+  async createTestnetWallet(wallet: TestnetWalletRecord): Promise<TestnetWalletRecord> {
+    const result = await this.executor.query(
+      `INSERT INTO testnet_wallets (account_id, public_key, network, created_at, last_faucet_at,
+         last_faucet_ip_hash, faucet_count)
+       VALUES ($1,$2,$3,$4,$5,$6,$7)
+       ON CONFLICT (account_id) DO UPDATE SET
+         public_key = EXCLUDED.public_key,
+         network = EXCLUDED.network,
+         last_faucet_at = COALESCE(EXCLUDED.last_faucet_at, testnet_wallets.last_faucet_at),
+         last_faucet_ip_hash = COALESCE(EXCLUDED.last_faucet_ip_hash, testnet_wallets.last_faucet_ip_hash),
+         faucet_count = GREATEST(EXCLUDED.faucet_count, testnet_wallets.faucet_count)
+       RETURNING *`,
+      [wallet.accountId, wallet.publicKey, wallet.network, wallet.createdAt,
+        wallet.lastFaucetAt ?? null, wallet.lastFaucetIpHash ?? null, wallet.faucetCount],
+    );
+    return testnetWalletFromRow(result.rows[0] as Row);
+  }
+
+  async getTestnetWallet(accountId: string): Promise<TestnetWalletRecord | null> {
+    const result = await this.executor.query(
+      'SELECT * FROM testnet_wallets WHERE account_id = $1',
+      [accountId],
+    );
+    return result.rows[0] ? testnetWalletFromRow(result.rows[0] as Row) : null;
+  }
+
+  async updateTestnetWallet(accountId: string, patch: TestnetWalletPatch): Promise<TestnetWalletRecord | null> {
+    const sets: string[] = [];
+    const params: unknown[] = [];
+    const add = (column: string, value: unknown) => {
+      params.push(value);
+      sets.push(`${column} = $${params.length}`);
+    };
+    if (patch.lastFaucetAt !== undefined) add('last_faucet_at', patch.lastFaucetAt);
+    if (patch.lastFaucetIpHash !== undefined) add('last_faucet_ip_hash', patch.lastFaucetIpHash);
+    if (patch.faucetCount !== undefined) add('faucet_count', patch.faucetCount);
+    if (sets.length === 0) return this.getTestnetWallet(accountId);
+    params.push(accountId);
+    const result = await this.executor.query(
+      `UPDATE testnet_wallets SET ${sets.join(', ')} WHERE account_id = $${params.length} RETURNING *`,
+      params,
+    );
+    return result.rows[0] ? testnetWalletFromRow(result.rows[0] as Row) : null;
   }
 
   async createAttestation(attestation: AttestationRecord): Promise<AttestationRecord> {

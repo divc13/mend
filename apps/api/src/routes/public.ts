@@ -45,6 +45,16 @@ export async function registerPublicRoutes(app: FastifyInstance, deps: AppDeps):
       },
       demoResetEnabled: deps.config.demo.resetEnabled && deps.config.nodeEnv !== 'production',
       durabilityIntervalMinutes: deps.config.durabilityMinutes,
+      testnet: {
+        network: deps.config.chain.network,
+        keysFileConfigured: Boolean(deps.config.chain.keysFile),
+        walletEnabled: deps.config.testnet.walletEnabled,
+        faucetEnabled: deps.config.testnet.faucetEnabled,
+        faucetAmountMicro: deps.config.testnet.faucetAmountMicro,
+        liveScenarioEnabled: deps.config.liveScenario.enabled,
+        roleAccounts: deps.config.chain.roleAccounts,
+        mainnetRefused: true,
+      },
       killSwitch: {
         enabled: deps.killSwitch.enabled,
         reason: deps.killSwitch.status.reason,
