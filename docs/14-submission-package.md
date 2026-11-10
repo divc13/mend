@@ -39,10 +39,12 @@ transaction links and final confirmation are HUMAN SUPPLIED — DO NOT INVENT.**
 > holdback. If durability fails, MEND reopens the original work order and warranty
 > history instead of creating a new bounty. Raw media and precise locations stay
 > off-chain; only redacted hashes and public state go on-chain. AI suggests but never
-> approves, awards or pays. The repository is in active integration: the protocol and
-> 100/80/72/8 accounting are tested locally; live testnet, hosted demo, video and
-> physical repair evidence remain blocked on human-supplied credentials, funds,
-> consent and approvals.
+> approves, awards or pays. A real NEAR testnet repair lifecycle completed with
+> 57 transactions and exact 100/20/72/8 accounting (`WO-BENCH-001-0003`, final
+> `CLOSED`). Live NEAR AI inference, a real Sputnik DAO, a live Intents deposit,
+> live OutLayer execution, a live NEP-366 relayer transaction, a live Agent
+> Market job, a hosted demo, narration and physical repair evidence remain
+> incomplete or human-gated. The authoritative matrix is `STATUS.md`.
 
 ## NEAR integration explanation
 
@@ -52,14 +54,14 @@ honestly.
 | NEAR capability | How MEND uses it | Evidence label |
 |---|---|---|
 | **Hub contract** (`contracts/hub`) | Assets, work orders, role registry, DAO authorization, sealed bids, score hash binding, escrow, 90/10 payment, durability, warranty, disputes, pause | Implemented; 30 tests + WASM build |
-| **Non-transferable passport** | NEP-171 token owned by the hub; every transfer/approval/burn path fails; history is public; no legal title | Source-verified; runtime `BLOCKED_ON_HUMAN` |
-| **NEP-141 escrow** | `ft_transfer_call` into the hub; exact token/sponsor/amount; underfund refund, overfund excess refund, duplicate refund | Source-verified; testnet `BLOCKED_ON_HUMAN` |
+| **Non-transferable passport** | NEP-171 token owned by the hub; every transfer/approval/burn path fails; history is public; no legal title | Testnet-proven: `BENCH-001` minted, hub-owned, `nft_transfer` rejected |
+| **NEP-141 escrow** | `ft_transfer_call` into the hub; exact token/sponsor/amount; underfund refund, overfund excess refund, duplicate refund | Testnet-proven: exact 100/20/72/8, escrow 0 |
 | **Sputnik DAO v2** | Approved `FunctionCall` proposal pushes `dao_authorize`; hub trusts only `config.dao` as predecessor | Live contracts/read path **VERIFIED**; DAO deployment `BLOCKED_ON_HUMAN` |
 | **OutLayer** | Hash-pinned `wasm32-wasip1` deterministic scorer; private promise callback; TEE attestation verified off-chain | Testnet read-only **VERIFIED**; funded execution `BLOCKED_ON_HUMAN` |
 | **NEAR AI Cloud** | Server-only private triage; schema-validated suggestions; signature/attestation evidence shown separately | Public endpoints **VERIFIED**; authenticated inference `BLOCKED_ON_HUMAN` |
 | **NEAR Intents / 1Click** | Cross-chain sponsorship quotes and status; dry preview by default; mainnet only | Read-only mainnet API **VERIFIED**; live deposit `BLOCKED_ON_HUMAN` |
 | **NEAR Agent Market** | External evidence-completeness review; no worker accept endpoint; human acceptance | Public reads **VERIFIED**; live job `BLOCKED_ON_HUMAN` |
-| **Function-call keys / NEP-366** | Separate agent sub-accounts, scoped keys, allowlisted relayer; zero-deposit gasless actions where valid | Source-verified; deployment `BLOCKED_ON_HUMAN` |
+| **Function-call keys / NEP-366** | Separate agent sub-accounts, scoped keys, allowlisted relayer; zero-deposit gasless actions where valid | Scoped keys proven on testnet; live NEP-366 relayer transaction `BLOCKED_ON_HUMAN` |
 
 MEND does **not** claim a complete NEAR AI end-to-end attestation chain, a live
 OutLayer score, a live Intents deposit or a live Agent Market job. Those are
@@ -126,12 +128,12 @@ are not in this document.
 | Baseline | MEND was bootstrapped as a new monorepo at commit `c21b694` (“bootstrap monorepo, freeze MEND protocol v1 and canonical fixtures”). No pre-existing MEND product codebase was imported. |
 | Protocol | Written for MEND; schemas, state machine, accounting, hashing, scoring and canonical fixtures live in `packages/protocol`. |
 | Research | External behaviour was validated in `orchestration/research/R0-A..R0-E` on 2026-11-09; claims carry live/source/unverified labels. |
-| Web framework (planned) | Next.js 16 per ADR-001; verify the pinned version and license in the integrated package. |
-| API framework (planned) | Fastify 5 per ADR-001; verify the pinned version and license. |
+| Web framework | Next.js `16.4.5` in `apps/web` per ADR-001; verify the license in the lockfile. |
+| API framework | Fastify `^5.12.8` in `apps/api` per ADR-001; verify the license in the lockfile. |
 | Language/runtime | TypeScript strict, Node `>=22` declared (Node 26 used in this environment). NEAR AI verifier SDK requires `>=24.22.1`. |
-| Tests | Vitest 5; protocol tests pass locally. Other suites are pending integration. |
-| NEAR SDK (planned) | `near-sdk` 5.30.x per the hub interface; verify version and license in the lockfile. |
-| NEAR AI SDK | `@nearai/inference-sdk@0.3.0` is MIT per R0-A; server-only. Not installed in this worktree. |
+| Tests | Vitest + Cargo suites pass locally across protocol, contracts, clients, API, DB, indexer, agents, quality and live-testnet checks; exact totals are in `orchestration/reports/G4-evidence.md`. |
+| NEAR SDK | `near-sdk` per the workspace pin; used by `contracts/hub` and `contracts/test-token`; verify version and license in the lockfile. |
+| NEAR AI SDK | `@nearai/inference-sdk@0.3.0` is MIT per R0-A; server-only. The client boundary exists; live authenticated calls remain blocked. |
 | OutLayer verify | `outlayer-verify` is Apache-2.0 per R0-B; not installed or run here. |
 | 1Click SDK | `@defuse-protocol/one-click-sdk-typescript` 0.1.26 was used for signature verification research; verify license and pin before shipping. |
 | Agent Market | External production service; no vendor code copied. |
@@ -140,17 +142,17 @@ are not in this document.
 
 ## License
 
-Project license: **MIT**. The repository `LICENSE` file is held by the integration
-branch (it was staged after this docs worktree was cut); the orchestrator must
-include it in the public repository. Third-party dependencies keep their own
-licenses; the disclosure table above must be reconciled with the final lockfile.
+Project license: **MIT**. The repository `LICENSE` file is present at the repo
+root. Third-party dependencies keep their own licenses; the disclosure table
+above must be reconciled with the final lockfile.
 
 ## What this package does not claim
 
-- no live testnet lifecycle yet;
+- a real NEAR testnet escrow lifecycle is proven; live NEAR AI inference,
+  Sputnik DAO, Intents deposit, OutLayer execution and Agent Market job are not;
 - no mainnet execution;
 - no hosted demo;
-- no demo video;
+- no narrated or captioned demo video (a silent REPLAY MP4 exists);
 - no physical repair or durability inspection;
 - no real users, city adoption or partnership;
 - no security audit or accessibility certification;

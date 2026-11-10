@@ -19,7 +19,7 @@ remain human production steps.
 | Real repair media | **BLOCKED_ON_HUMAN** | No repair performed; no consent |
 
 The harness is deliberately fail-soft: it reports `PENDING` with a reason instead
-of producing a fake recording.
+of producing a fake recording. Before integration it reported:
 
 ```text
 $ node scripts/demo/capture-replay-demo.mjs
@@ -32,8 +32,9 @@ ffmpeg for MP4 conversion: MISSING
 No recording was produced. Merge the web app, install Playwright, then rerun.
 ```
 
-The output above is the real command output with the repository path abbreviated;
-it is not a simulated transcript.
+That was the real output at the time. It is retained as history, not as the
+current state: the web app, Playwright and `ffmpeg-static` are now available and
+the silent MP4 above was produced. The command still refuses to fake a result.
 
 ## What the harness does
 
@@ -121,10 +122,9 @@ before recording. Do not paper over a missing state with an edited screenshot.
 | Loudness | Narration roughly −16 LUFS integrated; music lower |
 | Length | 90 seconds target |
 
-The browser records WebM. Conversion to the delivery MP4 requires ffmpeg, which is
-**not installed** in this environment. The conversion commands are intentionally
-not documented until ffmpeg is available and the exact pipeline is tested. The
-required operations are:
+The browser records WebM. Conversion to the delivery MP4 used `ffmpeg-static`
+during capture; the resulting silent MP4 is 1920×1080 H.264 with no audio track.
+For a narrated final cut, the pipeline still has to:
 
 - transcode video to H.264 with `yuv420p`;
 - encode narration/music to AAC;
@@ -132,8 +132,8 @@ required operations are:
 - either burn captions or mux the `.vtt` track;
 - verify duration, resolution, audio and caption sync.
 
-Document the dependency as `ffmpeg` and verify it in CI or the production
-environment before claiming the video is ready.
+The current MP4 satisfies the video properties only, not the audio or caption
+properties. Do not claim a narrated video exists.
 
 ## Audio and narration
 
@@ -182,14 +182,14 @@ The manifest is evidence about the capture, not about the physical repair.
 
 ## Acceptance checklist
 
-- [ ] Web app is integrated and reachable.
-- [ ] Playwright is a pinned project dependency.
-- [ ] Mode badge is visible in every frame.
-- [ ] All five REPLAY scenarios run.
-- [ ] No live transaction link appears in REPLAY.
+- [x] Web app is integrated and reachable.
+- [x] Playwright is available from the `tests` package.
+- [x] Mode badge is visible in every frame.
+- [x] All five REPLAY scenarios run.
+- [x] No live transaction link appears in REPLAY.
 - [ ] Narration matches the 90-second script.
 - [ ] Captions are burned in and provided as `.vtt`.
-- [ ] ffmpeg is installed and the MP4 is verified.
+- [x] The silent MP4 was produced and verified (video only; no audio track).
 - [ ] Repair media is real or labelled staged.
 - [ ] A human reviews the final cut.
 

@@ -173,7 +173,8 @@ deposit address. See
 |---|---|---|
 | 100 → 20 refund → 80 escrow → 72 completion → 8 holdback is exact | **VERIFIED (local)** | `packages/protocol/test/accounting.test.ts`; `npm test -w @mend/protocol` |
 | Ledger invariant is tested | **VERIFIED (local)** | `isLedgerBalanced` / `assertLedgerBalanced` tests |
-| On-chain payment behaviour is proven on testnet | **BLOCKED_ON_HUMAN** | Requires deployed hub, token, funded accounts and transactions |
+| On-chain payment behaviour is proven on NEAR testnet | **VERIFIED (testnet)** | `WO-BENCH-001-0003` `CLOSED`, 57 tx, exact NEP-141 events for refund 20 / completion 72 / holdback 8, escrow 0; see `orchestration/reports/G3-evidence.md` and `tests/live/LIVE-EVIDENCE.md` |
+| Mainnet payment behaviour | **BLOCKED_ON_HUMAN** | No mainnet deployment, funds or approval |
 
 ---
 

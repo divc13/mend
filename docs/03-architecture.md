@@ -226,7 +226,7 @@ empty database must reproduce the same public state.
 | NEAR Intents / 1Click | Cross-chain sponsorship | **VERIFIED** read-only mainnet API; live deposit **BLOCKED_ON_HUMAN**; testnet **UNAVAILABLE** | [16](./16-integration-evidence.md#near-intents--1click) |
 | Sputnik DAO v2 | Budget/policy authorization | **VERIFIED** contracts and push path; deployment **BLOCKED_ON_HUMAN** | [16](./16-integration-evidence.md#sputnik-dao-v2) |
 | NEAR Agent Market | External evidence-completeness review | **VERIFIED** public reads; worker job **BLOCKED_ON_HUMAN**; accept endpoint **UNAVAILABLE** | [16](./16-integration-evidence.md#near-agent-market) |
-| NEAR platform | Passport, escrow, keys, meta-transactions | **VERIFIED** from pinned source/docs; runtime proof **BLOCKED_ON_HUMAN** for deployment | [16](./16-integration-evidence.md#near-platform) |
+| NEAR platform | Passport, escrow, keys, meta-transactions | **VERIFIED** from pinned source/docs; testnet passport/escrow runtime **PASS_WITH_CAVEATS**; live NEP-366 and mainnet **BLOCKED_ON_HUMAN** | [16](./16-integration-evidence.md#near-platform) |
 
 ## Deployment topology
 
@@ -239,8 +239,10 @@ Mainnet: separate account, token, hub and UI configuration; never the default;
          every transaction requires explicit human approval
 ```
 
-The local stack, hosted deployment and testnet accounts do not exist on this
-branch. Exact commands and human gates are in
+The local stack exists on this branch and runs in REPLAY; the NEAR **testnet**
+accounts, token and hub are deployed (`mend-hub.testnet`, `mend-usdc.testnet`)
+and completed `WO-BENCH-001-0003`. A **hosted** deployment does not exist, and no
+mainnet account or transaction exists. Exact commands and human gates are in
 [10 — Deployment guide](./10-deployment-guide.md).
 
 ## Observability
@@ -254,14 +256,23 @@ branch. Exact commands and human gates are in
 
 ## Current implementation state
 
-Only these are present on this branch:
+The following are present on this branch and covered by local evidence:
 
 - `packages/protocol` — frozen protocol and 26 passing tests.
-- `docs/` — this documentation package.
-- `scripts/demo/` — docs sanity check and REPLAY capture harness.
-- `fixtures/demo/` — evidence and submission templates with no invented data.
+- `apps/web`, `apps/api` — public case experience, consoles and the HTTP API.
+- `contracts/hub`, `contracts/test-token` — hub and test NEP-141, 35 tests.
+- `compute/bid-rules` — deterministic Rust/WASM scorer, 12 tests.
+- `services/` — agents, DAO watcher, relayer, indexer and Agent Market worker.
+- `packages/ai-client`, `packages/intents-client` — AI and payment clients.
+- `infra/` — local compose stack and testnet deployment state.
+- `tests/` — integration, E2E, security, live and clean-room suites.
+- `docs/`, `scripts/demo/`, `fixtures/demo/` — documentation, checks and
+  evidence templates.
 
-Everything else is IMPLEMENTED. See
+The NEAR testnet hub/token deployment and the completed
+`WO-BENCH-001-0003` lifecycle are real. Hosted deployment, mainnet, live AI,
+Sputnik DAO, Intents deposit, OutLayer execution, NEP-366 relayer and Agent
+Market job are not done. See [`STATUS.md`](../STATUS.md),
 [11 — Limitations](./11-limitations.md) and
 [16 — Integration evidence matrix](./16-integration-evidence.md).
 

@@ -178,12 +178,13 @@ valid”, not “gasless funding”. Never imply the passport is legal ownership
 | G1 | Protocol schemas, state machine, accounting, scoring and fixtures pass locally | **VERIFIED (local)** | `npm test -w @mend/protocol` → 4 files, 26 tests passed |
 | G2 | Documentation and relative links are valid | **VERIFIED (local)** | `node scripts/demo/check-docs.mjs` |
 | G3 | Web app, API, contracts, compute, services | **VERIFIED (local)** | Integrated on `main`; G1/G2/G4 evidence |
-| G4 | Live testnet lifecycle with real links | **BLOCKED_ON_HUMAN** | No accounts/funds/deployment |
-| G5 | Hosted demo | **BLOCKED_ON_HUMAN** | No deployment credentials |
-| G6 | Demo video | **RECORDED (silent)** | `fixtures/demo/captures/mend-replay-demo.mp4`, 91.6 s; narration/captions pending human |
-| G7 | Real repair media and durability inspection | **BLOCKED_ON_HUMAN / NOT COLLECTED** | No repair performed; no consent |
-| G8 | Security audit or accessibility certification | **UNAVAILABLE** | None performed |
-| G9 | City adoption or partnership | **UNAVAILABLE** | No such relationship exists or is claimed |
+| G4 | Real NEAR testnet escrow lifecycle with real links | **VERIFIED (testnet) with caveats** | `WO-BENCH-001-0003` `CLOSED`, 57 tx, exact 100/20/72/8, escrow 0; [G3 evidence](../orchestration/reports/G3-evidence.md) |
+| G5 | Live NEAR AI inference, Sputnik DAO, Intents deposit, OutLayer execution, NEP-366 relayer, Agent Market job | **BLOCKED_ON_HUMAN** | Not exercised; no fake evidence |
+| G6 | Hosted demo | **BLOCKED_ON_HUMAN** | No deployment credentials |
+| G7 | Demo video | **RECORDED (silent)** | `fixtures/demo/captures/mend-replay-demo.mp4`, 91.6 s; narration/captions pending human |
+| G8 | Real repair media and durability inspection | **BLOCKED_ON_HUMAN / NOT COLLECTED** | No repair performed; no consent |
+| G9 | Security audit or accessibility certification | **UNAVAILABLE** | None performed |
+| G10 | City adoption or partnership | **UNAVAILABLE** | No such relationship exists or is claimed |
 
 ## Claims we must not make
 

@@ -10,9 +10,10 @@ and what is **blocked on a human**. It never presents a pending path as working.
 | Docs/protocol checks | **VERIFIED NOW** | `npm ci`, protocol tests, typecheck, docs checker |
 | Local web/API/workers stack | **IMPLEMENTED** | Compose file and apps integrated; config validated |
 | REPLAY mode | **IMPLEMENTED** | Demo room, fixtures, 90s recording |
-| NEAR testnet deployment | `BLOCKED_ON_HUMAN` | No accounts, faucet funds, token or hub deployed |
-| OutLayer execution | `BLOCKED_ON_HUMAN` | No funded testnet execution or published MEND WASM |
-| Sputnik DAO | `BLOCKED_ON_HUMAN` | No DAO, proposal or council |
+| NEAR **testnet** deployment | **PASS_WITH_CAVEATS** | Hub/token live; `WO-BENCH-001-0003` completed `CLOSED` with 57 tx |
+| Sputnik DAO | `BLOCKED_ON_HUMAN` | Factory failed; `mend-dao.testnet` plain-account fallback used |
+| OutLayer execution | `BLOCKED_ON_HUMAN` | No funded testnet execution or published MEND WASM; score was `LOCAL_DETERMINISTIC` |
+| Live NEP-366 relayer transaction | `BLOCKED_ON_HUMAN` | Relayer code/tests pass; no live meta-transaction |
 | Agent Market job | `BLOCKED_ON_HUMAN` | No account, worker token or balance |
 | 1Click live deposit | `BLOCKED_ON_HUMAN` | Mainnet only; no funds and no human approval |
 | Hosted demo | `BLOCKED_ON_HUMAN` | No deployment credentials |
@@ -24,10 +25,10 @@ and what is **blocked on a human**. It never presents a pending path as working.
 | Node.js | `package.json` declares `>=22`; the current environment used Node 26. The NEAR AI verifier SDK requires `>=24.22.1`; bump the runtime or hand-roll verification. |
 | npm | Workspaces; `npm ci` from the repository root |
 | Docker (optional) | Only for the pending local stack |
-| NEAR CLI | Use the syntax recorded in R0-D/R0-E for the current `near-cli-rs`; those commands were not executed |
-| OutLayer CLI | See R0-B for publish/version flow; not executed |
-| Playwright | Not resolvable in this worktree; see [15 — Capture plan](./15-demo-capture-plan.md) |
-| ffmpeg | Not installed in this environment; see [15 — Capture plan](./15-demo-capture-plan.md) |
+| NEAR CLI | Testnet deployment used the `near-cli-rs` syntax recorded in R0-D/R0-E; re-verify before mainnet |
+| OutLayer CLI | See R0-B for publish/version flow; the publish path was not executed |
+| Playwright | Available via `npm --prefix tests`; used for E2E and the live UI checks |
+| ffmpeg | `ffmpeg-static` was used to produce the silent MP4; not a required repo dependency |
 
 ## Today: run the checks that exist
 
@@ -44,7 +45,7 @@ npm run typecheck -w @mend/protocol
 # 4. Check documentation and relative links
 node scripts/demo/check-docs.mjs
 
-# 5. Check the REPLAY capture harness status (recording is pending)
+# 5. Check the current REPLAY capture status
 node scripts/demo/capture-replay-demo.mjs
 ```
 
@@ -59,11 +60,10 @@ The one-command stack is:
 docker compose -f infra/docker-compose.yml up -d
 ```
 
-It is expected to start Postgres, private object storage, the API, workers and the
-web app. The compose file, environment example and service code are owned by the
-Infrastructure, Backend, Frontend and Agents tracks. Do not claim this command
-works until the orchestrator has merged those tracks and the clean-room test
-passes.
+The compose file, environment example and service code are integrated. The local
+stack has been run for the G2 vertical slice and the E2E suites; hosted
+deployment is still absent. Verify against your own environment before publishing
+a run.
 
 Intended local URLs (verify against the integrated stack before publishing):
 
@@ -100,7 +100,7 @@ Names may change when `packages/config` lands; verify against the merged code.
 
 REPLAY exists so a judge can run every scenario with **no credentials**:
 
-1. Start the integrated local stack (pending).
+1. Start the integrated local stack (see above).
 2. Select `REPLAY / SIMULATION`.
 3. Choose scenario A–E: successful repair, failed durability, prompt injection,
    sponsorship uncertainty, judge replay.
@@ -112,10 +112,19 @@ REPLAY is an additional judging tool, not a substitute for the implemented
 testnet/live integrations. See [13 — Demo script](./13-demo-script.md) and
 [15 — Capture plan](./15-demo-capture-plan.md).
 
-## Testnet deployment (blocked on human)
+## Testnet deployment (executed, with caveats)
 
-These steps require human-created accounts, faucet funds and explicit approval.
-They have **not** been executed.
+The base deployment and canonical lifecycle below **were executed on NEAR
+testnet** on 2026-11-09: `mend-hub.testnet`, `mend-usdc.testnet`, roles, asset
+`BENCH-001`, work order `WO-BENCH-001-0003`, 57 transactions, final `CLOSED`,
+exact 100/20/72/8 and escrow 0. See
+[G3 evidence](../orchestration/reports/G3-evidence.md) and
+`infra/testnet/live-state.json`.
+
+The runbook is retained for reproducibility. Steps 7 (real Sputnik DAO),
+8 (OutLayer publication) and the live NEP-366 relayer path were **not** completed
+and remain `BLOCKED_ON_HUMAN`; the testnet run used the plain
+`mend-dao.testnet` fallback and a local deterministic score.
 
 1. **Create accounts** for hub, test token, steward, sponsor, coordinator AI,
    reviewer AI, relayer, contractors A/B/C, inspectors 1/2. Keep human and agent

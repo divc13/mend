@@ -1,8 +1,9 @@
 # G4 — Feature evidence (F01–F14)
 
-Date: 2026-11-09
-Main commit at verification: `a04131d` + guard/quality merges
-Mode: local + **REPLAY / SIMULATION**; no real transaction is claimed.
+Date: 2026-11-09; status reconciled 2026-11-10
+Main commit at verification: `a04131d` + guard/quality merges + live testnet lifecycle
+Mode: local + **REPLAY / SIMULATION** + real NEAR **testnet** lifecycle evidence.
+The authoritative per-feature matrix is [`STATUS.md`](../../STATUS.md). **G4 is PARTIAL**, not complete.
 
 ## Automated evidence totals
 
@@ -30,26 +31,26 @@ Mode: local + **REPLAY / SIMULATION**; no real transaction is claimed.
 | Feature | Evidence | Status |
 |---|---|---|
 | F01 Walletless reporting | `POST /v1/reports` returned R-005 + private `case_...` link with no wallet; report flow UI + API tests | **PASS** |
-| F02 Private AI triage | `packages/ai-client` 41 tests (schema validation, EXIF, pHash, duplicate engine, scope, evidence review, attestation states, prompt injection); API 33 tests incl. guard + `prompt_injection_blocked`; no key → honest UNAVAILABLE | **PASS (live inference BLOCKED_ON_HUMAN)** |
-| F03 Asset passport | Hub NEP-171 tests incl. transfer rejection; API `POST /v1/passport/BENCH-001/transfer` → `TRANSFER_DISABLED` | **PASS** |
-| F04 Steward + DAO authorization | Contract `dao_authorize` predecessor check tests; DAO watcher 10 tests; exact Sputnik FunctionCall payload fixture | **PASS (live DAO BLOCKED_ON_HUMAN)** |
-| F05 Cross-chain sponsorship | Intents client 99 tests (quote/dry/status/reconciliation/mainnet guard/signature); live read-only smoke: 216 tokens, dry quote 0.15→0.149968, SUCCESS status, no funds moved | **PASS (live deposit BLOCKED_ON_HUMAN)** |
-| F06 Sealed contractor market | Three deterministic strategies match fixtures; commit/reveal hash tests; contract early/late/mismatch/duplicate tests | **PASS** |
-| F07 Deterministic bid evaluation | `docs/RULES.md`; Rust 12 tests + TS parity; canonical B 9270 > C 5200 > A 2873; hub policy/WASM/input/output binding tests; OutLayer request/callback tests | **PASS (live OutLayer publish BLOCKED_ON_HUMAN)** |
-| F08 Secure identities/permissions | near-client provisioning/guard 31 tests; relayer 14 tests (allowlist, replay, quotas, kill switch); contract role/self-inspection tests | **PASS** |
-| F09 Stablecoin escrow + gasless | Hub escrow 30 tests; G2 API lifecycle exact 100/20/72/8; relayer NEP-366 tests; gasless-funding limitation documented honestly | **PASS (testnet deploy BLOCKED_ON_HUMAN)** |
-| F10 Independent inspection + Agent Market | Inspector agent 9 tests (missing items only, no certification language); market worker 11 tests (poll/start/submit, redacted brief, no accept); API inspection flow + human acceptance | **PASS (live market job BLOCKED_ON_HUMAN)** |
-| F11 Settlement + warranty | Contract failed-durability test reopens same work order, no new escrow, releases holdback once; E2E contract replay | **PASS** |
+| F02 Private AI triage | `packages/ai-client` 41 tests (schema validation, EXIF, pHash, duplicate engine, scope, evidence review, attestation states, prompt injection); API 33 tests incl. guard + `prompt_injection_blocked`; no key → honest UNAVAILABLE | **PARTIAL — live inference BLOCKED_ON_HUMAN** |
+| F03 Asset passport | Hub NEP-171 tests incl. transfer rejection; API `POST /v1/passport/BENCH-001/transfer` → `TRANSFER_DISABLED`; testnet `BENCH-001` minted, hub-owned, transfer rejected | **PASS** |
+| F04 Steward + DAO authorization | Contract `dao_authorize` predecessor check tests; DAO watcher 10 tests; exact Sputnik FunctionCall payload fixture; testnet used `mend-dao.testnet` fallback | **PARTIAL — real Sputnik DAO BLOCKED_ON_HUMAN** |
+| F05 Cross-chain sponsorship | Intents client 99 tests (quote/dry/status/reconciliation/mainnet guard/signature); live read-only smoke: 216 tokens, dry quote 0.15→0.149968, SUCCESS status, no funds moved | **PARTIAL — live deposit BLOCKED_ON_HUMAN** |
+| F06 Sealed contractor market | Three deterministic strategies match fixtures; commit/reveal hash tests; contract early/late/mismatch/duplicate tests; testnet three contractor commits/reveals | **PASS** |
+| F07 Deterministic bid evaluation | `docs/RULES.md`; Rust 12 tests + TS parity; canonical B 9270 > C 5200 > A 2873; hub policy/WASM/input/output binding tests; OutLayer request/callback tests | **PASS_WITH_CAVEATS — testnet score LOCAL_DETERMINISTIC; live OutLayer publish BLOCKED_ON_HUMAN** |
+| F08 Secure identities/permissions | near-client provisioning/guard 31 tests; relayer 14 tests (allowlist, replay, quotas, kill switch); contract role/self-inspection tests; scoped keys exercised on testnet | **PASS** |
+| F09 Stablecoin escrow + gasless | Hub escrow 30 tests; real testnet lifecycle exact 100/20/72/8 with escrow 0; relayer NEP-366 tests; gasless-funding limitation documented honestly | **PASS_WITH_CAVEATS — live NEP-366 relayer tx BLOCKED_ON_HUMAN** |
+| F10 Independent inspection + Agent Market | Inspector agent 9 tests (missing items only, no certification language); market worker 11 tests (poll/start/submit, redacted brief, no accept); API inspection flow + human acceptance; testnet completion/durability inspections | **PARTIAL — live market job BLOCKED_ON_HUMAN** |
+| F11 Settlement + warranty | Contract failed-durability test reopens same work order, no new escrow, releases holdback once; E2E contract replay; testnet durability pass released 8 and closed | **PASS_WITH_CAVEATS — failed-durability branch proven in contract/replay, not live testnet** |
 | F12 Public case experience | Next build; Playwright 32 passed incl. axe (no serious/critical), keyboard-only, mobile 390×844, REPLAY banner; case page renders 100/20/72/8 | **PASS** |
-| F13 Demo, replay, simulation | 9 scenarios in demo room; 90-second H.264 REPLAY video (`fixtures/demo/captures/mend-replay-demo.mp4`); capture manifest; deterministic reset; modes unmistakable | **PASS** |
-| F14 Production-quality submission | Docs 25 files, link check PASS, threat/privacy models, README Do X→See Y, CI, clean-room PASS, license, submission drafts | **PARTIAL — hosted demo, narrated video, real media, final human submission fields BLOCKED_ON_HUMAN** |
+| F13 Demo, replay, simulation | 9 scenarios in demo room; silent 91.6 s H.264 REPLAY video (`fixtures/demo/captures/mend-replay-demo.mp4`); capture manifest; deterministic reset; modes unmistakable | **PARTIAL — narration/captions/physical media BLOCKED_ON_HUMAN** |
+| F14 Production-quality submission | Docs 25 files, link check PASS, threat/privacy models, README Do X→See Y, local CI workflow, clean-room PASS, license, submission drafts, private GitHub push | **PARTIAL — CI pending; hosted demo, public repo, X post, final submission BLOCKED_ON_HUMAN** |
 
 ## Honest limits
 
-- G3 (real testnet lifecycle with transaction links) is **BLOCKED_ON_HUMAN**: no testnet accounts/faucet funds/deployment credentials were provided. No transaction is fabricated.
-- Live NEAR AI inference/signature, OutLayer publication/execution, Agent Market job, Sputnik DAO deployment and any mainnet Intents deposit are **BLOCKED_ON_HUMAN**.
-- Hosted demo and public repository/post/submission require human approval.
+- G3 (real testnet lifecycle with transaction links) is **PASS_WITH_CAVEATS**: `WO-BENCH-001-0003` is `CLOSED` with 57 real transactions and exact 100/20/72/8 accounting. Caveats: Sputnik factory failed (`mend-dao.testnet` fallback), OutLayer live was not used (`LOCAL_DETERMINISTIC`), the hub signing key was unavailable, wallet creation was rate-limited by the public faucet and no hosted demo exists.
+- Live NEAR AI inference/signature, OutLayer publication/execution, Agent Market job, a real Sputnik DAO deployment and any mainnet Intents deposit are **BLOCKED_ON_HUMAN**.
+- Hosted demo, public repository, X post and submission require human approval. CI is not green: the first GitHub Actions run failed and a follow-up run was in progress.
 - The 90s demo video is a silent screen recording; narration/captions and real repair media are human production steps.
 - 8 Playwright API-alternative tests skip because those scenarios are not seeded in the running instance; the contract replay tests prove the same lifecycle paths.
 
-**G4: PASS for all locally and testnet executable features; human-gated hosting, narration, real repair media, Sputnik factory, OutLayer live and Agent Market live remain blocked, not faked.**
+**G4: PARTIAL. Local and testnet escrow evidence passes; F02, F04, F05, F10, F13 and F14 remain incomplete because required live integrations and human-gated deliverables are missing. Nothing is faked.**

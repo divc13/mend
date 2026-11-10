@@ -112,9 +112,13 @@ response. MEND does not certify physical safety.
 ## Current status
 
 The protocol, canonical fixtures and accounting are frozen and tested. The
-application, contracts, agents and external integrations are being built in
-parallel worktrees. No live testnet lifecycle, hosted demo or physical repair
-media exists yet. The exact evidence state is in
+application, contracts, agents and external integrations are implemented locally
+and covered by the evidence in `orchestration/reports/`. A real NEAR **testnet**
+repair lifecycle completed (`WO-BENCH-001-0003`, `CLOSED`, 57 transactions,
+exact 100/20/72/8). Live NEAR AI inference, a real Sputnik DAO, an Intents
+deposit, OutLayer execution, a NEP-366 relayer transaction, an Agent Market job,
+a hosted demo, narration and physical repair media are not done. The
+authoritative state is [`STATUS.md`](../STATUS.md); the evidence detail is in
 [16 — Integration evidence matrix](./16-integration-evidence.md) and
 [11 — Limitations](./11-limitations.md).
 

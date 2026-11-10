@@ -6,12 +6,17 @@ This directory is the product documentation for MEND. It describes the intended
 integrated system, the frozen protocol, and — explicitly — which claims are proven
 today, which are unavailable, and which are waiting on a human.
 
-> **Repository status (2026-11-09):** the protocol, contracts, AI/compute, API,
-> web app, agents, payments client, infrastructure and docs are integrated on
-> this branch and covered by the evidence in `orchestration/reports/`. Live
-> testnet transactions, a hosted demo, a narrated demo video and collected
-> repair media do not exist yet. Do not read this documentation as evidence that
-> those exist.
+> **Repository status (2026-11-10):** the protocol, contracts, AI/compute, API,
+> web app, agents, payments client, infrastructure and docs are integrated and
+> covered by the evidence in `orchestration/reports/`. A real NEAR **testnet**
+> repair lifecycle completed with 57 transactions and exact 100/20/72/8
+> accounting (`WO-BENCH-001-0003`, final `CLOSED`); testnet only, test value
+> only. Live NEAR AI inference, a real Sputnik DAO, a live Intents deposit,
+> live OutLayer execution, a live NEP-366 relayer transaction, a live Agent
+> Market job, a hosted demo, a narrated video and collected repair media are
+> **not** done. CI is pending. The single authoritative matrix is
+> [`STATUS.md`](../STATUS.md); do not infer unproven capabilities from this
+> documentation.
 
 ## Start here
 
@@ -40,7 +45,7 @@ today, which are unavailable, and which are waiting on a human.
 - [Bid evaluation rules (`RULES.md`)](./RULES.md) — version `mend-bid-policy-v1`, intended to be executed by the hash-pinned WASM scorer.
 - [Root README](../README.md) — exact `Do X → See Y` commands and mode labels.
 - [Master plan](../PLAN.md) — `PLAN.md` is the scope authority.
-- Decision records in the orchestrator workspace: `orchestration/decisions/ADR-001-architecture.md`, `orchestration/decisions/G0-freeze.md` and `orchestration/decisions/HUB-INTERFACE.md`. These files are not tracked on this branch; they are the frozen inputs to this documentation.
+- Decision records: `orchestration/decisions/ADR-001-architecture.md`, `orchestration/decisions/G0-freeze.md` and `orchestration/decisions/HUB-INTERFACE.md`. These are the frozen inputs to this documentation.
 - [Canonical fixtures](../packages/protocol/src/fixtures.ts) — accounts, IDs, bids, expected ranking and amounts.
 - Research, all accessed 2026-11-09, in the orchestrator workspace: `orchestration/research/R0-A-near-ai.md`, `R0-B-outlayer.md`, `R0-C-intents.md`, `R0-D-dao-agent-market.md` and `R0-E-near-platform.md`. The evidence matrix in [16](./16-integration-evidence.md) summarizes every claim used here.
 
@@ -49,7 +54,7 @@ today, which are unavailable, and which are waiting on a human.
 - [Evidence package templates](../fixtures/demo/README.md) — media checklist, consent record, manifest and real-vs-staged log.
 - [Docs checker](../scripts/demo/check-docs.mjs) — `node scripts/demo/check-docs.mjs`.
 - [REPLAY capture harness](../scripts/demo/capture-replay-demo.mjs) — records the web app once it is integrated.
-- [Demo capture plan](./15-demo-capture-plan.md) — current status is **PENDING**.
+- [Demo capture plan](./15-demo-capture-plan.md) — the silent MP4 is **RECORDED**; narration/captions remain **PENDING (human)**.
 
 ## Evidence labels used in this documentation
 
@@ -79,7 +84,8 @@ more fully in [16 — Integration evidence matrix](./16-integration-evidence.md)
 | The canonical 100 → 80 → 20 → 72 → 8 accounting is exact integer math | **VERIFIED (local)** | [05](./05-payment-accounting.md), `packages/protocol/test/accounting.test.ts` |
 | Canonical bids A/B/C score 2873 / 9270 / 5200 and B wins | **VERIFIED (local)** | `packages/protocol/test/scoring.test.ts`, [RULES.md](./RULES.md) |
 | Documented external endpoints, versions and limits are traceable to the research docs | **VERIFIED (research)** | [16](./16-integration-evidence.md) |
-| MEND live testnet lifecycle, hosted demo, video, repair media | **BLOCKED_ON_HUMAN / NOT COLLECTED** | No transactions or media exist yet |
+| MEND real testnet escrow lifecycle | **VERIFIED (testnet)** | `WO-BENCH-001-0003` `CLOSED`, 57 tx, exact 100/20/72/8; [G3 evidence](../orchestration/reports/G3-evidence.md) |
+| Hosted demo, narrated video, real repair media | **BLOCKED_ON_HUMAN / NOT COLLECTED** | No hosted deployment; the MP4 is silent; no repair was performed for MEND |
 
 ## Cross-document rule
 

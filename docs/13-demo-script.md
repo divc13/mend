@@ -4,8 +4,10 @@ Target length: **90 seconds**. Timestamps match `PLAN.md` §9 exactly. The scrip
 shows one complete, understandable repair — not an architecture tour, wallet setup
 or track explanation.
 
-> **Status:** script and placeholders only. No recording exists. No transaction
-> link, quote ID, asset link or repair media may be inserted until it is real and
+> **Status:** a 91.6 s silent H.264 screen recording of the REPLAY app exists at
+> `fixtures/demo/captures/mend-replay-demo.mp4`. Narration, captions, a final
+> edited cut and real repair media do **not** exist yet. No transaction link,
+> quote ID, asset link or repair media may be inserted until it is real and
 > human-approved. See [15 — Capture plan](./15-demo-capture-plan.md) and
 > [12 — Real-world evidence package](./12-real-world-evidence-package.md).
 
