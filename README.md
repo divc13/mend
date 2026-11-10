@@ -16,13 +16,20 @@ holdback release OR warranty reopening → permanent asset history
 same warranty history. It does not create a fresh bounty that lets the failure
 disappear.
 
-> **Honest status (2026-11-09).** The protocol, contracts, AI/compute, API,
+> **Honest status (2026-11-10).** The protocol, contracts, AI/compute, API,
 > web app, agents, payments client, infra and docs are implemented and
 > integrated. A real NEAR **testnet** repair lifecycle completed with 57
 > transactions and exact 100/20/72/8 accounting (`WO-BENCH-001-0003`, final
-> `CLOSED`). The wallet/faucet UI is live against testnet. Hosted demo,
-> narrated video, real repair media and the final submission remain
-> human-gated. See [G3 evidence](./orchestration/reports/G3-evidence.md) and
+> `CLOSED`; testnet only, test value only). The wallet/faucet UI runs against
+> testnet. **Still incomplete:** live NEAR AI inference/signature/attestation,
+> a real Sputnik DAO, a live Intents deposit/settlement, live OutLayer TEE
+> execution, a live NEP-366 relayer transaction, a live Agent Market job,
+> narration/captions/physical repair media, and the hosted demo/public
+> repo/post/submission. CI is not green: the first GitHub Actions run failed and
+> a follow-up was in progress. The single
+> authoritative matrix is [`STATUS.md`](./STATUS.md); do not infer unproven
+> capabilities from this README. See also
+> [G3 evidence](./orchestration/reports/G3-evidence.md) and
 > [Limitations](./docs/11-limitations.md).
 
 ## Modes
@@ -35,8 +42,8 @@ disappear.
 
 ## Do X → See Y
 
-The first block works **today** on this branch. The second block becomes available
-after the orchestrator integrates the application and contracts.
+The first block works locally today. The second block is implemented in this
+repository; statuses distinguish verified paths from human-gated ones.
 
 ### Works today
 
@@ -46,7 +53,7 @@ after the orchestrator integrates the application and contracts.
 | `npm test -w @mend/protocol` | `Test Files 4 passed (4)`, `Tests 26 passed (26)` |
 | `npm run typecheck -w @mend/protocol` | TypeScript completes with no errors |
 | `node scripts/demo/check-docs.mjs` | `RESULT: PASS — documentation, links, anchors, templates and claims are consistent.` |
-| `node scripts/demo/capture-replay-demo.mjs` | `STATUS: PENDING` with the exact missing prerequisite (web app and/or Playwright) |
+| `node scripts/demo/capture-replay-demo.mjs` | The current capture state, reported honestly; it never fakes a recording (a silent MP4 now exists at `fixtures/demo/captures/mend-replay-demo.mp4`) |
 | Open [docs/README.md](./docs/README.md) | Documentation index with evidence labels and status |
 | Open [docs/13-demo-script.md](./docs/13-demo-script.md) | The 90-second script with timestamps, narration and placeholders |
 | Open [fixtures/demo/README.md](./fixtures/demo/README.md) | Evidence, consent and real-vs-staged templates; all `NOT COLLECTED` |
@@ -67,9 +74,9 @@ orchestrator actually verified from what still needs a human or a live network.
 | Run scenario B | Durability fails; same work order becomes `WARRANTY_REOPENED`; no new funds; holdback released once after a remedy | CONTRACT VERIFIED; UI flow partial |
 | Run scenario C | Injected instruction is blocked; no recipient, role, scope or payment change | PARTIAL — guard fix in progress |
 | Run scenario D | Dry quote, pending, underpayment, failure, refund and success are all labelled honestly; a quote is never a payment | IMPLEMENTED — 99 client tests + live dry smoke |
-| Run scenario E | Every scenario plays from recorded artifacts with a replay watermark and no live transaction links | PARTIAL — recording pending |
+| Run scenario E | Every scenario plays from recorded artifacts with a replay watermark and no live transaction links | IMPLEMENTED — silent MP4 recorded; narration/captions pending |
 | Run `npm test` (all workspaces) | Protocol, AI, Intents, API, DB, indexer, agents and web build pass | IMPLEMENTED |
-| Run `bash scripts/verify.sh` | Full local verification including contracts and secret scan | PASS — 17 checks |
+| Run `bash scripts/verify.sh` | Full local verification including contracts and secret scan | PASS — 18 checks |
 | Run `npm run demo:reset` | Deterministic reset of designated demo data only | IMPLEMENTED |
 | Open the inspector console | Redacted evidence, checklist, AI completeness suggestions, human acceptance controls | IMPLEMENTED |
 | Open the verification panel | AI evidence, OutLayer score binding, DAO authorization and transaction links, each labelled honestly | IMPLEMENTED |
@@ -80,10 +87,11 @@ orchestrator actually verified from what still needs a human or a live network.
 |---|---|---|
 | Configure a NEAR AI key and run triage | Authenticated inference + signature/attestation evidence, or an honest `UNAVAILABLE` | `BLOCKED_ON_HUMAN` |
 | Publish the bid-rules WASM and fund a testnet execution | Hash-bound ranking; separately verified TEE attestation | `BLOCKED_ON_HUMAN` |
-| Deploy the hub, token and DAO to testnet | Real testnet lifecycle with real transaction links | `BLOCKED_ON_HUMAN` |
+| Deploy a real Sputnik DAO on testnet | A Sputnik proposal that calls `dao_authorize` | `BLOCKED_ON_HUMAN` — factory failed; `mend-dao.testnet` fallback used |
 | Request an Intents dry quote | Quote, fees and destination, labelled `DRY QUOTE — NOT A PAYMENT` | Read-only API **VERIFIED**; live deposit `BLOCKED_ON_HUMAN` |
 | Approve a tiny mainnet Intents deposit | Real mainnet execution with an explorer link | `BLOCKED_ON_HUMAN` |
 | Run an Agent Market evidence-review job | External completeness findings; a human still accepts | `BLOCKED_ON_HUMAN` |
+| Run a live NEP-366 relayer transaction | A meta-transaction restricted to MEND methods | `BLOCKED_ON_HUMAN` |
 | Record the demo | A 90-second video from the integrated REPLAY app | **RECORDED (silent)** — narration/captions pending human |
 
 ### REPLAY with no credentials
@@ -129,13 +137,15 @@ Status: `IMPLEMENTED` — all local suites run without credentials.
 ```bash
 npm ci
 npm test                            # all workspaces
-bash scripts/verify.sh              # 17 checks: typecheck, protocol, API,
+bash scripts/verify.sh              # 18 checks: typecheck, protocol, API,
                                     # agents, contracts, WASM, secret scan, compose
 docker compose -f infra/docker-compose.yml up -d
 ```
 
-The contract replay, API, agents and web build are verified. Live testnet,
-mainnet, hosted demo and physical repair evidence remain `BLOCKED_ON_HUMAN`.
+The contract replay, API, agents, web build and real testnet escrow lifecycle
+are verified. Live AI, Sputnik DAO, Intents deposit, OutLayer execution, NEP-366
+relayer, Agent Market, hosted demo and physical repair evidence are not done.
+See [`STATUS.md`](./STATUS.md).
 
 ## Why the winner is not an AI choice
 
@@ -199,7 +209,10 @@ Start at [docs/README.md](./docs/README.md). Key pages:
 - [90-second demo script](./docs/13-demo-script.md)
 - [Submission package](./docs/14-submission-package.md)
 - [Demo capture plan](./docs/15-demo-capture-plan.md)
+- [Integration evidence matrix](./docs/16-integration-evidence.md)
 - [Copy and accessibility](./docs/17-copy-and-accessibility.md)
+
+The authoritative feature and gate matrix is [`STATUS.md`](./STATUS.md).
 
 ## HUMAN SUPPLIED — DO NOT INVENT
 
@@ -222,12 +235,10 @@ certification is made. See
 
 ## License
 
-MIT. See the repository `LICENSE` file (held by the integration branch). The docs
-worktree was cut before that file was staged; the orchestrator must include it in
-the public repository.
+MIT. See the repository [`LICENSE`](./LICENSE) file.
 
 ## Contributing and plan
 
 - [Master plan](./PLAN.md) — authoritative scope.
 - [Contributing](./CONTRIBUTING.md) — ownership and workspace rules.
-- Architecture decision and hub interface: `orchestration/decisions/ADR-001-architecture.md` and `orchestration/decisions/HUB-INTERFACE.md` (orchestrator workspace; not tracked on this branch).
+- Architecture decision and hub interface: `orchestration/decisions/ADR-001-architecture.md` and `orchestration/decisions/HUB-INTERFACE.md`.

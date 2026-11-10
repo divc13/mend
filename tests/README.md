@@ -6,18 +6,19 @@ entry points.
 
 ## Suites
 
-| Path | Requirement | Runs now |
+| Path | Requirement | Current status |
 |---|---|---|
 | `tests/integration/contract-adversarial.test.ts` | T07.1 attack coverage map + `cargo test` | yes (cargo) |
 | `tests/integration/contract-adversarial/` | independent public-API Rust attacks | yes (cargo) |
 | `tests/integration/canonical-scenario.test.ts` | T07.5 exact 100/80/72/8 replay | yes |
 | `tests/integration/intents-uncertainty.test.ts` | T07.6 Intents dry/status/failure | yes |
 | `tests/security/prompt-injection.test.ts` | T07.2 report/evidence/bid/market brief | yes (one live-log test skips) |
-| `tests/security/privacy.test.ts` | T07.3 bundle/log/DB/ACL/chain privacy | yes (bundle + live-API tests skip) |
-| `tests/security/authorization-matrix.test.ts` | T07.4 every mutation × every role | yes (live-API matrix skips) |
-| `tests/e2e/*.spec.ts` | T07.5–T07.7 UI/API + contract replay | contract/replay passes; UI/API skip |
-| `tests/clean-room/clean-room.test.ts` | T07.8 README → REPLAY | static checks pass; README/`npm ci` blockers reported |
-| `tests/clean-room/run.sh` | fresh worktree clean-room runner | `--static` yes, `--full` needs web |
+| `tests/security/privacy.test.ts` | T07.3 bundle/log/DB/ACL/chain privacy | yes (bundle + live-API tests skip without the stack) |
+| `tests/security/authorization-matrix.test.ts` | T07.4 every mutation × every role | yes (live-API matrix skips without the stack) |
+| `tests/e2e/*.spec.ts` | T07.5–T07.7 UI/API + contract replay | 32 passed, 8 honest API-state skips |
+| `tests/clean-room/clean-room.test.ts` | T07.8 README → REPLAY | 8 passed; `npm ci` from a fresh worktree passes |
+| `tests/clean-room/run.sh` | fresh worktree clean-room runner | `--static` yes, `--full` needs the local stack |
+| `tests/live/*` | real testnet RPC/API/UI checks | 10 Node checks + 2 Playwright UI checks pass; one wallet-creation sub-check BLOCKED by the public faucet |
 
 ## Install and run
 
@@ -60,16 +61,12 @@ MEND_WEB_URL=http://localhost:3000 MEND_API_URL=http://localhost:4000 npx playwr
 ## CI
 
 `bash tests/ci.sh` prints a PASS/FAIL/SKIP table with exact reasons and exits
-non-zero if any suite fails. It is the intended CI entry point.
+non-zero if any suite fails. It remains the intended local CI entry point.
 
-The existing `.github/workflows/ci.yml` (infra-owned) does not yet install the
-test package or call `tests/ci.sh`. The required CI steps are:
-
-```yaml
-- run: npm ci --prefix tests
-- run: npx --prefix tests playwright install --with-deps chromium
-- run: bash tests/ci.sh
-```
+The GitHub workflow (`.github/workflows/ci.yml`) now installs the test package,
+installs Chromium and runs the suites. The first GitHub Actions run **failed**
+and a follow-up run was in progress at the time of writing, so green CI is not
+claimed.
 
 No suite is allowed to fake a result:
 
@@ -78,14 +75,23 @@ No suite is allowed to fake a result:
   prerequisite is broken.
 - No mainnet call, deploy, signature or push is performed.
 
-## Current blockers found by these suites
+## Current status and residual gaps
 
-1. `npm ci` fails at the repository root because `package-lock.json` is out of
-   sync with the merged `@mend/ai-client` workspace. This breaks a clean clone.
-2. Root `README.md` does not exist yet, so the documented REPLAY path cannot be
-   exercised end-to-end.
-3. `apps/api`, `apps/web` and `services/*` are not merged in this worktree; the
-   live authorization/privacy/UX matrices skip with explicit reasons.
-4. The merged `@mend/ai-client` exports `scanPromptInjection` and
-   `enforceTrustedAction`, but no runtime service calls them yet, so the
-   security-log integration test skips until a service lands.
+The blockers previously recorded here are resolved:
+
+1. `npm ci` succeeds at the repository root from the committed lockfile.
+2. Root `README.md` exists and documents the REPLAY path.
+3. `apps/api`, `apps/web` and `services/*` are merged; E2E passes 32 checks.
+4. The runtime prompt-injection guard is wired into the API; the security-log
+   integration test passes.
+
+What remains:
+
+1. CI must actually pass. The repository is pushed to a private GitHub repo; the
+   first GitHub Actions run failed and a follow-up was in progress at the time of
+   writing. CI is **not green**.
+2. Live suites require the testnet API and keys outside the repo; they are not
+   part of a default clean clone.
+3. Live NEAR AI, Sputnik DAO, Intents deposit, OutLayer execution, NEP-366
+   relayer and Agent Market job evidence still requires human-supplied
+   credentials/funds. See [`STATUS.md`](../STATUS.md).
