@@ -1,0 +1,71 @@
+{
+  "schema": "mend.relayer-live.v1",
+  "network": "testnet",
+  "rpcUrl": "https://rpc.testnet.fastnear.com",
+  "hubAccount": "mend-hub.testnet",
+  "senderAccount": "mend-coordinator-ai.testnet",
+  "senderPublicKey": "ed25519:8i2GziZuWU6aGiirqoRqXZKX1mw922sWTNpVTdPnxu4E",
+  "relayerAccount": "mend-relayer.testnet",
+  "method": "create_work_order",
+  "workOrderId": "WO-RELAYER-LIVE-0002",
+  "generatedAt": "2026-11-10T09:12:31.212Z",
+  "valid": {
+    "txHash": "Getpks826tszmEhMJBSEqT5z7kH9KsrCqQrZtBXxSSju",
+    "success": true,
+    "logs": [
+      "EVENT_JSON:{\"standard\":\"mend\",\"version\":\"1.0.0\",\"event\":\"work_order_created\",\"data\":{\"scope_hash\":\"9e97018c2d9d3fec4c7913918c97466a82adfe2d6da260a6397866b4efe7f03b\",\"policy_hash\":\"1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d\",\"budget\":\"100000000\",\"sponsor\":\"mend-sponsor.testnet\",\"dao_proposal_id\":\"relayer-live-0002\",\"work_order_id\":\"WO-RELAYER-LIVE-0002\",\"asset_id\":\"BENCH-001\",\"actor\":\"mend-coordinator-ai.testnet\",\"timestamp_ns\":\"1794301928784011475\"}}"
+    ]
+  },
+  "gate": {
+    "delegateHash": "e6458c9c8c2cdd433af2460a799f0f09b84e4f09de815add06d08dbe2f508c33",
+    "receiverId": "mend-hub.testnet",
+    "method": "create_work_order",
+    "workOrderId": "WO-RELAYER-LIVE-0002",
+    "signatureVerified": true,
+    "keyScoped": true
+  },
+  "workOrder": {
+    "id": "WO-RELAYER-LIVE-0002",
+    "status": "DRAFT",
+    "proposedBy": "mend-coordinator-ai.testnet",
+    "budget": "100000000",
+    "escrow": {
+      "funding": "0",
+      "refunded": "0",
+      "escrowed": "0",
+      "completionPaid": "0",
+      "holdbackHeld": "0",
+      "holdbackReleased": "0"
+    }
+  },
+  "rejections": [
+    {
+      "kind": "replay",
+      "txHash": "CSkWirRgSgxgJWk6msUkL48UJk9eynDmMZ2EathEZyvM",
+      "error": "ActionError(index=0 kind(DelegateActionInvalidNonce(ak_nonce=276946726000003 delegate_nonce=276946726000003)))",
+      "gateCode": "RELAYER_REPLAY",
+      "gateMessage": "delegate nonce is not greater than the last seen nonce"
+    },
+    {
+      "kind": "wrong-receiver",
+      "txHash": "DqCf2aMzXXUnwp2BW9TLgv3dzQB2Dm6XSE4PEgas3rkj",
+      "error": "ActionError(index=0 kind(DelegateActionAccessKeyError(ReceiverMismatch(ak_receiver=mend-hub.testnet tx_receiver=mend-usdc.testnet))))",
+      "gateCode": "RELAYER_TARGET_NOT_ALLOWED",
+      "gateMessage": "delegate receiver is not the MEND hub"
+    },
+    {
+      "kind": "wrong-method",
+      "txHash": "99MvQ9ARMZND2fXatKJ3DfngUWug8XuDZkfXsEe9SCo7",
+      "error": "ActionError(index=0 kind(DelegateActionAccessKeyError(MethodNameMismatch(method_name=accept_completion))))",
+      "gateCode": "RELAYER_METHOD_NOT_ALLOWED",
+      "gateMessage": "method accept_completion is not relayable"
+    },
+    {
+      "kind": "expired",
+      "txHash": "GLcSZJ67iyk7Sz5K6eXfVLi6qi67AWV4Tzud31yra8QX",
+      "error": "ActionError(index=0 kind=DelegateActionExpired)",
+      "gateCode": "VALIDATION_ERROR",
+      "gateMessage": "delegate has expired"
+    }
+  ]
+}
