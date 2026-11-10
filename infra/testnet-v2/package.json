@@ -1,0 +1,16 @@
+{
+  "name": "@mend/testnet-v2-live",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Fresh MEND V2 hub and real Sputnik DAO testnet lifecycle driver.",
+  "scripts": {
+    "check": "node deploy-v2.mjs --check",
+    "deploy": "node deploy-v2.mjs --deploy",
+    "lifecycle": "node deploy-v2.mjs --lifecycle",
+    "all": "node deploy-v2.mjs --all"
+  },
+  "dependencies": {
+    "near-api-js": "^7.4.0"
+  }
+}
