@@ -191,6 +191,7 @@ fn commitment(
             duration,
             warranty,
             materials,
+            2,
             true,
             nonce,
         )
@@ -247,6 +248,7 @@ fn reveal(
         duration,
         warranty,
         materials,
+        2,
         true,
         nonce.to_string(),
     );
@@ -565,6 +567,7 @@ fn early_and_late_reveals_and_early_close_are_rejected() {
                 10,
                 180,
                 80,
+                2,
                 true,
                 "nonce-b-0002".to_string(),
             );
@@ -592,6 +595,7 @@ fn early_and_late_reveals_and_early_close_are_rejected() {
                 10,
                 180,
                 80,
+                2,
                 true,
                 "nonce-b-0002".to_string(),
             );
