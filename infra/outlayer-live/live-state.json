@@ -1,0 +1,247 @@
+{
+  "schema": "mend.outlayer-live.state.v1",
+  "network": "testnet",
+  "outlayerAccount": "outlayer.testnet",
+  "apiBase": "https://testnet-api.outlayer.ai",
+  "requestedProjectId": "mend.testnet/bid-rules",
+  "projectId": "mend-deployer.testnet/bid-rules",
+  "owner": "mend-deployer.testnet",
+  "build": {
+    "target": "wasm32-wasip1",
+    "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+    "wasmPath": "compute/bid-rules/target/wasm32-wasip1/release/mend-bid-rules.wasm",
+    "sizeBytes": 131506,
+    "wasmSha256": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+    "artifactRecord": "compute/bid-rules/artifacts/wasm-sha256.json"
+  },
+  "updatedAt": "2026-11-10T09:34:51.268Z",
+  "fixtures": {
+    "inputPath": "fixtures/recorded-responses/bid-rules/canonical-input.json",
+    "outputPath": "fixtures/recorded-responses/bid-rules/canonical-output.json",
+    "policyHash": "1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d",
+    "inputSha256": "63c8af41d052aac9a3caca4ac42efc23050e4128a1709af240c4c85c7375b691",
+    "inputBytes": 1561,
+    "fixtureOutputFileSha256": "26c77a3bd9847c9ff059ef1987bc2ffb54b88da906fad7996c7174e752fa9f4a",
+    "fixtureOutputFileBytes": 1659,
+    "localStdoutSha256": "c584f884925df3a398ebd0b546483b9cdcf2eb873416d5e7a91883b834faa801",
+    "localStdoutBytes": 1204,
+    "stdoutEqualsFixtureBytes": false,
+    "stdoutSemanticallyEqualsFixture": true,
+    "canonicalOutputSha256": "7dc310db71ce0d2b43863880acbf254c89033ebfc0ee65edf8e361b7248e7c41",
+    "canonicalOutputBytes": 1204,
+    "canonicalOutputRule": "sha256(compact JSON, keys sorted) — matches worker/src/main.rs sha256(serde_json::Value::to_string())",
+    "winnerBidId": "BID-B-BENCH-001",
+    "protocolInputHash": "b06906891107bc8171b2a99c6b561fd31e917cf54368e8ac5363028d4c583244",
+    "protocolOutputHash": "905950627b0c7b870fdfc96034f1168bd4654cd6497d443debe6162e6efef134",
+    "singleResumePayloadLimitBytes": 1024,
+    "exceedsSingleResumeLimit": true,
+    "recordedAt": "2026-11-10T09:34:51.268Z",
+    "wasmSha256Used": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55"
+  },
+  "fastfs": {
+    "url": "https://test.fastfs.io/mend-deployer.testnet/outlayer.testnet/640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55.wasm",
+    "uploadTx": "FrnTW8dz2374L81Dc1wio6sWwniqoQqnYifV4hTMLYg7",
+    "hash": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+    "served": true,
+    "bytes": 131506,
+    "recordedAt": "2026-11-10T09:33:13.124Z",
+    "uploadTxVerified": true,
+    "uploadTxStatus": "Failure (expected: gas=1, FastFS indexer reads tx args)"
+  },
+  "project": {
+    "projectId": "mend-deployer.testnet/bid-rules",
+    "requestedProjectId": "mend.testnet/bid-rules",
+    "name": "bid-rules",
+    "owner": "mend-deployer.testnet",
+    "createTx": "FTiMXNiGWte7s4ju6x8L3Zwrf9DMnwtGYqB2y3LRP1Dv",
+    "versionKey": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+    "buildTarget": "wasm32-wasip1",
+    "projectView": {
+      "uuid": "p000000000000013a",
+      "owner": "mend-deployer.testnet",
+      "name": "bid-rules",
+      "project_id": "mend-deployer.testnet/bid-rules",
+      "active_version": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+      "created_at": 1794302188307840300,
+      "storage_deposit": "2720000000000000000000"
+    },
+    "versionView": {
+      "wasm_hash": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+      "source": {
+        "WasmUrl": {
+          "url": "https://test.fastfs.io/mend-deployer.testnet/outlayer.testnet/640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55.wasm",
+          "hash": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+          "build_target": "wasm32-wasip1"
+        }
+      },
+      "added_at": 1794302188307840300,
+      "is_active": true
+    },
+    "canonicalIdBlocker": "account mend.testnet does not exist on testnet (NEAR RPC: UNKNOWN_ACCOUNT), so the outlayer.testnet-derived project id mend.testnet/bid-rules cannot be created; publishing under the controlled owner mend-deployer.testnet instead",
+    "recordedAt": "2026-11-10T09:33:13.124Z",
+    "createTxVerified": true
+  },
+  "execution": {
+    "requestTx": "4nAFPtVQUmuimrzFN55uB4B8wZzCWgBuXZW5hAXrsqoP",
+    "requestId": 15579,
+    "success": true,
+    "estimateYocto": "2000500000000000000000",
+    "depositYocto": "4000000000000000000000",
+    "limits": {
+      "max_instructions": 5000000000,
+      "max_memory_mb": 128,
+      "max_execution_seconds": 10
+    },
+    "responseFormat": "Json",
+    "payerAccountId": "mend-deployer.testnet",
+    "projectVersionKey": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+    "inputSha256": "63c8af41d052aac9a3caca4ac42efc23050e4128a1709af240c4c85c7375b691",
+    "inputBytes": 1561,
+    "executionCompletedEvent": [
+      {
+        "sender_id": "mend-deployer.testnet",
+        "code_source": {
+          "WasmUrl": {
+            "url": "https://test.fastfs.io/mend-deployer.testnet/outlayer.testnet/640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55.wasm",
+            "hash": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+            "build_target": "wasm32-wasip1"
+          }
+        },
+        "resources_used": {
+          "instructions": 423356,
+          "time_ms": 382,
+          "compile_time_ms": 589
+        },
+        "success": true,
+        "error_message": null,
+        "payment_charged": "1097100000000000000000",
+        "payment_refunded": "2902900000000000000000",
+        "compilation_note": "Freshly compiled",
+        "timestamp": 1794302281946623200
+      }
+    ],
+    "requestView": null,
+    "evidenceFile": "infra/outlayer-live/evidence/request-15579.json",
+    "recordedAt": "2026-11-10T09:18:06.229Z",
+    "attestation": {
+      "available": true,
+      "id": 28487,
+      "task_id": 32954,
+      "task_type": "execute",
+      "request_id": 15579,
+      "caller_account_id": "mend-deployer.testnet",
+      "transaction_hash": "4nAFPtVQUmuimrzFN55uB4B8wZzCWgBuXZW5hAXrsqoP",
+      "block_height": 277047990,
+      "repo_url": null,
+      "commit_hash": null,
+      "build_target": "wasm32-wasip1",
+      "wasm_hash": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+      "executed_wasm_sha256": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+      "input_hash": "63c8af41d052aac9a3caca4ac42efc23050e4128a1709af240c4c85c7375b691",
+      "output_hash": "7dc310db71ce0d2b43863880acbf254c89033ebfc0ee65edf8e361b7248e7c41",
+      "project_id": "mend-deployer.testnet/bid-rules",
+      "attached_usd": "0",
+      "timestamp": 1794302280,
+      "worker_measurement": "b1773e4dd9db7e54c2564f15913872cb6a8acd6ce6d4e28dc4008c6b90f6dfec43eae5021d3055a1917fe7360d73dcc9",
+      "quoteSha256": "c53bcd829bc0e8d77842f1cd128d11e68805663f44f58a189622ef653c621321",
+      "quoteBytes": 5006,
+      "reportData": "44555c8eae9786a0ede2ffcfa4b2dc00216283f9ed642df8745d0a474709441f0000000000000000000000000000000000000000000000000000000000000000",
+      "recomputedTaskHash": "44555c8eae9786a0ede2ffcfa4b2dc00216283f9ed642df8745d0a474709441f",
+      "taskHashMatchesReportData": true,
+      "measurements": {
+        "mrtd": "7fe60787222bd394cb516abca2435f22f035ab2cc9c0a4b4b3b148e46297f3d931a237b72f359052c6e657d8c1409173",
+        "rtmr0": "573aadb4d478839c803c4b1d3e03dd748976b63a89622f377e32a54dd60546e88ec2097f595ceafc324f48a0d0d31db6",
+        "rtmr1": "e7b3ffa0e72b50557d85f7ecd8dc98a4ffc3dd6f82d01f122ef522d61361abeac310d70d2877e56be9c9408d9bcc320c",
+        "rtmr2": "764489f277a8540189761e72b4238ba36d4d647e11bd958d8ab5522af2a4867b0ff63e06b0c4967f1857236244040a5d",
+        "rtmr3": "b1773e4dd9db7e54c2564f15913872cb6a8acd6ce6d4e28dc4008c6b90f6dfec43eae5021d3055a1917fe7360d73dcc9"
+      },
+      "measurementsApproved": true,
+      "approvedMeasurementSets": 121,
+      "verificationScope": "hashes + task-hash binding + measurement allowlist; Intel DCAP signature chain NOT checked here",
+      "record": {
+        "id": 28487,
+        "task_id": 32954,
+        "task_type": "execute",
+        "tdx_quote": "<5006 bytes, sha256 c53bcd829bc0e8d77842f1cd128d11e68805663f44f58a189622ef653c621321>",
+        "worker_measurement": "b1773e4dd9db7e54c2564f15913872cb6a8acd6ce6d4e28dc4008c6b90f6dfec43eae5021d3055a1917fe7360d73dcc9",
+        "request_id": 15579,
+        "caller_account_id": "mend-deployer.testnet",
+        "transaction_hash": "4nAFPtVQUmuimrzFN55uB4B8wZzCWgBuXZW5hAXrsqoP",
+        "block_height": 277047990,
+        "build_target": "wasm32-wasip1",
+        "wasm_hash": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+        "executed_wasm_sha256": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+        "input_hash": "63c8af41d052aac9a3caca4ac42efc23050e4128a1709af240c4c85c7375b691",
+        "output_hash": "7dc310db71ce0d2b43863880acbf254c89033ebfc0ee65edf8e361b7248e7c41",
+        "project_id": "mend-deployer.testnet/bid-rules",
+        "attached_usd": "0",
+        "timestamp": 1794302280
+      },
+      "evidenceFile": "infra/outlayer-live/evidence/attestation-request-15579.json"
+    },
+    "settlement": {
+      "txHash": "HHBDS4ymrGbUisX9NvfZJ6XTaC24aTShmomroX5XJYAQ",
+      "blockHeight": 277047998,
+      "signerId": "worker.outlayer.testnet",
+      "receiverId": "outlayer.testnet",
+      "method": "submit_execution_output_and_resolve",
+      "explorer": "https://explorer.testnet.near.org/transactions/HHBDS4ymrGbUisX9NvfZJ6XTaC24aTShmomroX5XJYAQ",
+      "status": "success",
+      "logs": [
+        "Stored pending output for request_id: 15579, data_id: [145, 80, 102, 114, 208, 47, 48, 69, 3, 2, 149, 145, 191, 69, 9, 25, 2, 76, 234, 127, 102, 254, 46, 165, 35, 107, 173, 112, 177, 53, 203, 217]",
+        "Resolving execution for request_id: 15579 (combined flow)",
+        "Resolving execution for request_id: 15579, data_id: [145, 80, 102, 114, 208, 47, 48, 69, 3, 2, 149, 145, 191, 69, 9, 25, 2, 76, 234, 127, 102, 254, 46, 165, 35, 107, 173, 112, 177, 53, 203, 217], success: true, output_submitted: true, resources_used: { instructions: 423356, time_ms: 382, compile_time_ms: Some(589) }",
+        "[[yNEAR charged: \"1097100000000000000000\"]]"
+      ],
+      "receipts": [
+        {
+          "id": "E4TqZbv14GaBdERAYmhR24q5JmsUSRAR91pXcYdrruBg",
+          "executorId": "outlayer.testnet",
+          "logs": [
+            "Stored pending output for request_id: 15579, data_id: [145, 80, 102, 114, 208, 47, 48, 69, 3, 2, 149, 145, 191, 69, 9, 25, 2, 76, 234, 127, 102, 254, 46, 165, 35, 107, 173, 112, 177, 53, 203, 217]",
+            "Resolving execution for request_id: 15579 (combined flow)",
+            "Resolving execution for request_id: 15579, data_id: [145, 80, 102, 114, 208, 47, 48, 69, 3, 2, 149, 145, 191, 69, 9, 25, 2, 76, 234, 127, 102, 254, 46, 165, 35, 107, 173, 112, 177, 53, 203, 217], success: true, output_submitted: true, resources_used: { instructions: 423356, time_ms: 382, compile_time_ms: Some(589) }",
+            "[[yNEAR charged: \"1097100000000000000000\"]]"
+          ],
+          "gasBurnt": 4563242866065
+        },
+        {
+          "id": "Fp7jr8JUBbjnk1vhJ2Cp4SozXWVCS5JVeT6SM5wtS7kM",
+          "executorId": "worker.outlayer.testnet",
+          "logs": [],
+          "gasBurnt": 223182562500
+        }
+      ],
+      "recordedAt": "2026-11-10T09:32:28.573Z"
+    }
+  },
+  "networkSnapshot": {
+    "evidenceFile": "infra/outlayer-live/evidence/network.json",
+    "health": {
+      "status": "ok",
+      "version": "0.1.0",
+      "git_sha": "c73f3fea768b",
+      "built_at": 1794150883
+    },
+    "pricing": {
+      "base_fee": "1000000000000000000000",
+      "per_instruction_fee": "100000000000000",
+      "per_ms_fee": "100000000000000000",
+      "per_compile_ms_fee": "100000000000000000",
+      "base_fee_usd": "1000",
+      "per_instruction_fee_usd": "1",
+      "per_sec_fee_usd": "1",
+      "per_compile_ms_fee_usd": "10",
+      "max_compilation_seconds": 300,
+      "max_instructions": 500000000000,
+      "max_execution_seconds": 180
+    },
+    "maxLimits": [
+      500000000000,
+      180,
+      300
+    ],
+    "paused": false,
+    "capturedAt": "2026-11-10T09:33:08.489Z"
+  }
+}

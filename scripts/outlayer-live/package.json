@@ -1,0 +1,13 @@
+{
+  "name": "@mend/outlayer-live",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Live OutLayer testnet publish/execute driver and evidence checks for MEND bid-rules.",
+  "scripts": {
+    "check": "node run-live.mjs --check"
+  },
+  "dependencies": {
+    "near-api-js": "^7.4.0"
+  }
+}

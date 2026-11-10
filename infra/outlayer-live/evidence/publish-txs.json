@@ -1,0 +1,19 @@
+{
+  "schema": "mend.outlayer-live.publish-txs.v1",
+  "recordedAt": "2026-11-10T09:33:35.052Z",
+  "note": "The first publish attempt wrote these two transactions but exited before saving state (get_project read raced the view node). Both hashes were re-read from NEAR RPC and verified: the FastFS tx is the __fastdata_fastfs upload for the exact 131506-byte WASM, and create_project succeeded with the logged project id/version.",
+  "fastfsUpload": {
+    "txHash": "FrnTW8dz2374L81Dc1wio6sWwniqoQqnYifV4hTMLYg7",
+    "receiver": "outlayer.testnet",
+    "method": "__fastdata_fastfs",
+    "status": "Failure",
+    "expectedFailureReason": "gas=1 by design; the FastFS indexer reads the file from the transaction args"
+  },
+  "createProject": {
+    "txHash": "FTiMXNiGWte7s4ju6x8L3Zwrf9DMnwtGYqB2y3LRP1Dv",
+    "receiver": "outlayer.testnet",
+    "method": "create_project",
+    "status": "SuccessValue",
+    "log": "Project created: id=mend-deployer.testnet/bid-rules, uuid=p000000000000013a, owner=mend-deployer.testnet, version=640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55"
+  }
+}

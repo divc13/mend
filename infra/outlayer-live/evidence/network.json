@@ -1,0 +1,66 @@
+{
+  "schema": "mend.outlayer-live.network.v1",
+  "capturedAt": "2026-11-10T09:33:08.489Z",
+  "rpc": "https://rpc.testnet.fastnear.com",
+  "api": "https://testnet-api.outlayer.ai",
+  "health": {
+    "status": 200,
+    "body": {
+      "status": "ok",
+      "version": "0.1.0",
+      "git_sha": "c73f3fea768b",
+      "built_at": 1794150883
+    }
+  },
+  "pricing": {
+    "status": 200,
+    "body": {
+      "base_fee": "1000000000000000000000",
+      "per_instruction_fee": "100000000000000",
+      "per_ms_fee": "100000000000000000",
+      "per_compile_ms_fee": "100000000000000000",
+      "base_fee_usd": "1000",
+      "per_instruction_fee_usd": "1",
+      "per_sec_fee_usd": "1",
+      "per_compile_ms_fee_usd": "10",
+      "max_compilation_seconds": 300,
+      "max_instructions": 500000000000,
+      "max_execution_seconds": 180
+    }
+  },
+  "stats": {
+    "status": 200,
+    "body": {
+      "total_executions": 32525,
+      "successful_executions": 29615,
+      "failed_executions": 790,
+      "access_denied_executions": 911,
+      "compilation_failed_executions": 656,
+      "execution_failed_executions": 261,
+      "insufficient_payment_executions": 9,
+      "custom_executions": 283,
+      "total_instructions_used": 4628411328250,
+      "average_execution_time_ms": 2890,
+      "total_near_paid_yocto": "1382760465975470666994608804",
+      "unique_users": 1025,
+      "active_workers": 4
+    }
+  },
+  "contract": {
+    "paused": false,
+    "config": [
+      "owner.outlayer.testnet",
+      "worker.outlayer.testnet"
+    ],
+    "maxLimits": [
+      500000000000,
+      180,
+      300
+    ],
+    "eventMetadata": [
+      "near-outlayer",
+      "1.0.0"
+    ],
+    "estimate": "2000500000000000000000"
+  }
+}

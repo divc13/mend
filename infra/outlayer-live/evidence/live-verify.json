@@ -1,0 +1,19 @@
+{
+  "schema": "mend.outlayer-live.live-verify.v1",
+  "checkedAt": "2026-11-10T09:32:31.005Z",
+  "rpc": "https://rpc.testnet.fastnear.com",
+  "api": "https://testnet-api.outlayer.ai",
+  "live": {
+    "outlayerReachable": true,
+    "paused": false,
+    "projectPresent": true,
+    "versionPresent": true,
+    "requestPresent": false,
+    "attestationAvailable": true,
+    "attestationFetchedVia": "by-request"
+  },
+  "problems": [],
+  "notes": [
+    "get_request returned null (request state may be archived)"
+  ]
+}
