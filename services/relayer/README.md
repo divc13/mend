@@ -24,8 +24,9 @@ Every rejection is recorded as a `relayer_rejected` event. Accepted delegates re
 
 ## Honest limits
 
-- Offline tests inject a deterministic signature verifier and recorded access-key view. Live mode must decode Borsh `SignedDelegateAction`, verify the real ed25519 signature over the NEP-366/NEP-461 hash, and fetch the sender key at the current block.
-- The relayer account needs a separate hot key (full-access or full-access gas key) with a minimal balance. That is an operational/HUMAN blocker.
+- Offline tests inject a deterministic signature verifier and recorded access-key view. The gate still takes a `DelegateSignatureVerifier` dependency; the live harness supplies the real Borsh `SignedDelegateAction` decoding, ed25519 verification over the NEP-366/NEP-461 hash, and fetched access key.
+- A live testnet proof now exists: `scripts/relayer-live/run-live.mjs` relayed a real `create_work_order` and recorded chain rejections for replay, wrong receiver, wrong method and expiry. See `scripts/relayer-live/LIVE-RELAYER.md`.
+- The relayer account needs a separate hot key (full-access or full-access gas key) with a minimal balance. The testnet proof uses an external full-access testnet key; production key custody and rotation remain operational work.
 - Gasless escrow funding is impossible with a function-call key; this relayer only forwards zero-deposit methods.
 - Protocol nonce is authoritative; the replay cache is defence in depth, not a substitute for contract idempotency.
 
