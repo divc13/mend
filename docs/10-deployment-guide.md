@@ -88,7 +88,7 @@ Names may change when `packages/config` lands; verify against the merged code.
 | `DAO_ACCOUNT_ID` | Sputnik DAO account | No | Hub checks this exact account |
 | `DATABASE_URL` | Postgres connection | **Yes** | Server only |
 | `S3_ENDPOINT`, `S3_BUCKET`, `S3_ACCESS_KEY`, `S3_SECRET_KEY` | Private evidence storage | **Yes** | Private bucket; signed access |
-| `NEARAI_API_KEY` | NEAR AI inference/signature | **Yes** | Server only; absent means `BLOCKED_ON_HUMAN` |
+| `NEAR_AI_API_KEY` | NEAR AI inference/signature | **Yes** | Server only; absent means `BLOCKED_ON_HUMAN` |
 | `OUTLAYER_*` | OutLayer project/payment config | **Yes** | Only if the funded path is approved |
 | `INTENTS_API_KEY` / partner JWT | 1Click authenticated quotes | **Yes** | Optional; disclose no-JWT fee if absent |
 | `AGENT_MARKET_TOKEN` | `aat_...` worker token | **Yes** | Production marketplace, not testnet |
