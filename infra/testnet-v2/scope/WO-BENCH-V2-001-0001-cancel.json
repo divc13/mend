@@ -1,0 +1,7 @@
+{
+  "schema": "mend.cancel-reason.v1",
+  "workOrderId": "WO-BENCH-V2-001-0001",
+  "reason": "This pre-award work order expired its commitment window during driver retries. It was never bid on and is cancelled and refunded; the active lifecycle work order is WO-BENCH-V2-001-0002.",
+  "replacementWorkOrderId": "WO-BENCH-V2-001-0002",
+  "at": "2026-11-10T09:19:55.844Z"
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "mend.bid-policy.v1",
+  "version": "mend-bid-policy-v1",
+  "weightsBps": {
+    "price": 4500,
+    "warranty": 2500,
+    "duration": 2000,
+    "materials": 1000
+  },
+  "completionBps": 9000,
+  "holdbackBps": 1000,
+  "tieBreak": "score_desc_price_asc_warranty_desc_duration_asc_bid_id_asc",
+  "availability": {
+    "field": "availableInDays",
+    "maxDays": 365,
+    "required": true
+  },
+  "note": "Hash-pinned deterministic bid policy used by this testnet deployment. Not an OutLayer attestation."
+}

@@ -1,0 +1,66 @@
+{
+  "schema": "mend.bid-rules.v1",
+  "policyVersion": "mend-bid-policy-v1",
+  "policyHash": "b35cff385a1f5e014c9de48dac0f79d77a103c57a81caeaface3ae12a60ce19f",
+  "weightsBps": {
+    "price": 4500,
+    "warranty": 2500,
+    "duration": 2000,
+    "materials": 1000
+  },
+  "ranking": [
+    {
+      "rank": 1,
+      "bidId": "BID-B-BENCH-V2-001",
+      "contractorId": "mend-contractor-b.testnet",
+      "scoreBps": 9270,
+      "dimensionsBps": {
+        "price": 8823,
+        "warranty": 10000,
+        "duration": 10000,
+        "materials": 8000
+      },
+      "priceMicro": "80000000",
+      "durationDays": 10,
+      "warrantyDays": 180,
+      "materialsScore": 80
+    },
+    {
+      "rank": 2,
+      "bidId": "BID-C-BENCH-V2-001",
+      "contractorId": "mend-contractor-c.testnet",
+      "scoreBps": 5200,
+      "dimensionsBps": {
+        "price": 10000,
+        "warranty": 0,
+        "duration": 0,
+        "materials": 7000
+      },
+      "priceMicro": "78000000",
+      "durationDays": 21,
+      "warrantyDays": 30,
+      "materialsScore": 70
+    },
+    {
+      "rank": 3,
+      "bidId": "BID-A-BENCH-V2-001",
+      "contractorId": "mend-contractor-a.testnet",
+      "scoreBps": 2873,
+      "dimensionsBps": {
+        "price": 0,
+        "warranty": 4000,
+        "duration": 6363,
+        "materials": 6000
+      },
+      "priceMicro": "95000000",
+      "durationDays": 14,
+      "warrantyDays": 90,
+      "materialsScore": 60
+    }
+  ],
+  "excluded": [],
+  "winnerBidId": "BID-B-BENCH-V2-001",
+  "inputHash": "d56613c78031e3e7bfef6b2c1e4ed61aa0e99348f35b2f088b63fc074af7a346",
+  "mode": "LOCAL_DETERMINISTIC",
+  "outlayerUsed": false
+}
