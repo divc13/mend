@@ -16,7 +16,7 @@ Statuses used here: `PASS`, `PASS_WITH_CAVEATS`, `PARTIAL`,
 | Local implementation | Implemented and covered by local suites and the REPLAY vertical slice (G2). |
 | NEAR testnet | Real deployment and real lifecycle completed: `WO-BENCH-001-0003`, final `CLOSED`, 57 transactions, hub `mend-hub.testnet`, token `mend-usdc.testnet` (test mUSDC). |
 | Mainnet | Nothing deployed or executed. All mainnet actions require explicit per-transaction human approval. |
-| GitHub / CI | The repository is pushed to a **private** GitHub repo. The first GitHub Actions run **failed**; a follow-up run was **in progress** when this file was written. **CI is not green yet.** |
+| GitHub / CI | Pushed to the **private** GitHub repo. GitHub Actions is **green** on `main` (Node/TypeScript, Contracts/Rust, secret scan, dependency audit). |
 | Hosting | No hosted demo; the web app runs locally against the live testnet API. |
 
 ## Features F01–F14
@@ -36,7 +36,7 @@ Statuses used here: `PASS`, `PASS_WITH_CAVEATS`, `PARTIAL`,
 | F11 | Settlement, durability and warranty | **PASS_WITH_CAVEATS** | Contract failed-durability test reopens the same work order with no new escrow and releases the holdback once; E2E contract replay; real testnet durability pass released 8 mUSDC and closed the order. | The **failed-durability branch was proven in contract/replay tests, not on live testnet**. The testnet run exercised the passing-durability branch. |
 | F12 | Public case experience | **PASS** | Next.js build passes all routes; Playwright 32 passed including axe (no serious/critical), keyboard-only, mobile 390×844 and the REPLAY banner; the case page renders the exact `100 / 20 / 72 / 8` split. | Production load, real-user and public-map/dashboard coverage are not claimed. |
 | F13 | Demo, replay and simulation | **PARTIAL** | Nine REPLAY scenarios in the demo room; a silent 91.6 s H.264 `REPLAY / SIMULATION` video at `fixtures/demo/captures/mend-replay-demo.mp4`; five scenario screenshots; capture manifest; deterministic reset; explicit mode labels. | **Narration, captions, a final edited cut and physical repair media are missing** (`BLOCKED_ON_HUMAN` / `NOT COLLECTED`). The MP4 is silent. |
-| F14 | Production-quality submission | **PARTIAL** | Docs package, valid relative links, threat/privacy models, README `Do X → See Y`, local test suites, clean-room checks, CI workflow definition, license. The repo is pushed to a private GitHub repo. | **The first CI run failed and a follow-up is in progress; CI is not green.** **Hosted demo, public repository, X post and final submission fields are not done** (`BLOCKED_ON_HUMAN`). |
+| F14 | Production-quality submission | **PARTIAL** | Docs package, valid relative links, threat/privacy models, README `Do X → See Y`, local test suites, clean-room checks, CI workflow definition, license. The repo is pushed to a private GitHub repo. | CI is green on `main`. **Hosted demo, public repository, X post and final submission fields are not done** (`BLOCKED_ON_HUMAN`). |
 
 ### Feature summary
 
