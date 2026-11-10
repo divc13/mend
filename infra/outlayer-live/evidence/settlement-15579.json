@@ -1,0 +1,37 @@
+{
+  "schema": "mend.outlayer-live.settlement.v1",
+  "requestId": 15579,
+  "txHash": "HHBDS4ymrGbUisX9NvfZJ6XTaC24aTShmomroX5XJYAQ",
+  "blockHeight": 277047998,
+  "signerId": "worker.outlayer.testnet",
+  "receiverId": "outlayer.testnet",
+  "method": "submit_execution_output_and_resolve",
+  "explorer": "https://explorer.testnet.near.org/transactions/HHBDS4ymrGbUisX9NvfZJ6XTaC24aTShmomroX5XJYAQ",
+  "status": "success",
+  "logs": [
+    "Stored pending output for request_id: 15579, data_id: [145, 80, 102, 114, 208, 47, 48, 69, 3, 2, 149, 145, 191, 69, 9, 25, 2, 76, 234, 127, 102, 254, 46, 165, 35, 107, 173, 112, 177, 53, 203, 217]",
+    "Resolving execution for request_id: 15579 (combined flow)",
+    "Resolving execution for request_id: 15579, data_id: [145, 80, 102, 114, 208, 47, 48, 69, 3, 2, 149, 145, 191, 69, 9, 25, 2, 76, 234, 127, 102, 254, 46, 165, 35, 107, 173, 112, 177, 53, 203, 217], success: true, output_submitted: true, resources_used: { instructions: 423356, time_ms: 382, compile_time_ms: Some(589) }",
+    "[[yNEAR charged: \"1097100000000000000000\"]]"
+  ],
+  "receipts": [
+    {
+      "id": "E4TqZbv14GaBdERAYmhR24q5JmsUSRAR91pXcYdrruBg",
+      "executorId": "outlayer.testnet",
+      "logs": [
+        "Stored pending output for request_id: 15579, data_id: [145, 80, 102, 114, 208, 47, 48, 69, 3, 2, 149, 145, 191, 69, 9, 25, 2, 76, 234, 127, 102, 254, 46, 165, 35, 107, 173, 112, 177, 53, 203, 217]",
+        "Resolving execution for request_id: 15579 (combined flow)",
+        "Resolving execution for request_id: 15579, data_id: [145, 80, 102, 114, 208, 47, 48, 69, 3, 2, 149, 145, 191, 69, 9, 25, 2, 76, 234, 127, 102, 254, 46, 165, 35, 107, 173, 112, 177, 53, 203, 217], success: true, output_submitted: true, resources_used: { instructions: 423356, time_ms: 382, compile_time_ms: Some(589) }",
+        "[[yNEAR charged: \"1097100000000000000000\"]]"
+      ],
+      "gasBurnt": 4563242866065
+    },
+    {
+      "id": "Fp7jr8JUBbjnk1vhJ2Cp4SozXWVCS5JVeT6SM5wtS7kM",
+      "executorId": "worker.outlayer.testnet",
+      "logs": [],
+      "gasBurnt": 223182562500
+    }
+  ],
+  "recordedAt": "2026-11-10T09:32:28.573Z"
+}

@@ -1,0 +1,123 @@
+{
+  "schema": "mend.outlayer-live.request.v1",
+  "requestId": 15579,
+  "txHash": "4nAFPtVQUmuimrzFN55uB4B8wZzCWgBuXZW5hAXrsqoP",
+  "explorer": "https://explorer.testnet.near.org/transactions/4nAFPtVQUmuimrzFN55uB4B8wZzCWgBuXZW5hAXrsqoP",
+  "sentAt": "2026-11-10T09:18:06.225Z",
+  "requestArgs": {
+    "source": {
+      "Project": {
+        "project_id": "mend-deployer.testnet/bid-rules",
+        "version_key": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55"
+      }
+    },
+    "resource_limits": {
+      "max_instructions": 5000000000,
+      "max_memory_mb": 128,
+      "max_execution_seconds": 10
+    },
+    "input_data": "<1561 bytes, sha256 63c8af41d052aac9a3caca4ac42efc23050e4128a1709af240c4c85c7375b691>",
+    "secrets_ref": null,
+    "response_format": "Json",
+    "payer_account_id": "mend-deployer.testnet",
+    "params": null
+  },
+  "status": "success",
+  "requestEventData": [
+    [
+      {
+        "request_data": "{\"request_id\":15579,\"sender_id\":\"mend-deployer.testnet\",\"predecessor_id\":\"mend-deployer.testnet\",\"code_source\":{\"WasmUrl\":{\"url\":\"https://test.fastfs.io/mend-deployer.testnet/outlayer.testnet/640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55.wasm\",\"hash\":\"640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55\",\"build_target\":\"wasm32-wasip1\"}},\"resource_limits\":{\"max_instructions\":5000000000,\"max_memory_mb\":128,\"max_execution_seconds\":10},\"input_data\":\"{\\n  \\\"schema\\\": \\\"mend.bid-rules.v1\\\",\\n  \\\"policyHash\\\": \\\"1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d\\\",\\n  \\\"policyVersion\\\": \\\"mend-bid-policy-v1\\\",\\n  \\\"weightsBps\\\": {\\n    \\\"price\\\": 4500,\\n    \\\"warranty\\\": 2500,\\n    \\\"duration\\\": 2000,\\n    \\\"materials\\\": 1000\\n  },\\n  \\\"bids\\\": [\\n    {\\n      \\\"bidId\\\": \\\"BID-A-BENCH-001\\\",\\n      \\\"contractorId\\\": \\\"contractor-a.mend.testnet\\\",\\n      \\\"priceMicro\\\": \\\"95000000\\\",\\n      \\\"durationDays\\\": 14,\\n      \\\"warrantyDays\\\": 90,\\n      \\\"materialsScore\\\": 60,\\n      \\\"availableInDays\\\": 3,\\n      \\\"eligible\\\": true,\\n      \\\"evidenceChecklistAccepted\\\": true,\\n      \\\"nonce\\\": \\\"nonce-a-0001\\\",\\n      \\\"commitmentHash\\\": \\\"1e1b013855623969420c303d8bc3be708e407a90f79c2c5a08ccd886092d67a0\\\"\\n    },\\n    {\\n      \\\"bidId\\\": \\\"BID-B-BENCH-001\\\",\\n      \\\"contractorId\\\": \\\"contractor-b.mend.testnet\\\",\\n      \\\"priceMicro\\\": \\\"80000000\\\",\\n      \\\"durationDays\\\": 10,\\n      \\\"warrantyDays\\\": 180,\\n      \\\"materialsScore\\\": 80,\\n      \\\"availableInDays\\\": 2,\\n      \\\"eligible\\\": true,\\n      \\\"evidenceChecklistAccepted\\\": true,\\n      \\\"nonce\\\": \\\"nonce-b-0002\\\",\\n      \\\"commitmentHash\\\": \\\"fcb0780b0d1f1dbccd9fdcefa5627c24b227636ee414a8c618077f0df079d968\\\"\\n    },\\n    {\\n      \\\"bidId\\\": \\\"BID-C-BENCH-001\\\",\\n      \\\"contractorId\\\": \\\"contractor-c.mend.testnet\\\",\\n      \\\"priceMicro\\\": \\\"78000000\\\",\\n      \\\"durationDays\\\": 21,\\n      \\\"warrantyDays\\\": 30,\\n      \\\"materialsScore\\\": 70,\\n      \\\"availableInDays\\\": 5,\\n      \\\"eligible\\\": true,\\n      \\\"evidenceChecklistAccepted\\\": true,\\n      \\\"nonce\\\": \\\"nonce-c-0003\\\",\\n      \\\"commitmentHash\\\": \\\"008850641e69a44e1d662632cde94dbdedc4a6845a55c5eeff9240b6fddbfce2\\\"\\n    }\\n  ]\\n}\\n\",\"input_data_in_state\":false,\"secrets_ref\":null,\"response_format\":\"Json\",\"payment\":\"4000000000000000000000\",\"attached_usd\":\"0\",\"timestamp\":1794302275842351080,\"compile_only\":false,\"force_rebuild\":false,\"store_on_fastfs\":false,\"use_bound_identity\":false,\"project_uuid\":\"p000000000000013a\",\"project_id\":\"mend-deployer.testnet/bid-rules\"}",
+        "data_id": [
+          145,
+          80,
+          102,
+          114,
+          208,
+          47,
+          48,
+          69,
+          3,
+          2,
+          149,
+          145,
+          191,
+          69,
+          9,
+          25,
+          2,
+          76,
+          234,
+          127,
+          102,
+          254,
+          46,
+          165,
+          35,
+          107,
+          173,
+          112,
+          177,
+          53,
+          203,
+          217
+        ],
+        "timestamp": 1794302275842351000
+      }
+    ]
+  ],
+  "logs": [
+    "Resolved project: mend-deployer.testnet/bid-rules, version: \"640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55\", source: WasmUrl { url: \"https://test.fastfs.io/mend-deployer.testnet/outlayer.testnet/640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55.wasm\", hash: \"640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55\", build_target: Some(\"wasm32-wasip1\") }, uuid: p000000000000013a",
+    "EVENT_JSON:{\"standard\":\"near-outlayer\",\"version\":\"1.0.0\",\"event\":\"execution_requested\",\"data\":[{\"request_data\":\"{\\\"request_id\\\":15579,\\\"sender_id\\\":\\\"mend-deployer.testnet\\\",\\\"predecessor_id\\\":\\\"mend-deployer.testnet\\\",\\\"code_source\\\":{\\\"WasmUrl\\\":{\\\"url\\\":\\\"https://test.fastfs.io/mend-deployer.testnet/outlayer.testnet/640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55.wasm\\\",\\\"hash\\\":\\\"640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55\\\",\\\"build_target\\\":\\\"wasm32-wasip1\\\"}},\\\"resource_limits\\\":{\\\"max_instructions\\\":5000000000,\\\"max_memory_mb\\\":128,\\\"max_execution_seconds\\\":10},\\\"input_data\\\":\\\"{\\\\n  \\\\\\\"schema\\\\\\\": \\\\\\\"mend.bid-rules.v1\\\\\\\",\\\\n  \\\\\\\"policyHash\\\\\\\": \\\\\\\"1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d\\\\\\\",\\\\n  \\\\\\\"policyVersion\\\\\\\": \\\\\\\"mend-bid-policy-v1\\\\\\\",\\\\n  \\\\\\\"weightsBps\\\\\\\": {\\\\n    \\\\\\\"price\\\\\\\": 4500,\\\\n    \\\\\\\"warranty\\\\\\\": 2500,\\\\n    \\\\\\\"duration\\\\\\\": 2000,\\\\n    \\\\\\\"materials\\\\\\\": 1000\\\\n  },\\\\n  \\\\\\\"bids\\\\\\\": [\\\\n    {\\\\n      \\\\\\\"bidId\\\\\\\": \\\\\\\"BID-A-BENCH-001\\\\\\\",\\\\n      \\\\\\\"contractorId\\\\\\\": \\\\\\\"contractor-a.mend.testnet\\\\\\\",\\\\n      \\\\\\\"priceMicro\\\\\\\": \\\\\\\"95000000\\\\\\\",\\\\n      \\\\\\\"durationDays\\\\\\\": 14,\\\\n      \\\\\\\"warrantyDays\\\\\\\": 90,\\\\n      \\\\\\\"materialsScore\\\\\\\": 60,\\\\n      \\\\\\\"availableInDays\\\\\\\": 3,\\\\n      \\\\\\\"eligible\\\\\\\": true,\\\\n      \\\\\\\"evidenceChecklistAccepted\\\\\\\": true,\\\\n      \\\\\\\"nonce\\\\\\\": \\\\\\\"nonce-a-0001\\\\\\\",\\\\n      \\\\\\\"commitmentHash\\\\\\\": \\\\\\\"1e1b013855623969420c303d8bc3be708e407a90f79c2c5a08ccd886092d67a0\\\\\\\"\\\\n    },\\\\n    {\\\\n      \\\\\\\"bidId\\\\\\\": \\\\\\\"BID-B-BENCH-001\\\\\\\",\\\\n      \\\\\\\"contractorId\\\\\\\": \\\\\\\"contractor-b.mend.testnet\\\\\\\",\\\\n      \\\\\\\"priceMicro\\\\\\\": \\\\\\\"80000000\\\\\\\",\\\\n      \\\\\\\"durationDays\\\\\\\": 10,\\\\n      \\\\\\\"warrantyDays\\\\\\\": 180,\\\\n      \\\\\\\"materialsScore\\\\\\\": 80,\\\\n      \\\\\\\"availableInDays\\\\\\\": 2,\\\\n      \\\\\\\"eligible\\\\\\\": true,\\\\n      \\\\\\\"evidenceChecklistAccepted\\\\\\\": true,\\\\n      \\\\\\\"nonce\\\\\\\": \\\\\\\"nonce-b-0002\\\\\\\",\\\\n      \\\\\\\"commitmentHash\\\\\\\": \\\\\\\"fcb0780b0d1f1dbccd9fdcefa5627c24b227636ee414a8c618077f0df079d968\\\\\\\"\\\\n    },\\\\n    {\\\\n      \\\\\\\"bidId\\\\\\\": \\\\\\\"BID-C-BENCH-001\\\\\\\",\\\\n      \\\\\\\"contractorId\\\\\\\": \\\\\\\"contractor-c.mend.testnet\\\\\\\",\\\\n      \\\\\\\"priceMicro\\\\\\\": \\\\\\\"78000000\\\\\\\",\\\\n      \\\\\\\"durationDays\\\\\\\": 21,\\\\n      \\\\\\\"warrantyDays\\\\\\\": 30,\\\\n      \\\\\\\"materialsScore\\\\\\\": 70,\\\\n      \\\\\\\"availableInDays\\\\\\\": 5,\\\\n      \\\\\\\"eligible\\\\\\\": true,\\\\n      \\\\\\\"evidenceChecklistAccepted\\\\\\\": true,\\\\n      \\\\\\\"nonce\\\\\\\": \\\\\\\"nonce-c-0003\\\\\\\",\\\\n      \\\\\\\"commitmentHash\\\\\\\": \\\\\\\"008850641e69a44e1d662632cde94dbdedc4a6845a55c5eeff9240b6fddbfce2\\\\\\\"\\\\n    }\\\\n  ]\\\\n}\\\\n\\\",\\\"input_data_in_state\\\":false,\\\"secrets_ref\\\":null,\\\"response_format\\\":\\\"Json\\\",\\\"payment\\\":\\\"4000000000000000000000\\\",\\\"attached_usd\\\":\\\"0\\\",\\\"timestamp\\\":1794302275842351080,\\\"compile_only\\\":false,\\\"force_rebuild\\\":false,\\\"store_on_fastfs\\\":false,\\\"use_bound_identity\\\":false,\\\"project_uuid\\\":\\\"p000000000000013a\\\",\\\"project_id\\\":\\\"mend-deployer.testnet/bid-rules\\\"}\",\"data_id\":[145,80,102,114,208,47,48,69,3,2,149,145,191,69,9,25,2,76,234,127,102,254,46,165,35,107,173,112,177,53,203,217],\"timestamp\":1794302275842351080}]}",
+    "Retrieving large output from storage for request_id: 15579",
+    "[[yNEAR charged: \"1097100000000000000000\"]]",
+    "EVENT_JSON:{\"standard\":\"near-outlayer\",\"version\":\"1.0.0\",\"event\":\"execution_completed\",\"data\":[{\"sender_id\":\"mend-deployer.testnet\",\"code_source\":{\"WasmUrl\":{\"url\":\"https://test.fastfs.io/mend-deployer.testnet/outlayer.testnet/640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55.wasm\",\"hash\":\"640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55\",\"build_target\":\"wasm32-wasip1\"}},\"resources_used\":{\"instructions\":423356,\"time_ms\":382,\"compile_time_ms\":589},\"success\":true,\"error_message\":null,\"payment_charged\":\"1097100000000000000000\",\"payment_refunded\":\"2902900000000000000000\",\"compilation_note\":\"Freshly compiled\",\"timestamp\":1794302281946623304}]}",
+    "Execution completed successfully. Output: Json(1204 bytes), Resources: { instructions: 423356, time_ms: 382 }, Cost: 1097100000000000000000 yoctoNEAR, Refund: 2902900000000000000000 yoctoNEAR, Freshly compiled"
+  ],
+  "receiptsOutcome": [
+    {
+      "id": "BcArR6RyNZjxcwm3ddBxDGmie4jNHAM545iMNnztJaG9",
+      "executorId": "outlayer.testnet",
+      "logs": [
+        "Resolved project: mend-deployer.testnet/bid-rules, version: \"640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55\", source: WasmUrl { url: \"https://test.fastfs.io/mend-deployer.testnet/outlayer.testnet/640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55.wasm\", hash: \"640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55\", build_target: Some(\"wasm32-wasip1\") }, uuid: p000000000000013a",
+        "EVENT_JSON:{\"standard\":\"near-outlayer\",\"version\":\"1.0.0\",\"event\":\"execution_requested\",\"data\":[{\"request_data\":\"{\\\"request_id\\\":15579,\\\"sender_id\\\":\\\"mend-deployer.testnet\\\",\\\"predecessor_id\\\":\\\"mend-deployer.testnet\\\",\\\"code_source\\\":{\\\"WasmUrl\\\":{\\\"url\\\":\\\"https://test.fastfs.io/mend-deployer.testnet/outlayer.testnet/640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55.wasm\\\",\\\"hash\\\":\\\"640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55\\\",\\\"build_target\\\":\\\"wasm32-wasip1\\\"}},\\\"resource_limits\\\":{\\\"max_instructions\\\":5000000000,\\\"max_memory_mb\\\":128,\\\"max_execution_seconds\\\":10},\\\"input_data\\\":\\\"{\\\\n  \\\\\\\"schema\\\\\\\": \\\\\\\"mend.bid-rules.v1\\\\\\\",\\\\n  \\\\\\\"policyHash\\\\\\\": \\\\\\\"1a8a985878ebb09ebbad817ecd17ad93b3ff1d8b421a830fb3342c15c942357d\\\\\\\",\\\\n  \\\\\\\"policyVersion\\\\\\\": \\\\\\\"mend-bid-policy-v1\\\\\\\",\\\\n  \\\\\\\"weightsBps\\\\\\\": {\\\\n    \\\\\\\"price\\\\\\\": 4500,\\\\n    \\\\\\\"warranty\\\\\\\": 2500,\\\\n    \\\\\\\"duration\\\\\\\": 2000,\\\\n    \\\\\\\"materials\\\\\\\": 1000\\\\n  },\\\\n  \\\\\\\"bids\\\\\\\": [\\\\n    {\\\\n      \\\\\\\"bidId\\\\\\\": \\\\\\\"BID-A-BENCH-001\\\\\\\",\\\\n      \\\\\\\"contractorId\\\\\\\": \\\\\\\"contractor-a.mend.testnet\\\\\\\",\\\\n      \\\\\\\"priceMicro\\\\\\\": \\\\\\\"95000000\\\\\\\",\\\\n      \\\\\\\"durationDays\\\\\\\": 14,\\\\n      \\\\\\\"warrantyDays\\\\\\\": 90,\\\\n      \\\\\\\"materialsScore\\\\\\\": 60,\\\\n      \\\\\\\"availableInDays\\\\\\\": 3,\\\\n      \\\\\\\"eligible\\\\\\\": true,\\\\n      \\\\\\\"evidenceChecklistAccepted\\\\\\\": true,\\\\n      \\\\\\\"nonce\\\\\\\": \\\\\\\"nonce-a-0001\\\\\\\",\\\\n      \\\\\\\"commitmentHash\\\\\\\": \\\\\\\"1e1b013855623969420c303d8bc3be708e407a90f79c2c5a08ccd886092d67a0\\\\\\\"\\\\n    },\\\\n    {\\\\n      \\\\\\\"bidId\\\\\\\": \\\\\\\"BID-B-BENCH-001\\\\\\\",\\\\n      \\\\\\\"contractorId\\\\\\\": \\\\\\\"contractor-b.mend.testnet\\\\\\\",\\\\n      \\\\\\\"priceMicro\\\\\\\": \\\\\\\"80000000\\\\\\\",\\\\n      \\\\\\\"durationDays\\\\\\\": 10,\\\\n      \\\\\\\"warrantyDays\\\\\\\": 180,\\\\n      \\\\\\\"materialsScore\\\\\\\": 80,\\\\n      \\\\\\\"availableInDays\\\\\\\": 2,\\\\n      \\\\\\\"eligible\\\\\\\": true,\\\\n      \\\\\\\"evidenceChecklistAccepted\\\\\\\": true,\\\\n      \\\\\\\"nonce\\\\\\\": \\\\\\\"nonce-b-0002\\\\\\\",\\\\n      \\\\\\\"commitmentHash\\\\\\\": \\\\\\\"fcb0780b0d1f1dbccd9fdcefa5627c24b227636ee414a8c618077f0df079d968\\\\\\\"\\\\n    },\\\\n    {\\\\n      \\\\\\\"bidId\\\\\\\": \\\\\\\"BID-C-BENCH-001\\\\\\\",\\\\n      \\\\\\\"contractorId\\\\\\\": \\\\\\\"contractor-c.mend.testnet\\\\\\\",\\\\n      \\\\\\\"priceMicro\\\\\\\": \\\\\\\"78000000\\\\\\\",\\\\n      \\\\\\\"durationDays\\\\\\\": 21,\\\\n      \\\\\\\"warrantyDays\\\\\\\": 30,\\\\n      \\\\\\\"materialsScore\\\\\\\": 70,\\\\n      \\\\\\\"availableInDays\\\\\\\": 5,\\\\n      \\\\\\\"eligible\\\\\\\": true,\\\\n      \\\\\\\"evidenceChecklistAccepted\\\\\\\": true,\\\\n      \\\\\\\"nonce\\\\\\\": \\\\\\\"nonce-c-0003\\\\\\\",\\\\n      \\\\\\\"commitmentHash\\\\\\\": \\\\\\\"008850641e69a44e1d662632cde94dbdedc4a6845a55c5eeff9240b6fddbfce2\\\\\\\"\\\\n    }\\\\n  ]\\\\n}\\\\n\\\",\\\"input_data_in_state\\\":false,\\\"secrets_ref\\\":null,\\\"response_format\\\":\\\"Json\\\",\\\"payment\\\":\\\"4000000000000000000000\\\",\\\"attached_usd\\\":\\\"0\\\",\\\"timestamp\\\":1794302275842351080,\\\"compile_only\\\":false,\\\"force_rebuild\\\":false,\\\"store_on_fastfs\\\":false,\\\"use_bound_identity\\\":false,\\\"project_uuid\\\":\\\"p000000000000013a\\\",\\\"project_id\\\":\\\"mend-deployer.testnet/bid-rules\\\"}\",\"data_id\":[145,80,102,114,208,47,48,69,3,2,149,145,191,69,9,25,2,76,234,127,102,254,46,165,35,107,173,112,177,53,203,217],\"timestamp\":1794302275842351080}]}"
+      ],
+      "gasBurnt": 5241919873599
+    },
+    {
+      "id": "Dj2QNm3W7eSy49wnE5U7QpcbggYvnekWTy89XiEDTUPj",
+      "executorId": "outlayer.testnet",
+      "logs": [
+        "Retrieving large output from storage for request_id: 15579",
+        "[[yNEAR charged: \"1097100000000000000000\"]]",
+        "EVENT_JSON:{\"standard\":\"near-outlayer\",\"version\":\"1.0.0\",\"event\":\"execution_completed\",\"data\":[{\"sender_id\":\"mend-deployer.testnet\",\"code_source\":{\"WasmUrl\":{\"url\":\"https://test.fastfs.io/mend-deployer.testnet/outlayer.testnet/640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55.wasm\",\"hash\":\"640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55\",\"build_target\":\"wasm32-wasip1\"}},\"resources_used\":{\"instructions\":423356,\"time_ms\":382,\"compile_time_ms\":589},\"success\":true,\"error_message\":null,\"payment_charged\":\"1097100000000000000000\",\"payment_refunded\":\"2902900000000000000000\",\"compilation_note\":\"Freshly compiled\",\"timestamp\":1794302281946623304}]}",
+        "Execution completed successfully. Output: Json(1204 bytes), Resources: { instructions: 423356, time_ms: 382 }, Cost: 1097100000000000000000 yoctoNEAR, Refund: 2902900000000000000000 yoctoNEAR, Freshly compiled"
+      ],
+      "gasBurnt": 3115956847554
+    },
+    {
+      "id": "AESyHsUFKQt6rmpktxMwAw2imknaEqNPwe66tDozy1BX",
+      "executorId": "mend-deployer.testnet",
+      "logs": [],
+      "gasBurnt": 223182562500
+    },
+    {
+      "id": "8eEFa3Vpp9STbDUJzErZCEui7UoTnNbVGZEFhCu9PiQa",
+      "executorId": "mend-deployer.testnet",
+      "logs": [],
+      "gasBurnt": 223182562500
+    },
+    {
+      "id": "FBumPM2ZNGU71rKFoao653Bdw29gYtTyfuk8ZXhBvQVu",
+      "executorId": "mend-deployer.testnet",
+      "logs": [],
+      "gasBurnt": 223182562500
+    },
+    {
+      "id": "4Kss6CTA2Mv6zpT6mF1R7uRndLeE8wgeKQYFeZFuStBe",
+      "executorId": "mend-deployer.testnet",
+      "logs": [],
+      "gasBurnt": 223182562500
+    }
+  ],
+  "getRequest": null
+}

@@ -1,0 +1,10 @@
+{
+  "schema": "mend.outlayer-live.wasm-sha256.v1",
+  "artifact": "compute/bid-rules/target/wasm32-wasip1/release/mend-bid-rules.wasm",
+  "buildTarget": "wasm32-wasip1",
+  "buildCommand": "cargo build --manifest-path compute/bid-rules/Cargo.toml --target wasm32-wasip1 --release",
+  "toolchain": "rustc 1.99.1 (58cf8f9c3 2026-10-13)",
+  "sizeBytes": 131506,
+  "sha256": "640589102f5c259b849c9b1c4b4242b56459dee1f52659700011611fbe41bf55",
+  "recordedAt": "2026-11-10T09:34:51.262Z"
+}
