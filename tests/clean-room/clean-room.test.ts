@@ -153,8 +153,13 @@ describe('clean-room — no hidden generated files are required', () => {
     for (const ignored of ['node_modules/', '.env', 'target/', '.next/']) {
       expect(gitignore).toContain(ignored);
     }
-    // The repository must not contain a committed .env (checked in privacy too).
+    // A local .env is allowed only when it is gitignored. It must never be tracked.
     const topLevel = readdirSync(repoPath());
-    expect(topLevel.filter((entry) => entry === '.env')).toEqual([]);
+    if (topLevel.includes('.env')) {
+      const ignored = run('git', ['check-ignore', '-q', '.env'], 30_000);
+      expect(ignored.status, '.env exists but is not gitignored').toBe(0);
+    }
+    const tracked = run('git', ['ls-files', '--error-unmatch', '.env'], 30_000);
+    expect(tracked.status, '.env must not be tracked by git').not.toBe(0);
   });
 });

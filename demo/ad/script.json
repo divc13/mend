@@ -1,0 +1,136 @@
+{
+  "version": 1,
+  "title": "MEND — Maintenance with memory",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "siteUrl": "",
+  "voice": {
+    "voiceId": "",
+    "model": "eleven_multilingual_v2",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.8,
+      "style": 0.32,
+      "use_speaker_boost": true,
+      "speed": 1.0
+    }
+  },
+  "music": {
+    "model": "music_v2_5",
+    "lengthMs": 300000,
+    "prompt": "Uplifting cinematic indie folk-pop for a hopeful community advertisement, 118 BPM, warm acoustic guitar, felt piano, string swells, hand claps, soft kick and snare, subtle analog synth pulse, sunrise over a neighborhood, human and optimistic. Start sparse with piano and distant street ambience, build gently with drums and claps, lift into a joyful climax, resolve warmly and cleanly. Instrumental only, no vocals, no sirens, no alarms."
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "start": 0,
+      "duration": 20,
+      "chapter": "01 — The problem",
+      "vo": "Every neighborhood has one. A pothole everyone avoids. And nobody owns. It has been there for months. A near miss for every cyclist. This morning, Sam decides to change that.",
+      "caption": "Every neighborhood has one.\nA pothole everyone avoids — and nobody owns.",
+      "visual": "hook"
+    },
+    {
+      "id": "report",
+      "start": 20,
+      "duration": 45,
+      "chapter": "02 — Report",
+      "vo": "He opens MEND. No wallet. No forms. A photo, a location, one sentence. The browser strips the GPS and metadata before anything leaves his phone. Private AI reads the report, checks for duplicates, and drafts a repair scope. It suggests. It never approves. Two neighbors reported the same pothole. MEND merges them privately.",
+      "caption": "No wallet. No forms.\nEXIF and GPS removed in the browser.",
+      "visual": "report"
+    },
+    {
+      "id": "dao",
+      "start": 65,
+      "duration": 40,
+      "chapter": "03 — Authorize",
+      "vo": "A steward turns the report into a scope and a maximum budget. Then the community's DAO authorizes it. Not the AI. Not a platform. The budget, the contractor roster and the scoring policy are on-chain. Two of three council votes. Every decision has a receipt.",
+      "caption": "Steward proposes.\nDAO authorizes.\nAI has no payment authority.",
+      "visual": "dao"
+    },
+    {
+      "id": "bids",
+      "start": 105,
+      "duration": 40,
+      "chapter": "04 — Compete",
+      "vo": "Three contractors submit sealed bids. When the window closes, a hash-pinned policy scores price, warranty, duration and materials. B wins on total value, not the lowest sticker price. No language model picks the winner.",
+      "caption": "Sealed bids. Deterministic score.\nB 9270 · C 5200 · A 2873",
+      "visual": "bids"
+    },
+    {
+      "id": "repair",
+      "start": 145,
+      "duration": 40,
+      "chapter": "05 — Repair",
+      "vo": "The repair begins. The pothole is cleaned, filled, compacted and sealed. Every photo, receipt and note is hashed onto the work order. Then a different human inspects the work. Not the contractor. Not the AI. A checklist, evidence, and a signature.",
+      "caption": "Independent human inspection.\nEvidence, not vibes.",
+      "visual": "repair"
+    },
+    {
+      "id": "payment",
+      "start": 185,
+      "duration": 35,
+      "chapter": "06 — Settle",
+      "vo": "On acceptance, exactly seventy-two USDC goes to the contractor. Eight stays in a durability holdback. One hundred was funded. Twenty was refunded at award. The contractor gets paid. The community keeps leverage.",
+      "caption": "100 funded · 20 refunded\n72 paid · 8 held",
+      "visual": "payment"
+    },
+    {
+      "id": "passport",
+      "start": 220,
+      "duration": 25,
+      "chapter": "07 — Remember",
+      "vo": "If the repair fails, MEND reopens the same work order and the same history. No new bounty. No new money. One asset. One permanent record. The passport keeps the failure, the remedy, and every payment in one place.",
+      "caption": "Same work order. Same history.\nNo new bounty. No new money.",
+      "visual": "passport"
+    },
+    {
+      "id": "tech",
+      "start": 245,
+      "duration": 35,
+      "chapter": "08 — Under the hood",
+      "vo": "Under the hood: Next.js and React, a Fastify API, Postgres, Rust contracts on NEAR, a real Sputnik DAO, NEAR AI, OutLayer, 1Click and Agent Market. The infrastructure is live on NEAR testnet. The pothole story is a replay demo. The contracts, the DAO vote, the AI signature and the Agent Market listing are real. Every payment, vote and attestation has a verifiable receipt.",
+      "caption": "Built on NEAR.\nLive testnet proof. Replay demo.",
+      "visual": "tech"
+    },
+    {
+      "id": "close",
+      "start": 280,
+      "duration": 20,
+      "chapter": "09 — MEND",
+      "vo": "This is maintenance with memory. Report it. Fix it. Remember it. For the price of a small repair, a neighborhood gets a memory. MEND. Get it fixed. Keep it fixed.",
+      "caption": "MEND — Maintenance with memory.\nGet it fixed. Keep it fixed.",
+      "visual": "close"
+    }
+  ],
+  "cuts": {
+    "master": ["hook", "report", "dao", "bids", "repair", "payment", "passport", "tech", "close"],
+    "submission": ["hook", "report", "dao", "bids", "repair", "payment", "passport", "close"],
+    "teaser": ["hook", "report", "repair", "close"]
+  },
+  "assets": {
+    "pothole": "assets/footage/pothole.mp4",
+    "phone": "assets/footage/phone.mp4",
+    "repair": "assets/footage/repair.mp4",
+    "roadworks": "assets/footage/roadworks.mp4",
+    "cyclist": "assets/footage/cyclist.mp4",
+    "potholePhoto": "assets/photos/pothole.jpg",
+    "afterPhoto": "assets/photos/after.jpg",
+    "appReport": "assets/app/report.png",
+    "appPrivacy": "assets/app/privacy.png",
+    "appTriage": "assets/app/triage.png",
+    "appCase": "assets/app/case.png",
+    "appSteward": "assets/app/steward.png",
+    "appBids": "assets/app/bids.png",
+    "appInspector": "assets/app/inspector.png",
+    "appPassport": "assets/app/passport.png",
+    "appTech": "assets/app/how-it-works.png",
+    "appTrust": "assets/app/trust.png"
+  },
+  "disclosures": [
+    "Pothole and repair footage: illustrative stock footage from Pexels.",
+    "Pothole software scenario: REPLAY / SIMULATION.",
+    "Real contracts, DAO vote, AI signature and Agent Market listing: NEAR testnet / production as labelled."
+  ]
+}

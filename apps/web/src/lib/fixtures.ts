@@ -82,6 +82,19 @@ export const HASHES = {
   secondEvidence: 'd'.repeat(64),
   thirdEvidence: 'e'.repeat(64),
   fourthEvidence: 'f'.repeat(64),
+  pathScope: 'c822658e772ecd21e02056fc0c047c386ddbfe9c9d5a04249f25018800f260d8',
+  pathInput: 'ca560e1b137c410ad2f646543b1ca1c3356456abd7465c53887e5a496ff285bf',
+  pathOutput: 'c999fa72390c79d85689bb19b11c59a95e9cebfc51380de8dd5e12460fdf5af5',
+  pathReport1Media: 'c0730e9bb3a076d344f885e1bf67e2ce5e7c572b3f945a5ee360360ef79cd4db',
+  pathReport2Media: 'de389ccf7eef03cf1b99aedc878a4cefaa3b5734218e88f4e7f7ebd4fd635a8a',
+  pathCommitA: '9f2c251063291d0677ae7cc8faeb45acd362f7e2565962cf7006960078970cbb',
+  pathCommitB: '260769951e256afbeabc39db1c7806ddc9aa06d1af2eb035028172200f4f9379',
+  pathCommitC: 'f1037df0a38328e1c6522110178b2a771068c43467ee65e9347698696ba6bd39',
+  pathCompletionEvidence: '00c411c04395547a90a29211f4844d5587e50347f45c97ae9a865380c6844f90',
+  pathCompletionNotes: '643f8d12a820198e760c04e973d7486e5558d06d1a353754e28b5909b65cfdd1',
+  pathDurabilityNotes: '4564ca56c14e0e8f33ab53f6f297022c0989e378fe55585f073ac2b150961d6f',
+  pathSecondEvidence: 'c8cf101c4752f2f1f0215232a76721b370e86d728675951a368d86d44eb32e52',
+  pathThirdEvidence: '7d73450ab2fefaeb49caf6675aa37c2d0ac961e2670439448a6f370043dde969',
   unknown: '0'.repeat(64),
 } as const;
 
@@ -121,6 +134,12 @@ export const LOCATIONS: Record<string, PublicLocation> = {
     coarseLat: 52.5195,
     coarseLng: 13.409,
     area: 'Community Garden',
+  },
+  path: {
+    label: 'Riverside path — north gate',
+    coarseLat: 52.5205,
+    coarseLng: 13.407,
+    area: 'Riverside Path',
   },
 };
 
@@ -1383,6 +1402,487 @@ const GATE_CASE: CaseBundle = {
   },
 };
 
+const PATH_TIMES = {
+  report1: '2026-11-10T08:10:00.000Z',
+  report2: '2026-11-10T08:13:00.000Z',
+  clusterConfirmed: '2026-11-10T08:22:00.000Z',
+  policyApproved: '2026-11-10T08:35:00.000Z',
+  funded: '2026-11-10T08:45:00.000Z',
+  biddingOpen: '2026-11-10T09:00:00.000Z',
+  revealStart: '2026-11-10T09:10:00.000Z',
+  revealEnd: '2026-11-10T09:20:00.000Z',
+  scored: '2026-11-10T09:21:00.000Z',
+  awarded: '2026-11-10T09:25:00.000Z',
+  workStarted: '2026-11-10T09:40:00.000Z',
+  completionSubmitted: '2026-11-10T11:05:00.000Z',
+  completionAccepted: '2026-11-10T11:35:00.000Z',
+  durabilityDue: '2026-11-10T13:35:00.000Z',
+  durabilityPassed: '2026-11-10T13:40:00.000Z',
+} as const;
+
+const PATH_REPORT_1: Report = {
+  id: 'R-008',
+  assetId: 'PATH-006',
+  description:
+    'Deep pothole on the riverside path just inside the north gate. It fills with water and is hard to see after rain.',
+  publicLocation: LOCATIONS.path!,
+  reporterCaseLink: 'case_4Pq8Wm2Yb6Nc9KdT',
+  redactedMediaHash: HASHES.pathReport1Media,
+  perceptualHash: 'a7b8c9d0e1f2031425364758697a8b9c',
+  exifStripped: true,
+  status: 'CLUSTERED',
+  clusterId: 'CL-0002',
+  createdAt: PATH_TIMES.report1,
+};
+
+const PATH_REPORT_2: Report = {
+  id: 'R-009',
+  assetId: 'PATH-006',
+  description:
+    'Pothole beside the north gate on the path — my front wheel hit it this morning and I nearly came off.',
+  publicLocation: LOCATIONS.path!,
+  reporterCaseLink: 'case_7Lm3Vq9Xc2Bd5KfR',
+  redactedMediaHash: HASHES.pathReport2Media,
+  perceptualHash: 'a7b8c9d0e1f2031425364758697a8b9c',
+  exifStripped: true,
+  status: 'CLUSTERED',
+  clusterId: 'CL-0002',
+  createdAt: PATH_TIMES.report2,
+};
+
+const PATH_CLUSTER: ReportCluster = {
+  id: 'CL-0002',
+  reportIds: ['R-008', 'R-009'],
+  confidenceBps: 9_300,
+  rationale: 'Same pothole, identical perceptual hash, 9 m apart, matching descriptions from both sides of the north gate.',
+  status: 'CONFIRMED',
+  confirmedBy: ACCOUNTS.steward,
+  createdAt: PATH_TIMES.clusterConfirmed,
+};
+
+const PATH_BID_INPUTS = [
+  {
+    bidId: 'BID-A-PATH-006',
+    contractorId: ACCOUNTS.contractorA,
+    priceMicro: '95000000',
+    durationDays: 14,
+    warrantyDays: 90,
+    availableInDays: 3,
+    materials: 'Cold-lay asphalt patch, standard compaction',
+    materialsScore: 60,
+    evidenceChecklistAccepted: true,
+    commitmentHash: HASHES.pathCommitA,
+    committedAt: PATH_TIMES.revealStart,
+  },
+  {
+    bidId: 'BID-B-PATH-006',
+    contractorId: ACCOUNTS.contractorB,
+    priceMicro: '80000000',
+    durationDays: 10,
+    warrantyDays: 180,
+    availableInDays: 2,
+    materials: 'Hot-mix asphalt, sealed edges, compacted base',
+    materialsScore: 80,
+    evidenceChecklistAccepted: true,
+    commitmentHash: HASHES.pathCommitB,
+    committedAt: PATH_TIMES.revealStart,
+  },
+  {
+    bidId: 'BID-C-PATH-006',
+    contractorId: ACCOUNTS.contractorC,
+    priceMicro: '78000000',
+    durationDays: 21,
+    warrantyDays: 30,
+    availableInDays: 5,
+    materials: 'Cold patch, mixed aggregate',
+    materialsScore: 70,
+    evidenceChecklistAccepted: true,
+    commitmentHash: HASHES.pathCommitC,
+    committedAt: PATH_TIMES.revealStart,
+  },
+];
+
+const PATH_REVEALS: BidRevealView[] = PATH_BID_INPUTS.map((bid) => ({
+  ...bid,
+  revealedAt: PATH_TIMES.revealEnd,
+}));
+
+const PATH_SCORING: ScoredBidView[] = scoreBids(
+  PATH_BID_INPUTS.map((bid) => ({
+    bidId: bid.bidId,
+    contractorId: bid.contractorId,
+    priceMicro: bid.priceMicro,
+    durationDays: bid.durationDays,
+    warrantyDays: bid.warrantyDays,
+    availableInDays: bid.availableInDays,
+    materialsScore: bid.materialsScore,
+    eligible: true,
+  })),
+);
+
+const PATH_CHECKLIST = [
+  { label: 'Before photo of the damaged path surface', complete: true },
+  { label: 'Repair or replacement in progress', complete: true },
+  { label: 'After photo from the same angle', complete: true },
+  { label: 'Close-up of the compacted patch and sealed edge', complete: true },
+  { label: 'Materials or asphalt receipt / label', complete: true },
+  { label: 'Site left clean and safe', complete: true },
+] as const;
+
+const PATH_COMPLETION_EVIDENCE: EvidencePackageView = {
+  id: 'EV-0005',
+  kind: 'COMPLETION',
+  evidenceHashes: [HASHES.pathCompletionEvidence, HASHES.pathSecondEvidence, HASHES.pathThirdEvidence],
+  checklist: PATH_CHECKLIST.map((item) => ({ ...item })),
+  redacted: true,
+  submittedBy: ACCOUNTS.contractorB,
+  submittedAt: PATH_TIMES.completionSubmitted,
+};
+
+const PATH_COMPLETION_INSPECTION: InspectionView = {
+  id: 'INS-0005',
+  kind: 'COMPLETION',
+  inspectorId: ACCOUNTS.inspector,
+  decision: 'APPROVED',
+  evidencePackageId: PATH_COMPLETION_EVIDENCE.id,
+  notesHash: HASHES.pathCompletionNotes,
+  signedAt: PATH_TIMES.completionAccepted,
+};
+
+const PATH_DURABILITY_INSPECTION: InspectionView = {
+  id: 'INS-0006',
+  kind: 'DURABILITY',
+  inspectorId: ACCOUNTS.inspector,
+  decision: 'APPROVED',
+  evidencePackageId: PATH_COMPLETION_EVIDENCE.id,
+  notesHash: HASHES.pathDurabilityNotes,
+  signedAt: PATH_TIMES.durabilityPassed,
+};
+
+function pathAttestations(scopeHash: string): AttestationView[] {
+  return [
+    {
+      id: 'ATT-AI-PATH-0001',
+      kind: 'NEAR_AI',
+      label: 'Private AI triage, duplicate suggestion and scope draft',
+      subjectHash: HASHES.pathReport1Media,
+      verified: false,
+      unavailableReason:
+        'Replay recording. No live NEAR AI response signature is bundled, so this artifact is shown as unavailable rather than verified.',
+      detail:
+        'Structured classification identified a pothole / path-surface defect, proposed a 93% duplicate candidate and drafted a low-risk repair scope. Raw media stayed private; AI did not approve the scope or any payment.',
+      createdAt: PATH_TIMES.report1,
+    },
+    {
+      id: 'ATT-OL-PATH-0001',
+      kind: 'OUTLAYER',
+      label: 'Deterministic bid scoring execution',
+      subjectHash: HASHES.pathOutput,
+      verified: false,
+      unavailableReason:
+        'Replay recording. The deterministic ranking can be reproduced from the frozen bids, but no live OutLayer callback is claimed.',
+      detail:
+        'Policy, WASM, input and output hashes are displayed below. The contract would accept only a hash-bound callback from the configured OutLayer account.',
+      createdAt: PATH_TIMES.scored,
+    },
+    {
+      id: 'ATT-DAO-PATH-0001',
+      kind: 'DAO',
+      label: 'Sputnik DAO proposal #48',
+      subjectHash: scopeHash,
+      verified: false,
+      unavailableReason:
+        'Replay recording. The proposal reference is canonical fixture data; it is not a live Sputnik proposal lookup.',
+      detail:
+        'DAO authorization is a push path. A Sputnik FunctionCall proposal executes dao_authorize after approval; MEND does not trust proposal text.',
+      createdAt: PATH_TIMES.policyApproved,
+    },
+    {
+      id: 'ATT-HUMAN-PATH-0001',
+      kind: 'HUMAN',
+      label: 'Human steward and inspector decisions',
+      subjectHash: HASHES.pathCompletionNotes,
+      verified: false,
+      unavailableReason:
+        'Replay recording. Human actors are labelled, but their wallet signatures are not part of this fixture bundle.',
+      detail:
+        'AI never authorizes a scope, award or payment. A rostered human inspector records the physical acceptance decision.',
+      createdAt: PATH_TIMES.completionAccepted,
+    },
+  ];
+}
+
+const PATH_INTENT: IntentQuoteView = {
+  ...SUCCESS_INTENT,
+  id: 'IQ-0007',
+  depositMemo: 'MEND-WO-PATH-001-0001',
+  updatedAt: PATH_TIMES.funded,
+};
+
+const PATH_CASE: CaseBundle = {
+  id: 'WO-PATH-001-0001',
+  assetId: 'PATH-006',
+  title: 'Riverside path — north gate pothole',
+  summary:
+    'Two nearby reports merged into one pothole repair. Private AI triage proposed the duplicate and a human steward confirmed it. Three sealed bids revealed, deterministic scoring selected contractor B, and the 10% durability holdback released after a second human inspection. The completed repair stays attached to passport PATH-006.',
+  status: 'CLOSED',
+  mode: 'REPLAY',
+  budgetMicro: '100000000',
+  winningBidMicro: '80000000',
+  refundMicro: '20000000',
+  completionPaymentMicro: '72000000',
+  holdbackMicro: '8000000',
+  scope:
+    'Clean and square the pothole on the riverside path at the north gate. Fill with hot-mix asphalt, compact the base, seal the edges flush with the surrounding path, and leave the route clean and passable. Submit six-item redacted evidence.',
+  scopeHash: HASHES.pathScope,
+  daoApproval: {
+    id: 'dao-48',
+    daoAccount: ACCOUNTS.dao,
+    proposalId: '48',
+    budgetMicro: '100000000',
+    contractorRoster: [ACCOUNTS.contractorA, ACCOUNTS.contractorB, ACCOUNTS.contractorC],
+    inspectorRoster: [ACCOUNTS.inspector, ACCOUNTS.inspector2],
+    policyHash: HASHES.policy,
+    state: 'APPROVED',
+    approvedAt: PATH_TIMES.policyApproved,
+  },
+  policyVersion: 'mend-bid-policy-v1',
+  policyWeightsBps: DEFAULT_WEIGHTS,
+  policyHash: HASHES.policy,
+  contractorId: ACCOUNTS.contractorB,
+  inspectorId: ACCOUNTS.inspector,
+  fundingToken: ACCOUNTS.token,
+  durabilityDueAt: PATH_TIMES.durabilityDue,
+  reopenCount: 0,
+  createdAt: TIMES.assetCreated,
+  updatedAt: PATH_TIMES.durabilityPassed,
+  reports: [PATH_REPORT_1, PATH_REPORT_2],
+  cluster: PATH_CLUSTER,
+  commitments: PATH_BID_INPUTS.map(({ bidId, contractorId, commitmentHash, committedAt }) => ({
+    bidId,
+    contractorId,
+    commitmentHash,
+    committedAt,
+  })),
+  reveals: PATH_REVEALS,
+  score: {
+    id: 'SX-0005',
+    policyHash: HASHES.policy,
+    policyVersion: 'mend-bid-policy-v1',
+    weightsBps: DEFAULT_WEIGHTS,
+    wasmHash: HASHES.wasm,
+    inputHash: HASHES.pathInput,
+    outputHash: HASHES.pathOutput,
+    ranking: PATH_SCORING,
+    verified: false,
+    unavailableReason:
+      'Replay recording: ranking is reproducible from frozen revealed bids; no live OutLayer callback is claimed.',
+    createdAt: PATH_TIMES.scored,
+  },
+  evidence: [PATH_COMPLETION_EVIDENCE],
+  inspections: [PATH_COMPLETION_INSPECTION, PATH_DURABILITY_INSPECTION],
+  escrow: {
+    token: ACCOUNTS.token,
+    fundedMicro: '100000000',
+    refundedMicro: '20000000',
+    completionPaidMicro: '72000000',
+    holdbackHeldMicro: '0',
+    holdbackReleasedMicro: '8000000',
+  },
+  payments: [
+    {
+      id: 'PAY-0040',
+      kind: 'REFUND',
+      amountMicro: '20000000',
+      recipient: ACCOUNTS.sponsor,
+      status: 'SUCCESS',
+      releasedAt: PATH_TIMES.awarded,
+    },
+    {
+      id: 'PAY-0041',
+      kind: 'COMPLETION',
+      amountMicro: '72000000',
+      recipient: ACCOUNTS.contractorB,
+      status: 'SUCCESS',
+      releasedAt: PATH_TIMES.completionAccepted,
+    },
+    {
+      id: 'PAY-0042',
+      kind: 'HOLDBACK',
+      amountMicro: '8000000',
+      recipient: ACCOUNTS.contractorB,
+      status: 'SUCCESS',
+      releasedAt: PATH_TIMES.durabilityPassed,
+    },
+  ],
+  attestations: pathAttestations(HASHES.pathScope),
+  events: [
+    {
+      id: 'E-PATH-REPORT-1',
+      at: PATH_TIMES.report1,
+      title: 'First pothole report received without a wallet',
+      detail: 'Photo and description submitted. EXIF/GPS metadata removed in the browser before upload.',
+      actor: ACCOUNTS.reporterA,
+      kind: 'report',
+      evidence: [{ label: 'Redacted media hash', kind: 'HASH', value: HASHES.pathReport1Media }],
+    },
+    {
+      id: 'E-PATH-REPORT-2',
+      at: PATH_TIMES.report2,
+      title: 'Second report received from the other side of the path',
+      detail: 'A nearby reporter describes the same pothole after a near miss on a bicycle.',
+      actor: ACCOUNTS.reporterB,
+      kind: 'report',
+      evidence: [{ label: 'Redacted media hash', kind: 'HASH', value: HASHES.pathReport2Media }],
+    },
+    {
+      id: 'E-PATH-TRIAGE',
+      at: PATH_TIMES.clusterConfirmed,
+      title: 'Duplicate cluster confirmed by a human steward',
+      detail:
+        'Private AI proposed 93% confidence. The steward confirmed the merge; no automatic merge was applied.',
+      actor: ACCOUNTS.steward,
+      kind: 'triage',
+      evidence: [
+        { label: 'Cluster fixture', kind: 'HASH', value: 'CL-0002' },
+        { label: 'Human decision', kind: 'HUMAN', value: ACCOUNTS.steward },
+      ],
+    },
+    {
+      id: 'E-PATH-POLICY',
+      at: PATH_TIMES.policyApproved,
+      title: 'Scope and maximum budget approved; DAO proposal attached',
+      detail: 'Steward approves the pothole scope. The DAO envelope and scoring policy are referenced, not invented by AI.',
+      actor: `${ACCOUNTS.steward} + ${ACCOUNTS.dao}`,
+      kind: 'policy',
+      evidence: [
+        { label: 'Scope hash', kind: 'HASH', value: HASHES.pathScope },
+        { label: 'Policy hash', kind: 'HASH', value: HASHES.policy },
+      ],
+    },
+    {
+      id: 'E-PATH-FUND',
+      at: PATH_TIMES.funded,
+      title: 'Sponsor funded 100 test USDC',
+      detail: 'Exact-token, exact-amount funding into the work-order escrow. Test value only.',
+      actor: ACCOUNTS.sponsor,
+      kind: 'funding',
+      evidence: [{ label: 'Funding token', kind: 'HASH', value: ACCOUNTS.token }],
+    },
+    {
+      id: 'E-PATH-BID-OPEN',
+      at: PATH_TIMES.biddingOpen,
+      title: 'Sealed bidding opened',
+      detail: 'Three rostered contractors may commit. Competing values are invisible until the reveal phase.',
+      actor: ACCOUNTS.steward,
+      kind: 'bid',
+    },
+    {
+      id: 'E-PATH-BID-COMMIT',
+      at: PATH_TIMES.revealStart,
+      title: 'Three sealed commitments recorded',
+      detail: 'Commitment hashes are public; price, duration and warranty remain sealed.',
+      actor: '3 rostered contractors',
+      kind: 'bid',
+      evidence: PATH_BID_INPUTS.map((bid) => ({
+        label: bid.bidId,
+        kind: 'HASH' as const,
+        value: bid.commitmentHash,
+      })),
+    },
+    {
+      id: 'E-PATH-REVEAL',
+      at: PATH_TIMES.revealEnd,
+      title: 'Reveals checked against commitments',
+      detail: 'Every revealed bid matched its commitment hash, arrived in the reveal window and came from the approved roster.',
+      actor: 'Hub contract',
+      kind: 'bid',
+    },
+    {
+      id: 'E-PATH-SCORE',
+      at: PATH_TIMES.scored,
+      title: 'Deterministic score produced: B 9270 > C 5200 > A 2873',
+      detail: 'A hash-pinned WASM policy ranks total value. No LLM chooses the winner.',
+      actor: 'OutLayer execution (replay fixture)',
+      kind: 'score',
+      evidence: [
+        { label: 'WASM hash', kind: 'HASH', value: HASHES.wasm },
+        { label: 'Input hash', kind: 'HASH', value: HASHES.pathInput },
+        { label: 'Output hash', kind: 'HASH', value: HASHES.pathOutput },
+      ],
+    },
+    {
+      id: 'E-PATH-AWARD',
+      at: PATH_TIMES.awarded,
+      title: 'Steward confirmed the rank-1 eligible bid',
+      detail: `${ACCOUNTS.contractorB} awarded at 80 USDC. The unallocated 20 USDC returns to the sponsor.`,
+      actor: ACCOUNTS.steward,
+      kind: 'award',
+      evidence: [{ label: 'Human award confirmation', kind: 'HUMAN', value: ACCOUNTS.steward }],
+    },
+    {
+      id: 'E-PATH-WORK',
+      at: PATH_TIMES.workStarted,
+      title: 'Contractor started the pothole repair',
+      detail: 'Only the awarded contractor can start and submit completion for this work order.',
+      actor: ACCOUNTS.contractorB,
+      kind: 'work',
+    },
+    {
+      id: 'E-PATH-COMPLETE',
+      at: PATH_TIMES.completionSubmitted,
+      title: 'Redacted completion evidence submitted',
+      detail: 'Six checklist items expected. Evidence is stored privately and referenced on-chain by redacted hash only.',
+      actor: ACCOUNTS.contractorB,
+      kind: 'evidence',
+      evidence: [{ label: 'Completion evidence', kind: 'HASH', value: HASHES.pathCompletionEvidence }],
+    },
+    {
+      id: 'E-PATH-INSPECT',
+      at: PATH_TIMES.completionAccepted,
+      title: 'Independent human inspector accepted completion',
+      detail: 'The inspector is not the contractor. Acceptance releases exactly 90% and starts the durability window.',
+      actor: ACCOUNTS.inspector,
+      kind: 'inspection',
+      evidence: [
+        { label: 'Human acceptance', kind: 'HUMAN', value: ACCOUNTS.inspector },
+        { label: 'Notes hash', kind: 'HASH', value: HASHES.pathCompletionNotes },
+      ],
+    },
+    {
+      id: 'E-PATH-PAY-72',
+      at: PATH_TIMES.completionAccepted,
+      title: '72 USDC completion payment recorded',
+      detail: '90% of the 80 USDC award. The remaining 8 USDC is held for durability.',
+      actor: 'Escrow',
+      kind: 'payment',
+      evidence: [{ label: 'No live transaction hash in replay', kind: 'TX' }],
+    },
+    {
+      id: 'E-PATH-DURABILITY',
+      at: PATH_TIMES.durabilityPassed,
+      title: 'Durability inspection passed; 8 USDC holdback released',
+      detail: 'Same work order. Same asset history. The durability timestamp was fixed before the repair began.',
+      actor: ACCOUNTS.inspector,
+      kind: 'inspection',
+      evidence: [
+        { label: 'Human durability decision', kind: 'HUMAN', value: ACCOUNTS.inspector },
+        { label: 'Physical observation', kind: 'PHYSICAL', value: 'Patch stable under foot and cycle-wheel loading check' },
+      ],
+    },
+    {
+      id: 'E-PATH-PAY-8',
+      at: PATH_TIMES.durabilityPassed,
+      title: '8 USDC holdback released; work order CLOSED',
+      detail: 'Total: 20 refunded + 72 completion + 8 holdback = 100 funded. Released exactly once.',
+      actor: 'Escrow',
+      kind: 'payment',
+      evidence: [{ label: 'No live transaction hash in replay', kind: 'TX' }],
+    },
+  ],
+  intent: PATH_INTENT,
+};
+
 export const ASSETS: Asset[] = [
   {
     id: 'BENCH-001',
@@ -1462,9 +1962,30 @@ export const ASSETS: Asset[] = [
     replacementCount: 0,
     repeatFailures: 0,
   },
+  {
+    id: 'PATH-006',
+    publicDescription: 'Riverside path surface at the north gate with a pothole and broken edge.',
+    assetType: 'other',
+    publicLocation: LOCATIONS.path!,
+    passportTokenId: 'PATH-006',
+    createdAt: TIMES.assetCreated,
+    owner: ACCOUNTS.dao,
+    transferable: false,
+    repairCount: 1,
+    replacementCount: 0,
+    repeatFailures: 0,
+  },
 ];
 
-export const CASES: CaseBundle[] = [BENCH_CASE, RACK_CASE, DOOR_CASE, FENCE_CASE, PLAY_CASE, GATE_CASE];
+export const CASES: CaseBundle[] = [
+  BENCH_CASE,
+  RACK_CASE,
+  DOOR_CASE,
+  FENCE_CASE,
+  PLAY_CASE,
+  GATE_CASE,
+  PATH_CASE,
+];
 
 export const CASE_BY_ID: Record<string, CaseBundle> = Object.fromEntries(
   CASES.map((item) => [item.id, item]),
@@ -1538,6 +2059,17 @@ export function statusLabel(status: CaseBundle['status']): string {
 }
 
 export const SCENARIOS: ScenarioView[] = [
+  {
+    id: 'pothole',
+    code: 'PATH',
+    title: 'Pothole repair — report to passport',
+    description:
+      'A walletless report and a duplicate from the other side of the path merge into one work order. Private AI triage proposes the duplicate; a human steward confirms it. Three sealed bids reveal and deterministic scoring selects contractor B.',
+    expected:
+      '100 funded → 20 refunded → 72 completion → 8 holdback → CLOSED. Passport PATH-006 keeps the repair, evidence and payments attached.',
+    caseId: 'WO-PATH-001-0001',
+    tags: ['pothole', 'duplicate', 'sealed bids', 'durability pass', 'passport'],
+  },
   {
     id: 'successful-repair',
     code: 'A',

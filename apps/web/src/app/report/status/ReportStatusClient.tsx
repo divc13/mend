@@ -6,6 +6,7 @@ import { Badge, Callout, PageHero } from '@/components/ui';
 import { DataSourceNote } from '@/components/DataSourceNote';
 import { CopyButton } from '@/components/CopyButton';
 import { formatDateTime, shortHash } from '@/lib/format';
+import { assetIdForReport } from '@/lib/report-routing';
 import { ArrowRight, Check, Clock, FileText, Lock, MapPin, ShieldCheck } from '@/components/Icons';
 
 interface Receipt {
@@ -14,6 +15,8 @@ interface Receipt {
   token: string;
   description: string;
   category: string;
+  categoryLabel?: string;
+  assetId?: string;
   area: string;
   areaLabel: string;
   exifStripped: boolean;
@@ -28,6 +31,7 @@ interface Receipt {
 export function ReportStatusClient({ token }: { token?: string }) {
   const [receipt, setReceipt] = useState<Receipt | null>(null);
   const [loaded, setLoaded] = useState(false);
+  const routedAssetId = receipt ? receipt.assetId ?? assetIdForReport(receipt.category, receipt.area) : undefined;
 
   useEffect(() => {
     if (!token) {
@@ -122,7 +126,19 @@ export function ReportStatusClient({ token }: { token?: string }) {
                 <dl className="facts-grid" style={{ marginTop: 18 }}>
                   <div className="fact">
                     <dt>Category</dt>
-                    <dd>{receipt.category.replace(/_/g, ' ')}</dd>
+                    <dd>{receipt.categoryLabel ?? receipt.category.replace(/_/g, ' ')}</dd>
+                  </div>
+                  <div className="fact">
+                    <dt>Routed asset</dt>
+                    <dd>
+                      {routedAssetId && routedAssetId !== 'UNASSIGNED' ? (
+                        <Link className="text-link" href={`/assets/${routedAssetId}`}>
+                          {routedAssetId}
+                        </Link>
+                      ) : (
+                        'Steward triage'
+                      )}
+                    </dd>
                   </div>
                   <div className="fact">
                     <dt>Public area</dt>

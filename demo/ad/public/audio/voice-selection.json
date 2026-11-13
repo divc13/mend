@@ -1,0 +1,68 @@
+{
+  "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+  "name": "George",
+  "display_name": "George — Warm, Captivating Storyteller",
+  "category": "premade",
+  "labels": {
+    "accent": "british",
+    "description": "warm, captivating storyteller"
+  },
+  "model": "eleven_multilingual_v2",
+  "settings": {
+    "stability": 0.45,
+    "similarity_boost": 0.8,
+    "style": 0.32,
+    "use_speaker_boost": true,
+    "speed": 1.0
+  },
+  "output_format": "mp3_44100_128",
+  "requested_output_format": "mp3_44100_192",
+  "output_format_note": "The requested mp3_44100_192 format is Creator tier and above. This account is on the Free tier, so the API returned HTTP 403 subscription_required for 192 kbps. All audio was generated at mp3_44100_128, the highest format available on the plan.",
+  "selection_rationale": "George is a premade warm storyteller with a clear, human delivery. His tone fits a hopeful community ad better than a news-style broadcaster or a very deep character voice: trustworthy and calm without sounding hypey.",
+  "tests": [
+    {
+      "name": "george",
+      "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+      "file": "vo/voice-test-george.mp3",
+      "status": 200,
+      "ok": true,
+      "bytes": 94501,
+      "duration_seconds": 5.877551,
+      "selected": true,
+      "notes": "Warm, clear storyteller. Selected for the final read."
+    },
+    {
+      "name": "daniel",
+      "voice_id": "onwK4e9ZLuTAKqWW03F9",
+      "file": "vo/voice-test-daniel.mp3",
+      "status": 200,
+      "ok": true,
+      "bytes": 129610,
+      "duration_seconds": 8.071837,
+      "selected": false,
+      "notes": "Steady broadcaster. Clear, but more news-read than neighborhood story."
+    },
+    {
+      "name": "brian",
+      "voice_id": "nPczCjzI2devNBz1zQrb",
+      "file": "vo/voice-test-brian.mp3",
+      "status": 200,
+      "ok": true,
+      "bytes": 104532,
+      "duration_seconds": 6.50449,
+      "selected": false,
+      "notes": "Deep and comforting. Good warmth, but heavier than the hopeful, forward-moving read the ad needs."
+    }
+  ],
+  "test_text": "Every neighborhood has one. A pothole everyone avoids. This morning, Sam decides to change that.",
+  "character_usage": {
+    "tests": 288,
+    "scenes": 2182,
+    "total": 2470,
+    "exploratory_api_tests": 79,
+    "account_total_after_generation": 2549,
+    "account_limit": 10000,
+    "account_remaining": 7451
+  },
+  "generated_at": "2026-11-13T18:02:21Z"
+}

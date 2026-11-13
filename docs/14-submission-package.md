@@ -44,9 +44,9 @@ transaction links and final confirmation are HUMAN SUPPLIED — DO NOT INVENT.**
 > (`WO-BENCH-V2-001-0002`, final `CLOSED`); an earlier 57-transaction run is
 > historical. Live NEAR AI inference/signature, a real Sputnik DAO, live OutLayer
 > execution, a live NEP-366 relayer transaction and a disclosed live Agent Market
-> self-hire have evidence. The Intents deposit/settlement, a hosted demo, narration
-> and physical repair evidence remain incomplete or human-gated. The authoritative
-> matrix is `STATUS.md`.
+> self-hire have evidence. The Intents deposit/settlement, a hosted demo and
+> real physical repair evidence remain incomplete or human-gated. The
+> authoritative matrix is `STATUS.md`.
 
 ## NEAR integration explanation
 
@@ -158,7 +158,7 @@ above must be reconciled with the final lockfile.
   deposit/settlement is not;
 - no mainnet execution;
 - no hosted demo;
-- no narrated or captioned demo video (a silent REPLAY MP4 exists);
+- a 5:00 narrated, captioned 1080p master exists at `demo/ad/out/mend-ad-5min.mp4`; the hosted demo, public repository and X post are pending;
 - no physical repair or durability inspection;
 - no real users, city adoption or partnership;
 - no security audit or accessibility certification;

@@ -178,7 +178,7 @@ export function DemoRoom() {
           <div className="panel__head">
             <div>
               <p className="eyebrow">Recorded scenarios</p>
-              <h2 id="scenarios-title">Nine narratives, no fabricated success</h2>
+              <h2 id="scenarios-title">{SCENARIOS.length} narratives, no fabricated success</h2>
               <p>
                 Each scenario links to a real replay case or a recorded transcript. “Run” only changes local presentation
                 state; it never claims a live transaction.

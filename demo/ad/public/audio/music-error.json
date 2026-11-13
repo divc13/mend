@@ -1,0 +1,16 @@
+{
+  "status": 402,
+  "error": "payment_required",
+  "code": "paid_plan_required",
+  "message": "Music API is not available for free users. Please upgrade to a paid plan to use the API.",
+  "model": "music_v2_5",
+  "prompt": "Uplifting cinematic indie folk-pop for a hopeful community advertisement, 118 BPM, warm acoustic guitar, felt piano, string swells, hand claps, soft kick and snare, subtle analog synth pulse, sunrise over a neighborhood, human and optimistic. Start sparse with piano and distant street ambience, build gently with drums and claps, lift into a joyful climax, resolve warmly and cleanly. Instrumental only, no vocals, no sirens, no alarms.",
+  "requested_length_ms": 300000,
+  "output_format": "mp3_44100_128",
+  "requested_output_format": "mp3_44100_192",
+  "output_format_note": "The requested mp3_44100_192 format is Creator tier and above. The account is on the Free tier, so music generation was attempted at mp3_44100_128.",
+  "diagnostic_prompt": "Uplifting cinematic indie folk-pop, warm acoustic guitar, felt piano, hopeful, instrumental only.",
+  "diagnostic_request_id": "12c7a81df7429a11a09e8894d5220023",
+  "attempted_at": "2026-11-13T18:02:21Z",
+  "note": "No music track was generated or fabricated. The initial generation attempt with the script prompt returned HTTP 402; a follow-up diagnostic with the same endpoint, model and length confirmed the paid-plan requirement and returned the message above. The diagnostic request id is recorded above; the initial full-prompt request returned the same status."
+}

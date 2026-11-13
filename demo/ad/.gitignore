@@ -1,0 +1,7 @@
+# Generated media is large and reproducible; do not commit it.
+out/
+public/assets/footage/
+public/assets/photos/
+public/assets/app/
+public/audio/vo/
+public/audio/music/

@@ -10,6 +10,12 @@ import { useMode } from '@/components/ModeProvider';
 import { submitReport } from '@/lib/api';
 import { LOCATIONS } from '@/lib/fixtures';
 import { shortHash } from '@/lib/format';
+import {
+  REPORT_AREAS as areas,
+  REPORT_CATEGORIES as categories,
+  assetIdForReport,
+  protocolCategoryFor,
+} from '@/lib/report-routing';
 import { AlertTriangle, ArrowRight, Check, FileText, Lock, MapPin, ShieldCheck, Wallet } from '@/components/Icons';
 
 type DuplicateChoice = 'same' | 'different' | 'unsure';
@@ -22,23 +28,6 @@ interface ResultState {
   mediaHash?: string;
   note?: string;
 }
-
-const areas = [
-  { value: 'bench', label: 'Riverside Park — east gate bench area' },
-  { value: 'rack', label: 'Community Centre — north entrance' },
-  { value: 'door', label: 'Community Centre — side entrance' },
-  { value: 'fence', label: 'Allotment gardens — west boundary' },
-  { value: 'playground', label: 'Playground — south corner' },
-] as const;
-
-const categories = [
-  { value: 'bench', label: 'Bench / seating' },
-  { value: 'bicycle_rack', label: 'Bicycle rack' },
-  { value: 'fence', label: 'Fence' },
-  { value: 'door', label: 'Door / closer' },
-  { value: 'playground', label: 'Non-electrical playground fixture' },
-  { value: 'other', label: 'Other low-risk community asset' },
-] as const;
 
 const stepTitles = ['The problem', 'Protect privacy', 'Duplicate check', 'Review & send'];
 
@@ -85,6 +74,23 @@ export function ReportFlow() {
 
   const selectedArea = LOCATIONS[area] ?? LOCATIONS.bench!;
   const selectedCategory = categories.find((item) => item.value === category)?.label ?? 'Other';
+  const isPathPothole = protocolCategoryFor(category) === 'other' && area === 'path';
+  const duplicateSuggestion = isPathPothole
+    ? {
+        title: 'Possible duplicate · 93% confidence',
+        detail:
+          'Same pothole, identical perceptual hash, 9 m apart, matching descriptions from both sides of the north gate. A steward decides whether the reports form one work order.',
+        reports: ['R-008 · CLUSTERED', 'R-009 · CLUSTERED', 'CL-0002 · CONFIRMED'],
+      }
+    : {
+        title: 'Possible duplicate · 94% confidence',
+        detail:
+          'Same asset, identical perceptual hash, 12 m apart, near-identical damage description. A steward decides whether the reports form one work order.',
+        reports: ['R-001 · CLUSTERED', 'R-002 · CLUSTERED', 'CL-0001 · CONFIRMED'],
+      };
+  const descriptionPlaceholder = isPathPothole
+    ? 'For example: a deep pothole on the path just inside the north gate fills with water and is hard to see after rain.'
+    : 'For example: the seat plank is cracked, one armrest is loose and a sharp edge is exposed.';
 
   function validateStep(current: number): string[] {
     const next: string[] = [];
@@ -127,18 +133,8 @@ export function ReportFlow() {
     }
 
     setSubmitting(true);
-    const assetId =
-      category === 'bench' && area === 'bench'
-        ? 'BENCH-001'
-        : category === 'bicycle_rack' && area === 'rack'
-          ? 'RACK-002'
-          : category === 'door' && area === 'door'
-            ? 'DOOR-003'
-            : category === 'fence' && area === 'fence'
-              ? 'FENCE-004'
-              : category === 'playground' && area === 'playground'
-                ? 'PLAY-005'
-                : 'UNASSIGNED';
+    const protocolCategory = protocolCategoryFor(category);
+    const assetId = assetIdForReport(category, area);
 
     const submitted =
       mode === 'REPLAY'
@@ -149,7 +145,7 @@ export function ReportFlow() {
             assetId,
             redactedMediaHash: photo.mediaHash,
             exifStripped: true,
-            category,
+            category: protocolCategory,
             duplicateChoice: duplicateChoice || 'unsure',
           });
 
@@ -175,7 +171,9 @@ export function ReportFlow() {
       caseLink,
       token,
       description: description.trim(),
-      category,
+      category: protocolCategory,
+      categoryLabel: selectedCategory,
+      assetId,
       area,
       areaLabel: selectedArea.label,
       exifStripped: true,
@@ -467,7 +465,7 @@ export function ReportFlow() {
                       onChange={(event) => setDescription(event.target.value)}
                       aria-describedby="report-description-hint report-description-count"
                       aria-invalid={errors.some((error) => error.includes('Describe'))}
-                      placeholder="For example: the seat plank is cracked, one armrest is loose and a sharp edge is exposed."
+                      placeholder={descriptionPlaceholder}
                     />
                     <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12 }}>
                       <span id="report-description-hint" className="field__hint">
@@ -503,17 +501,16 @@ export function ReportFlow() {
                   </p>
                   <div className="duplicate-card">
                     <div className="duplicate-card__top">
-                      <h3>Possible duplicate · 94% confidence</h3>
+                      <h3>{duplicateSuggestion.title}</h3>
                       <Badge tone="warning">Needs human confirmation</Badge>
                     </div>
-                    <p>
-                      Same asset, identical perceptual hash, 12 m apart, near-identical damage description. A steward
-                      decides whether the reports form one work order.
-                    </p>
+                    <p>{duplicateSuggestion.detail}</p>
                     <div className="duplicate-card__reports">
-                      <span className="duplicate-card__report">R-001 · CLUSTERED</span>
-                      <span className="duplicate-card__report">R-002 · CLUSTERED</span>
-                      <span className="duplicate-card__report">CL-0001 · CONFIRMED</span>
+                      {duplicateSuggestion.reports.map((report) => (
+                        <span key={report} className="duplicate-card__report">
+                          {report}
+                        </span>
+                      ))}
                     </div>
                   </div>
 

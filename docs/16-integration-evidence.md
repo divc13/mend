@@ -186,7 +186,7 @@ valid”, not “gasless funding”. Never imply the passport is legal ownership
 | G4 | Real NEAR testnet escrow lifecycle with real links | **VERIFIED (testnet) with caveats** | V2 `WO-BENCH-V2-001-0002` `CLOSED`, 42 tx, exact 100/20/72/8, escrow 0; earlier 57-tx `WO-BENCH-001-0003` remains historical; [G3 evidence](../orchestration/reports/G3-evidence.md) |
 | G5 | Live NEAR AI inference, Sputnik DAO, Intents deposit, OutLayer execution, NEP-366 relayer, Agent Market job | **VERIFIED with caveats / PARTIAL** | AI signature valid but no matching TEE report; Sputnik DAO, OutLayer, NEP-366 and Agent Market job live; Intents deposit/settlement not executed. See `STATUS.md` |
 | G6 | Hosted demo | **BLOCKED_ON_HUMAN** | No deployment credentials |
-| G7 | Demo video | **RECORDED (silent)** | `fixtures/demo/captures/mend-replay-demo.mp4`, 91.6 s; narration/captions pending human |
+| G7 | Demo video | **RECORDED (5:00, narrated + captions)** | `demo/ad/out/mend-ad-5min.mp4`, 1920×1080/30fps, H.264/AAC, ≈−13.8 LUFS; pothole/repair B-roll is illustrative Pexels stock. Earlier silent 91.6 s REPLAY video remains as history. |
 | G8 | Real repair media and durability inspection | **BLOCKED_ON_HUMAN / NOT COLLECTED** | No repair performed; no consent |
 | G9 | Security audit or accessibility certification | **UNAVAILABLE** | None performed |
 | G10 | City adoption or partnership | **UNAVAILABLE** | No such relationship exists or is claimed |

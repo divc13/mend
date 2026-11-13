@@ -1,0 +1,322 @@
+{
+  "project": "MEND — Maintenance with memory",
+  "generated_at": "2026-11-13",
+  "provider": "Pexels",
+  "license": {
+    "name": "Pexels License",
+    "url": "https://www.pexels.com/license/",
+    "attribution_required": false,
+    "commercial_use": true,
+    "modifications_allowed": true
+  },
+  "usage_note": "Illustrative stock footage and photography only. Identifiable people are not MEND endorsers, customers, or team members, and must not be presented as such. The pothole repair scenario is a replay/simulation, not documentary footage of a specific MEND job.",
+  "video_spec": {
+    "container": "mp4",
+    "codec": "h264",
+    "profile": "High",
+    "pixel_format": "yuv420p",
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "audio": false,
+    "faststart": true,
+    "crf": 20,
+    "preset": "medium"
+  },
+  "photo_spec": {
+    "format": "jpeg",
+    "width": 1920,
+    "height": 1080,
+    "quality": 90,
+    "metadata": "stripped"
+  },
+  "assets": [
+    {
+      "id": "pothole",
+      "type": "video",
+      "file": "footage/pothole.mp4",
+      "bytes": 11770221,
+      "sha256": "92a0847d4e3e6645f9070205c8713ccb99839c585c82d09c5d578702086c516e",
+      "description": "Motorbikes navigating a muddy pothole on a busy urban street. Illustrates the everyday hazard the ad opens with.",
+      "source": {
+        "provider": "Pexels",
+        "page": "https://www.pexels.com/video/motorbikes-navigating-a-pothole-in-urban-street-34218247/",
+        "author": "CHRISTIAN BARDOT",
+        "license": "Pexels",
+        "license_url": "https://www.pexels.com/license/",
+        "download_url": "https://videos.pexels.com/video-files/34218247/14505627_1920_1080_25fps.mp4"
+      },
+      "original": {
+        "width": 1920,
+        "height": 1080,
+        "duration_seconds": 7.2,
+        "fps": 25,
+        "format": "mp4/h264"
+      },
+      "output": {
+        "width": 1920,
+        "height": 1080,
+        "duration_seconds": 7.2,
+        "fps": 30,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": false,
+        "faststart": true
+      },
+      "processing": "Scaled to 1920x1080 with lanczos, frame rate converted to 30 fps, H.264 CRF 20, audio removed, faststart enabled."
+    },
+    {
+      "id": "phone",
+      "type": "video",
+      "file": "footage/phone.mp4",
+      "bytes": 1466636,
+      "sha256": "3c9cf9ba686cbfe5f739c02f3ae2efc39dc60c6bf19d1295a26feb644291d4ea",
+      "description": "Monochrome close-up of a man texting on a smartphone outdoors. Illustrates the MEND report flow on a phone.",
+      "source": {
+        "provider": "Pexels",
+        "page": "https://www.pexels.com/video/close-up-video-of-a-man-using-cellphone-8992783/",
+        "author": "Artem Podrez",
+        "license": "Pexels",
+        "license_url": "https://www.pexels.com/license/",
+        "download_url": "https://videos.pexels.com/video-files/8992783/8992783-uhd_1440_2560_30fps.mp4"
+      },
+      "original": {
+        "width": 2160,
+        "height": 3840,
+        "duration_seconds": 9.9,
+        "fps": 30,
+        "format": "mp4/h264",
+        "note": "Pexels page lists 2160x3840; the downloaded UHD proxy is 1440x2560."
+      },
+      "downloaded_file": {
+        "width": 1440,
+        "height": 2560,
+        "duration_seconds": 9.9,
+        "fps": 30
+      },
+      "output": {
+        "width": 1920,
+        "height": 1080,
+        "duration_seconds": 9.87,
+        "fps": 30,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": false,
+        "faststart": true
+      },
+      "processing": "16:9 composite: vertical source scaled to 1080 px height (607x1080) and centered over a blurred, darkened, desaturated fill made from the same clip. H.264 CRF 20, 30 fps, audio removed, faststart enabled. A clean 1080x1920 proxy is also provided at footage/phone-vertical.mp4."
+    },
+    {
+      "id": "phone-vertical",
+      "type": "video",
+      "file": "footage/phone-vertical.mp4",
+      "bytes": 3337826,
+      "sha256": "2449f0593adbc605687294ee2731a6f5203c5de462d73b39fb26eb86481f7877",
+      "description": "Clean 9:16 vertical proxy of the phone/texting clip, suitable for a phone mockup or vertical cutdown.",
+      "source": {
+        "provider": "Pexels",
+        "page": "https://www.pexels.com/video/close-up-video-of-a-man-using-cellphone-8992783/",
+        "author": "Artem Podrez",
+        "license": "Pexels",
+        "license_url": "https://www.pexels.com/license/",
+        "download_url": "https://videos.pexels.com/video-files/8992783/8992783-uhd_1440_2560_30fps.mp4"
+      },
+      "original": {
+        "width": 2160,
+        "height": 3840,
+        "duration_seconds": 9.9,
+        "fps": 30,
+        "format": "mp4/h264",
+        "note": "Pexels page lists 2160x3840; the downloaded UHD proxy is 1440x2560."
+      },
+      "downloaded_file": {
+        "width": 1440,
+        "height": 2560,
+        "duration_seconds": 9.9,
+        "fps": 30
+      },
+      "output": {
+        "width": 1080,
+        "height": 1920,
+        "duration_seconds": 9.9,
+        "fps": 30,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": false,
+        "faststart": true
+      },
+      "processing": "Scaled to 1080x1920 with lanczos (exact 9:16 source, no pad), H.264 CRF 20, 30 fps, audio removed, faststart enabled."
+    },
+    {
+      "id": "repair",
+      "type": "video",
+      "file": "footage/repair.mp4",
+      "bytes": 7497115,
+      "sha256": "6a943c757b916f0026b2b62293c38cc521251171d4e10dfc9a895e137ffd86b4",
+      "description": "Large roller compacting asphalt on an outdoor road construction site. Illustrates the repair and compaction stage.",
+      "source": {
+        "provider": "Pexels",
+        "page": "https://www.pexels.com/video/roller-compacting-asphalt-on-a-street-10333669/",
+        "author": "Suraphat Nuea-on",
+        "license": "Pexels",
+        "license_url": "https://www.pexels.com/license/",
+        "download_url": "https://videos.pexels.com/video-files/10333669/10333669-hd_1920_1080_30fps.mp4"
+      },
+      "original": {
+        "width": 1920,
+        "height": 1080,
+        "duration_seconds": 10.56,
+        "fps": 29.97,
+        "format": "mp4/h264"
+      },
+      "output": {
+        "width": 1920,
+        "height": 1080,
+        "duration_seconds": 10.5,
+        "fps": 30,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": false,
+        "faststart": true
+      },
+      "processing": "Scaled to 1920x1080 with lanczos, frame rate converted to 30 fps, H.264 CRF 20, audio removed, faststart enabled."
+    },
+    {
+      "id": "roadworks",
+      "type": "video",
+      "file": "footage/roadworks.mp4",
+      "bytes": 15298014,
+      "sha256": "60c48cd9acea069b06d013ded05ecdb980a3005b0a6b621fff44d7e29a9ad804",
+      "description": "Top-down drone view of road works, with an asphalt paving machine and crew on a residential street. Illustrates coordinated road maintenance.",
+      "source": {
+        "provider": "Pexels",
+        "page": "https://www.pexels.com/video/top-view-of-man-doing-road-works-4115445/",
+        "author": "Jozef Papp",
+        "license": "Pexels",
+        "license_url": "https://www.pexels.com/license/",
+        "download_url": "https://videos.pexels.com/video-files/4115445/4115445-uhd_2560_1440_25fps.mp4"
+      },
+      "original": {
+        "width": 3840,
+        "height": 2160,
+        "duration_seconds": 20.8,
+        "fps": 25,
+        "format": "mp4/h264",
+        "note": "Pexels page lists 3840x2160; the downloaded UHD proxy is 2560x1440."
+      },
+      "downloaded_file": {
+        "width": 2560,
+        "height": 1440,
+        "duration_seconds": 20.8,
+        "fps": 25
+      },
+      "output": {
+        "width": 1920,
+        "height": 1080,
+        "duration_seconds": 10.0,
+        "fps": 30,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": false,
+        "faststart": true
+      },
+      "processing": "Trimmed to the first 10.0 seconds, scaled to 1920x1080 with lanczos, frame rate converted to 30 fps, H.264 CRF 20, audio removed, faststart enabled."
+    },
+    {
+      "id": "cyclist",
+      "type": "video",
+      "file": "footage/cyclist.mp4",
+      "bytes": 6554889,
+      "sha256": "d6fceecec1b030a366b91f4c8b7abb113b0470ebf757339ae30a23950da03a45",
+      "description": "Close-up of bicycle wheels moving over a rough urban path. Illustrates the near-miss risk to cyclists.",
+      "source": {
+        "provider": "Pexels",
+        "page": "https://www.pexels.com/video/man-riding-his-road-bike-9080400/",
+        "author": "Nothing Ahead",
+        "license": "Pexels",
+        "license_url": "https://www.pexels.com/license/",
+        "download_url": "https://videos.pexels.com/video-files/9080400/9080400-hd_1920_1080_30fps.mp4"
+      },
+      "original": {
+        "width": 1920,
+        "height": 1080,
+        "duration_seconds": 6.08,
+        "fps": 29.97,
+        "format": "mp4/h264"
+      },
+      "output": {
+        "width": 1920,
+        "height": 1080,
+        "duration_seconds": 6.03,
+        "fps": 30,
+        "codec": "h264",
+        "pixel_format": "yuv420p",
+        "audio": false,
+        "faststart": true
+      },
+      "processing": "Resolved from the Pexels download endpoint to the HD CDN file, scaled to 1920x1080 with lanczos, frame rate converted to 30 fps, H.264 CRF 20, audio removed, faststart enabled."
+    },
+    {
+      "id": "potholePhoto",
+      "type": "photo",
+      "file": "photos/pothole.jpg",
+      "bytes": 761290,
+      "sha256": "4d638f70f76753ee770bac0acc88b167e709bb2db94d0cbc6c9afad914699625",
+      "description": "Close-up crop of a pothole and cracked asphalt from an empty forest road. Used as the report/evidence still.",
+      "source": {
+        "provider": "Pexels",
+        "page": "https://www.pexels.com/photo/empty-asphalt-road-with-cracks-going-between-coniferous-trees-on-cloudy-day-5688465/",
+        "author": "Erik Mclean",
+        "license": "Pexels",
+        "license_url": "https://www.pexels.com/license/",
+        "download_url": "https://images.pexels.com/photos/5688465/pexels-photo-5688465.jpeg"
+      },
+      "original": {
+        "width": 3648,
+        "height": 5472,
+        "format": "jpeg",
+        "orientation": "portrait"
+      },
+      "output": {
+        "width": 1920,
+        "height": 1080,
+        "format": "jpeg",
+        "quality": 90,
+        "color_space": "yuvj420p",
+        "metadata": "stripped"
+      },
+      "processing": "Portrait original scaled to 1920 px wide, center-cropped to 16:9, downscaled to 1920x1080, JPEG quality 90, EXIF/GPS stripped."
+    },
+    {
+      "id": "afterPhoto",
+      "type": "photo",
+      "file": "photos/after.jpg",
+      "bytes": 821687,
+      "sha256": "9e1fd3193a39139940991607fd14c0aabca6a045292202d738e406341f61c322",
+      "description": "Freshly patched hole in the road with work boots at the edge. Used as the after/evidence still.",
+      "source": {
+        "provider": "Pexels",
+        "page": "https://www.pexels.com/photo/patched-hole-in-the-road-6018646/",
+        "author": "Nicolette Villavicencio",
+        "license": "Pexels",
+        "license_url": "https://www.pexels.com/license/",
+        "download_url": "https://images.pexels.com/photos/6018646/pexels-photo-6018646.jpeg"
+      },
+      "original": {
+        "width": 5184,
+        "height": 3456,
+        "format": "jpeg",
+        "orientation": "landscape"
+      },
+      "output": {
+        "width": 1920,
+        "height": 1080,
+        "format": "jpeg",
+        "quality": 90,
+        "color_space": "yuvj420p",
+        "metadata": "stripped"
+      },
+      "processing": "Landscape original scaled to 1920 px wide, center-cropped to 16:9, downscaled to 1920x1080, JPEG quality 90, EXIF/GPS stripped."
+    }
+  ]
+}

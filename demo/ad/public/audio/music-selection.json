@@ -1,0 +1,14 @@
+{
+  "provider": "Mixkit",
+  "track": "Mountains",
+  "artist": "Andrew Ev",
+  "source": "https://mixkit.co/free-stock-music/mood/uplifting/",
+  "license": "Mixkit Free License (free for commercial use)",
+  "license_url": "https://mixkit.co/license/#musicFree",
+  "file": "music-1.mp3",
+  "original_duration_seconds": 277.34,
+  "bed_duration_seconds": 300,
+  "edit": "Original 4:37.34 track plus a 25.66s tail from the start, joined with a 3s equal-power crossfade to make a 5:00 bed.",
+  "fallback_reason": "ElevenLabs Music API is not available on the current free plan. A licensed Mixkit track is used instead.",
+  "credit_line": "Music: “Mountains” by Andrew Ev — Mixkit Free License"
+}
