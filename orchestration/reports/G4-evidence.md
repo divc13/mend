@@ -1,8 +1,8 @@
 # G4 — Feature evidence (F01–F14)
 
 Date: 2026-11-09; status reconciled 2026-11-13
-Main commit at verification: `a04131d` + guard/quality merges + live testnet lifecycle
-Mode: local + **REPLAY / SIMULATION** + real NEAR **testnet** lifecycle evidence.
+Main commit at verification: `24aebac` plus the live NEAR AI, Agent Market and Intents evidence files
+Mode: local + **REPLAY / SIMULATION** + real NEAR **testnet** lifecycle evidence + live NEAR AI/Agent Market reads.
 The authoritative per-feature matrix is [`STATUS.md`](../../STATUS.md). **G4 is PARTIAL**, not complete.
 
 ## Automated evidence totals
