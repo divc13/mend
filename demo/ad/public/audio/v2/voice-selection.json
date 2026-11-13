@@ -1,0 +1,107 @@
+{
+  "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+  "name": "George",
+  "display_name": "George — Warm, Captivating Storyteller",
+  "category": "premade",
+  "labels": {
+    "accent": "british",
+    "description": "warm, captivating storyteller"
+  },
+  "model": "eleven_multilingual_v2",
+  "settings": {
+    "stability": 0.45,
+    "similarity_boost": 0.8,
+    "style": 0.32,
+    "use_speaker_boost": true,
+    "speed": 1.0
+  },
+  "output_format": "mp3_44100_128",
+  "requested_output_format": "mp3_44100_192",
+  "output_format_note": "mp3_44100_192 is Creator tier and above. The v1 render used mp3_44100_128, the highest format available on the Free tier.",
+  "selection_status": "final_v1_george_reuse",
+  "selection_rationale": "Final voice is the existing v1 ElevenLabs George render. The v2 George/Adam first-line test could not run because the free tier returns HTTP 401 detected_unusual_activity on synthesis. George was already selected over Brian in v1 for this material: warm, clear British storyteller, less heavy than Brian's deeper read. Reusing v1 George keeps the final voice consistent and avoids the blocked v2 synthesis path.",
+  "tests": [
+    {
+      "name": "george-v2-first-line",
+      "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+      "text": "Every neighborhood has one. A pothole everyone swerves around. This morning, Sam stops.",
+      "status": 401,
+      "ok": false,
+      "error_code": "detected_unusual_activity",
+      "characters_consumed": 0,
+      "selected": true,
+      "notes": "Blocked before synthesis. No audio file was written."
+    },
+    {
+      "name": "adam-v2-first-line",
+      "voice_id": "pNInz6obpgDQGcFmaJgB",
+      "text": "Every neighborhood has one. A pothole everyone swerves around. This morning, Sam stops.",
+      "status": 401,
+      "ok": false,
+      "error_code": "detected_unusual_activity",
+      "characters_consumed": 0,
+      "selected": false,
+      "notes": "The brighter male test could not be rendered for the same account-level reason."
+    },
+    {
+      "name": "george-v1-final-reference",
+      "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+      "file": "../vo/voice-test-george.mp3",
+      "status": 200,
+      "ok": true,
+      "duration_seconds": 5.877551,
+      "selected": true,
+      "notes": "v1 first-line reference. The v1 scene render is the final voice source."
+    },
+    {
+      "name": "brian-v1-reference",
+      "voice_id": "nPczCjzI2devNBz1zQrb",
+      "file": "../vo/voice-test-brian.mp3",
+      "status": 200,
+      "ok": true,
+      "duration_seconds": 6.50449,
+      "selected": false,
+      "notes": "v1 comparison. Deep and comforting, but heavier than the hopeful, forward-moving read."
+    }
+  ],
+  "render": {
+    "status": "final",
+    "provider": "elevenlabs_v1_reuse",
+    "voice_id": "JBFqnCBsd6RMkjVDRZzb",
+    "name": "George",
+    "source": "demo/ad/public/audio/vo/<scene>.mp3",
+    "timestamps": "demo/ad/public/audio/vo/<scene>.timestamps.json",
+    "mirror": "demo/ad/public/audio/v2/vo/<scene>.mp3 (byte-identical copy for the v2 mixer)",
+    "output_format": "mp3_44100_128",
+    "is_placeholder": false,
+    "note": "Existing v1 George render reused as the final voice. No v2 ElevenLabs synthesis was performed."
+  },
+  "blocker": {
+    "http_status": 401,
+    "error_code": "detected_unusual_activity",
+    "message": "Unusual activity has been detected on your account, so Free Tier access has been disabled. This can be triggered by using a proxy or VPN, or by creating multiple free accounts.",
+    "help_url": "https://elevenlabs.io/docs/help-center/account/general/what-does-unusual-activity-detected-free-tier-usage-disabled-if-you-are-using-proxy-vpn-you-might-need-to-purchase-a-paid-plan-to-not-trigger-our-abuse-detectors-mean",
+    "tested_at": "2026-11-13T21:10:00Z",
+    "tested_endpoints": [
+      "POST /v1/text-to-speech/{voice_id}",
+      "POST /v1/text-to-speech/{voice_id}/with-timestamps",
+      "POST /v1/text-to-dialogue (eleven_v3)"
+    ],
+    "impact": "No new v2 George render. The final cut uses the existing v1 George audio and v1 timestamps; no local placeholder audio remains in the final path.",
+    "note": "The key authenticates: GET /v1/user/subscription and GET /v1/voices return 200. Only synthesis is blocked. No characters were consumed by the rejected requests."
+  },
+  "character_usage": {
+    "account_before": 2549,
+    "account_after": 2549,
+    "used_this_run": 0,
+    "account_limit": 10000,
+    "account_remaining": 7451,
+    "next_character_count_reset_unix": 1796767513,
+    "note": "Failed 401 requests are not billed. Reusing v1 George uses no ElevenLabs characters."
+  },
+  "generated_at": "2026-11-13T22:02:04Z",
+  "future_option": {
+    "status": "not_planned",
+    "note": "The final cut uses the existing v1 George render. A future paid/unique-IP ElevenLabs run could use generate-v2-vo-elevenlabs.mjs, but no retry is planned now."
+  }
+}

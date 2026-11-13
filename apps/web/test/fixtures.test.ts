@@ -5,6 +5,7 @@ import {
   ASSET_BY_ID,
   CASE_BY_ID,
   CASES,
+  buildPotholeReplayCase,
   getPublicMetrics,
   totalForCase,
 } from '../src/lib/fixtures';
@@ -15,11 +16,11 @@ import {
   protocolCategoryFor,
 } from '../src/lib/report-routing';
 
-const PATH_CASE_ID = 'WO-PATH-001-0001';
+const PATH_CASE_ID = 'WO-PATH-001-0002';
 
 function requirePathCase() {
-  const caseData = CASE_BY_ID[PATH_CASE_ID];
-  assert.ok(caseData, `expected ${PATH_CASE_ID} to exist`);
+  const caseData = buildPotholeReplayCase('CLOSED');
+  assert.equal(caseData.id, PATH_CASE_ID);
   return caseData;
 }
 
@@ -106,10 +107,10 @@ test('pothole case includes AI triage, steward scope and DAO authorization repla
 
   const dao = caseData.attestations.find((attestation) => attestation.kind === 'DAO');
   assert.ok(dao);
-  assert.match(dao.label, /#48/);
+  assert.match(dao.label, /#49/);
   assert.equal(caseData.daoApproval.state, 'APPROVED');
   assert.equal(caseData.daoApproval.budgetMicro, '100000000');
-  assert.equal(caseData.daoApproval.proposalId, '48');
+  assert.equal(caseData.daoApproval.proposalId, '49');
 });
 
 test('pothole durability passed, holdback released and case closed', () => {

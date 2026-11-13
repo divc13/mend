@@ -5,7 +5,7 @@ const projectRoot = path.resolve(__dirname, '..');
 const publicDir = path.join(projectRoot, 'public');
 const outFile = path.join(projectRoot, 'src', 'asset-manifest.json');
 
-const IGNORED = new Set(['.DS_Store', 'Thumbs.db']);
+const IGNORED = new Set(['.DS_Store', 'Thumbs.db', '.raw']);
 
 function walk(dir, prefix = '') {
   if (!fs.existsSync(dir)) {
@@ -14,7 +14,7 @@ function walk(dir, prefix = '') {
   const entries = fs.readdirSync(dir, { withFileTypes: true });
   const files = [];
   for (const entry of entries) {
-    if (IGNORED.has(entry.name)) {
+    if (IGNORED.has(entry.name) || entry.name.startsWith('.')) {
       continue;
     }
     const relative = prefix ? `${prefix}/${entry.name}` : entry.name;

@@ -1,0 +1,3307 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-13T21:59:54.374Z",
+  "runtimeSeconds": 300,
+  "fps": 30,
+  "voice": {
+    "provider": "elevenlabs_v1_reuse",
+    "name": "George",
+    "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+    "model": "eleven_multilingual_v2",
+    "outputFormat": "mp3_44100_128",
+    "sampleRate": 44100,
+    "source": "v1",
+    "intended": {
+      "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+      "name": "George",
+      "model": "eleven_multilingual_v2",
+      "settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.8,
+        "style": 0.32,
+        "use_speaker_boost": true,
+        "speed": 1
+      },
+      "outputFormat": "mp3_44100_128",
+      "source": "v1",
+      "sourcePath": "demo/ad/public/audio/vo",
+      "reuseNote": "Final voice is the existing v1 ElevenLabs George render. No v2 synthesis. Script text and word timings are reused from v1."
+    },
+    "status": "final_v1_george_reuse",
+    "note": "Final voice is the existing v1 ElevenLabs George render. No v2 synthesis was performed. Word times come from the v1 with-timestamps alignment; scene starts and voOffset come from script-v2.json."
+  },
+  "timingModel": {
+    "sceneStart": "absolute seconds from script-v2.json",
+    "voStart": "scene.start + scene.voOffset (negative = J-cut)",
+    "wordAbsolute": "voStart + word.start",
+    "cueAbsolute": "voStart + word.start + cue.offset"
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "chapter": "01 — The problem",
+      "start": 0,
+      "duration": 15,
+      "end": 15,
+      "voOffset": 0,
+      "voStart": 0,
+      "voEnd": 11.842,
+      "voDuration": 11.842,
+      "gapBeforeNext": 3.158,
+      "text": "Every neighborhood has one. A pothole everyone avoids. And nobody owns. It has been there for months. A near miss for every cyclist. This morning, Sam decides to change that.",
+      "wordCount": 30,
+      "words": [
+        {
+          "i": 1,
+          "word": "Every",
+          "start": 0,
+          "end": 0.313,
+          "absStart": 0,
+          "absEnd": 0.313
+        },
+        {
+          "i": 2,
+          "word": "neighborhood",
+          "start": 0.36,
+          "end": 0.766,
+          "absStart": 0.36,
+          "absEnd": 0.766
+        },
+        {
+          "i": 3,
+          "word": "has",
+          "start": 0.813,
+          "end": 0.987,
+          "absStart": 0.813,
+          "absEnd": 0.987
+        },
+        {
+          "i": 4,
+          "word": "one",
+          "start": 1.068,
+          "end": 1.358,
+          "absStart": 1.068,
+          "absEnd": 1.358
+        },
+        {
+          "i": 5,
+          "word": "A",
+          "start": 1.544,
+          "end": 1.625,
+          "absStart": 1.544,
+          "absEnd": 1.625
+        },
+        {
+          "i": 6,
+          "word": "pothole",
+          "start": 1.707,
+          "end": 2.159,
+          "absStart": 1.707,
+          "absEnd": 2.159
+        },
+        {
+          "i": 7,
+          "word": "everyone",
+          "start": 2.206,
+          "end": 2.577,
+          "absStart": 2.206,
+          "absEnd": 2.577
+        },
+        {
+          "i": 8,
+          "word": "avoids",
+          "start": 2.612,
+          "end": 3.135,
+          "absStart": 2.612,
+          "absEnd": 3.135
+        },
+        {
+          "i": 9,
+          "word": "And",
+          "start": 3.796,
+          "end": 3.959,
+          "absStart": 3.796,
+          "absEnd": 3.959
+        },
+        {
+          "i": 10,
+          "word": "nobody",
+          "start": 4.029,
+          "end": 4.354,
+          "absStart": 4.029,
+          "absEnd": 4.354
+        },
+        {
+          "i": 11,
+          "word": "owns",
+          "start": 4.423,
+          "end": 4.876,
+          "absStart": 4.423,
+          "absEnd": 4.876
+        },
+        {
+          "i": 12,
+          "word": "It",
+          "start": 5.375,
+          "end": 5.503,
+          "absStart": 5.375,
+          "absEnd": 5.503
+        },
+        {
+          "i": 13,
+          "word": "has",
+          "start": 5.538,
+          "end": 5.619,
+          "absStart": 5.538,
+          "absEnd": 5.619
+        },
+        {
+          "i": 14,
+          "word": "been",
+          "start": 5.654,
+          "end": 5.817,
+          "absStart": 5.654,
+          "absEnd": 5.817
+        },
+        {
+          "i": 15,
+          "word": "there",
+          "start": 5.851,
+          "end": 6.002,
+          "absStart": 5.851,
+          "absEnd": 6.002
+        },
+        {
+          "i": 16,
+          "word": "for",
+          "start": 6.037,
+          "end": 6.142,
+          "absStart": 6.037,
+          "absEnd": 6.142
+        },
+        {
+          "i": 17,
+          "word": "months",
+          "start": 6.188,
+          "end": 6.56,
+          "absStart": 6.188,
+          "absEnd": 6.56
+        },
+        {
+          "i": 18,
+          "word": "A",
+          "start": 6.792,
+          "end": 6.861,
+          "absStart": 6.792,
+          "absEnd": 6.861
+        },
+        {
+          "i": 19,
+          "word": "near",
+          "start": 6.954,
+          "end": 7.129,
+          "absStart": 6.954,
+          "absEnd": 7.129
+        },
+        {
+          "i": 20,
+          "word": "miss",
+          "start": 7.198,
+          "end": 7.477,
+          "absStart": 7.198,
+          "absEnd": 7.477
+        },
+        {
+          "i": 21,
+          "word": "for",
+          "start": 7.535,
+          "end": 7.639,
+          "absStart": 7.535,
+          "absEnd": 7.639
+        },
+        {
+          "i": 22,
+          "word": "every",
+          "start": 7.697,
+          "end": 7.964,
+          "absStart": 7.697,
+          "absEnd": 7.964
+        },
+        {
+          "i": 23,
+          "word": "cyclist",
+          "start": 8.011,
+          "end": 8.638,
+          "absStart": 8.011,
+          "absEnd": 8.638
+        },
+        {
+          "i": 24,
+          "word": "This",
+          "start": 9.207,
+          "end": 9.404,
+          "absStart": 9.207,
+          "absEnd": 9.404
+        },
+        {
+          "i": 25,
+          "word": "morning",
+          "start": 9.474,
+          "end": 9.799,
+          "absStart": 9.474,
+          "absEnd": 9.799
+        },
+        {
+          "i": 26,
+          "word": "Sam",
+          "start": 9.927,
+          "end": 10.205,
+          "absStart": 9.927,
+          "absEnd": 10.205
+        },
+        {
+          "i": 27,
+          "word": "decides",
+          "start": 10.263,
+          "end": 10.635,
+          "absStart": 10.263,
+          "absEnd": 10.635
+        },
+        {
+          "i": 28,
+          "word": "to",
+          "start": 10.67,
+          "end": 10.728,
+          "absStart": 10.67,
+          "absEnd": 10.728
+        },
+        {
+          "i": 29,
+          "word": "change",
+          "start": 10.797,
+          "end": 11.111,
+          "absStart": 10.797,
+          "absEnd": 11.111
+        },
+        {
+          "i": 30,
+          "word": "that",
+          "start": 11.146,
+          "end": 11.413,
+          "absStart": 11.146,
+          "absEnd": 11.413
+        }
+      ],
+      "firstWord": {
+        "i": 1,
+        "word": "Every",
+        "start": 0,
+        "end": 0.313,
+        "absStart": 0,
+        "absEnd": 0.313
+      },
+      "lastWord": {
+        "i": 30,
+        "word": "that",
+        "start": 11.146,
+        "end": 11.413,
+        "absStart": 11.146,
+        "absEnd": 11.413
+      },
+      "source": "demo/ad/public/audio/vo/hook.timestamps.json",
+      "audio": "demo/ad/public/audio/vo/hook.mp3",
+      "provider": "elevenlabs_v1_reuse",
+      "voice": "George"
+    },
+    {
+      "id": "report",
+      "chapter": "02 — Report",
+      "start": 15,
+      "duration": 40,
+      "end": 55,
+      "voOffset": -0.4,
+      "voStart": 14.6,
+      "voEnd": 38.005,
+      "voDuration": 23.405,
+      "gapBeforeNext": 16.995,
+      "text": "He opens MEND. No wallet. No forms. A photo, a location, one sentence. The browser strips the GPS and metadata before anything leaves his phone. Private AI reads the report, checks for duplicates, and drafts a repair scope. It suggests. It never approves. Two neighbors reported the same pothole. MEND merges them privately.",
+      "wordCount": 53,
+      "words": [
+        {
+          "i": 1,
+          "word": "He",
+          "start": 0,
+          "end": 0.116,
+          "absStart": 14.6,
+          "absEnd": 14.716
+        },
+        {
+          "i": 2,
+          "word": "opens",
+          "start": 0.186,
+          "end": 0.499,
+          "absStart": 14.786,
+          "absEnd": 15.099
+        },
+        {
+          "i": 3,
+          "word": "MEND",
+          "start": 0.58,
+          "end": 1.045,
+          "absStart": 15.18,
+          "absEnd": 15.645
+        },
+        {
+          "i": 4,
+          "word": "No",
+          "start": 1.73,
+          "end": 1.881,
+          "absStart": 16.33,
+          "absEnd": 16.481
+        },
+        {
+          "i": 5,
+          "word": "wallet",
+          "start": 1.95,
+          "end": 2.322,
+          "absStart": 16.55,
+          "absEnd": 16.922
+        },
+        {
+          "i": 6,
+          "word": "No",
+          "start": 2.485,
+          "end": 2.635,
+          "absStart": 17.085,
+          "absEnd": 17.235
+        },
+        {
+          "i": 7,
+          "word": "forms",
+          "start": 2.717,
+          "end": 3.158,
+          "absStart": 17.317,
+          "absEnd": 17.758
+        },
+        {
+          "i": 8,
+          "word": "A",
+          "start": 3.483,
+          "end": 3.564,
+          "absStart": 18.083,
+          "absEnd": 18.164
+        },
+        {
+          "i": 9,
+          "word": "photo",
+          "start": 3.634,
+          "end": 4.017,
+          "absStart": 18.234,
+          "absEnd": 18.617
+        },
+        {
+          "i": 10,
+          "word": "a",
+          "start": 4.087,
+          "end": 4.133,
+          "absStart": 18.687,
+          "absEnd": 18.733
+        },
+        {
+          "i": 11,
+          "word": "location",
+          "start": 4.203,
+          "end": 4.783,
+          "absStart": 18.803,
+          "absEnd": 19.383
+        },
+        {
+          "i": 12,
+          "word": "one",
+          "start": 5.016,
+          "end": 5.224,
+          "absStart": 19.616,
+          "absEnd": 19.824
+        },
+        {
+          "i": 13,
+          "word": "sentence",
+          "start": 5.271,
+          "end": 5.863,
+          "absStart": 19.871,
+          "absEnd": 20.463
+        },
+        {
+          "i": 14,
+          "word": "The",
+          "start": 6.246,
+          "end": 6.351,
+          "absStart": 20.846,
+          "absEnd": 20.951
+        },
+        {
+          "i": 15,
+          "word": "browser",
+          "start": 6.397,
+          "end": 6.769,
+          "absStart": 20.997,
+          "absEnd": 21.369
+        },
+        {
+          "i": 16,
+          "word": "strips",
+          "start": 6.838,
+          "end": 7.175,
+          "absStart": 21.438,
+          "absEnd": 21.775
+        },
+        {
+          "i": 17,
+          "word": "the",
+          "start": 7.221,
+          "end": 7.303,
+          "absStart": 21.821,
+          "absEnd": 21.903
+        },
+        {
+          "i": 18,
+          "word": "GPS",
+          "start": 7.372,
+          "end": 7.918,
+          "absStart": 21.972,
+          "absEnd": 22.518
+        },
+        {
+          "i": 19,
+          "word": "and",
+          "start": 8.011,
+          "end": 8.127,
+          "absStart": 22.611,
+          "absEnd": 22.727
+        },
+        {
+          "i": 20,
+          "word": "metadata",
+          "start": 8.197,
+          "end": 8.684,
+          "absStart": 22.797,
+          "absEnd": 23.284
+        },
+        {
+          "i": 21,
+          "word": "before",
+          "start": 8.731,
+          "end": 8.986,
+          "absStart": 23.331,
+          "absEnd": 23.586
+        },
+        {
+          "i": 22,
+          "word": "anything",
+          "start": 9.021,
+          "end": 9.323,
+          "absStart": 23.621,
+          "absEnd": 23.923
+        },
+        {
+          "i": 23,
+          "word": "leaves",
+          "start": 9.381,
+          "end": 9.613,
+          "absStart": 23.981,
+          "absEnd": 24.213
+        },
+        {
+          "i": 24,
+          "word": "his",
+          "start": 9.648,
+          "end": 9.741,
+          "absStart": 24.248,
+          "absEnd": 24.341
+        },
+        {
+          "i": 25,
+          "word": "phone",
+          "start": 9.787,
+          "end": 10.228,
+          "absStart": 24.387,
+          "absEnd": 24.828
+        },
+        {
+          "i": 26,
+          "word": "Private",
+          "start": 10.855,
+          "end": 11.262,
+          "absStart": 25.455,
+          "absEnd": 25.862
+        },
+        {
+          "i": 27,
+          "word": "AI",
+          "start": 11.308,
+          "end": 11.68,
+          "absStart": 25.908,
+          "absEnd": 26.28
+        },
+        {
+          "i": 28,
+          "word": "reads",
+          "start": 11.761,
+          "end": 12.005,
+          "absStart": 26.361,
+          "absEnd": 26.605
+        },
+        {
+          "i": 29,
+          "word": "the",
+          "start": 12.051,
+          "end": 12.121,
+          "absStart": 26.651,
+          "absEnd": 26.721
+        },
+        {
+          "i": 30,
+          "word": "report",
+          "start": 12.179,
+          "end": 12.62,
+          "absStart": 26.779,
+          "absEnd": 27.22
+        },
+        {
+          "i": 31,
+          "word": "checks",
+          "start": 12.829,
+          "end": 13.131,
+          "absStart": 27.429,
+          "absEnd": 27.731
+        },
+        {
+          "i": 32,
+          "word": "for",
+          "start": 13.166,
+          "end": 13.258,
+          "absStart": 27.766,
+          "absEnd": 27.858
+        },
+        {
+          "i": 33,
+          "word": "duplicates",
+          "start": 13.316,
+          "end": 13.862,
+          "absStart": 27.916,
+          "absEnd": 28.462
+        },
+        {
+          "i": 34,
+          "word": "and",
+          "start": 13.978,
+          "end": 14.117,
+          "absStart": 28.578,
+          "absEnd": 28.717
+        },
+        {
+          "i": 35,
+          "word": "drafts",
+          "start": 14.164,
+          "end": 14.477,
+          "absStart": 28.764,
+          "absEnd": 29.077
+        },
+        {
+          "i": 36,
+          "word": "a",
+          "start": 14.512,
+          "end": 14.535,
+          "absStart": 29.112,
+          "absEnd": 29.135
+        },
+        {
+          "i": 37,
+          "word": "repair",
+          "start": 14.593,
+          "end": 14.884,
+          "absStart": 29.193,
+          "absEnd": 29.484
+        },
+        {
+          "i": 38,
+          "word": "scope",
+          "start": 14.942,
+          "end": 15.406,
+          "absStart": 29.542,
+          "absEnd": 30.006
+        },
+        {
+          "i": 39,
+          "word": "It",
+          "start": 16.161,
+          "end": 16.312,
+          "absStart": 30.761,
+          "absEnd": 30.912
+        },
+        {
+          "i": 40,
+          "word": "suggests",
+          "start": 16.346,
+          "end": 16.973,
+          "absStart": 30.946,
+          "absEnd": 31.573
+        },
+        {
+          "i": 41,
+          "word": "It",
+          "start": 17.252,
+          "end": 17.391,
+          "absStart": 31.852,
+          "absEnd": 31.991
+        },
+        {
+          "i": 42,
+          "word": "never",
+          "start": 17.438,
+          "end": 17.647,
+          "absStart": 32.038,
+          "absEnd": 32.247
+        },
+        {
+          "i": 43,
+          "word": "approves",
+          "start": 17.693,
+          "end": 18.239,
+          "absStart": 32.293,
+          "absEnd": 32.839
+        },
+        {
+          "i": 44,
+          "word": "Two",
+          "start": 18.831,
+          "end": 19.028,
+          "absStart": 33.431,
+          "absEnd": 33.628
+        },
+        {
+          "i": 45,
+          "word": "neighbors",
+          "start": 19.098,
+          "end": 19.435,
+          "absStart": 33.698,
+          "absEnd": 34.035
+        },
+        {
+          "i": 46,
+          "word": "reported",
+          "start": 19.504,
+          "end": 19.899,
+          "absStart": 34.104,
+          "absEnd": 34.499
+        },
+        {
+          "i": 47,
+          "word": "the",
+          "start": 19.934,
+          "end": 20.004,
+          "absStart": 34.534,
+          "absEnd": 34.604
+        },
+        {
+          "i": 48,
+          "word": "same",
+          "start": 20.038,
+          "end": 20.259,
+          "absStart": 34.638,
+          "absEnd": 34.859
+        },
+        {
+          "i": 49,
+          "word": "pothole",
+          "start": 20.294,
+          "end": 20.851,
+          "absStart": 34.894,
+          "absEnd": 35.451
+        },
+        {
+          "i": 50,
+          "word": "MEND",
+          "start": 21.408,
+          "end": 21.722,
+          "absStart": 36.008,
+          "absEnd": 36.322
+        },
+        {
+          "i": 51,
+          "word": "merges",
+          "start": 21.815,
+          "end": 22.186,
+          "absStart": 36.415,
+          "absEnd": 36.786
+        },
+        {
+          "i": 52,
+          "word": "them",
+          "start": 22.233,
+          "end": 22.36,
+          "absStart": 36.833,
+          "absEnd": 36.96
+        },
+        {
+          "i": 53,
+          "word": "privately",
+          "start": 22.418,
+          "end": 22.976,
+          "absStart": 37.018,
+          "absEnd": 37.576
+        }
+      ],
+      "firstWord": {
+        "i": 1,
+        "word": "He",
+        "start": 0,
+        "end": 0.116,
+        "absStart": 14.6,
+        "absEnd": 14.716
+      },
+      "lastWord": {
+        "i": 53,
+        "word": "privately",
+        "start": 22.418,
+        "end": 22.976,
+        "absStart": 37.018,
+        "absEnd": 37.576
+      },
+      "source": "demo/ad/public/audio/vo/report.timestamps.json",
+      "audio": "demo/ad/public/audio/vo/report.mp3",
+      "provider": "elevenlabs_v1_reuse",
+      "voice": "George"
+    },
+    {
+      "id": "dao",
+      "chapter": "03 — Authorize",
+      "start": 55,
+      "duration": 35,
+      "end": 90,
+      "voOffset": -0.35,
+      "voStart": 54.65,
+      "voEnd": 71.462,
+      "voDuration": 16.812,
+      "gapBeforeNext": 18.538,
+      "text": "A steward turns the report into a scope and a maximum budget. Then the community's DAO authorizes it. Not the AI. Not a platform. The budget, the contractor roster and the scoring policy are on-chain. Two of three council votes. Every decision has a receipt.",
+      "wordCount": 45,
+      "words": [
+        {
+          "i": 1,
+          "word": "A",
+          "start": 0,
+          "end": 0.116,
+          "absStart": 54.65,
+          "absEnd": 54.766
+        },
+        {
+          "i": 2,
+          "word": "steward",
+          "start": 0.197,
+          "end": 0.546,
+          "absStart": 54.847,
+          "absEnd": 55.196
+        },
+        {
+          "i": 3,
+          "word": "turns",
+          "start": 0.58,
+          "end": 0.848,
+          "absStart": 55.23,
+          "absEnd": 55.498
+        },
+        {
+          "i": 4,
+          "word": "the",
+          "start": 0.894,
+          "end": 0.964,
+          "absStart": 55.544,
+          "absEnd": 55.614
+        },
+        {
+          "i": 5,
+          "word": "report",
+          "start": 1.01,
+          "end": 1.358,
+          "absStart": 55.66,
+          "absEnd": 56.008
+        },
+        {
+          "i": 6,
+          "word": "into",
+          "start": 1.405,
+          "end": 1.544,
+          "absStart": 56.055,
+          "absEnd": 56.194
+        },
+        {
+          "i": 7,
+          "word": "a",
+          "start": 1.614,
+          "end": 1.637,
+          "absStart": 56.264,
+          "absEnd": 56.287
+        },
+        {
+          "i": 8,
+          "word": "scope",
+          "start": 1.707,
+          "end": 2.055,
+          "absStart": 56.357,
+          "absEnd": 56.705
+        },
+        {
+          "i": 9,
+          "word": "and",
+          "start": 2.09,
+          "end": 2.183,
+          "absStart": 56.74,
+          "absEnd": 56.833
+        },
+        {
+          "i": 10,
+          "word": "a",
+          "start": 2.229,
+          "end": 2.252,
+          "absStart": 56.879,
+          "absEnd": 56.902
+        },
+        {
+          "i": 11,
+          "word": "maximum",
+          "start": 2.31,
+          "end": 2.728,
+          "absStart": 56.96,
+          "absEnd": 57.378
+        },
+        {
+          "i": 12,
+          "word": "budget",
+          "start": 2.786,
+          "end": 3.228,
+          "absStart": 57.436,
+          "absEnd": 57.878
+        },
+        {
+          "i": 13,
+          "word": "Then",
+          "start": 3.785,
+          "end": 4.029,
+          "absStart": 58.435,
+          "absEnd": 58.679
+        },
+        {
+          "i": 14,
+          "word": "the",
+          "start": 4.075,
+          "end": 4.145,
+          "absStart": 58.725,
+          "absEnd": 58.795
+        },
+        {
+          "i": 15,
+          "word": "community's",
+          "start": 4.191,
+          "end": 4.667,
+          "absStart": 58.841,
+          "absEnd": 59.317
+        },
+        {
+          "i": 16,
+          "word": "DAO",
+          "start": 4.725,
+          "end": 5.027,
+          "absStart": 59.375,
+          "absEnd": 59.677
+        },
+        {
+          "i": 17,
+          "word": "authorizes",
+          "start": 5.074,
+          "end": 5.689,
+          "absStart": 59.724,
+          "absEnd": 60.339
+        },
+        {
+          "i": 18,
+          "word": "it",
+          "start": 5.759,
+          "end": 5.909,
+          "absStart": 60.409,
+          "absEnd": 60.559
+        },
+        {
+          "i": 19,
+          "word": "Not",
+          "start": 6.339,
+          "end": 6.536,
+          "absStart": 60.989,
+          "absEnd": 61.186
+        },
+        {
+          "i": 20,
+          "word": "the",
+          "start": 6.583,
+          "end": 6.676,
+          "absStart": 61.233,
+          "absEnd": 61.326
+        },
+        {
+          "i": 21,
+          "word": "AI",
+          "start": 6.757,
+          "end": 7.21,
+          "absStart": 61.407,
+          "absEnd": 61.86
+        },
+        {
+          "i": 22,
+          "word": "Not",
+          "start": 7.396,
+          "end": 7.57,
+          "absStart": 62.046,
+          "absEnd": 62.22
+        },
+        {
+          "i": 23,
+          "word": "a",
+          "start": 7.605,
+          "end": 7.628,
+          "absStart": 62.255,
+          "absEnd": 62.278
+        },
+        {
+          "i": 24,
+          "word": "platform",
+          "start": 7.674,
+          "end": 8.185,
+          "absStart": 62.324,
+          "absEnd": 62.835
+        },
+        {
+          "i": 25,
+          "word": "The",
+          "start": 8.719,
+          "end": 8.835,
+          "absStart": 63.369,
+          "absEnd": 63.485
+        },
+        {
+          "i": 26,
+          "word": "budget",
+          "start": 8.882,
+          "end": 9.288,
+          "absStart": 63.532,
+          "absEnd": 63.938
+        },
+        {
+          "i": 27,
+          "word": "the",
+          "start": 9.404,
+          "end": 9.509,
+          "absStart": 64.054,
+          "absEnd": 64.159
+        },
+        {
+          "i": 28,
+          "word": "contractor",
+          "start": 9.567,
+          "end": 10.066,
+          "absStart": 64.217,
+          "absEnd": 64.716
+        },
+        {
+          "i": 29,
+          "word": "roster",
+          "start": 10.112,
+          "end": 10.449,
+          "absStart": 64.762,
+          "absEnd": 65.099
+        },
+        {
+          "i": 30,
+          "word": "and",
+          "start": 10.507,
+          "end": 10.612,
+          "absStart": 65.157,
+          "absEnd": 65.262
+        },
+        {
+          "i": 31,
+          "word": "the",
+          "start": 10.658,
+          "end": 10.728,
+          "absStart": 65.308,
+          "absEnd": 65.378
+        },
+        {
+          "i": 32,
+          "word": "scoring",
+          "start": 10.762,
+          "end": 11.111,
+          "absStart": 65.412,
+          "absEnd": 65.761
+        },
+        {
+          "i": 33,
+          "word": "policy",
+          "start": 11.157,
+          "end": 11.564,
+          "absStart": 65.807,
+          "absEnd": 66.214
+        },
+        {
+          "i": 34,
+          "word": "are",
+          "start": 11.634,
+          "end": 11.785,
+          "absStart": 66.284,
+          "absEnd": 66.435
+        },
+        {
+          "i": 35,
+          "word": "on-chain",
+          "start": 11.831,
+          "end": 12.377,
+          "absStart": 66.481,
+          "absEnd": 67.027
+        },
+        {
+          "i": 36,
+          "word": "Two",
+          "start": 13.015,
+          "end": 13.236,
+          "absStart": 67.665,
+          "absEnd": 67.886
+        },
+        {
+          "i": 37,
+          "word": "of",
+          "start": 13.329,
+          "end": 13.398,
+          "absStart": 67.979,
+          "absEnd": 68.048
+        },
+        {
+          "i": 38,
+          "word": "three",
+          "start": 13.456,
+          "end": 13.689,
+          "absStart": 68.106,
+          "absEnd": 68.339
+        },
+        {
+          "i": 39,
+          "word": "council",
+          "start": 13.735,
+          "end": 14.095,
+          "absStart": 68.385,
+          "absEnd": 68.745
+        },
+        {
+          "i": 40,
+          "word": "votes",
+          "start": 14.153,
+          "end": 14.49,
+          "absStart": 68.803,
+          "absEnd": 69.14
+        },
+        {
+          "i": 41,
+          "word": "Every",
+          "start": 14.792,
+          "end": 15.047,
+          "absStart": 69.442,
+          "absEnd": 69.697
+        },
+        {
+          "i": 42,
+          "word": "decision",
+          "start": 15.093,
+          "end": 15.465,
+          "absStart": 69.743,
+          "absEnd": 70.115
+        },
+        {
+          "i": 43,
+          "word": "has",
+          "start": 15.523,
+          "end": 15.627,
+          "absStart": 70.173,
+          "absEnd": 70.277
+        },
+        {
+          "i": 44,
+          "word": "a",
+          "start": 15.674,
+          "end": 15.697,
+          "absStart": 70.324,
+          "absEnd": 70.347
+        },
+        {
+          "i": 45,
+          "word": "receipt",
+          "start": 15.755,
+          "end": 16.208,
+          "absStart": 70.405,
+          "absEnd": 70.858
+        }
+      ],
+      "firstWord": {
+        "i": 1,
+        "word": "A",
+        "start": 0,
+        "end": 0.116,
+        "absStart": 54.65,
+        "absEnd": 54.766
+      },
+      "lastWord": {
+        "i": 45,
+        "word": "receipt",
+        "start": 15.755,
+        "end": 16.208,
+        "absStart": 70.405,
+        "absEnd": 70.858
+      },
+      "source": "demo/ad/public/audio/vo/dao.timestamps.json",
+      "audio": "demo/ad/public/audio/vo/dao.mp3",
+      "provider": "elevenlabs_v1_reuse",
+      "voice": "George"
+    },
+    {
+      "id": "bids",
+      "chapter": "04 — Compete",
+      "start": 90,
+      "duration": 30,
+      "end": 120,
+      "voOffset": -0.45,
+      "voStart": 89.55,
+      "voEnd": 104.086,
+      "voDuration": 14.536,
+      "gapBeforeNext": 15.914,
+      "text": "Three contractors submit sealed bids. When the window closes, a hash-pinned policy scores price, warranty, duration and materials. B wins on total value, not the lowest sticker price. No language model picks the winner.",
+      "wordCount": 34,
+      "words": [
+        {
+          "i": 1,
+          "word": "Three",
+          "start": 0,
+          "end": 0.29,
+          "absStart": 89.55,
+          "absEnd": 89.84
+        },
+        {
+          "i": 2,
+          "word": "contractors",
+          "start": 0.337,
+          "end": 0.94,
+          "absStart": 89.887,
+          "absEnd": 90.49
+        },
+        {
+          "i": 3,
+          "word": "submit",
+          "start": 0.987,
+          "end": 1.312,
+          "absStart": 90.537,
+          "absEnd": 90.862
+        },
+        {
+          "i": 4,
+          "word": "sealed",
+          "start": 1.393,
+          "end": 1.718,
+          "absStart": 90.943,
+          "absEnd": 91.268
+        },
+        {
+          "i": 5,
+          "word": "bids",
+          "start": 1.776,
+          "end": 2.136,
+          "absStart": 91.326,
+          "absEnd": 91.686
+        },
+        {
+          "i": 6,
+          "word": "When",
+          "start": 2.612,
+          "end": 2.775,
+          "absStart": 92.162,
+          "absEnd": 92.325
+        },
+        {
+          "i": 7,
+          "word": "the",
+          "start": 2.81,
+          "end": 2.879,
+          "absStart": 92.36,
+          "absEnd": 92.429
+        },
+        {
+          "i": 8,
+          "word": "window",
+          "start": 2.914,
+          "end": 3.181,
+          "absStart": 92.464,
+          "absEnd": 92.731
+        },
+        {
+          "i": 9,
+          "word": "closes",
+          "start": 3.251,
+          "end": 3.704,
+          "absStart": 92.801,
+          "absEnd": 93.254
+        },
+        {
+          "i": 10,
+          "word": "a",
+          "start": 3.785,
+          "end": 3.855,
+          "absStart": 93.335,
+          "absEnd": 93.405
+        },
+        {
+          "i": 11,
+          "word": "hash-pinned",
+          "start": 3.947,
+          "end": 4.458,
+          "absStart": 93.497,
+          "absEnd": 94.008
+        },
+        {
+          "i": 12,
+          "word": "policy",
+          "start": 4.516,
+          "end": 4.899,
+          "absStart": 94.066,
+          "absEnd": 94.449
+        },
+        {
+          "i": 13,
+          "word": "scores",
+          "start": 4.969,
+          "end": 5.317,
+          "absStart": 94.519,
+          "absEnd": 94.867
+        },
+        {
+          "i": 14,
+          "word": "price",
+          "start": 5.375,
+          "end": 5.863,
+          "absStart": 94.925,
+          "absEnd": 95.413
+        },
+        {
+          "i": 15,
+          "word": "warranty",
+          "start": 6.13,
+          "end": 6.641,
+          "absStart": 95.68,
+          "absEnd": 96.191
+        },
+        {
+          "i": 16,
+          "word": "duration",
+          "start": 6.734,
+          "end": 7.233,
+          "absStart": 96.284,
+          "absEnd": 96.783
+        },
+        {
+          "i": 17,
+          "word": "and",
+          "start": 7.279,
+          "end": 7.361,
+          "absStart": 96.829,
+          "absEnd": 96.911
+        },
+        {
+          "i": 18,
+          "word": "materials",
+          "start": 7.407,
+          "end": 8.081,
+          "absStart": 96.957,
+          "absEnd": 97.631
+        },
+        {
+          "i": 19,
+          "word": "B",
+          "start": 8.673,
+          "end": 8.824,
+          "absStart": 98.223,
+          "absEnd": 98.374
+        },
+        {
+          "i": 20,
+          "word": "wins",
+          "start": 8.998,
+          "end": 9.3,
+          "absStart": 98.548,
+          "absEnd": 98.85
+        },
+        {
+          "i": 21,
+          "word": "on",
+          "start": 9.358,
+          "end": 9.451,
+          "absStart": 98.908,
+          "absEnd": 99.001
+        },
+        {
+          "i": 22,
+          "word": "total",
+          "start": 9.52,
+          "end": 9.822,
+          "absStart": 99.07,
+          "absEnd": 99.372
+        },
+        {
+          "i": 23,
+          "word": "value",
+          "start": 9.88,
+          "end": 10.344,
+          "absStart": 99.43,
+          "absEnd": 99.894
+        },
+        {
+          "i": 24,
+          "word": "not",
+          "start": 10.495,
+          "end": 10.716,
+          "absStart": 100.045,
+          "absEnd": 100.266
+        },
+        {
+          "i": 25,
+          "word": "the",
+          "start": 10.762,
+          "end": 10.832,
+          "absStart": 100.312,
+          "absEnd": 100.382
+        },
+        {
+          "i": 26,
+          "word": "lowest",
+          "start": 10.89,
+          "end": 11.18,
+          "absStart": 100.44,
+          "absEnd": 100.73
+        },
+        {
+          "i": 27,
+          "word": "sticker",
+          "start": 11.25,
+          "end": 11.552,
+          "absStart": 100.8,
+          "absEnd": 101.102
+        },
+        {
+          "i": 28,
+          "word": "price",
+          "start": 11.587,
+          "end": 12.028,
+          "absStart": 101.137,
+          "absEnd": 101.578
+        },
+        {
+          "i": 29,
+          "word": "No",
+          "start": 12.562,
+          "end": 12.736,
+          "absStart": 102.112,
+          "absEnd": 102.286
+        },
+        {
+          "i": 30,
+          "word": "language",
+          "start": 12.829,
+          "end": 13.236,
+          "absStart": 102.379,
+          "absEnd": 102.786
+        },
+        {
+          "i": 31,
+          "word": "model",
+          "start": 13.282,
+          "end": 13.526,
+          "absStart": 102.832,
+          "absEnd": 103.076
+        },
+        {
+          "i": 32,
+          "word": "picks",
+          "start": 13.595,
+          "end": 13.816,
+          "absStart": 103.145,
+          "absEnd": 103.366
+        },
+        {
+          "i": 33,
+          "word": "the",
+          "start": 13.862,
+          "end": 13.932,
+          "absStart": 103.412,
+          "absEnd": 103.482
+        },
+        {
+          "i": 34,
+          "word": "winner",
+          "start": 13.967,
+          "end": 14.269,
+          "absStart": 103.517,
+          "absEnd": 103.819
+        }
+      ],
+      "firstWord": {
+        "i": 1,
+        "word": "Three",
+        "start": 0,
+        "end": 0.29,
+        "absStart": 89.55,
+        "absEnd": 89.84
+      },
+      "lastWord": {
+        "i": 34,
+        "word": "winner",
+        "start": 13.967,
+        "end": 14.269,
+        "absStart": 103.517,
+        "absEnd": 103.819
+      },
+      "source": "demo/ad/public/audio/vo/bids.timestamps.json",
+      "audio": "demo/ad/public/audio/vo/bids.mp3",
+      "provider": "elevenlabs_v1_reuse",
+      "voice": "George"
+    },
+    {
+      "id": "repair",
+      "chapter": "05 — Repair",
+      "start": 120,
+      "duration": 35,
+      "end": 155,
+      "voOffset": -0.3,
+      "voStart": 119.7,
+      "voEnd": 135.768,
+      "voDuration": 16.068,
+      "gapBeforeNext": 19.232,
+      "text": "The repair begins. The pothole is cleaned, filled, compacted and sealed. Every photo, receipt and note is hashed onto the work order. Then a different human inspects the work. Not the contractor. Not the AI. A checklist, evidence, and a signature.",
+      "wordCount": 41,
+      "words": [
+        {
+          "i": 1,
+          "word": "The",
+          "start": 0,
+          "end": 0.116,
+          "absStart": 119.7,
+          "absEnd": 119.816
+        },
+        {
+          "i": 2,
+          "word": "repair",
+          "start": 0.186,
+          "end": 0.534,
+          "absStart": 119.886,
+          "absEnd": 120.234
+        },
+        {
+          "i": 3,
+          "word": "begins",
+          "start": 0.592,
+          "end": 1.138,
+          "absStart": 120.292,
+          "absEnd": 120.838
+        },
+        {
+          "i": 4,
+          "word": "The",
+          "start": 1.498,
+          "end": 1.602,
+          "absStart": 121.198,
+          "absEnd": 121.302
+        },
+        {
+          "i": 5,
+          "word": "pothole",
+          "start": 1.66,
+          "end": 2.113,
+          "absStart": 121.36,
+          "absEnd": 121.813
+        },
+        {
+          "i": 6,
+          "word": "is",
+          "start": 2.148,
+          "end": 2.218,
+          "absStart": 121.848,
+          "absEnd": 121.918
+        },
+        {
+          "i": 7,
+          "word": "cleaned",
+          "start": 2.276,
+          "end": 2.647,
+          "absStart": 121.976,
+          "absEnd": 122.347
+        },
+        {
+          "i": 8,
+          "word": "filled",
+          "start": 2.717,
+          "end": 3.053,
+          "absStart": 122.417,
+          "absEnd": 122.753
+        },
+        {
+          "i": 9,
+          "word": "compacted",
+          "start": 3.135,
+          "end": 3.669,
+          "absStart": 122.835,
+          "absEnd": 123.369
+        },
+        {
+          "i": 10,
+          "word": "and",
+          "start": 3.715,
+          "end": 3.796,
+          "absStart": 123.415,
+          "absEnd": 123.496
+        },
+        {
+          "i": 11,
+          "word": "sealed",
+          "start": 3.866,
+          "end": 4.331,
+          "absStart": 123.566,
+          "absEnd": 124.031
+        },
+        {
+          "i": 12,
+          "word": "Every",
+          "start": 4.923,
+          "end": 5.224,
+          "absStart": 124.623,
+          "absEnd": 124.924
+        },
+        {
+          "i": 13,
+          "word": "photo",
+          "start": 5.271,
+          "end": 5.666,
+          "absStart": 124.971,
+          "absEnd": 125.366
+        },
+        {
+          "i": 14,
+          "word": "receipt",
+          "start": 5.77,
+          "end": 6.142,
+          "absStart": 125.47,
+          "absEnd": 125.842
+        },
+        {
+          "i": 15,
+          "word": "and",
+          "start": 6.188,
+          "end": 6.258,
+          "absStart": 125.888,
+          "absEnd": 125.958
+        },
+        {
+          "i": 16,
+          "word": "note",
+          "start": 6.327,
+          "end": 6.687,
+          "absStart": 126.027,
+          "absEnd": 126.387
+        },
+        {
+          "i": 17,
+          "word": "is",
+          "start": 6.769,
+          "end": 6.931,
+          "absStart": 126.469,
+          "absEnd": 126.631
+        },
+        {
+          "i": 18,
+          "word": "hashed",
+          "start": 6.989,
+          "end": 7.303,
+          "absStart": 126.689,
+          "absEnd": 127.003
+        },
+        {
+          "i": 19,
+          "word": "onto",
+          "start": 7.338,
+          "end": 7.5,
+          "absStart": 127.038,
+          "absEnd": 127.2
+        },
+        {
+          "i": 20,
+          "word": "the",
+          "start": 7.546,
+          "end": 7.616,
+          "absStart": 127.246,
+          "absEnd": 127.316
+        },
+        {
+          "i": 21,
+          "word": "work",
+          "start": 7.651,
+          "end": 7.883,
+          "absStart": 127.351,
+          "absEnd": 127.583
+        },
+        {
+          "i": 22,
+          "word": "order",
+          "start": 7.941,
+          "end": 8.231,
+          "absStart": 127.641,
+          "absEnd": 127.931
+        },
+        {
+          "i": 23,
+          "word": "Then",
+          "start": 8.986,
+          "end": 9.207,
+          "absStart": 128.686,
+          "absEnd": 128.907
+        },
+        {
+          "i": 24,
+          "word": "a",
+          "start": 9.265,
+          "end": 9.288,
+          "absStart": 128.965,
+          "absEnd": 128.988
+        },
+        {
+          "i": 25,
+          "word": "different",
+          "start": 9.346,
+          "end": 9.648,
+          "absStart": 129.046,
+          "absEnd": 129.348
+        },
+        {
+          "i": 26,
+          "word": "human",
+          "start": 9.706,
+          "end": 9.996,
+          "absStart": 129.406,
+          "absEnd": 129.696
+        },
+        {
+          "i": 27,
+          "word": "inspects",
+          "start": 10.054,
+          "end": 10.507,
+          "absStart": 129.754,
+          "absEnd": 130.207
+        },
+        {
+          "i": 28,
+          "word": "the",
+          "start": 10.565,
+          "end": 10.635,
+          "absStart": 130.265,
+          "absEnd": 130.335
+        },
+        {
+          "i": 29,
+          "word": "work",
+          "start": 10.693,
+          "end": 11.006,
+          "absStart": 130.393,
+          "absEnd": 130.706
+        },
+        {
+          "i": 30,
+          "word": "Not",
+          "start": 11.25,
+          "end": 11.424,
+          "absStart": 130.95,
+          "absEnd": 131.124
+        },
+        {
+          "i": 31,
+          "word": "the",
+          "start": 11.459,
+          "end": 11.528,
+          "absStart": 131.159,
+          "absEnd": 131.228
+        },
+        {
+          "i": 32,
+          "word": "contractor",
+          "start": 11.575,
+          "end": 12.178,
+          "absStart": 131.275,
+          "absEnd": 131.878
+        },
+        {
+          "i": 33,
+          "word": "Not",
+          "start": 12.387,
+          "end": 12.55,
+          "absStart": 132.087,
+          "absEnd": 132.25
+        },
+        {
+          "i": 34,
+          "word": "the",
+          "start": 12.585,
+          "end": 12.666,
+          "absStart": 132.285,
+          "absEnd": 132.366
+        },
+        {
+          "i": 35,
+          "word": "AI",
+          "start": 12.747,
+          "end": 13.188,
+          "absStart": 132.447,
+          "absEnd": 132.888
+        },
+        {
+          "i": 36,
+          "word": "A",
+          "start": 13.572,
+          "end": 13.641,
+          "absStart": 133.272,
+          "absEnd": 133.341
+        },
+        {
+          "i": 37,
+          "word": "checklist",
+          "start": 13.711,
+          "end": 14.257,
+          "absStart": 133.411,
+          "absEnd": 133.957
+        },
+        {
+          "i": 38,
+          "word": "evidence",
+          "start": 14.338,
+          "end": 14.791,
+          "absStart": 134.038,
+          "absEnd": 134.491
+        },
+        {
+          "i": 39,
+          "word": "and",
+          "start": 14.837,
+          "end": 14.942,
+          "absStart": 134.537,
+          "absEnd": 134.642
+        },
+        {
+          "i": 40,
+          "word": "a",
+          "start": 14.988,
+          "end": 15.011,
+          "absStart": 134.688,
+          "absEnd": 134.711
+        },
+        {
+          "i": 41,
+          "word": "signature",
+          "start": 15.058,
+          "end": 15.603,
+          "absStart": 134.758,
+          "absEnd": 135.303
+        }
+      ],
+      "firstWord": {
+        "i": 1,
+        "word": "The",
+        "start": 0,
+        "end": 0.116,
+        "absStart": 119.7,
+        "absEnd": 119.816
+      },
+      "lastWord": {
+        "i": 41,
+        "word": "signature",
+        "start": 15.058,
+        "end": 15.603,
+        "absStart": 134.758,
+        "absEnd": 135.303
+      },
+      "source": "demo/ad/public/audio/vo/repair.timestamps.json",
+      "audio": "demo/ad/public/audio/vo/repair.mp3",
+      "provider": "elevenlabs_v1_reuse",
+      "voice": "George"
+    },
+    {
+      "id": "payment",
+      "chapter": "06 — Settle",
+      "start": 155,
+      "duration": 30,
+      "end": 185,
+      "voOffset": -0.4,
+      "voStart": 154.6,
+      "voEnd": 169.925,
+      "voDuration": 15.325,
+      "gapBeforeNext": 15.075,
+      "text": "On acceptance, exactly seventy-two USDC goes to the contractor. Eight stays in a durability holdback. One hundred was funded. Twenty was refunded at award. The contractor gets paid. The community keeps leverage.",
+      "wordCount": 32,
+      "words": [
+        {
+          "i": 1,
+          "word": "On",
+          "start": 0,
+          "end": 0.186,
+          "absStart": 154.6,
+          "absEnd": 154.786
+        },
+        {
+          "i": 2,
+          "word": "acceptance",
+          "start": 0.221,
+          "end": 0.906,
+          "absStart": 154.821,
+          "absEnd": 155.506
+        },
+        {
+          "i": 3,
+          "word": "exactly",
+          "start": 1.033,
+          "end": 1.544,
+          "absStart": 155.633,
+          "absEnd": 156.144
+        },
+        {
+          "i": 4,
+          "word": "seventy-two",
+          "start": 1.614,
+          "end": 2.206,
+          "absStart": 156.214,
+          "absEnd": 156.806
+        },
+        {
+          "i": 5,
+          "word": "USDC",
+          "start": 2.322,
+          "end": 2.926,
+          "absStart": 156.922,
+          "absEnd": 157.526
+        },
+        {
+          "i": 6,
+          "word": "goes",
+          "start": 3.437,
+          "end": 3.715,
+          "absStart": 158.037,
+          "absEnd": 158.315
+        },
+        {
+          "i": 7,
+          "word": "to",
+          "start": 3.762,
+          "end": 3.82,
+          "absStart": 158.362,
+          "absEnd": 158.42
+        },
+        {
+          "i": 8,
+          "word": "the",
+          "start": 3.878,
+          "end": 3.947,
+          "absStart": 158.478,
+          "absEnd": 158.547
+        },
+        {
+          "i": 9,
+          "word": "contractor",
+          "start": 3.994,
+          "end": 4.598,
+          "absStart": 158.594,
+          "absEnd": 159.198
+        },
+        {
+          "i": 10,
+          "word": "Eight",
+          "start": 5.19,
+          "end": 5.41,
+          "absStart": 159.79,
+          "absEnd": 160.01
+        },
+        {
+          "i": 11,
+          "word": "stays",
+          "start": 5.468,
+          "end": 5.828,
+          "absStart": 160.068,
+          "absEnd": 160.428
+        },
+        {
+          "i": 12,
+          "word": "in",
+          "start": 5.875,
+          "end": 5.933,
+          "absStart": 160.475,
+          "absEnd": 160.533
+        },
+        {
+          "i": 13,
+          "word": "a",
+          "start": 5.979,
+          "end": 6.002,
+          "absStart": 160.579,
+          "absEnd": 160.602
+        },
+        {
+          "i": 14,
+          "word": "durability",
+          "start": 6.06,
+          "end": 6.676,
+          "absStart": 160.66,
+          "absEnd": 161.276
+        },
+        {
+          "i": 15,
+          "word": "holdback",
+          "start": 6.745,
+          "end": 7.268,
+          "absStart": 161.345,
+          "absEnd": 161.868
+        },
+        {
+          "i": 16,
+          "word": "One",
+          "start": 7.86,
+          "end": 8.057,
+          "absStart": 162.46,
+          "absEnd": 162.657
+        },
+        {
+          "i": 17,
+          "word": "hundred",
+          "start": 8.104,
+          "end": 8.406,
+          "absStart": 162.704,
+          "absEnd": 163.006
+        },
+        {
+          "i": 18,
+          "word": "was",
+          "start": 8.452,
+          "end": 8.568,
+          "absStart": 163.052,
+          "absEnd": 163.168
+        },
+        {
+          "i": 19,
+          "word": "funded",
+          "start": 8.626,
+          "end": 9.044,
+          "absStart": 163.226,
+          "absEnd": 163.644
+        },
+        {
+          "i": 20,
+          "word": "Twenty",
+          "start": 9.346,
+          "end": 9.706,
+          "absStart": 163.946,
+          "absEnd": 164.306
+        },
+        {
+          "i": 21,
+          "word": "was",
+          "start": 9.764,
+          "end": 9.857,
+          "absStart": 164.364,
+          "absEnd": 164.457
+        },
+        {
+          "i": 22,
+          "word": "refunded",
+          "start": 9.938,
+          "end": 10.461,
+          "absStart": 164.538,
+          "absEnd": 165.061
+        },
+        {
+          "i": 23,
+          "word": "at",
+          "start": 10.519,
+          "end": 10.635,
+          "absStart": 165.119,
+          "absEnd": 165.235
+        },
+        {
+          "i": 24,
+          "word": "award",
+          "start": 10.681,
+          "end": 11.18,
+          "absStart": 165.281,
+          "absEnd": 165.78
+        },
+        {
+          "i": 25,
+          "word": "The",
+          "start": 11.68,
+          "end": 11.784,
+          "absStart": 166.28,
+          "absEnd": 166.384
+        },
+        {
+          "i": 26,
+          "word": "contractor",
+          "start": 11.842,
+          "end": 12.341,
+          "absStart": 166.442,
+          "absEnd": 166.941
+        },
+        {
+          "i": 27,
+          "word": "gets",
+          "start": 12.388,
+          "end": 12.574,
+          "absStart": 166.988,
+          "absEnd": 167.174
+        },
+        {
+          "i": 28,
+          "word": "paid",
+          "start": 12.632,
+          "end": 13.026,
+          "absStart": 167.232,
+          "absEnd": 167.626
+        },
+        {
+          "i": 29,
+          "word": "The",
+          "start": 13.293,
+          "end": 13.398,
+          "absStart": 167.893,
+          "absEnd": 167.998
+        },
+        {
+          "i": 30,
+          "word": "community",
+          "start": 13.444,
+          "end": 13.909,
+          "absStart": 168.044,
+          "absEnd": 168.509
+        },
+        {
+          "i": 31,
+          "word": "keeps",
+          "start": 13.967,
+          "end": 14.211,
+          "absStart": 168.567,
+          "absEnd": 168.811
+        },
+        {
+          "i": 32,
+          "word": "leverage",
+          "start": 14.269,
+          "end": 14.826,
+          "absStart": 168.869,
+          "absEnd": 169.426
+        }
+      ],
+      "firstWord": {
+        "i": 1,
+        "word": "On",
+        "start": 0,
+        "end": 0.186,
+        "absStart": 154.6,
+        "absEnd": 154.786
+      },
+      "lastWord": {
+        "i": 32,
+        "word": "leverage",
+        "start": 14.269,
+        "end": 14.826,
+        "absStart": 168.869,
+        "absEnd": 169.426
+      },
+      "source": "demo/ad/public/audio/vo/payment.timestamps.json",
+      "audio": "demo/ad/public/audio/vo/payment.mp3",
+      "provider": "elevenlabs_v1_reuse",
+      "voice": "George"
+    },
+    {
+      "id": "passport",
+      "chapter": "07 — Remember",
+      "start": 185,
+      "duration": 20,
+      "end": 205,
+      "voOffset": -0.35,
+      "voStart": 184.65,
+      "voEnd": 199.186,
+      "voDuration": 14.536,
+      "gapBeforeNext": 5.814,
+      "text": "If the repair fails, MEND reopens the same work order and the same history. No new bounty. No new money. One asset. One permanent record. The passport keeps the failure, the remedy, and every payment in one place.",
+      "wordCount": 38,
+      "words": [
+        {
+          "i": 1,
+          "word": "If",
+          "start": 0,
+          "end": 0.186,
+          "absStart": 184.65,
+          "absEnd": 184.836
+        },
+        {
+          "i": 2,
+          "word": "the",
+          "start": 0.232,
+          "end": 0.302,
+          "absStart": 184.882,
+          "absEnd": 184.952
+        },
+        {
+          "i": 3,
+          "word": "repair",
+          "start": 0.372,
+          "end": 0.708,
+          "absStart": 185.022,
+          "absEnd": 185.358
+        },
+        {
+          "i": 4,
+          "word": "fails",
+          "start": 0.778,
+          "end": 1.196,
+          "absStart": 185.428,
+          "absEnd": 185.846
+        },
+        {
+          "i": 5,
+          "word": "MEND",
+          "start": 1.451,
+          "end": 1.776,
+          "absStart": 186.101,
+          "absEnd": 186.426
+        },
+        {
+          "i": 6,
+          "word": "reopens",
+          "start": 1.846,
+          "end": 2.345,
+          "absStart": 186.496,
+          "absEnd": 186.995
+        },
+        {
+          "i": 7,
+          "word": "the",
+          "start": 2.403,
+          "end": 2.485,
+          "absStart": 187.053,
+          "absEnd": 187.135
+        },
+        {
+          "i": 8,
+          "word": "same",
+          "start": 2.531,
+          "end": 2.763,
+          "absStart": 187.181,
+          "absEnd": 187.413
+        },
+        {
+          "i": 9,
+          "word": "work",
+          "start": 2.798,
+          "end": 3.042,
+          "absStart": 187.448,
+          "absEnd": 187.692
+        },
+        {
+          "i": 10,
+          "word": "order",
+          "start": 3.1,
+          "end": 3.309,
+          "absStart": 187.75,
+          "absEnd": 187.959
+        },
+        {
+          "i": 11,
+          "word": "and",
+          "start": 3.379,
+          "end": 3.518,
+          "absStart": 188.029,
+          "absEnd": 188.168
+        },
+        {
+          "i": 12,
+          "word": "the",
+          "start": 3.564,
+          "end": 3.634,
+          "absStart": 188.214,
+          "absEnd": 188.284
+        },
+        {
+          "i": 13,
+          "word": "same",
+          "start": 3.68,
+          "end": 3.913,
+          "absStart": 188.33,
+          "absEnd": 188.563
+        },
+        {
+          "i": 14,
+          "word": "history",
+          "start": 3.959,
+          "end": 4.412,
+          "absStart": 188.609,
+          "absEnd": 189.062
+        },
+        {
+          "i": 15,
+          "word": "No",
+          "start": 4.737,
+          "end": 4.876,
+          "absStart": 189.387,
+          "absEnd": 189.526
+        },
+        {
+          "i": 16,
+          "word": "new",
+          "start": 4.946,
+          "end": 5.05,
+          "absStart": 189.596,
+          "absEnd": 189.7
+        },
+        {
+          "i": 17,
+          "word": "bounty",
+          "start": 5.108,
+          "end": 5.584,
+          "absStart": 189.758,
+          "absEnd": 190.234
+        },
+        {
+          "i": 18,
+          "word": "No",
+          "start": 5.933,
+          "end": 6.084,
+          "absStart": 190.583,
+          "absEnd": 190.734
+        },
+        {
+          "i": 19,
+          "word": "new",
+          "start": 6.165,
+          "end": 6.293,
+          "absStart": 190.815,
+          "absEnd": 190.943
+        },
+        {
+          "i": 20,
+          "word": "money",
+          "start": 6.339,
+          "end": 6.653,
+          "absStart": 190.989,
+          "absEnd": 191.303
+        },
+        {
+          "i": 21,
+          "word": "One",
+          "start": 7.303,
+          "end": 7.535,
+          "absStart": 191.953,
+          "absEnd": 192.185
+        },
+        {
+          "i": 22,
+          "word": "asset",
+          "start": 7.57,
+          "end": 8.011,
+          "absStart": 192.22,
+          "absEnd": 192.661
+        },
+        {
+          "i": 23,
+          "word": "One",
+          "start": 8.336,
+          "end": 8.545,
+          "absStart": 192.986,
+          "absEnd": 193.195
+        },
+        {
+          "i": 24,
+          "word": "permanent",
+          "start": 8.591,
+          "end": 8.998,
+          "absStart": 193.241,
+          "absEnd": 193.648
+        },
+        {
+          "i": 25,
+          "word": "record",
+          "start": 9.056,
+          "end": 9.52,
+          "absStart": 193.706,
+          "absEnd": 194.17
+        },
+        {
+          "i": 26,
+          "word": "The",
+          "start": 9.88,
+          "end": 9.996,
+          "absStart": 194.53,
+          "absEnd": 194.646
+        },
+        {
+          "i": 27,
+          "word": "passport",
+          "start": 10.054,
+          "end": 10.553,
+          "absStart": 194.704,
+          "absEnd": 195.203
+        },
+        {
+          "i": 28,
+          "word": "keeps",
+          "start": 10.612,
+          "end": 10.832,
+          "absStart": 195.262,
+          "absEnd": 195.482
+        },
+        {
+          "i": 29,
+          "word": "the",
+          "start": 10.867,
+          "end": 10.937,
+          "absStart": 195.517,
+          "absEnd": 195.587
+        },
+        {
+          "i": 30,
+          "word": "failure",
+          "start": 10.995,
+          "end": 11.482,
+          "absStart": 195.645,
+          "absEnd": 196.132
+        },
+        {
+          "i": 31,
+          "word": "the",
+          "start": 11.645,
+          "end": 11.749,
+          "absStart": 196.295,
+          "absEnd": 196.399
+        },
+        {
+          "i": 32,
+          "word": "remedy",
+          "start": 11.819,
+          "end": 12.179,
+          "absStart": 196.469,
+          "absEnd": 196.829
+        },
+        {
+          "i": 33,
+          "word": "and",
+          "start": 12.249,
+          "end": 12.365,
+          "absStart": 196.899,
+          "absEnd": 197.015
+        },
+        {
+          "i": 34,
+          "word": "every",
+          "start": 12.434,
+          "end": 12.632,
+          "absStart": 197.084,
+          "absEnd": 197.282
+        },
+        {
+          "i": 35,
+          "word": "payment",
+          "start": 12.678,
+          "end": 13.026,
+          "absStart": 197.328,
+          "absEnd": 197.676
+        },
+        {
+          "i": 36,
+          "word": "in",
+          "start": 13.073,
+          "end": 13.142,
+          "absStart": 197.723,
+          "absEnd": 197.792
+        },
+        {
+          "i": 37,
+          "word": "one",
+          "start": 13.212,
+          "end": 13.375,
+          "absStart": 197.862,
+          "absEnd": 198.025
+        },
+        {
+          "i": 38,
+          "word": "place",
+          "start": 13.421,
+          "end": 13.909,
+          "absStart": 198.071,
+          "absEnd": 198.559
+        }
+      ],
+      "firstWord": {
+        "i": 1,
+        "word": "If",
+        "start": 0,
+        "end": 0.186,
+        "absStart": 184.65,
+        "absEnd": 184.836
+      },
+      "lastWord": {
+        "i": 38,
+        "word": "place",
+        "start": 13.421,
+        "end": 13.909,
+        "absStart": 198.071,
+        "absEnd": 198.559
+      },
+      "source": "demo/ad/public/audio/vo/passport.timestamps.json",
+      "audio": "demo/ad/public/audio/vo/passport.mp3",
+      "provider": "elevenlabs_v1_reuse",
+      "voice": "George"
+    },
+    {
+      "id": "tech",
+      "chapter": "08 — Under the hood",
+      "start": 205,
+      "duration": 50,
+      "end": 255,
+      "voOffset": -0.5,
+      "voStart": 204.5,
+      "voEnd": 233.339,
+      "voDuration": 28.839,
+      "gapBeforeNext": 21.661,
+      "text": "Under the hood: Next.js and React, a Fastify API, Postgres, Rust contracts on NEAR, a real Sputnik DAO, NEAR AI, OutLayer, 1Click and Agent Market. The infrastructure is live on NEAR testnet. The pothole story is a replay demo. The contracts, the DAO vote, the AI signature and the Agent Market listing are real. Every payment, vote and attestation has a verifiable receipt.",
+      "wordCount": 63,
+      "words": [
+        {
+          "i": 1,
+          "word": "Under",
+          "start": 0,
+          "end": 0.302,
+          "absStart": 204.5,
+          "absEnd": 204.802
+        },
+        {
+          "i": 2,
+          "word": "the",
+          "start": 0.348,
+          "end": 0.418,
+          "absStart": 204.848,
+          "absEnd": 204.918
+        },
+        {
+          "i": 3,
+          "word": "hood",
+          "start": 0.476,
+          "end": 0.731,
+          "absStart": 204.976,
+          "absEnd": 205.231
+        },
+        {
+          "i": 4,
+          "word": "Next.js",
+          "start": 1.057,
+          "end": 1.741,
+          "absStart": 205.557,
+          "absEnd": 206.241
+        },
+        {
+          "i": 5,
+          "word": "and",
+          "start": 1.8,
+          "end": 1.904,
+          "absStart": 206.3,
+          "absEnd": 206.404
+        },
+        {
+          "i": 6,
+          "word": "React",
+          "start": 1.962,
+          "end": 2.415,
+          "absStart": 206.462,
+          "absEnd": 206.915
+        },
+        {
+          "i": 7,
+          "word": "a",
+          "start": 2.682,
+          "end": 2.752,
+          "absStart": 207.182,
+          "absEnd": 207.252
+        },
+        {
+          "i": 8,
+          "word": "Fastify",
+          "start": 2.833,
+          "end": 3.367,
+          "absStart": 207.333,
+          "absEnd": 207.867
+        },
+        {
+          "i": 9,
+          "word": "API",
+          "start": 3.437,
+          "end": 3.994,
+          "absStart": 207.937,
+          "absEnd": 208.494
+        },
+        {
+          "i": 10,
+          "word": "Postgres",
+          "start": 4.481,
+          "end": 5.132,
+          "absStart": 208.981,
+          "absEnd": 209.632
+        },
+        {
+          "i": 11,
+          "word": "Rust",
+          "start": 5.457,
+          "end": 5.712,
+          "absStart": 209.957,
+          "absEnd": 210.212
+        },
+        {
+          "i": 12,
+          "word": "contracts",
+          "start": 5.77,
+          "end": 6.235,
+          "absStart": 210.27,
+          "absEnd": 210.735
+        },
+        {
+          "i": 13,
+          "word": "on",
+          "start": 6.293,
+          "end": 6.385,
+          "absStart": 210.793,
+          "absEnd": 210.885
+        },
+        {
+          "i": 14,
+          "word": "NEAR",
+          "start": 6.467,
+          "end": 6.792,
+          "absStart": 210.967,
+          "absEnd": 211.292
+        },
+        {
+          "i": 15,
+          "word": "a",
+          "start": 7.21,
+          "end": 7.279,
+          "absStart": 211.71,
+          "absEnd": 211.779
+        },
+        {
+          "i": 16,
+          "word": "real",
+          "start": 7.396,
+          "end": 7.639,
+          "absStart": 211.896,
+          "absEnd": 212.139
+        },
+        {
+          "i": 17,
+          "word": "Sputnik",
+          "start": 7.709,
+          "end": 8.162,
+          "absStart": 212.209,
+          "absEnd": 212.662
+        },
+        {
+          "i": 18,
+          "word": "DAO",
+          "start": 8.231,
+          "end": 8.557,
+          "absStart": 212.731,
+          "absEnd": 213.057
+        },
+        {
+          "i": 19,
+          "word": "NEAR",
+          "start": 8.951,
+          "end": 9.218,
+          "absStart": 213.451,
+          "absEnd": 213.718
+        },
+        {
+          "i": 20,
+          "word": "AI",
+          "start": 9.3,
+          "end": 9.741,
+          "absStart": 213.8,
+          "absEnd": 214.241
+        },
+        {
+          "i": 21,
+          "word": "OutLayer",
+          "start": 9.985,
+          "end": 10.542,
+          "absStart": 214.485,
+          "absEnd": 215.042
+        },
+        {
+          "i": 22,
+          "word": "1Click",
+          "start": 10.786,
+          "end": 11.262,
+          "absStart": 215.286,
+          "absEnd": 215.762
+        },
+        {
+          "i": 23,
+          "word": "and",
+          "start": 11.331,
+          "end": 11.436,
+          "absStart": 215.831,
+          "absEnd": 215.936
+        },
+        {
+          "i": 24,
+          "word": "Agent",
+          "start": 11.482,
+          "end": 11.773,
+          "absStart": 215.982,
+          "absEnd": 216.273
+        },
+        {
+          "i": 25,
+          "word": "Market",
+          "start": 11.819,
+          "end": 12.307,
+          "absStart": 216.319,
+          "absEnd": 216.807
+        },
+        {
+          "i": 26,
+          "word": "The",
+          "start": 12.934,
+          "end": 13.061,
+          "absStart": 217.434,
+          "absEnd": 217.561
+        },
+        {
+          "i": 27,
+          "word": "infrastructure",
+          "start": 13.142,
+          "end": 13.839,
+          "absStart": 217.642,
+          "absEnd": 218.339
+        },
+        {
+          "i": 28,
+          "word": "is",
+          "start": 13.886,
+          "end": 13.967,
+          "absStart": 218.386,
+          "absEnd": 218.467
+        },
+        {
+          "i": 29,
+          "word": "live",
+          "start": 14.048,
+          "end": 14.327,
+          "absStart": 218.548,
+          "absEnd": 218.827
+        },
+        {
+          "i": 30,
+          "word": "on",
+          "start": 14.373,
+          "end": 14.454,
+          "absStart": 218.873,
+          "absEnd": 218.954
+        },
+        {
+          "i": 31,
+          "word": "NEAR",
+          "start": 14.536,
+          "end": 14.744,
+          "absStart": 219.036,
+          "absEnd": 219.244
+        },
+        {
+          "i": 32,
+          "word": "testnet",
+          "start": 14.791,
+          "end": 15.36,
+          "absStart": 219.291,
+          "absEnd": 219.86
+        },
+        {
+          "i": 33,
+          "word": "The",
+          "start": 15.859,
+          "end": 15.963,
+          "absStart": 220.359,
+          "absEnd": 220.463
+        },
+        {
+          "i": 34,
+          "word": "pothole",
+          "start": 16.022,
+          "end": 16.405,
+          "absStart": 220.522,
+          "absEnd": 220.905
+        },
+        {
+          "i": 35,
+          "word": "story",
+          "start": 16.428,
+          "end": 16.753,
+          "absStart": 220.928,
+          "absEnd": 221.253
+        },
+        {
+          "i": 36,
+          "word": "is",
+          "start": 16.799,
+          "end": 16.881,
+          "absStart": 221.299,
+          "absEnd": 221.381
+        },
+        {
+          "i": 37,
+          "word": "a",
+          "start": 16.927,
+          "end": 16.95,
+          "absStart": 221.427,
+          "absEnd": 221.45
+        },
+        {
+          "i": 38,
+          "word": "replay",
+          "start": 17.02,
+          "end": 17.426,
+          "absStart": 221.52,
+          "absEnd": 221.926
+        },
+        {
+          "i": 39,
+          "word": "demo",
+          "start": 17.484,
+          "end": 17.891,
+          "absStart": 221.984,
+          "absEnd": 222.391
+        },
+        {
+          "i": 40,
+          "word": "The",
+          "start": 18.32,
+          "end": 18.425,
+          "absStart": 222.82,
+          "absEnd": 222.925
+        },
+        {
+          "i": 41,
+          "word": "contracts",
+          "start": 18.483,
+          "end": 19.11,
+          "absStart": 222.983,
+          "absEnd": 223.61
+        },
+        {
+          "i": 42,
+          "word": "the",
+          "start": 19.179,
+          "end": 19.284,
+          "absStart": 223.679,
+          "absEnd": 223.784
+        },
+        {
+          "i": 43,
+          "word": "DAO",
+          "start": 19.354,
+          "end": 19.632,
+          "absStart": 223.854,
+          "absEnd": 224.132
+        },
+        {
+          "i": 44,
+          "word": "vote",
+          "start": 19.69,
+          "end": 20.039,
+          "absStart": 224.19,
+          "absEnd": 224.539
+        },
+        {
+          "i": 45,
+          "word": "the",
+          "start": 20.224,
+          "end": 20.34,
+          "absStart": 224.724,
+          "absEnd": 224.84
+        },
+        {
+          "i": 46,
+          "word": "AI",
+          "start": 20.41,
+          "end": 20.735,
+          "absStart": 224.91,
+          "absEnd": 225.235
+        },
+        {
+          "i": 47,
+          "word": "signature",
+          "start": 20.805,
+          "end": 21.339,
+          "absStart": 225.305,
+          "absEnd": 225.839
+        },
+        {
+          "i": 48,
+          "word": "and",
+          "start": 21.409,
+          "end": 21.571,
+          "absStart": 225.909,
+          "absEnd": 226.071
+        },
+        {
+          "i": 49,
+          "word": "the",
+          "start": 21.618,
+          "end": 21.687,
+          "absStart": 226.118,
+          "absEnd": 226.187
+        },
+        {
+          "i": 50,
+          "word": "Agent",
+          "start": 21.768,
+          "end": 22.094,
+          "absStart": 226.268,
+          "absEnd": 226.594
+        },
+        {
+          "i": 51,
+          "word": "Market",
+          "start": 22.163,
+          "end": 22.5,
+          "absStart": 226.663,
+          "absEnd": 227
+        },
+        {
+          "i": 52,
+          "word": "listing",
+          "start": 22.546,
+          "end": 22.918,
+          "absStart": 227.046,
+          "absEnd": 227.418
+        },
+        {
+          "i": 53,
+          "word": "are",
+          "start": 22.999,
+          "end": 23.173,
+          "absStart": 227.499,
+          "absEnd": 227.673
+        },
+        {
+          "i": 54,
+          "word": "real",
+          "start": 23.22,
+          "end": 23.556,
+          "absStart": 227.72,
+          "absEnd": 228.056
+        },
+        {
+          "i": 55,
+          "word": "Every",
+          "start": 24.218,
+          "end": 24.52,
+          "absStart": 228.718,
+          "absEnd": 229.02
+        },
+        {
+          "i": 56,
+          "word": "payment",
+          "start": 24.578,
+          "end": 24.984,
+          "absStart": 229.078,
+          "absEnd": 229.484
+        },
+        {
+          "i": 57,
+          "word": "vote",
+          "start": 25.112,
+          "end": 25.414,
+          "absStart": 229.612,
+          "absEnd": 229.914
+        },
+        {
+          "i": 58,
+          "word": "and",
+          "start": 25.46,
+          "end": 25.553,
+          "absStart": 229.96,
+          "absEnd": 230.053
+        },
+        {
+          "i": 59,
+          "word": "attestation",
+          "start": 25.611,
+          "end": 26.296,
+          "absStart": 230.111,
+          "absEnd": 230.796
+        },
+        {
+          "i": 60,
+          "word": "has",
+          "start": 26.54,
+          "end": 26.703,
+          "absStart": 231.04,
+          "absEnd": 231.203
+        },
+        {
+          "i": 61,
+          "word": "a",
+          "start": 26.749,
+          "end": 26.772,
+          "absStart": 231.249,
+          "absEnd": 231.272
+        },
+        {
+          "i": 62,
+          "word": "verifiable",
+          "start": 26.83,
+          "end": 27.481,
+          "absStart": 231.33,
+          "absEnd": 231.981
+        },
+        {
+          "i": 63,
+          "word": "receipt",
+          "start": 27.527,
+          "end": 28.015,
+          "absStart": 232.027,
+          "absEnd": 232.515
+        }
+      ],
+      "firstWord": {
+        "i": 1,
+        "word": "Under",
+        "start": 0,
+        "end": 0.302,
+        "absStart": 204.5,
+        "absEnd": 204.802
+      },
+      "lastWord": {
+        "i": 63,
+        "word": "receipt",
+        "start": 27.527,
+        "end": 28.015,
+        "absStart": 232.027,
+        "absEnd": 232.515
+      },
+      "source": "demo/ad/public/audio/vo/tech.timestamps.json",
+      "audio": "demo/ad/public/audio/vo/tech.mp3",
+      "provider": "elevenlabs_v1_reuse",
+      "voice": "George"
+    },
+    {
+      "id": "close",
+      "chapter": "09 — MEND",
+      "start": 255,
+      "duration": 45,
+      "end": 300,
+      "voOffset": -0.3,
+      "voStart": 254.7,
+      "voEnd": 267.053,
+      "voDuration": 12.353,
+      "gapBeforeNext": 32.947,
+      "text": "This is maintenance with memory. Report it. Fix it. Remember it. For the price of a small repair, a neighborhood gets a memory. MEND. Get it fixed. Keep it fixed.",
+      "wordCount": 30,
+      "words": [
+        {
+          "i": 1,
+          "word": "This",
+          "start": 0,
+          "end": 0.255,
+          "absStart": 254.7,
+          "absEnd": 254.955
+        },
+        {
+          "i": 2,
+          "word": "is",
+          "start": 0.325,
+          "end": 0.406,
+          "absStart": 255.025,
+          "absEnd": 255.106
+        },
+        {
+          "i": 3,
+          "word": "maintenance",
+          "start": 0.488,
+          "end": 0.964,
+          "absStart": 255.188,
+          "absEnd": 255.664
+        },
+        {
+          "i": 4,
+          "word": "with",
+          "start": 0.987,
+          "end": 1.126,
+          "absStart": 255.687,
+          "absEnd": 255.826
+        },
+        {
+          "i": 5,
+          "word": "memory",
+          "start": 1.184,
+          "end": 1.579,
+          "absStart": 255.884,
+          "absEnd": 256.279
+        },
+        {
+          "i": 6,
+          "word": "Report",
+          "start": 1.916,
+          "end": 2.299,
+          "absStart": 256.616,
+          "absEnd": 256.999
+        },
+        {
+          "i": 7,
+          "word": "it",
+          "start": 2.357,
+          "end": 2.519,
+          "absStart": 257.057,
+          "absEnd": 257.219
+        },
+        {
+          "i": 8,
+          "word": "Fix",
+          "start": 2.81,
+          "end": 3.088,
+          "absStart": 257.51,
+          "absEnd": 257.788
+        },
+        {
+          "i": 9,
+          "word": "it",
+          "start": 3.17,
+          "end": 3.332,
+          "absStart": 257.87,
+          "absEnd": 258.032
+        },
+        {
+          "i": 10,
+          "word": "Remember",
+          "start": 3.889,
+          "end": 4.284,
+          "absStart": 258.589,
+          "absEnd": 258.984
+        },
+        {
+          "i": 11,
+          "word": "it",
+          "start": 4.342,
+          "end": 4.505,
+          "absStart": 259.042,
+          "absEnd": 259.205
+        },
+        {
+          "i": 12,
+          "word": "For",
+          "start": 5.166,
+          "end": 5.294,
+          "absStart": 259.866,
+          "absEnd": 259.994
+        },
+        {
+          "i": 13,
+          "word": "the",
+          "start": 5.329,
+          "end": 5.399,
+          "absStart": 260.029,
+          "absEnd": 260.099
+        },
+        {
+          "i": 14,
+          "word": "price",
+          "start": 5.445,
+          "end": 5.724,
+          "absStart": 260.145,
+          "absEnd": 260.424
+        },
+        {
+          "i": 15,
+          "word": "of",
+          "start": 5.759,
+          "end": 5.805,
+          "absStart": 260.459,
+          "absEnd": 260.505
+        },
+        {
+          "i": 16,
+          "word": "a",
+          "start": 5.851,
+          "end": 5.875,
+          "absStart": 260.551,
+          "absEnd": 260.575
+        },
+        {
+          "i": 17,
+          "word": "small",
+          "start": 5.921,
+          "end": 6.188,
+          "absStart": 260.621,
+          "absEnd": 260.888
+        },
+        {
+          "i": 18,
+          "word": "repair",
+          "start": 6.258,
+          "end": 6.734,
+          "absStart": 260.958,
+          "absEnd": 261.434
+        },
+        {
+          "i": 19,
+          "word": "a",
+          "start": 7.036,
+          "end": 7.117,
+          "absStart": 261.736,
+          "absEnd": 261.817
+        },
+        {
+          "i": 20,
+          "word": "neighborhood",
+          "start": 7.187,
+          "end": 7.605,
+          "absStart": 261.887,
+          "absEnd": 262.305
+        },
+        {
+          "i": 21,
+          "word": "gets",
+          "start": 7.639,
+          "end": 7.825,
+          "absStart": 262.339,
+          "absEnd": 262.525
+        },
+        {
+          "i": 22,
+          "word": "a",
+          "start": 7.86,
+          "end": 7.883,
+          "absStart": 262.56,
+          "absEnd": 262.583
+        },
+        {
+          "i": 23,
+          "word": "memory",
+          "start": 7.941,
+          "end": 8.336,
+          "absStart": 262.641,
+          "absEnd": 263.036
+        },
+        {
+          "i": 24,
+          "word": "MEND",
+          "start": 8.905,
+          "end": 9.334,
+          "absStart": 263.605,
+          "absEnd": 264.034
+        },
+        {
+          "i": 25,
+          "word": "Get",
+          "start": 10.159,
+          "end": 10.333,
+          "absStart": 264.859,
+          "absEnd": 265.033
+        },
+        {
+          "i": 26,
+          "word": "it",
+          "start": 10.391,
+          "end": 10.461,
+          "absStart": 265.091,
+          "absEnd": 265.161
+        },
+        {
+          "i": 27,
+          "word": "fixed",
+          "start": 10.53,
+          "end": 10.96,
+          "absStart": 265.23,
+          "absEnd": 265.66
+        },
+        {
+          "i": 28,
+          "word": "Keep",
+          "start": 11.25,
+          "end": 11.459,
+          "absStart": 265.95,
+          "absEnd": 266.159
+        },
+        {
+          "i": 29,
+          "word": "it",
+          "start": 11.505,
+          "end": 11.575,
+          "absStart": 266.205,
+          "absEnd": 266.275
+        },
+        {
+          "i": 30,
+          "word": "fixed",
+          "start": 11.633,
+          "end": 12.028,
+          "absStart": 266.333,
+          "absEnd": 266.728
+        }
+      ],
+      "firstWord": {
+        "i": 1,
+        "word": "This",
+        "start": 0,
+        "end": 0.255,
+        "absStart": 254.7,
+        "absEnd": 254.955
+      },
+      "lastWord": {
+        "i": 30,
+        "word": "fixed",
+        "start": 11.633,
+        "end": 12.028,
+        "absStart": 266.333,
+        "absEnd": 266.728
+      },
+      "source": "demo/ad/public/audio/vo/close.timestamps.json",
+      "audio": "demo/ad/public/audio/vo/close.mp3",
+      "provider": "elevenlabs_v1_reuse",
+      "voice": "George"
+    }
+  ],
+  "totals": {
+    "scenes": 9,
+    "words": 366,
+    "speechSeconds": 153.716,
+    "runtimeSeconds": 300,
+    "speechDensity": 0.512,
+    "cueCount": 66,
+    "voOffsetRange": [
+      -0.5,
+      0
+    ],
+    "allScenesFit": true,
+    "minGapBeforeNext": 3.158
+  }
+}

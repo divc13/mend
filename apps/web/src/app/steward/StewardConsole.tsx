@@ -80,7 +80,12 @@ export function StewardConsole() {
               transaction.
             </p>
             <label className="checkbox-row" style={{ marginTop: 12 }}>
-              <input type="checkbox" checked={acting} onChange={(event) => setActing(event.target.checked)} />
+              <input
+                type="checkbox"
+                data-testid="steward-acting"
+                checked={acting}
+                onChange={(event) => setActing(event.target.checked)}
+              />
               <span>I am acting as the steward in this replay and understand no transaction will be sent.</span>
             </label>
           </div>
@@ -93,7 +98,13 @@ export function StewardConsole() {
             <div className="form-grid">
               <div className="field" style={{ marginTop: 0 }}>
                 <label htmlFor="steward-case">Work order</label>
-                <select id="steward-case" className="select" value={caseId} onChange={(event) => chooseCase(event.target.value)}>
+                <select
+                  id="steward-case"
+                  className="select"
+                  data-testid="steward-case-select"
+                  value={caseId}
+                  onChange={(event) => chooseCase(event.target.value)}
+                >
                   {CASES.map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.id} — {statusLabel(item.status)}
@@ -194,6 +205,7 @@ export function StewardConsole() {
                 <button
                   type="button"
                   className="button"
+                  data-testid="steward-save-draft"
                   disabled={!acting}
                   onClick={() =>
                     setDraftStatus(
@@ -357,6 +369,7 @@ export function StewardConsole() {
                     <button
                       type="button"
                       className="button button--small"
+                      data-testid="steward-confirm-award"
                       disabled={!acting || !canRehearseAward}
                       onClick={() => {
                         setAwardStatus(

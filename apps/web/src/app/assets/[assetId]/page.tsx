@@ -106,7 +106,7 @@ export default async function AssetPage({ params }: { params: Promise<{ assetId:
     });
 
   return (
-    <div className="container">
+    <div className="container" data-testid="passport-page">
       <div style={{ paddingTop: 'clamp(30px, 5vw, 54px)' }}>
         <nav className="case-hero__breadcrumbs" aria-label="Breadcrumb">
           <Link href="/">Map</Link>
@@ -123,7 +123,9 @@ export default async function AssetPage({ params }: { params: Promise<{ assetId:
               <Badge tone="warning">Non-transferable</Badge>
               <Badge tone="neutral">{asset.assetType.replace(/_/g, ' ')}</Badge>
             </div>
-            <h1 style={{ marginTop: 14 }}>{asset.id}</h1>
+            <h1 style={{ marginTop: 14 }} data-testid="passport-id">
+              {asset.id}
+            </h1>
             <p className="page-lead" style={{ marginTop: 10 }}>
               {asset.publicDescription}
             </p>

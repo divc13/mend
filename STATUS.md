@@ -35,7 +35,7 @@ Statuses used here: `PASS`, `PASS_WITH_CAVEATS`, `PARTIAL`,
 | F10 | Independent inspection and Agent Market | **PASS_WITH_CAVEATS** | Inspector agent 9 tests (missing items only, no certification language); market worker 12 tests (poll/start/submit, redacted brief, no auto-accept, null bid id); API inspection flow with human acceptance; testnet completion and durability inspections by separate inspector accounts. **Live Agent Market listing is `live`** (`delivered_jobs: 1`, `success_rate: 100`); the worker started and submitted a paid `$0.01` USDC hire (`76ef7a92-b654-46cc-87d9-dc032c3a8500`, escrow `0.0100 USDC`) and the human buyer accepted it (`finalizedAt 2026-11-13T11:50:00Z`); see `scripts/agent-market-live/LIVE-AGENT-MARKET.md`. | Self-hire, not independent market reputation. The actual seller payout/5% fee ledger row is `NOT_COLLECTED` because a worker `aat_` token cannot read `/v1/wallet/ledger`; escrow and acceptance are verified. |
 | F11 | Settlement, durability and warranty | **PASS_WITH_CAVEATS** | Contract failed-durability test reopens the same work order with no new escrow and releases the holdback once; E2E contract replay; real testnet durability pass released 8 mUSDC and closed the order. | The **failed-durability branch was proven in contract/replay tests, not on live testnet**. The testnet run exercised the passing-durability branch. |
 | F12 | Public case experience | **PASS** | Next.js build passes all routes; Playwright 32 passed including axe (no serious/critical), keyboard-only, mobile 390×844 and the REPLAY banner; the case page renders the exact `100 / 20 / 72 / 8` split. | Production load, real-user and public-map/dashboard coverage are not claimed. |
-| F13 | Demo, replay and simulation | **PASS_WITH_CAVEATS** | A **5:00 narrated, captioned 1080p master** exists at `demo/ad/out/mend-ad-5min.mp4` (H.264/AAC, 30fps, −13.8 LUFS), with a thumbnail, SRT/VTT, actual MEND app captures, a pothole replay scenario (`PATH-006` / `WO-PATH-001-0001`), the in-app `/how-it-works` page, ElevenLabs voice and licensed Mixkit music. The existing silent 91.6 s REPLAY video and nine demo scenarios remain. | **Physical repair media is illustrative Pexels stock footage, not a real MEND repair**; the pothole software scenario is `REPLAY / SIMULATION`. The 5:00 master still needs a human watch-through and a hosted URL for the end-card QR. |
+| F13 | Demo, replay and simulation | **PASS_WITH_CAVEATS** | A **5:00 narrated, captioned 1080p v2 master** exists at `demo/ad/out/mend-ad-v2-master.mp4` (H.264/AAC, 30fps), with live app interactions (report, steward award, bid reveal, inspector accept, passport, `/how-it-works`), paper-cut Sam and stick-figure council/bidders/contractor/inspector/neighbor, a pothole case staged through `BIDDING` → `COMPLETION_SUBMITTED` → `CLOSED`, ElevenLabs George voice, SFX and licensed Mixkit music. The earlier 5:00 v1 and silent 91.6 s REPLAY video remain as history. | **Physical repair media is illustrative Pexels stock footage, not a real MEND repair**; the pothole software scenario is `REPLAY / SIMULATION`. The v2 voice reuses the existing v1 George render because ElevenLabs free-tier v2 synthesis returned HTTP 401; the end-card QR remains a labelled placeholder until the hosted URL is set. The master still needs a human watch/listen-through. |
 | F14 | Production-quality submission | **PARTIAL** | Docs package, valid relative links, threat/privacy models, README `Do X → See Y`, local test suites, clean-room checks, CI workflow definition, license. The repo is pushed to a private GitHub repo. | CI is green on `main`. The human will handle hosting and make the repository public. **X post and final submission fields are not done** (`BLOCKED_ON_HUMAN`). |
 
 ### Feature summary
@@ -102,11 +102,13 @@ Statuses used here: `PASS`, `PASS_WITH_CAVEATS`, `PARTIAL`,
     request/response bytes and all four cryptographic checks pass. The artifact
     remains `UNAVAILABLE` because no matching TEE report was retained; the UI
     labels it `UNVERIFIED_INFERENCE`.
-12. **A 5:00 narrated MEND film.** `demo/ad/out/mend-ad-5min.mp4` is a
-    1920×1080/30fps H.264/AAC master with captions, ElevenLabs voice, licensed
-    music, actual app captures, a pothole replay scenario and the in-app
-    `/how-it-works` page. Repair B-roll is illustrative Pexels footage and is
-    labelled as such; the real testnet/production evidence is shown separately.
+12. **A 5:00 narrated MEND film.** `demo/ad/out/mend-ad-v2-master.mp4` is a
+    1920×1080/30fps H.264/AAC v2 master with captions, ElevenLabs George voice,
+    SFX, licensed music, live app interactions (report, steward award, bid
+    reveal, inspector accept, passport, `/how-it-works`), paper-cut Sam and a
+    stick-figure council/bidder/contractor/inspector/neighbor cast. The pothole
+    case is staged through `BIDDING` → `COMPLETION_SUBMITTED` → `CLOSED`; repair
+    B-roll is illustrative Pexels footage and is labelled as such.
 
 ## What is not proven
 
@@ -152,7 +154,7 @@ Statuses used here: `PASS`, `PASS_WITH_CAVEATS`, `PARTIAL`,
 - `scripts/intents-live/LIVE-INTENTS.md`
 - `scripts/near-ai-live/LIVE-NEAR-AI.md`
 - `demo/ad/README.md`
-- `demo/ad/out/mend-ad-5min.mp4` (large generated master; not committed)
+- `demo/ad/out/mend-ad-v2-master.mp4` (large generated v2 master; not committed)
 - `tests/live/LIVE-EVIDENCE.md`
 - [docs/16 — Integration evidence](./docs/16-integration-evidence.md)
 - [docs/11 — Limitations](./docs/11-limitations.md)

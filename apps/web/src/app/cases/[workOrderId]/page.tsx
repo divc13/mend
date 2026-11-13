@@ -50,7 +50,7 @@ export default async function CasePage({ params }: { params: Promise<{ workOrder
 
   return (
     <>
-      <div className="container">
+      <div className="container" data-testid="case-page">
         <header className="case-hero">
           <div>
             <nav className="case-hero__breadcrumbs" aria-label="Breadcrumb">
@@ -95,32 +95,34 @@ export default async function CasePage({ params }: { params: Promise<{ workOrder
                 Updated {formatDateTime(caseData.updatedAt)}
               </p>
             </div>
-            <div className="side-card">
+            <div className="side-card" data-testid="case-accounting">
               <h2>Money at a glance</h2>
-              <p className="side-card__value">{usdc(caseData.escrow.fundedMicro)}</p>
+              <p className="side-card__value" data-testid="case-funded">
+                {usdc(caseData.escrow.fundedMicro)}
+              </p>
               <p className="side-card__note">Funded in {caseData.fundingToken}</p>
               <dl>
                 <div>
                   <dt>Refunded</dt>
-                  <dd>{usdc(caseData.escrow.refundedMicro)}</dd>
+                  <dd data-testid="case-refunded">{usdc(caseData.escrow.refundedMicro)}</dd>
                 </div>
                 {BigInt(caseData.escrow.escrowedMicro ?? '0') > 0n ? (
                   <div>
                     <dt>Still escrowed</dt>
-                    <dd>{usdc(caseData.escrow.escrowedMicro ?? '0')}</dd>
+                    <dd data-testid="case-escrowed">{usdc(caseData.escrow.escrowedMicro ?? '0')}</dd>
                   </div>
                 ) : null}
                 <div>
                   <dt>Completion paid</dt>
-                  <dd>{usdc(caseData.escrow.completionPaidMicro)}</dd>
+                  <dd data-testid="case-completion-paid">{usdc(caseData.escrow.completionPaidMicro)}</dd>
                 </div>
                 <div>
                   <dt>Holdback held</dt>
-                  <dd>{usdc(caseData.escrow.holdbackHeldMicro)}</dd>
+                  <dd data-testid="case-holdback-held">{usdc(caseData.escrow.holdbackHeldMicro)}</dd>
                 </div>
                 <div>
                   <dt>Holdback released</dt>
-                  <dd>{usdc(caseData.escrow.holdbackReleasedMicro)}</dd>
+                  <dd data-testid="case-holdback-released">{usdc(caseData.escrow.holdbackReleasedMicro)}</dd>
                 </div>
               </dl>
             </div>

@@ -12,6 +12,7 @@ export const WORK_ORDER_STATES = [
   'FUNDED',
   'BIDDING_OPEN',
   'BIDDING_REVEAL',
+  'BIDDING',
   'SCORED',
   'AWARDED',
   'IN_PROGRESS',

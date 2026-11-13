@@ -158,7 +158,7 @@ above must be reconciled with the final lockfile.
   deposit/settlement is not;
 - no mainnet execution;
 - no hosted demo;
-- a 5:00 narrated, captioned 1080p master exists at `demo/ad/out/mend-ad-5min.mp4`; the hosted demo, public repository and X post are pending;
+- a 5:00 narrated, captioned 1080p v2 master exists at `demo/ad/out/mend-ad-v2-master.mp4` (live app interactions, paper-cut Sam and stick-figure cast); the hosted demo, public repository and X post are pending;
 - no physical repair or durability inspection;
 - no real users, city adoption or partnership;
 - no security audit or accessibility certification;

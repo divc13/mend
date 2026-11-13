@@ -1,0 +1,586 @@
+{
+  "version": 2,
+  "title": "MEND — Maintenance with memory",
+  "subtitle": "5:00 live cut — v1 George VO reuse",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "siteUrl": "",
+  "runtimeSeconds": 300,
+  "spokenWordTarget": 366,
+  "voice": {
+    "voiceId": "JBFqnCBsd6RMkjVDRZzb",
+    "name": "George",
+    "model": "eleven_multilingual_v2",
+    "settings": {
+      "stability": 0.45,
+      "similarity_boost": 0.8,
+      "style": 0.32,
+      "use_speaker_boost": true,
+      "speed": 1.0
+    },
+    "outputFormat": "mp3_44100_128",
+    "source": "v1",
+    "sourcePath": "demo/ad/public/audio/vo",
+    "reuseNote": "Final voice is the existing v1 ElevenLabs George render. No v2 synthesis. Script text and word timings are reused from v1."
+  },
+  "music": {
+    "reuse": "demo/ad/public/audio/music/music-1.mp3",
+    "file": "audio/music/music-1.mp3",
+    "durationSeconds": 300,
+    "license": "Mixkit Free License",
+    "regenerate": false
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "start": 0,
+      "duration": 15,
+      "chapter": "01 — The problem",
+      "voOffset": 0,
+      "visualOffset": 0,
+      "vo": "Every neighborhood has one. A pothole everyone avoids. And nobody owns. It has been there for months. A near miss for every cyclist. This morning, Sam decides to change that.",
+      "caption": "Every neighborhood has one.\nA pothole nobody owns.",
+      "visual": "hook",
+      "cast": [
+        "Sam"
+      ],
+      "live": [
+        "Handheld: Sam walks the curb in low morning light. Natural street ambience, no music yet.",
+        "Sam kneels and frames the pothole; the phone shutter is the first hard sound.",
+        "Phone lowers. The pothole holds in the foreground as the title starts."
+      ],
+      "cues": [
+        {
+          "at": "Every",
+          "action": "establish"
+        },
+        {
+          "at": "pothole",
+          "action": "pothole-push"
+        },
+        {
+          "at": "months",
+          "action": "time-pass"
+        },
+        {
+          "at": "cyclist",
+          "action": "near-miss"
+        },
+        {
+          "at": "Sam",
+          "action": "sam-enter",
+          "actor": "Sam"
+        },
+        {
+          "at": "change",
+          "action": "phone-raise",
+          "actor": "Sam"
+        },
+        {
+          "at": "that",
+          "action": "camera-shutter",
+          "offset": 0.2
+        }
+      ],
+      "voSource": "v1"
+    },
+    {
+      "id": "report",
+      "start": 15,
+      "duration": 40,
+      "chapter": "02 — Report",
+      "voOffset": -0.4,
+      "visualOffset": 0,
+      "vo": "He opens MEND. No wallet. No forms. A photo, a location, one sentence. The browser strips the GPS and metadata before anything leaves his phone. Private AI reads the report, checks for duplicates, and drafts a repair scope. It suggests. It never approves. Two neighbors reported the same pothole. MEND merges them privately.",
+      "caption": "No wallet. No forms.\nEXIF and GPS stripped in the browser.",
+      "visual": "report",
+      "cast": [
+        "Sam",
+        "Neighbor (off-screen)"
+      ],
+      "live": [
+        "Screen capture: Sam opens MEND in the browser. No wallet prompt, no form wall.",
+        "Photo thumbnail lands. Public pin drops. One-line description is typed live.",
+        "Privacy panel: EXIF, GPS and device identifiers strike through before upload.",
+        "Triage card: duplicate found; two reports merge into one work order."
+      ],
+      "cues": [
+        {
+          "at": "opens",
+          "action": "app-open"
+        },
+        {
+          "at": "photo",
+          "action": "photo-attach",
+          "offset": 0.15
+        },
+        {
+          "at": "browser",
+          "action": "exif-strip",
+          "offset": 0.2
+        },
+        {
+          "at": "duplicates",
+          "action": "duplicate-scan"
+        },
+        {
+          "at": "suggests",
+          "action": "ai-suggest"
+        },
+        {
+          "at": "approves",
+          "action": "authority-lock"
+        },
+        {
+          "at": "merges",
+          "action": "work-order-merge"
+        },
+        {
+          "at": "privately",
+          "action": "case-open",
+          "offset": 0.8
+        }
+      ],
+      "voSource": "v1"
+    },
+    {
+      "id": "dao",
+      "start": 55,
+      "duration": 35,
+      "chapter": "03 — Authorize",
+      "voOffset": -0.35,
+      "visualOffset": 0,
+      "vo": "A steward turns the report into a scope and a maximum budget. Then the community's DAO authorizes it. Not the AI. Not a platform. The budget, the contractor roster and the scoring policy are on-chain. Two of three council votes. Every decision has a receipt.",
+      "caption": "Steward proposes.\nDAO authorizes. 2 of 3.",
+      "visual": "dao",
+      "cast": [
+        "Steward",
+        "Council x3"
+      ],
+      "live": [
+        "Steward view: scope, maximum budget, contractor roster, scoring policy.",
+        "Council panel: three members. Two green votes, one abstain.",
+        "Authorization stamp lands. A receipt mints with the vote hash."
+      ],
+      "cues": [
+        {
+          "at": "scope",
+          "action": "steward-scope"
+        },
+        {
+          "at": "budget",
+          "action": "budget-set"
+        },
+        {
+          "at": "on-chain",
+          "action": "chain-lock"
+        },
+        {
+          "at": "votes",
+          "action": "council-vote",
+          "offset": 0.2
+        },
+        {
+          "at": "authorizes",
+          "action": "dao-stamp",
+          "offset": 0.1
+        },
+        {
+          "at": "AI",
+          "occurrence": 1,
+          "action": "authority-lock"
+        },
+        {
+          "at": "receipt",
+          "action": "receipt-mint",
+          "offset": 0.2
+        }
+      ],
+      "voSource": "v1"
+    },
+    {
+      "id": "bids",
+      "start": 90,
+      "duration": 30,
+      "chapter": "04 — Compete",
+      "voOffset": -0.45,
+      "visualOffset": 0,
+      "vo": "Three contractors submit sealed bids. When the window closes, a hash-pinned policy scores price, warranty, duration and materials. B wins on total value, not the lowest sticker price. No language model picks the winner.",
+      "caption": "Sealed bids. Deterministic score.\nB 9270 · C 5200 · A 2873",
+      "visual": "bids",
+      "cast": [
+        "Contractor A",
+        "Contractor B",
+        "Contractor C"
+      ],
+      "live": [
+        "Three sealed bid cards stack. A countdown closes the window.",
+        "Score table resolves row by row: price, warranty, duration, materials.",
+        "Winner card: B. Policy hash and totals stay on screen."
+      ],
+      "cues": [
+        {
+          "at": "sealed",
+          "action": "bids-seal"
+        },
+        {
+          "at": "closes",
+          "action": "window-close"
+        },
+        {
+          "at": "scores",
+          "action": "score-reveal"
+        },
+        {
+          "at": "wins",
+          "action": "winner-b"
+        },
+        {
+          "at": "winner",
+          "action": "award-receipt"
+        },
+        {
+          "at": "winner",
+          "action": "receipt-stamp",
+          "offset": 0.6
+        }
+      ],
+      "voSource": "v1"
+    },
+    {
+      "id": "repair",
+      "start": 120,
+      "duration": 35,
+      "chapter": "05 — Repair",
+      "voOffset": -0.3,
+      "visualOffset": 0,
+      "vo": "The repair begins. The pothole is cleaned, filled, compacted and sealed. Every photo, receipt and note is hashed onto the work order. Then a different human inspects the work. Not the contractor. Not the AI. A checklist, evidence, and a signature.",
+      "caption": "Independent human inspection.\nChecklist. Evidence. Signature.",
+      "visual": "repair",
+      "cast": [
+        "Crew",
+        "Inspector"
+      ],
+      "live": [
+        "Live-action: crew van arrives, cones out, shovel and compactor start.",
+        "Before/after wipe: clean, fill, compact, seal. Real roadwork texture.",
+        "Inspector with a tablet. Checklist fills to eight of eight. Accept signature."
+      ],
+      "cues": [
+        {
+          "at": "begins",
+          "action": "crew-arrive"
+        },
+        {
+          "at": "cleaned",
+          "action": "repair-clean"
+        },
+        {
+          "at": "filled",
+          "action": "repair-fill"
+        },
+        {
+          "at": "compacted",
+          "action": "repair-compact"
+        },
+        {
+          "at": "sealed",
+          "action": "repair-seal"
+        },
+        {
+          "at": "hashed",
+          "action": "evidence-hash"
+        },
+        {
+          "at": "inspects",
+          "action": "inspector-enter",
+          "actor": "Inspector"
+        },
+        {
+          "at": "checklist",
+          "action": "checklist-fill"
+        },
+        {
+          "at": "signature",
+          "action": "inspector-accept",
+          "actor": "Inspector"
+        },
+        {
+          "at": "signature",
+          "action": "signature",
+          "offset": 0.5
+        }
+      ],
+      "voSource": "v1"
+    },
+    {
+      "id": "payment",
+      "start": 155,
+      "duration": 30,
+      "chapter": "06 — Settle",
+      "voOffset": -0.4,
+      "visualOffset": 0,
+      "vo": "On acceptance, exactly seventy-two USDC goes to the contractor. Eight stays in a durability holdback. One hundred was funded. Twenty was refunded at award. The contractor gets paid. The community keeps leverage.",
+      "caption": "100 funded · 20 refunded\n72 paid · 8 held",
+      "visual": "payment",
+      "cast": [
+        "Contractor B",
+        "Treasurer"
+      ],
+      "live": [
+        "Case ledger scrolls live: funded 100, refund 20 at award, pay 72, hold 8.",
+        "Split bar animates. Receipt opens with every number attached.",
+        "Contractor payout confirms; holdback stays visible."
+      ],
+      "cues": [
+        {
+          "at": "acceptance",
+          "action": "acceptance"
+        },
+        {
+          "at": "acceptance",
+          "action": "case-scroll",
+          "offset": 0.5
+        },
+        {
+          "at": "seventy-two",
+          "action": "contractor-paid"
+        },
+        {
+          "at": "Eight",
+          "action": "holdback"
+        },
+        {
+          "at": "funded",
+          "action": "funding-bar"
+        },
+        {
+          "at": "refunded",
+          "action": "refund"
+        },
+        {
+          "at": "paid",
+          "action": "receipt-open"
+        },
+        {
+          "at": "leverage",
+          "action": "leverage-chip"
+        }
+      ],
+      "voSource": "v1"
+    },
+    {
+      "id": "passport",
+      "start": 185,
+      "duration": 20,
+      "chapter": "07 — Remember",
+      "voOffset": -0.35,
+      "visualOffset": 0,
+      "vo": "If the repair fails, MEND reopens the same work order and the same history. No new bounty. No new money. One asset. One permanent record. The passport keeps the failure, the remedy, and every payment in one place.",
+      "caption": "Same work order. Same history.\nNo new bounty. No new money.",
+      "visual": "passport",
+      "cast": [
+        "Steward",
+        "Inspector"
+      ],
+      "live": [
+        "Passport opens on the same work order. History scrolls back through the repair.",
+        "Durability holdback highlighted; remedy path stays attached."
+      ],
+      "cues": [
+        {
+          "at": "fails",
+          "action": "passport-open"
+        },
+        {
+          "at": "reopens",
+          "action": "reopen-work-order"
+        },
+        {
+          "at": "history",
+          "action": "history-scroll"
+        },
+        {
+          "at": "bounty",
+          "action": "no-new-bounty"
+        },
+        {
+          "at": "passport",
+          "action": "passport-stamp"
+        },
+        {
+          "at": "payment",
+          "action": "payment-ledger"
+        }
+      ],
+      "voSource": "v1"
+    },
+    {
+      "id": "tech",
+      "start": 205,
+      "duration": 50,
+      "chapter": "08 — Under the hood",
+      "voOffset": -0.5,
+      "visualOffset": 0,
+      "vo": "Under the hood: Next.js and React, a Fastify API, Postgres, Rust contracts on NEAR, a real Sputnik DAO, NEAR AI, OutLayer, 1Click and Agent Market. The infrastructure is live on NEAR testnet. The pothole story is a replay demo. The contracts, the DAO vote, the AI signature and the Agent Market listing are real. Every payment, vote and attestation has a verifiable receipt.",
+      "caption": "Live on NEAR testnet.\nContracts, vote, AI signature, listing: real.",
+      "visual": "tech",
+      "cast": [
+        "Narrator (live screen)"
+      ],
+      "live": [
+        "Live browser: /how-it-works on the deployed app. Cursor moves, no cuts.",
+        "Contract call, DAO vote and Agent Market listing open in sequence; testnet badges stay visible.",
+        "Receipt verify: payment, vote and attestation resolve to hashes."
+      ],
+      "cues": [
+        {
+          "at": "hood",
+          "action": "how-it-works-open"
+        },
+        {
+          "at": "testnet",
+          "action": "testnet-badge"
+        },
+        {
+          "at": "replay",
+          "action": "replay-badge"
+        },
+        {
+          "at": "real",
+          "occurrence": 2,
+          "action": "real-badge"
+        },
+        {
+          "at": "contracts",
+          "occurrence": 2,
+          "action": "contract-call"
+        },
+        {
+          "at": "vote",
+          "occurrence": 2,
+          "action": "dao-vote-proof"
+        },
+        {
+          "at": "listing",
+          "action": "agent-market"
+        },
+        {
+          "at": "receipt",
+          "action": "receipt-verify"
+        }
+      ],
+      "voSource": "v1"
+    },
+    {
+      "id": "close",
+      "start": 255,
+      "duration": 45,
+      "chapter": "09 — MEND",
+      "voOffset": -0.3,
+      "visualOffset": 0,
+      "vo": "This is maintenance with memory. Report it. Fix it. Remember it. For the price of a small repair, a neighborhood gets a memory. MEND. Get it fixed. Keep it fixed.",
+      "caption": "MEND — Maintenance with memory.\nGet it fixed. Keep it fixed.",
+      "visual": "close",
+      "cast": [
+        "Sam",
+        "Neighbor"
+      ],
+      "live": [
+        "Sam stands on the repaired street. The pothole is gone; the line is clean.",
+        "Neighbor waves from a porch. Sam nods. The street stays live behind the end card.",
+        "End card: MEND logo, tagline, URL. Music resolves; no hard cut."
+      ],
+      "cues": [
+        {
+          "at": "memory",
+          "occurrence": 1,
+          "action": "sam-smile",
+          "actor": "Sam"
+        },
+        {
+          "at": "repair",
+          "action": "after-shot",
+          "offset": 0.2
+        },
+        {
+          "at": "neighborhood",
+          "action": "neighbor-wave",
+          "actor": "Neighbor"
+        },
+        {
+          "at": "MEND",
+          "action": "end-card"
+        },
+        {
+          "at": "fixed",
+          "occurrence": 1,
+          "action": "logo-lockup",
+          "offset": 0.5
+        },
+        {
+          "at": "fixed",
+          "occurrence": 2,
+          "action": "hold-logo",
+          "offset": 0.3
+        }
+      ],
+      "voSource": "v1"
+    }
+  ],
+  "cuts": {
+    "master": [
+      "hook",
+      "report",
+      "dao",
+      "bids",
+      "repair",
+      "payment",
+      "passport",
+      "tech",
+      "close"
+    ],
+    "submission": [
+      "hook",
+      "report",
+      "dao",
+      "bids",
+      "repair",
+      "payment",
+      "passport",
+      "close"
+    ],
+    "teaser": [
+      "hook",
+      "report",
+      "repair",
+      "close"
+    ]
+  },
+  "assets": {
+    "pothole": "assets/footage/pothole.mp4",
+    "phone": "assets/footage/phone.mp4",
+    "repair": "assets/footage/repair.mp4",
+    "roadworks": "assets/footage/roadworks.mp4",
+    "cyclist": "assets/footage/cyclist.mp4",
+    "potholePhoto": "assets/photos/pothole.jpg",
+    "afterPhoto": "assets/photos/after.jpg",
+    "appReport": "assets/app/report.png",
+    "appPrivacy": "assets/app/privacy.png",
+    "appTriage": "assets/app/triage.png",
+    "appCase": "assets/app/case.png",
+    "appSteward": "assets/app/steward.png",
+    "appBids": "assets/app/bids.png",
+    "appInspector": "assets/app/inspector.png",
+    "appPassport": "assets/app/passport.png",
+    "appTech": "assets/app/how-it-works.png",
+    "appTrust": "assets/app/trust.png"
+  },
+  "disclosures": [
+    "Pothole and repair footage: illustrative stock footage from Pexels.",
+    "Pothole software scenario: REPLAY / SIMULATION.",
+    "Real contracts, DAO vote, AI signature and Agent Market listing: NEAR testnet / production as labelled."
+  ],
+  "spokenWordActual": 366
+}

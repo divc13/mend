@@ -1,3 +1,4 @@
+import demoCaseState from './demo-case-state.json';
 import { DEFAULT_WEIGHTS, scoreBids } from './scoring';
 import type {
   Asset,
@@ -1559,7 +1560,7 @@ const PATH_DURABILITY_INSPECTION: InspectionView = {
   signedAt: PATH_TIMES.durabilityPassed,
 };
 
-function pathAttestations(scopeHash: string): AttestationView[] {
+function pathAttestations(scopeHash: string, proposalId = '48'): AttestationView[] {
   return [
     {
       id: 'ATT-AI-PATH-0001',
@@ -1588,7 +1589,7 @@ function pathAttestations(scopeHash: string): AttestationView[] {
     {
       id: 'ATT-DAO-PATH-0001',
       kind: 'DAO',
-      label: 'Sputnik DAO proposal #48',
+      label: `Sputnik DAO proposal #${proposalId}`,
       subjectHash: scopeHash,
       verified: false,
       unavailableReason:
@@ -1883,6 +1884,175 @@ const PATH_CASE: CaseBundle = {
   intent: PATH_INTENT,
 };
 
+export const DEMO_CASE_STATES = ['BIDDING', 'COMPLETION_SUBMITTED', 'CLOSED'] as const;
+export type DemoCaseState = (typeof DEMO_CASE_STATES)[number];
+
+function isDemoCaseState(value: string): value is DemoCaseState {
+  return (DEMO_CASE_STATES as readonly string[]).includes(value);
+}
+
+/**
+ * Capture-only staging state for the pothole replay case.
+ *
+ * `scripts/demo/stage-pothole-case.mjs` writes this JSON file before a build or
+ * dev-server capture. It is not a runtime `?demo=` flag and it does not change
+ * any other case.
+ */
+export const DEMO_CASE_STATE: DemoCaseState = isDemoCaseState(demoCaseState.status)
+  ? demoCaseState.status
+  : 'BIDDING';
+
+function pathReplayEvents(state: DemoCaseState): TimelineEvent[] {
+  const cutoff =
+    state === 'BIDDING'
+      ? PATH_TIMES.scored
+      : state === 'COMPLETION_SUBMITTED'
+        ? PATH_TIMES.completionSubmitted
+        : PATH_TIMES.durabilityPassed;
+  return PATH_CASE.events.filter(
+    (event) => new Date(event.at).getTime() <= new Date(cutoff).getTime(),
+  );
+}
+
+/**
+ * Builds the second pothole work order in a capture-ready state. The bid data,
+ * reports, scope and passport are the same pothole as WO-PATH-001-0001; only
+ * the lifecycle position and its accounting change.
+ */
+export function buildPotholeReplayCase(state: DemoCaseState): CaseBundle {
+  const awarded = state !== 'BIDDING';
+  const closed = state === 'CLOSED';
+  const completionSubmitted = state === 'COMPLETION_SUBMITTED';
+
+  const escrow: CaseBundle['escrow'] = closed
+    ? {
+        token: ACCOUNTS.token,
+        fundedMicro: '100000000',
+        refundedMicro: '20000000',
+        completionPaidMicro: '72000000',
+        holdbackHeldMicro: '0',
+        holdbackReleasedMicro: '8000000',
+      }
+    : completionSubmitted
+      ? {
+          token: ACCOUNTS.token,
+          fundedMicro: '100000000',
+          refundedMicro: '20000000',
+          escrowedMicro: '80000000',
+          completionPaidMicro: '0',
+          holdbackHeldMicro: '0',
+          holdbackReleasedMicro: '0',
+        }
+      : {
+          token: ACCOUNTS.token,
+          fundedMicro: '100000000',
+          refundedMicro: '0',
+          escrowedMicro: '100000000',
+          completionPaidMicro: '0',
+          holdbackHeldMicro: '0',
+          holdbackReleasedMicro: '0',
+        };
+
+  const payments: CaseBundle['payments'] = closed
+    ? [
+        {
+          id: 'PAY-0050',
+          kind: 'REFUND',
+          amountMicro: '20000000',
+          recipient: ACCOUNTS.sponsor,
+          status: 'SUCCESS',
+          releasedAt: PATH_TIMES.awarded,
+        },
+        {
+          id: 'PAY-0051',
+          kind: 'COMPLETION',
+          amountMicro: '72000000',
+          recipient: ACCOUNTS.contractorB,
+          status: 'SUCCESS',
+          releasedAt: PATH_TIMES.completionAccepted,
+        },
+        {
+          id: 'PAY-0052',
+          kind: 'HOLDBACK',
+          amountMicro: '8000000',
+          recipient: ACCOUNTS.contractorB,
+          status: 'SUCCESS',
+          releasedAt: PATH_TIMES.durabilityPassed,
+        },
+      ]
+    : completionSubmitted
+      ? [
+          {
+            id: 'PAY-0050',
+            kind: 'REFUND',
+            amountMicro: '20000000',
+            recipient: ACCOUNTS.sponsor,
+            status: 'SUCCESS',
+            releasedAt: PATH_TIMES.awarded,
+          },
+        ]
+      : [];
+
+  const summary = closed
+    ? 'Two nearby reports merged into one pothole repair. Three sealed bids revealed, deterministic scoring selected contractor B, a human inspector accepted completion, and the 10% durability holdback released after a second human inspection. The completed repair stays attached to passport PATH-006.'
+    : completionSubmitted
+      ? 'Two nearby reports merged into one pothole repair. Contractor B was awarded at 80 USDC and 20 USDC returned to the sponsor. Redacted completion evidence is submitted and the 72 USDC completion payment is still held pending an independent human inspector.'
+      : 'Two nearby reports merged into one pothole repair. Three sealed bids are committed and the replay carries the reveal and deterministic score. Contractor B ranks first at 80 USDC, but no award has been confirmed and no completion evidence exists yet.';
+
+  return {
+    id: 'WO-PATH-001-0002',
+    assetId: 'PATH-006',
+    title: 'Riverside path — north gate pothole',
+    summary,
+    status: state,
+    mode: 'REPLAY',
+    budgetMicro: '100000000',
+    winningBidMicro: '80000000',
+    refundMicro: '20000000',
+    completionPaymentMicro: '72000000',
+    holdbackMicro: '8000000',
+    scope: PATH_CASE.scope,
+    scopeHash: HASHES.pathScope,
+    daoApproval: {
+      ...PATH_CASE.daoApproval,
+      id: 'dao-49',
+      proposalId: '49',
+    },
+    policyVersion: 'mend-bid-policy-v1',
+    policyWeightsBps: DEFAULT_WEIGHTS,
+    policyHash: HASHES.policy,
+    contractorId: awarded ? ACCOUNTS.contractorB : undefined,
+    inspectorId: awarded ? ACCOUNTS.inspector : undefined,
+    fundingToken: ACCOUNTS.token,
+    durabilityDueAt: closed ? PATH_TIMES.durabilityDue : undefined,
+    reopenCount: 0,
+    createdAt: TIMES.assetCreated,
+    updatedAt: closed
+      ? PATH_TIMES.durabilityPassed
+      : completionSubmitted
+        ? PATH_TIMES.completionSubmitted
+        : PATH_TIMES.scored,
+    reports: PATH_CASE.reports,
+    cluster: PATH_CASE.cluster,
+    commitments: PATH_CASE.commitments,
+    reveals: PATH_CASE.reveals,
+    score: PATH_CASE.score,
+    evidence: state === 'BIDDING' ? [] : [PATH_COMPLETION_EVIDENCE],
+    inspections: closed ? [PATH_COMPLETION_INSPECTION, PATH_DURABILITY_INSPECTION] : [],
+    escrow,
+    payments,
+    attestations: pathAttestations(HASHES.pathScope, '49'),
+    events: pathReplayEvents(state),
+    intent: {
+      ...PATH_INTENT,
+      id: 'IQ-0008',
+      depositMemo: 'MEND-WO-PATH-001-0002',
+    },
+  };
+}
+
+const PATH_REPLAY_CASE = buildPotholeReplayCase(DEMO_CASE_STATE);
+
 export const ASSETS: Asset[] = [
   {
     id: 'BENCH-001',
@@ -1984,7 +2154,7 @@ export const CASES: CaseBundle[] = [
   FENCE_CASE,
   PLAY_CASE,
   GATE_CASE,
-  PATH_CASE,
+  PATH_REPLAY_CASE,
 ];
 
 export const CASE_BY_ID: Record<string, CaseBundle> = Object.fromEntries(
@@ -2041,6 +2211,7 @@ export function statusLabel(status: CaseBundle['status']): string {
     FUNDED: 'Funded',
     BIDDING_OPEN: 'Sealed bidding',
     BIDDING_REVEAL: 'Reveal phase',
+    BIDDING: 'Sealed bidding',
     SCORED: 'Scored',
     AWARDED: 'Awarded',
     IN_PROGRESS: 'In progress',
@@ -2067,7 +2238,7 @@ export const SCENARIOS: ScenarioView[] = [
       'A walletless report and a duplicate from the other side of the path merge into one work order. Private AI triage proposes the duplicate; a human steward confirms it. Three sealed bids reveal and deterministic scoring selects contractor B.',
     expected:
       '100 funded → 20 refunded → 72 completion → 8 holdback → CLOSED. Passport PATH-006 keeps the repair, evidence and payments attached.',
-    caseId: 'WO-PATH-001-0001',
+    caseId: 'WO-PATH-001-0002',
     tags: ['pothole', 'duplicate', 'sealed bids', 'durability pass', 'passport'],
   },
   {

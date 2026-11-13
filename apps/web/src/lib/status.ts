@@ -21,6 +21,11 @@ export const STATE_COPY: Record<WorkOrderState, { meaning: string; next: string 
     meaning: 'Reveals are checked against commitments, eligibility and deadlines. No new sealed bid can win.',
     next: 'A hash-pinned deterministic WASM policy scores every eligible revealed bid.',
   },
+  BIDDING: {
+    meaning:
+      'Sealed bids are committed and the replay carries the reveal and score data. No contractor has been awarded and no completion evidence exists yet.',
+    next: 'Reveal the sealed offers, then the steward confirms the deterministic rank-1 bid.',
+  },
   SCORED: {
     meaning: 'The deterministic ranking is recorded with policy, WASM, input and output hashes. No LLM chose the winner.',
     next: 'The steward confirms the rank-1 eligible bid. The unallocated budget returns to the sponsor.',

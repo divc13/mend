@@ -86,7 +86,12 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
             </span>
           </div>
           {hasReveals ? (
-            <button type="button" className="button button--small button--ghost" onClick={() => setShowRevealed((value) => !value)}>
+            <button
+              type="button"
+              className="button button--small button--ghost"
+              data-testid="bid-reveal-toggle"
+              onClick={() => setShowRevealed((value) => !value)}
+            >
               {revealed ? 'View sealed commitments only' : 'View revealed comparison'}
             </button>
           ) : (
@@ -207,7 +212,12 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
 
           {!revealed && hasReveals ? (
             <div className="bid-actions">
-              <button type="button" className="button button--small" onClick={() => setShowRevealed(true)}>
+              <button
+                type="button"
+                className="button button--small"
+                data-testid="bid-reveal"
+                onClick={() => setShowRevealed(true)}
+              >
                 Reveal comparison <Eye size={15} aria-hidden="true" />
               </button>
             </div>

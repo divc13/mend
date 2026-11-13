@@ -146,10 +146,11 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
 
                 <h3 style={{ marginTop: 20, fontSize: '1rem' }}>Checklist (reviewed locally)</h3>
                 <ul className="checklist">
-                  {evidence.checklist.map((item) => (
+                  {evidence.checklist.map((item, index) => (
                     <li key={item.label} className="checklist__item">
                       <input
                         id={`check-${item.label.replace(/\s+/g, '-').toLowerCase()}`}
+                        data-testid={`inspector-checklist-${index}`}
                         type="checkbox"
                         checked={Boolean(checklist[item.label])}
                         onChange={(event) =>
@@ -234,19 +235,40 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
               <legend className="label">Confirm before you decide</legend>
               <ul className="checklist" style={{ marginTop: 8 }}>
                 <li className="checklist__item">
-                  <input id="confirm-role" type="checkbox" checked={confirmRole} onChange={(e) => setConfirmRole(e.target.checked)} disabled={!canDecide} />
+                  <input
+                    id="confirm-role"
+                    data-testid="inspector-confirm-role"
+                    type="checkbox"
+                    checked={confirmRole}
+                    onChange={(e) => setConfirmRole(e.target.checked)}
+                    disabled={!canDecide}
+                  />
                   <label htmlFor="confirm-role">
                     I am the rostered inspector for this work order and I am not the contractor.
                   </label>
                 </li>
                 <li className="checklist__item">
-                  <input id="confirm-reviewed" type="checkbox" checked={confirmReviewed} onChange={(e) => setConfirmReviewed(e.target.checked)} disabled={!canDecide} />
+                  <input
+                    id="confirm-reviewed"
+                    data-testid="inspector-confirm-reviewed"
+                    type="checkbox"
+                    checked={confirmReviewed}
+                    onChange={(e) => setConfirmReviewed(e.target.checked)}
+                    disabled={!canDecide}
+                  />
                   <label htmlFor="confirm-reviewed">
                     I reviewed every redacted evidence item myself, including missing checklist items.
                   </label>
                 </li>
                 <li className="checklist__item">
-                  <input id="confirm-human" type="checkbox" checked={confirmHuman} onChange={(e) => setConfirmHuman(e.target.checked)} disabled={!canDecide} />
+                  <input
+                    id="confirm-human"
+                    data-testid="inspector-confirm-human"
+                    type="checkbox"
+                    checked={confirmHuman}
+                    onChange={(e) => setConfirmHuman(e.target.checked)}
+                    disabled={!canDecide}
+                  />
                   <label htmlFor="confirm-human">
                     I understand the AI suggestions are advisory and cannot make this acceptance decision.
                   </label>
@@ -273,6 +295,7 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
               <button
                 type="button"
                 className="button"
+                data-testid="inspector-accept"
                 disabled={!readyToDecide}
                 onClick={() => setDecision('APPROVED')}
               >
@@ -281,6 +304,7 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
               <button
                 type="button"
                 className="button button--danger"
+                data-testid="inspector-reject"
                 disabled={!readyToDecide}
                 onClick={() => setDecision('REJECTED')}
               >

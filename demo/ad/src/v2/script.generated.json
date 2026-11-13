@@ -1,0 +1,126 @@
+{
+  "version": 2,
+  "source": "script-v2.json (v1 George VO timing)",
+  "title": "MEND — Maintenance with memory",
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "siteUrl": "",
+  "durationInFrames": 9000,
+  "durationSeconds": 300,
+  "scenes": [
+    {
+      "id": "hook",
+      "originalId": "hook",
+      "start": 0,
+      "duration": 15,
+      "chapter": "01 — The problem",
+      "vo": "Every neighborhood has one. A pothole everyone avoids. And nobody owns. It has been there for months. A near miss for every cyclist. This morning, Sam decides to change that.",
+      "caption": "Every neighborhood has one.\nA pothole nobody owns.",
+      "visual": "hook",
+      "tone": "dark",
+      "visualOffset": 0
+    },
+    {
+      "id": "report",
+      "originalId": "report",
+      "start": 15,
+      "duration": 40,
+      "chapter": "02 — Report",
+      "vo": "He opens MEND. No wallet. No forms. A photo, a location, one sentence. The browser strips the GPS and metadata before anything leaves his phone. Private AI reads the report, checks for duplicates, and drafts a repair scope. It suggests. It never approves. Two neighbors reported the same pothole. MEND merges them privately.",
+      "caption": "No wallet. No forms.\nEXIF and GPS stripped in the browser.",
+      "visual": "report",
+      "tone": "paper",
+      "visualOffset": 0
+    },
+    {
+      "id": "dao",
+      "originalId": "dao",
+      "start": 55,
+      "duration": 35,
+      "chapter": "03 — Authorize",
+      "vo": "A steward turns the report into a scope and a maximum budget. Then the community's DAO authorizes it. Not the AI. Not a platform. The budget, the contractor roster and the scoring policy are on-chain. Two of three council votes. Every decision has a receipt.",
+      "caption": "Steward proposes.\nDAO authorizes. 2 of 3.",
+      "visual": "dao",
+      "tone": "paper",
+      "visualOffset": 0
+    },
+    {
+      "id": "bids",
+      "originalId": "bids",
+      "start": 90,
+      "duration": 30,
+      "chapter": "04 — Compete",
+      "vo": "Three contractors submit sealed bids. When the window closes, a hash-pinned policy scores price, warranty, duration and materials. B wins on total value, not the lowest sticker price. No language model picks the winner.",
+      "caption": "Sealed bids. Deterministic score.\nB 9270 · C 5200 · A 2873",
+      "visual": "bids",
+      "tone": "paper",
+      "visualOffset": 0
+    },
+    {
+      "id": "repair",
+      "originalId": "repair",
+      "start": 120,
+      "duration": 35,
+      "chapter": "05 — Repair",
+      "vo": "The repair begins. The pothole is cleaned, filled, compacted and sealed. Every photo, receipt and note is hashed onto the work order. Then a different human inspects the work. Not the contractor. Not the AI. A checklist, evidence, and a signature.",
+      "caption": "Independent human inspection.\nChecklist. Evidence. Signature.",
+      "visual": "repair",
+      "tone": "dark",
+      "visualOffset": 0
+    },
+    {
+      "id": "payment",
+      "originalId": "payment",
+      "start": 155,
+      "duration": 30,
+      "chapter": "06 — Settle",
+      "vo": "On acceptance, exactly seventy-two USDC goes to the contractor. Eight stays in a durability holdback. One hundred was funded. Twenty was refunded at award. The contractor gets paid. The community keeps leverage.",
+      "caption": "100 funded · 20 refunded\n72 paid · 8 held",
+      "visual": "payment",
+      "tone": "paper",
+      "visualOffset": 0
+    },
+    {
+      "id": "passport",
+      "originalId": "passport",
+      "start": 185,
+      "duration": 20,
+      "chapter": "07 — Remember",
+      "vo": "If the repair fails, MEND reopens the same work order and the same history. No new bounty. No new money. One asset. One permanent record. The passport keeps the failure, the remedy, and every payment in one place.",
+      "caption": "Same work order. Same history.\nNo new bounty. No new money.",
+      "visual": "passport",
+      "tone": "paper",
+      "visualOffset": 0
+    },
+    {
+      "id": "tech",
+      "originalId": "tech",
+      "start": 205,
+      "duration": 50,
+      "chapter": "08 — Under the hood",
+      "vo": "Under the hood: Next.js and React, a Fastify API, Postgres, Rust contracts on NEAR, a real Sputnik DAO, NEAR AI, OutLayer, 1Click and Agent Market. The infrastructure is live on NEAR testnet. The pothole story is a replay demo. The contracts, the DAO vote, the AI signature and the Agent Market listing are real. Every payment, vote and attestation has a verifiable receipt.",
+      "caption": "Live on NEAR testnet.\nContracts, vote, AI signature, listing: real.",
+      "visual": "tech",
+      "tone": "dark",
+      "visualOffset": 0
+    },
+    {
+      "id": "close",
+      "originalId": "close",
+      "start": 255,
+      "duration": 45,
+      "chapter": "09 — MEND",
+      "vo": "This is maintenance with memory. Report it. Fix it. Remember it. For the price of a small repair, a neighborhood gets a memory. MEND. Get it fixed. Keep it fixed.",
+      "caption": "MEND — Maintenance with memory.\nGet it fixed. Keep it fixed.",
+      "visual": "close",
+      "tone": "paper",
+      "visualOffset": 0
+    }
+  ],
+  "disclosures": [
+    "Pothole and repair footage: illustrative stock footage from Pexels.",
+    "Pothole software scenario: REPLAY / SIMULATION.",
+    "Real contracts, DAO vote, AI signature and Agent Market listing: NEAR testnet / production as labelled."
+  ]
+}
