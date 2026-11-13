@@ -1,8 +1,8 @@
 # G4 — Feature evidence (F01–F14)
 
-Date: 2026-11-09; status reconciled 2026-11-13
-Main commit at verification: `24aebac` plus the live NEAR AI, Agent Market and Intents evidence files
-Mode: local + **REPLAY / SIMULATION** + real NEAR **testnet** lifecycle evidence + live NEAR AI/Agent Market reads.
+Date: 2026-11-09; status reconciled 2026-11-14
+Main commit at verification: `05228f9` (5:00 film + pothole app scenario) plus live NEAR AI, Agent Market and Intents evidence
+Mode: local + **REPLAY / SIMULATION** + real NEAR **testnet** lifecycle evidence + live NEAR AI/Agent Market reads + a narrated 5:00 film.
 The authoritative per-feature matrix is [`STATUS.md`](../../STATUS.md). **G4 is PARTIAL**, not complete.
 
 ## Automated evidence totals
