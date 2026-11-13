@@ -7,7 +7,8 @@ relevant JSON, then re-render; no timeline editing is required.
 ## Final outputs
 
 - `out/mend-ad-v2-master.mp4` — current 5:00 v2 master, 1920×1080, 30fps, H.264/AAC, −13.88 LUFS.
-- `out/mend-ad-v2-thumbnail.png` — v2 thumbnail.
+- `out/mend-ad-v2-thumbnail.png` — v2 thumbnail (1920×1080).
+- `out/mend-ad-v2-thumbnail-1280.jpg` — YouTube-ready 1280×720 thumbnail.
 - `out/mend-ad-v2-contact-sheet.png` — v2 scene contact sheet.
 - `out/mend-ad-v2.srt`, `out/mend-ad-v2.vtt` — v2 captions.
 - `out/mend-ad-v2-silent.mp4` — v2 silent picture lock.
@@ -18,37 +19,39 @@ relevant JSON, then re-render; no timeline editing is required.
 ```bash
 # from the repository root
 npm install
-node demo/ad/scripts/sync-assets.cjs
+node demo/ad/scripts/sync-v2.cjs
 npx remotion compositions demo/ad/src/index.ts
 npx remotion studio demo/ad/src/index.ts        # live preview
 ```
 
-Render the master:
+Render the current v2 master:
 
 ```bash
-npx remotion render demo/ad/src/index.ts MendAd demo/ad/out/mend-ad-silent.mp4 \
-  --concurrency=4 --codec=h264 --crf=18 --pixel-format=yuv420p
-node scripts/demo/build-audio-mix.mjs \
-  --video demo/ad/out/mend-ad-silent.mp4 --cut master
+node scripts/demo/render-v2.mjs
+# -> demo/ad/out/mend-ad-v2-master.mp4
 ```
 
-`build-audio-mix.mjs` writes `out/mix.m4a` and `out/mend-ad-master.mp4`. Copy the
-result to `out/mend-ad-5min.mp4` when it is the final picture lock.
+The earlier v1 master can still be rendered with `MendAd`, `script.json` and
+`node scripts/demo/build-audio-mix.mjs`; it is kept as history.
 
 ## Iterating
 
-- **Narration/timing:** edit `script.json` scenes, then regenerate only changed
-  VO lines (see `public/audio/voice-selection.json` for the selected voice).
-- **Visuals:** edit `src/scenes/*` or `src/components/*`; use `npx remotion still`
-  at a frame number for a fast check.
-- **Assets:** replace files under `public/assets/` and run
-  `node demo/ad/scripts/sync-assets.cjs`; the composition checks the manifest and
-  falls back to a branded placeholder when an asset is missing.
-- **End card URL:** set `siteUrl` in `script.json`; the QR placeholder and
-  `DEMO LINK IN DESCRIPTION` copy are generated from it. Re-render only the end
-  card/close scene when the hosted URL is ready.
-- **Cuts:** `script.json` has `master`, `submission` and `teaser` lists. Register
-  more compositions in `src/Root.tsx` if needed.
+- **Narration/timing (v2):** edit `script-v2.json` and re-run
+  `node demo/ad/scripts/sync-v2.cjs`. The v2 cut reuses the v1 George VO; see
+  `public/audio/v2/voice-selection.json`.
+- **Visuals (v2):** edit `src/v2/scenes/*` or `src/characters/*`; use
+  `npx remotion still demo/ad/src/index.ts MendAdV2 <out.png> --frame=<n>` for a
+  fast check.
+- **v1 history:** edit `script.json` / `src/scenes/*` and render `MendAd`.
+- **Assets (v2):** live app clips live under `public/assets/live/` (ignored by
+  git). Re-capture with `node scripts/demo/capture-live-ad.mjs`; run
+  `node demo/ad/scripts/sync-v2.cjs` so the manifest picks them up. Missing media
+  falls back to a branded placeholder.
+- **End card URL:** set `siteUrl` in `script-v2.json`; the QR placeholder and
+  `DEMO LINK IN DESCRIPTION` copy are generated from it. Re-render the close
+  scene (or the whole v2 film) when the hosted URL is ready.
+- **Cuts:** `script-v2.json` has `master`, `submission` and `teaser` lists.
+  Register more compositions in `src/Root.tsx` if needed.
 
 ## Audio
 
