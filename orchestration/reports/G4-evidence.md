@@ -24,7 +24,7 @@ The authoritative per-feature matrix is [`STATUS.md`](../../STATUS.md). **G4 is 
 | Web build | PASS (all routes) |
 | `scripts/verify.sh` | 18 passed, 0 failed, 2 skipped |
 | Clean-room | 8 passed; `npm ci` from fresh worktree PASS |
-| Live testnet | 10 RPC/API checks + 2 Playwright live UI checks passed; 57 real tx hashes |
+| Live testnet | Historical 10 RPC/API checks + 2 Playwright live UI checks passed on `mend-hub.testnet` (57 tx). Active V2 `WO-BENCH-V2-001-0002` (42 tx) is documented in `infra/testnet-v2/LIVE-V2.md`. |
 
 ## Feature matrix
 

@@ -1,5 +1,12 @@
 # LIVE_TESTNET quality evidence
 
+> **Historical run (2026-11-09):** this file records the earlier
+> `mend-hub.testnet` / `WO-BENCH-001-0003` lifecycle (57 transactions). The
+> active deployment is the fresh V2 hub `mend-hub-v2.testnet` with
+> `WO-BENCH-V2-001-0002` (42 transactions), documented in
+> [`infra/testnet-v2/LIVE-V2.md`](../../infra/testnet-v2/LIVE-V2.md). The older
+> run remains valid evidence and is not deleted.
+
 Independent verification of the real NEAR testnet deployment and the live
 wallet/API/UI surfaces. No mainnet, no deploy, no repository secret was read or
 printed.
