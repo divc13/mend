@@ -26,7 +26,7 @@ MEND / NEAR Intents live test — MAINNET ONLY
 
 This runs four signed transactions:
   0. register USDC storage for ${ACCOUNT} if it is missing
-  1. create the temporary implicit account (0.001 NEAR)
+  1. create the temporary implicit account (0.003 NEAR; covers its own storage)
   2. register USDT storage for it (0.00125 NEAR)
   3. send exactly ${AMOUNT_USDT} USDT
 
@@ -88,7 +88,7 @@ fi
 
 near tokens "${ACCOUNT}" send-near \
   "${DEPOSIT}" \
-  '0.001 NEAR' \
+  '0.003 NEAR' \
   network-config mainnet sign-with-keychain send
 
 sleep 2

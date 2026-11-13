@@ -43,7 +43,8 @@ not exist yet, and USDT storage is not registered for it. The final recipient
 also has no USDC storage. The human must sign:
 
 0. Register USDC storage for `divyanshc.near` (`0.00125 NEAR`) if missing.
-1. Create the implicit deposit account with a small NEAR transfer (`0.001 NEAR`).
+1. Create the implicit deposit account with a small NEAR transfer (`0.003 NEAR`;
+   this covers the account's own storage).
 2. Register USDT storage for it (`0.00125 NEAR`).
 3. Send exactly `0.15 USDT` with `ft_transfer`.
 
@@ -76,7 +77,7 @@ near account manage-storage-deposit \
 # 1. Create the implicit deposit account. Keep this small; it is a real NEAR transfer.
 near tokens divyanshc.near send-near \
   3229d3894d42123c1fb93ee8c0c46536f7d9d3b771672198a182fd0632fc2a63 \
-  '0.001 NEAR' \
+  '0.003 NEAR' \
   network-config mainnet sign-with-keychain send
 
 # 2. Register USDT storage for the deposit account.
