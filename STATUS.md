@@ -130,11 +130,9 @@ Statuses used here: `PASS`, `PASS_WITH_CAVEATS`, `PARTIAL`,
    durability inspection.** The MP4 is silent and no repair was performed for
    MEND.
 8. **A hosted demo, public repository, X post or submitted entry.** The GitHub
-   repo is private and CI is still pending; submission fields are human-supplied.
+   repo is private; CI is green on `main`. Submission fields are human-supplied.
 9. **Any mainnet execution, security audit, accessibility certification, city
    adoption or partnership.** None exists.
-10. **CI green.** The first GitHub Actions run failed; a follow-up run was in
-    progress at the time of writing. CI is not green.
 
 ## Evidence index
 
