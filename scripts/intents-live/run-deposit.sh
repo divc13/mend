@@ -10,6 +10,10 @@ USDC="17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1"
 DEPOSIT="3229d3894d42123c1fb93ee8c0c46536f7d9d3b771672198a182fd0632fc2a63"
 AMOUNT_USDT="0.15"
 STATUS_URL="https://1click.chaindefuser.com/v0/status?depositAddress=${DEPOSIT}"
+CHECK_ONLY=0
+if [[ "${1:-}" == "--check" ]]; then
+  CHECK_ONLY=1
+fi
 
 cat <<EOF
 MEND / NEAR Intents live test — MAINNET ONLY
@@ -32,10 +36,12 @@ The temporary account is required by 1Click. The final USDC is delivered to
 ${ACCOUNT}; no USDC is left in the temporary account.
 EOF
 
-read -r -p "Type YES to continue: " confirm
-if [[ "${confirm}" != "YES" ]]; then
-  echo "Aborted. No transaction was sent."
-  exit 1
+if [[ "${CHECK_ONLY}" != "1" ]]; then
+  read -r -p "Type YES to continue: " confirm
+  if [[ "${confirm}" != "YES" ]]; then
+    echo "Aborted. No transaction was sent."
+    exit 1
+  fi
 fi
 
 # Read-only preflight: do not pay for a duplicate USDC storage registration.
@@ -64,13 +70,20 @@ PY
 )
 
 if [ "$USDC_STORAGE" = "null" ]; then
-  echo "USDC storage is not registered for ${ACCOUNT}; adding 0.00125 NEAR storage."
-  near account manage-storage-deposit "${USDC}" deposit "${ACCOUNT}" \
-    '0.00125 NEAR' \
-    sign-as "${ACCOUNT}" network-config mainnet sign-with-keychain send
-  sleep 2
+  echo "USDC storage is not registered for ${ACCOUNT}; step 0 would add 0.00125 NEAR storage."
+  if [[ "${CHECK_ONLY}" != "1" ]]; then
+    near account manage-storage-deposit "${USDC}" deposit "${ACCOUNT}" \
+      '0.00125 NEAR' \
+      sign-as "${ACCOUNT}" network-config mainnet sign-with-keychain send
+    sleep 2
+  fi
 else
-  echo "USDC storage is already registered for ${ACCOUNT}; skipping step 0."
+  echo "USDC storage is already registered for ${ACCOUNT}; step 0 would be skipped."
+fi
+
+if [[ "${CHECK_ONLY}" == "1" ]]; then
+  echo "CHECK ONLY: no transaction was sent. Re-run without --check to sign and send."
+  exit 0
 fi
 
 near tokens "${ACCOUNT}" send-near \

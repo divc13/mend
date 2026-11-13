@@ -54,6 +54,10 @@ storage; the final USDC goes to `divyanshc.near`.
 ## One command
 
 ```bash
+# Read-only preflight: checks USDC storage and prints the warning.
+bash scripts/intents-live/run-deposit.sh --check
+
+# Sign and send after reviewing the warning.
 bash scripts/intents-live/run-deposit.sh
 ```
 
