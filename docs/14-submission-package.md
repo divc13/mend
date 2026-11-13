@@ -39,12 +39,14 @@ transaction links and final confirmation are HUMAN SUPPLIED — DO NOT INVENT.**
 > holdback. If durability fails, MEND reopens the original work order and warranty
 > history instead of creating a new bounty. Raw media and precise locations stay
 > off-chain; only redacted hashes and public state go on-chain. AI suggests but never
-> approves, awards or pays. A real NEAR testnet repair lifecycle completed with
-> 57 transactions and exact 100/20/72/8 accounting (`WO-BENCH-001-0003`, final
-> `CLOSED`). Live NEAR AI inference, a real Sputnik DAO, a live Intents deposit,
-> live OutLayer execution, a live NEP-366 relayer transaction, a live Agent
-> Market job, a hosted demo, narration and physical repair evidence remain
-> incomplete or human-gated. The authoritative matrix is `STATUS.md`.
+> approves, awards or pays. A real NEAR testnet repair lifecycle completed on
+> `mend-hub-v2.testnet` with 42 transactions and exact 100/20/72/8 accounting
+> (`WO-BENCH-V2-001-0002`, final `CLOSED`); an earlier 57-transaction run is
+> historical. Live NEAR AI inference/signature, a real Sputnik DAO, live OutLayer
+> execution, a live NEP-366 relayer transaction and a disclosed live Agent Market
+> self-hire have evidence. The Intents deposit/settlement, a hosted demo, narration
+> and physical repair evidence remain incomplete or human-gated. The authoritative
+> matrix is `STATUS.md`.
 
 ## NEAR integration explanation
 
@@ -56,16 +58,18 @@ honestly.
 | **Hub contract** (`contracts/hub`) | Assets, work orders, role registry, DAO authorization, sealed bids, score hash binding, escrow, 90/10 payment, durability, warranty, disputes, pause | Implemented; 30 tests + WASM build |
 | **Non-transferable passport** | NEP-171 token owned by the hub; every transfer/approval/burn path fails; history is public; no legal title | Testnet-proven: `BENCH-001` minted, hub-owned, `nft_transfer` rejected |
 | **NEP-141 escrow** | `ft_transfer_call` into the hub; exact token/sponsor/amount; underfund refund, overfund excess refund, duplicate refund | Testnet-proven: exact 100/20/72/8, escrow 0 |
-| **Sputnik DAO v2** | Approved `FunctionCall` proposal pushes `dao_authorize`; hub trusts only `config.dao` as predecessor | Live contracts/read path **VERIFIED**; DAO deployment `BLOCKED_ON_HUMAN` |
-| **OutLayer** | Hash-pinned `wasm32-wasip1` deterministic scorer; private promise callback; TEE attestation verified off-chain | Testnet read-only **VERIFIED**; funded execution `BLOCKED_ON_HUMAN` |
-| **NEAR AI Cloud** | Server-only private triage; schema-validated suggestions; signature/attestation evidence shown separately | Public endpoints **VERIFIED**; authenticated inference `BLOCKED_ON_HUMAN` |
-| **NEAR Intents / 1Click** | Cross-chain sponsorship quotes and status; dry preview by default; mainnet only | Read-only mainnet API **VERIFIED**; live deposit `BLOCKED_ON_HUMAN` |
-| **NEAR Agent Market** | External evidence-completeness review; no worker accept endpoint; human acceptance | Public reads **VERIFIED**; live job `BLOCKED_ON_HUMAN` |
-| **Function-call keys / NEP-366** | Separate agent sub-accounts, scoped keys, allowlisted relayer; zero-deposit gasless actions where valid | Scoped keys proven on testnet; live NEP-366 relayer transaction `BLOCKED_ON_HUMAN` |
+| **Sputnik DAO v2** | Approved `FunctionCall` proposal pushes `dao_authorize`; hub trusts only `config.dao` as predecessor | Live testnet DAO + proposal execution **VERIFIED**; testnet-only |
+| **OutLayer** | Hash-pinned `wasm32-wasip1` deterministic scorer; private promise callback; TEE attestation captured | Live testnet publish/execute **VERIFIED**; full Intel DCAP/ITA chain not verified |
+| **NEAR AI Cloud** | Server-only private triage; schema-validated suggestions; signature/attestation evidence shown separately | Live inference + `provider_tee` signature **VERIFIED**; full TEE report/DCAP/ITA `UNAVAILABLE` |
+| **NEAR Intents / 1Click** | Cross-chain sponsorship quotes and status; dry preview by default; mainnet only | Read-only API + signed non-dry quote **VERIFIED**; live deposit/settlement `BLOCKED_ON_HUMAN` |
+| **NEAR Agent Market** | External evidence-completeness review; no worker accept endpoint; human acceptance | Live listing + paid self-hire **VERIFIED**; seller payout `NOT_COLLECTED`; disclosed self-hire |
+| **Function-call keys / NEP-366** | Separate agent sub-accounts, scoped keys, allowlisted relayer; zero-deposit gasless actions where valid | Scoped keys + live NEP-366 relayer transaction **VERIFIED**; gasless escrow funding still unavailable |
 
-MEND does **not** claim a complete NEAR AI end-to-end attestation chain, a live
-OutLayer score, a live Intents deposit or a live Agent Market job. Those are
-`BLOCKED_ON_HUMAN` and are labelled as such in the product and demo.
+MEND does **not** claim a complete NEAR AI end-to-end attestation chain, a full
+Intel DCAP/ITA verification, a live Intents deposit/settlement, or independent
+Agent Market reputation. The Intents deposit is `BLOCKED_ON_HUMAN`; the Agent
+Market job is a disclosed self-hire. These limits are labelled in the product,
+the evidence files and `STATUS.md`.
 
 ## Track justification
 
@@ -133,7 +137,7 @@ are not in this document.
 | Language/runtime | TypeScript strict, Node `>=22` declared (Node 26 used in this environment). NEAR AI verifier SDK requires `>=24.22.1`. |
 | Tests | Vitest + Cargo suites pass locally across protocol, contracts, clients, API, DB, indexer, agents, quality and live-testnet checks; exact totals are in `orchestration/reports/G4-evidence.md`. |
 | NEAR SDK | `near-sdk` per the workspace pin; used by `contracts/hub` and `contracts/test-token`; verify version and license in the lockfile. |
-| NEAR AI SDK | `@nearai/inference-sdk@0.3.0` is MIT per R0-A; server-only. The client boundary exists; live authenticated calls remain blocked. |
+| NEAR AI SDK | `@nearai/inference-sdk@0.3.0` is MIT per R0-A; server-only. Live authenticated inference and signature fetch passed with a key; full TEE attestation remains unavailable. |
 | OutLayer verify | `outlayer-verify` is Apache-2.0 per R0-B; not installed or run here. |
 | 1Click SDK | `@defuse-protocol/one-click-sdk-typescript` 0.1.26 was used for signature verification research; verify license and pin before shipping. |
 | Agent Market | External production service; no vendor code copied. |
@@ -148,8 +152,10 @@ above must be reconciled with the final lockfile.
 
 ## What this package does not claim
 
-- a real NEAR testnet escrow lifecycle is proven; live NEAR AI inference,
-  Sputnik DAO, Intents deposit, OutLayer execution and Agent Market job are not;
+- a real V2 NEAR testnet escrow lifecycle is proven; live NEAR AI
+  inference/signature, Sputnik DAO, OutLayer execution, NEP-366 relayer and a
+  disclosed Agent Market self-hire are proven with caveats; an Intents
+  deposit/settlement is not;
 - no mainnet execution;
 - no hosted demo;
 - no narrated or captioned demo video (a silent REPLAY MP4 exists);
@@ -157,8 +163,10 @@ above must be reconciled with the final lockfile.
 - no real users, city adoption or partnership;
 - no security audit or accessibility certification;
 - no complete NEAR AI attestation chain;
-- no live OutLayer TEE attestation;
-- no live Agent Market job.
+- no full Intel DCAP/ITA verification for the live NEAR AI or OutLayer
+  attestations;
+- no independent Agent Market reputation; the live job was a disclosed
+  self-hire and the seller payout ledger was not collected.
 
 ## Final human review checklist
 

@@ -232,9 +232,11 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
     triage: {
       provider: 'NEAR AI Cloud',
       baseUrl: env.NEAR_AI_BASE_URL ?? 'https://cloud-api.near.ai/v1',
-      model: env.NEAR_AI_MODEL ?? 'Qwen/Qwen3-235B-A22B-Instruct-2507',
+      // This model is live in the NEAR AI catalog and supports structured
+      // output. The previous Qwen default was not a valid provider model.
+      model: env.NEAR_AI_MODEL ?? 'z-ai/glm-5.3-flash',
       apiKey: env.NEAR_AI_API_KEY,
-      timeoutMs: int(env.NEAR_AI_TIMEOUT_MS, 20_000),
+      timeoutMs: int(env.NEAR_AI_TIMEOUT_MS, 120_000),
     },
     intents: {
       enabled: intentsEnabled,

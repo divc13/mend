@@ -1,0 +1,47 @@
+{
+  "quote": {
+    "amountIn": "150000",
+    "amountInFormatted": "0.15",
+    "amountInUsd": "0.149891400000",
+    "minAmountIn": "150000",
+    "amountOut": "145411",
+    "amountOutFormatted": "0.145411",
+    "amountOutUsd": "0.145350363613",
+    "minAmountOut": "144683",
+    "timeEstimate": 22,
+    "refundFee": "0",
+    "withdrawFee": "4427",
+    "deadline": "2026-11-16T13:25:01.933Z",
+    "timeWhenInactive": "2026-11-16T13:25:01.933Z",
+    "depositAddress": "3229d3894d42123c1fb93ee8c0c46536f7d9d3b771672198a182fd0632fc2a63"
+  },
+  "quoteRequest": {
+    "dry": false,
+    "depositMode": "SIMPLE",
+    "swapType": "EXACT_INPUT",
+    "slippageTolerance": 50,
+    "originAsset": "nep141:usdt.tether-token.near",
+    "depositType": "ORIGIN_CHAIN",
+    "destinationAsset": "nep141:17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+    "amount": "150000",
+    "refundTo": "divyanshc.near",
+    "refundType": "ORIGIN_CHAIN",
+    "recipient": "divyanshc.near",
+    "recipientType": "DESTINATION_CHAIN",
+    "deadline": "2026-11-13T13:25:01.933Z",
+    "confidentiality": "public",
+    "referral": "mend",
+    "quoteWaitingTimeMs": 0,
+    "insured": false,
+    "appFees": [
+      {
+        "recipient": "5880ad2b362620fadf759cbceb1cd5737ce8c6ed7fb8e9942881e6731f9247dd",
+        "fee": 1,
+        "limitOrderId": null
+      }
+    ]
+  },
+  "signature": "ed25519:ZxpxRmWfxmByqaiVBA6in1tRqzRhGjqcoXnvwm6uufzc6TFpoq2yQUbrCuLcxm162LefNhE1tdHEGxze8iP44Do",
+  "timestamp": "2026-11-13T12:25:02.694Z",
+  "correlationId": "49aa2ea9-59e5-4b9e-b37a-ba720f79d61c"
+}

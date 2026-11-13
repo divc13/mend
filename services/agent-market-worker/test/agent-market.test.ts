@@ -61,6 +61,38 @@ describe('agent market worker', () => {
     expect(paths.some((path) => path?.includes('accept'))).toBe(false);
   });
 
+  it('accepts a live assignment with a null bid id', async () => {
+    const transport = new RecordedMarketTransport([
+      {
+        method: 'GET',
+        path: '/v1/agents/me/assignments',
+        status: 200,
+        body: {
+          assignments: [
+            {
+              assignment: {
+                assignmentId: 'asg-null-bid',
+                jobId: 'job-null-bid',
+                bidId: null,
+                status: 'in_progress',
+                startedAt: null,
+                submittedAt: null,
+                deliverableUrl: null,
+              },
+              job: { jobId: 'job-null-bid', title: 'Instant hire', status: 'in_progress' },
+              latestMessage: null,
+              autoAcceptAt: null,
+            },
+          ],
+        },
+      },
+    ]);
+    const client = worker(transport);
+    const poll = await client.pollAssignments();
+    expect(poll.assignments[0]?.assignment.bidId).toBeNull();
+    expect(poll.assignments[0]?.assignment.assignmentId).toBe('asg-null-bid');
+  });
+
   it('has no worker accept capability and never sends an accept request', async () => {
     const transport = routes();
     const client = worker(transport);

@@ -69,10 +69,16 @@ export class NearAiClient implements JsonChatClient {
       );
     }
 
+    // The provider only receives `json_object` mode unless we include the
+    // schema itself. Reasoning models otherwise invent their own field names.
+    const schemaText = JSON.stringify(z.toJSONSchema(options.schema));
     const body = {
       model: options.model ?? this.config.model,
       messages: [
-        { role: 'system', content: options.system },
+        {
+          role: 'system',
+          content: `${options.system}\n\nReturn one JSON object that conforms exactly to this JSON Schema. Do not add extra keys.\n${schemaText}`,
+        },
         { role: 'user', content: options.user },
       ],
       temperature: options.temperature ?? 0,

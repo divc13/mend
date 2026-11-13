@@ -133,7 +133,7 @@ export function LiveConsole() {
       <PageHero
         eyebrow="Live control"
         title="Run the testnet scenario, or watch the recording."
-        lead="LIVE TESTNET executes a real scenario against mend-hub.testnet and mend-usdc.testnet. Every step is shown in order with the transaction hashes the API returns. If live is unavailable, the recorded replay path takes over — clearly labelled."
+        lead={`LIVE TESTNET executes a real scenario against ${TESTNET_HUB_ACCOUNT} and ${TESTNET_TOKEN_ACCOUNT}. Every step is shown in order with the transaction hashes the API returns. If live is unavailable, the recorded replay path takes over — clearly labelled.`}
         aside={
           <div className="side-card wallet-status-card">
             <div className="wallet-status-card__top">

@@ -90,6 +90,10 @@ describe('NEAR AI client', () => {
     expect(record.responseId).toBe('chatcmpl-recorded-scope-0001');
     expect(record.requestHash).toBe(sha256Hex(record.requestBodyText));
     expect(record.responseHash).toBe(sha256Hex(record.responseBodyText));
+    // The model needs the schema in the request; json_object alone does not
+    // tell it which field names to emit.
+    expect(record.requestBodyText).toContain('JSON Schema');
+    expect(record.requestBodyText).toContain('safetyExclusions');
     expect(record.data.humanReviewRequired).toBe(true);
     expect(JSON.stringify(record)).not.toContain('test-key-not-real-1234');
   });

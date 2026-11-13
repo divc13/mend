@@ -26,7 +26,7 @@ export const AssignmentSchema = z
     startedAt: z.string().nullable().optional(),
     submittedAt: z.string().nullable().optional(),
     deliverableUrl: z.string().nullable().optional(),
-    bidId: z.string().optional(),
+    bidId: z.string().nullable().optional(),
   })
   .passthrough();
 

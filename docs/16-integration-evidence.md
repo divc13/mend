@@ -1,5 +1,10 @@
 # 16 — Integration evidence matrix
 
+> **Status note (2026-11-13):** This file began as the 2026-11-09 Wave 0 research
+> matrix. Later live evidence is reconciled in the affected rows below;
+> [`STATUS.md`](../STATUS.md) is authoritative. Research-only labels remain
+> historical where no later evidence exists.
+
 Every external integration claim in MEND must match the Wave 0 research and carry
 one of three labels. Research was accessed **2026-11-09**; the source files are in
 `orchestration/research/`.
@@ -40,8 +45,8 @@ Sources: `orchestration/research/R0-A-near-ai.md`. Access date 2026-11-09.
 | A13 | Responses/Messages APIs are gateway-signed only | **VERIFIED** | Docs |
 | A14 | Structured output/`response_format` is a stable documented request contract | **UNAVAILABLE** | Not enumerated in the live OpenAPI request schema; must be probed; research marks it unverified |
 | A15 | The official JS SDK requires Node `>=24.22.1` | **VERIFIED** | npm metadata/docs; repo declares `>=22` |
-| A16 | Authenticated MEND inference, signature fetch and billing | **BLOCKED_ON_HUMAN** | No API key/credits; no fabricated calls |
-| A17 | MEND can claim a complete end-to-end AI attestation chain | **UNAVAILABLE** | Provider itself documents the gap |
+| A16 | Authenticated MEND inference, signature fetch and billing | **VERIFIED (live) / NOT_COLLECTED (billing)** | Live `z-ai/glm-5.3-flash` smoke and API triage on `R-001`; `provider_tee` ECDSA signature fetched and cryptographically checked. Billing ledger was not read. See `scripts/near-ai-live/LIVE-NEAR-AI.md` |
+| A17 | MEND can claim a complete end-to-end AI attestation chain | **UNAVAILABLE** | Provider itself documents the gap; live signature has `signerMatchesReport:false` because no matching TEE report was retained |
 
 **Product rule:** show `INFERENCE EVIDENCE VERIFIED` only for verified bytes; show
 gateway and model evidence separately; show `UNAVAILABLE` for 404/error. Never say “AI approved”.
@@ -65,8 +70,8 @@ Sources: `orchestration/research/R0-B-outlayer.md`. Access date 2026-11-09.
 | B11 | Coordinator is closed source and can censor/delay | **VERIFIED** | Docs/source |
 | B12 | Exact deployed memory floor / WASM cap parity | **UNAVAILABLE** | Source says 1024 MB / 10 MiB; deployed parity unverified |
 | B13 | Independent `outlayer-verify` tool exists (Apache-2.0) | **VERIFIED** | Docs/source; not installed/run here |
-| B14 | MEND published WASM and funded testnet execution | **BLOCKED_ON_HUMAN** | No project/funds; no execution performed |
-| B15 | MEND TEE attestation verified for a real execution | **BLOCKED_ON_HUMAN** | No execution artifact to verify |
+| B14 | MEND published WASM and funded testnet execution | **VERIFIED (testnet)** | Project `mend-deployer.testnet/bid-rules`, request `15579`, settlement tx `HHBDS4ymrGbUisX9NvfZJ6XTaC24aTShmomroX5XJYAQ`; see `infra/outlayer-live/LIVE-OUTLAY.md` |
+| B15 | MEND TEE attestation verified for a real execution | **UNAVAILABLE (full Intel chain)** | Live attestation captured with the built code hash and canonical input/output; the Intel DCAP/ITA signature chain is not independently verified by MEND |
 | B16 | Mainnet stablecoin address for funding | **UNAVAILABLE** | Not verified; not needed for testnet |
 
 **Product rule:** on-chain hashes = `SCORE BOUND`; independently verified TEE =
@@ -95,7 +100,7 @@ Sources: `orchestration/research/R0-C-intents.md`. Access date 2026-11-09.
 | C14 | `sessionId` is returned by status | **UNAVAILABLE** | Echoed at quote time but not returned by status; reconcile by `depositAddress` |
 | C15 | Authenticated fee schedule 20/1 bps and no-JWT +25 bps | **UNAVAILABLE** | Not observed; docs/live differ; partner JWT is `BLOCKED_ON_HUMAN` |
 | C16 | Live `REFUNDED`/`FAILED`/`INCOMPLETE_DEPOSIT` bodies | **UNAVAILABLE** | Schema/docs only; no live sample |
-| C17 | MEND live deposit → SUCCESS → hub funding | **BLOCKED_ON_HUMAN** | No funds, no human approval; mainnet only |
+| C17 | MEND live deposit → SUCCESS → hub funding | **BLOCKED_ON_HUMAN** | Signed non-dry quote allocated; no deposit/settlement. Recipient `divyanshc.near` lacks USDC storage; four human-signed transactions are required. See `scripts/intents-live/LIVE-INTENTS.md` |
 | C18 | Explorer API for historical swaps without partner auth | **UNAVAILABLE** | Requires JWT |
 
 **Product rule:** dry quotes are not payments; show fees and destination as
@@ -118,8 +123,8 @@ Sources: `orchestration/research/R0-D-dao-agent-market.md`. Access date 2026-11-
 | D8 | The hub checks `predecessor_account_id == config.dao` | **MEND DECISION**, source-compatible | Hub interface freeze |
 | D9 | `act_proposal` requires the exact proposal kind | **VERIFIED** | Current source; README drift |
 | D10 | The bond must equal the policy bond exactly | **VERIFIED** | Source; README “at least 1 NEAR” is wrong for custom policies |
-| D11 | MEND DAO deployment, council and proposals | **BLOCKED_ON_HUMAN** | No DAO exists |
-| D12 | MEND DAO watcher verification against a live proposal | **BLOCKED_ON_HUMAN** | Depends on D11 |
+| D11 | MEND DAO deployment, council and proposals | **VERIFIED (testnet)** | `mend-dao.sputnikv2.testnet`, council `mend-deployer`/`mend-steward`/`mend-inspector`; proposal `1` approved 2/3 |
+| D12 | MEND DAO watcher verification against a live proposal | **VERIFIED (testnet)** | Proposal `1` executed `mend-hub-v2.testnet.dao_authorize`; see `infra/testnet-v2/LIVE-V2.md` |
 
 **Product rule:** `DAO AUTHORIZED` only after the hub records the authorization.
 A pending proposal is not an approval.
@@ -141,7 +146,7 @@ Sources: `orchestration/research/R0-D-dao-agent-market.md`. Access date 2026-11-
 | E9 | Agent Market is a NEAR testnet | **UNAVAILABLE** | Production marketplace with USD/USDC |
 | E10 | Platform fee is 5% of builder payout | **VERIFIED** | Live config/docs |
 | E11 | Email verification is required | **VERIFIED** | Live config |
-| E12 | MEND live job, account, token or balance | **BLOCKED_ON_HUMAN** | None exists |
+| E12 | MEND live job, account, token or balance | **VERIFIED (job/token) / NOT_COLLECTED (payout)** | Listing `mend-evidence-review` live; paid `0.0100 USDC` self-hire started/submitted by worker and accepted by human. Seller payout/ledger not read with a worker `aat_` token. See `scripts/agent-market-live/LIVE-AGENT-MARKET.md` |
 | E13 | Self-hire is independent market reputation | **UNAVAILABLE** | Must be disclosed if tested |
 
 **Product rule:** `EXTERNAL REVIEW — NOT A SAFETY CERTIFICATION`; human acceptance
@@ -178,8 +183,8 @@ valid”, not “gasless funding”. Never imply the passport is legal ownership
 | G1 | Protocol schemas, state machine, accounting, scoring and fixtures pass locally | **VERIFIED (local)** | `npm test -w @mend/protocol` → 4 files, 26 tests passed |
 | G2 | Documentation and relative links are valid | **VERIFIED (local)** | `node scripts/demo/check-docs.mjs` |
 | G3 | Web app, API, contracts, compute, services | **VERIFIED (local)** | Integrated on `main`; G1/G2/G4 evidence |
-| G4 | Real NEAR testnet escrow lifecycle with real links | **VERIFIED (testnet) with caveats** | `WO-BENCH-001-0003` `CLOSED`, 57 tx, exact 100/20/72/8, escrow 0; [G3 evidence](../orchestration/reports/G3-evidence.md) |
-| G5 | Live NEAR AI inference, Sputnik DAO, Intents deposit, OutLayer execution, NEP-366 relayer, Agent Market job | **BLOCKED_ON_HUMAN** | Not exercised; no fake evidence |
+| G4 | Real NEAR testnet escrow lifecycle with real links | **VERIFIED (testnet) with caveats** | V2 `WO-BENCH-V2-001-0002` `CLOSED`, 42 tx, exact 100/20/72/8, escrow 0; earlier 57-tx `WO-BENCH-001-0003` remains historical; [G3 evidence](../orchestration/reports/G3-evidence.md) |
+| G5 | Live NEAR AI inference, Sputnik DAO, Intents deposit, OutLayer execution, NEP-366 relayer, Agent Market job | **VERIFIED with caveats / PARTIAL** | AI signature valid but no matching TEE report; Sputnik DAO, OutLayer, NEP-366 and Agent Market job live; Intents deposit/settlement not executed. See `STATUS.md` |
 | G6 | Hosted demo | **BLOCKED_ON_HUMAN** | No deployment credentials |
 | G7 | Demo video | **RECORDED (silent)** | `fixtures/demo/captures/mend-replay-demo.mp4`, 91.6 s; narration/captions pending human |
 | G8 | Real repair media and durability inspection | **BLOCKED_ON_HUMAN / NOT COLLECTED** | No repair performed; no consent |

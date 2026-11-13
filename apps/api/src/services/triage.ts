@@ -336,7 +336,9 @@ export class NearAiTriageAdapter implements TriageAdapter {
         system: TRIAGE_SYSTEM_PROMPT,
         user,
         schema: triageOutputSchema,
-        maxTokens: 800,
+        // Reasoning models spend tokens on their hidden reasoning before they
+        // emit content; 800 truncated the live response to `content: null`.
+        maxTokens: 4_096,
       });
     } catch (error) {
       return this.unavailable(

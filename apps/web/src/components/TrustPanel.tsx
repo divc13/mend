@@ -37,8 +37,8 @@ export function TrustPanel({ caseData }: { caseData: CaseBundle }) {
           <p className="eyebrow">Verification ledger</p>
           <h2 id="trust-panel-title">What is verified, what is unavailable, and what is a human claim</h2>
         </div>
-        <Badge tone="warning" icon={<AlertTriangle size={14} />}>
-          REPLAY RECORDING
+        <Badge tone={caseData.mode === 'REPLAY' ? 'warning' : 'positive'} icon={<AlertTriangle size={14} />}>
+          {caseData.mode === 'REPLAY' ? 'REPLAY RECORDING' : 'LIVE TESTNET'}
         </Badge>
       </div>
 
@@ -251,4 +251,4 @@ export function TrustPanel({ caseData }: { caseData: CaseBundle }) {
   );
 }
 
-const NEXT_HUB = 'mend-hub.testnet';
+const NEXT_HUB = 'mend-hub-v2.testnet';

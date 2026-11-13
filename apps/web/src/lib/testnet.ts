@@ -13,7 +13,7 @@
  */
 
 export const TESTNET_EXPLORER = 'https://explorer.testnet.near.org';
-export const TESTNET_HUB_ACCOUNT = 'mend-hub.testnet';
+export const TESTNET_HUB_ACCOUNT = 'mend-hub-v2.testnet';
 export const TESTNET_TOKEN_ACCOUNT = 'mend-usdc.testnet';
 export const TESTNET_FAUCET_MICRO = '100000000'; // 100 mUSDC, 6 decimals.
 export const TESTNET_NETWORK = 'testnet' as const;

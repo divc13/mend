@@ -1,0 +1,11 @@
+{
+  "accountId": "divyanshc.near",
+  "tokenAccount": "17208628f84f5d6ad33f0da3bbbeb27ffcb398eac501a31bd6ad2011e36133a1",
+  "rpcUrl": "https://rpc.mainnet.near.org",
+  "exists": true,
+  "storageRegistered": false,
+  "storageBalance": null,
+  "accountAmountYocto": "281915247177904087425148",
+  "checkedAt": "2026-11-13T12:25:18.934Z",
+  "error": "STORAGE_NOT_REGISTERED"
+}
