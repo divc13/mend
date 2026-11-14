@@ -37,6 +37,7 @@ function writeStoredMode(mode: Mode): void {
 
 export function ModeProvider({
   children,
+  initialMode = 'REPLAY',
   apiConfigured = false,
 }: {
   children: ReactNode;
@@ -81,8 +82,12 @@ export function ModeProvider({
       if (cancelled) return;
       setApiHealth(health);
 
-      if (health.ok && storedMode === 'LIVE_TESTNET') {
+      if (
+        health.ok &&
+        (storedMode === 'LIVE_TESTNET' || (storedMode !== 'REPLAY' && initialMode === 'LIVE_TESTNET'))
+      ) {
         applyMode('LIVE_TESTNET');
+        writeStoredMode('LIVE_TESTNET');
         return;
       }
 
