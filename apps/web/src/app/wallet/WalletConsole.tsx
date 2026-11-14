@@ -84,8 +84,10 @@ function friendlyError(error: ApiFailure, action: string): string {
 }
 
 export function WalletConsole() {
-  const { mode, apiConfigured, setMode } = useMode();
+  const { mode, apiConfigured, apiHealth, setMode } = useMode();
   const live = mode === 'LIVE_TESTNET';
+  const walletEnabled = live && apiHealth?.testnet?.walletEnabled === true;
+  const faucetEnabled = live && apiHealth?.testnet?.faucetEnabled === true;
   const [accountInput, setAccountInput] = useState('');
   const [wallet, setWallet] = useState<TestnetWalletView | null>(null);
   const [creating, setCreating] = useState(false);
@@ -423,6 +425,7 @@ export function WalletConsole() {
         <p className="wallet-live-note" role="status">
           <span className="wallet-live-note__dot" aria-hidden="true" />
           LIVE TESTNET selected. Every account and transaction below is testnet-only.
+          {!walletEnabled || !faucetEnabled ? ' Wallet creation and the faucet are disabled on this deployment.' : ''}
         </p>
       )}
 
@@ -514,7 +517,7 @@ export function WalletConsole() {
                     type="button"
                     className="button"
                     onClick={() => void onCreate()}
-                    disabled={!live || busy}
+                    disabled={!walletEnabled || busy}
                     aria-busy={creating}
                     data-testid="create-testnet-wallet"
                   >
@@ -532,7 +535,7 @@ export function WalletConsole() {
                     type="button"
                     className="button button--ghost"
                     onClick={() => void refreshBalance()}
-                    disabled={!live || !wallet || busy}
+                    disabled={!walletEnabled || !wallet || busy}
                     aria-busy={refreshing}
                   >
                     <Refresh size={15} aria-hidden="true" /> {refreshing ? 'Refreshing…' : 'Refresh balance'}
@@ -551,12 +554,12 @@ export function WalletConsole() {
                         placeholder="mend-wallet-xxxx.testnet"
                         autoComplete="off"
                         spellCheck={false}
-                        disabled={!live || busy || secretVisible}
+                        disabled={!walletEnabled || busy || secretVisible}
                       />
                       <button
                         type="submit"
                         className="button button--small button--ghost"
-                        disabled={!live || busy || secretVisible}
+                        disabled={!walletEnabled || busy || secretVisible}
                         aria-busy={lookingUp}
                       >
                         {lookingUp ? 'Looking up…' : 'Load wallet'}
@@ -644,12 +647,12 @@ export function WalletConsole() {
                         type="button"
                         className="button button--small button--ghost"
                         onClick={() => void refreshBalance()}
-                        disabled={!live || busy}
+                        disabled={!walletEnabled || busy}
                       >
                         <Refresh size={14} aria-hidden="true" /> Refresh
                       </button>
                       <Link className="text-link" href="/live">
-                        Run the live scenario <ArrowRight size={14} aria-hidden="true" />
+                        Open live control <ArrowRight size={14} aria-hidden="true" />
                       </Link>
                     </div>
                     {balanceError ? (
@@ -683,7 +686,7 @@ export function WalletConsole() {
                 type="button"
                 className="button"
                 onClick={() => void onFaucet()}
-                disabled={!live || !wallet || busy || secretVisible}
+                disabled={!faucetEnabled || !wallet || busy || secretVisible}
                 aria-busy={fauceting}
                 data-testid="request-testnet-faucet"
               >
@@ -829,7 +832,7 @@ export function WalletConsole() {
                 type="button"
                 className="button button--small button--ghost"
                 onClick={() => void refreshBalance()}
-                disabled={!live || !wallet || busy}
+                disabled={!walletEnabled || !wallet || busy}
                 aria-busy={refreshing}
               >
                 <Refresh size={14} aria-hidden="true" /> Refresh

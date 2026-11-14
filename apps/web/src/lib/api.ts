@@ -205,6 +205,10 @@ export interface ApiHealth {
   repository?: string;
   liveScenarioEnabled: boolean;
   roleAccounts?: Record<string, string>;
+  testnet?: {
+    walletEnabled: boolean;
+    faucetEnabled: boolean;
+  };
   checkedAt: string;
   message: string;
 }
@@ -217,6 +221,8 @@ interface HealthPayload {
   database?: string;
   testnet?: {
     liveScenarioEnabled?: boolean;
+    walletEnabled?: boolean;
+    faucetEnabled?: boolean;
     roleAccounts?: Record<string, string>;
   };
 }
@@ -268,6 +274,14 @@ export async function checkApiHealth(): Promise<ApiHealth> {
     ...(payload.repository ? { repository: payload.repository } : {}),
     liveScenarioEnabled: payload.testnet?.liveScenarioEnabled === true,
     ...(payload.testnet?.roleAccounts ? { roleAccounts: payload.testnet.roleAccounts } : {}),
+    ...(payload.testnet
+      ? {
+          testnet: {
+            walletEnabled: payload.testnet.walletEnabled === true,
+            faucetEnabled: payload.testnet.faucetEnabled === true,
+          },
+        }
+      : {}),
     checkedAt,
     message,
   };
