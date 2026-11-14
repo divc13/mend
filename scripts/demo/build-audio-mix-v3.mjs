@@ -115,20 +115,26 @@ const sceneAt = Object.fromEntries(script.scenes.map((scene) => [scene.id, scene
 
 // Only the three biggest hard cuts keep a whoosh: into the live app, into the
 // DAO authorization, and into the close card. Every other cut is a clean hard cut.
-for (const at of [11.94, 35.1, 140.09]) add(sfxFile('whoosh'), Math.max(0, at - 0.08), 0.30);
+// Scene starts come from script-v3.json, so the 0.60 s breaths cannot drift the
+// whooshes or the prize-card lift off the picture.
+for (const at of [sceneAt.report, sceneAt.dao, sceneAt.close]) {
+  add(sfxFile('whoosh'), Math.max(0, at - 0.08), 0.30);
+}
 add(sfxFile('camera-shutter'), 5.9, 0.65);
-for (const at of [10.1, 15.0, 21.0, 26.0]) add(sfxFile('ui-click'), at, 0.38);
-add(mergePop, 17.3, 0.42);
-add(sfxFile('dao-stamp'), 50.9, 0.55);
-add(bidTick, 54.5, 0.34);
-add(sfxFile('dao-stamp'), 80.9, 0.52);
-add(sfxFile('cash'), 83.0, 0.40);
-add(sfxFile('page-turn'), 99.2, 0.36);
+// Report clicks follow the action table in demo/ad/src/v3/lib/actions.ts:
+// photo 11.48, privacy 14.76, duplicate 17.17, submit 26.19.
+for (const at of [11.48, 14.76, 17.17, 26.19]) add(sfxFile('ui-click'), at, 0.38);
+add(mergePop, 19.28, 0.42);
+add(sfxFile('dao-stamp'), sceneAt.dao + 15.8, 0.55);
+add(bidTick, sceneAt.bids + 3.12, 0.34);
+add(sfxFile('dao-stamp'), sceneAt.repair + 15.0, 0.52);
+add(sfxFile('cash'), sceneAt.payment + 1.37, 0.40);
+add(sfxFile('page-turn'), sceneAt.passport + 2.84, 0.36);
 add(sfxFile('ui-click'), sceneAt.payment + 0.6, 0.4);
 add(sfxFile('ui-click'), sceneAt.tech + 1.2, 0.32);
 // A trimmed, high-passed page-turn reads as a receipt printer at the tech close.
-add(sfxFile('page-turn'), 138.0, 0.42, 'atrim=0:0.30,highpass=f=600,afade=t=out:st=0.18:d=0.12');
-add(sfxFile('dao-stamp'), 141.0, 0.62);
+add(sfxFile('page-turn'), sceneAt.tech + 26.84, 0.42, 'atrim=0:0.30,highpass=f=600,afade=t=out:st=0.18:d=0.12');
+add(sfxFile('dao-stamp'), sceneAt.close + 0.91, 0.62);
 
 const inputs = ['-i', voice, '-stream_loop', '-1', '-i', music];
 const filters = [];
@@ -145,11 +151,11 @@ filters.push(
     `apad=whole_dur=${total},atrim=0:${total},asplit=2[voSide][voMix]`,
 );
 
-// Music: 0.26 base, +0.08 lift from 138.0s to the close card at 140.09s, then a
-// full 2s tail fade. The fade ends exactly at the last frame so the QR card holds
-// under music instead of being cut by a short master fade.
-const closeLiftStart = 138.0;
+// Music: 0.26 base, +0.08 lift over the last 3 s before the close card, then a
+// full 2 s tail fade. The fade ends exactly at the last frame so the QR card
+// holds under music instead of being cut by a short master fade.
 const closeLiftEnd = sceneAt.close;
+const closeLiftStart = Math.max(0, closeLiftEnd - 3);
 const baseMusic = 0.26;
 const closeMusic = 0.34;
 const musicGain = `${baseMusic}+${(closeMusic - baseMusic).toFixed(2)}*min(max((t-${closeLiftStart})/${(closeLiftEnd - closeLiftStart).toFixed(2)},0),1)`;
@@ -261,6 +267,19 @@ if (Number.isFinite(truePeak) && truePeak > -1) {
 }
 if (Number.isFinite(integrated) && Math.abs(integrated + 14) > 0.3) {
   console.warn(`warning: integrated loudness ${integrated} LUFS is outside -14.3..-13.7`);
+}
+
+// The voice bed has 0.60 s of deliberate air between lines; the music must fill
+// every one. Fail loudly if any stretch of the finished mix is silent >1.2 s.
+const silenceProbe = spawnSync(
+  ffmpegPath,
+  ['-hide_banner', '-nostats', '-i', mix, '-af', 'silencedetect=n=-50dB:d=1.2', '-f', 'null', '-'],
+  { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 },
+);
+const silenceHits = (silenceProbe.stderr ?? '').match(/silence_start/g)?.length ?? 0;
+console.log(`silence: ${silenceHits} gap(s) over 1.2 s at -50 dB (music must cover breaths)`);
+if (silenceHits > 0) {
+  console.warn('warning: the mix has a silence longer than 1.2 s; check the music bed');
 }
 
 await rm(cueDir, { recursive: true, force: true });

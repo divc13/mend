@@ -133,9 +133,138 @@ const BottomLabel: React.FC<{ children: React.ReactNode; dark?: boolean }> = ({
   </div>
 );
 
-const ReportCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
+const PrivateAiCard: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const steps = [
+    { label: 'PHOTO', text: 'GPS + EXIF erased in browser' },
+    { label: 'PRIVATE AI', text: 'reads only the cleaned note' },
+    { label: 'SUGGESTS', text: 'duplicate + scope' },
+    { label: 'HUMAN', text: 'approves; AI has no wallet' },
+  ];
+  return (
+    <Card
+      label="PRIVATE AI · THE TUTOR"
+      kicker="NO WALLET"
+      style={{ right: 16, top: 126, width: 336, height: 366 }}
+      rotate={1.2}
+    >
+      <div
+        style={{
+          height: '100%',
+          boxSizing: 'border-box',
+          padding: '14px 16px 12px',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <div
+          style={{
+            fontFamily: fonts.mono,
+            fontSize: 8.5,
+            letterSpacing: '0.1em',
+            color: palette.amberStrong,
+          }}
+        >
+          WHAT HAPPENS TO THE PHOTO
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginTop: 11 }}>
+          {steps.map((step, index) => {
+            const on = frame >= 8 + index * Math.round(fps * 0.9);
+            return (
+              <div
+                key={step.label}
+                style={{
+                  display: 'flex',
+                  gap: 10,
+                  opacity: on ? 1 : 0.32,
+                  transform: `translateX(${on ? 0 : 6}px)`,
+                }}
+              >
+                <span
+                  style={{
+                    width: 22,
+                    height: 22,
+                    flexShrink: 0,
+                    borderRadius: 999,
+                    border: `1px solid ${on ? palette.green : palette.line}`,
+                    backgroundColor: on ? palette.green : 'transparent',
+                    color: on ? palette.paper : palette.muted,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontFamily: fonts.mono,
+                    fontSize: 10,
+                  }}
+                >
+                  {index + 1}
+                </span>
+                <div>
+                  <div
+                    style={{
+                      fontFamily: fonts.mono,
+                      fontSize: 10,
+                      fontWeight: 700,
+                      letterSpacing: '0.08em',
+                      color: on ? palette.green : palette.muted,
+                    }}
+                  >
+                    {step.label}
+                  </div>
+                  <div
+                    style={{
+                      marginTop: 2,
+                      fontFamily: fonts.body,
+                      fontSize: 14.5,
+                      lineHeight: 1.25,
+                      color: palette.inkSoft,
+                    }}
+                  >
+                    {step.text}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <div
+          style={{
+            marginTop: 'auto',
+            paddingTop: 11,
+            borderTop: `1px dashed ${palette.line}`,
+          }}
+        >
+          <div
+            style={{
+              fontFamily: fonts.display,
+              fontSize: 23,
+              lineHeight: 1.05,
+              letterSpacing: '-0.02em',
+              color: palette.green,
+            }}
+          >
+            AI helps. Humans decide.
+          </div>
+          <div
+            style={{
+              marginTop: 7,
+              fontFamily: fonts.mono,
+              fontSize: 7,
+              letterSpacing: '0.04em',
+              color: palette.muted,
+            }}
+          >
+            SIGNED RESPONSE · TEE PROOF UNAVAILABLE (LABELLED)
+          </div>
+        </div>
+      </div>
+    </Card>
+  );
+};
+
+const ReportCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
+  const frame = useCurrentFrame();
+  const { fps, durationInFrames } = useVideoConfig();
   const photoFrame = ACTIONS.report.photo * fps;
   const snapping = frame >= photoFrame - 2 && frame <= photoFrame + 12;
   const snap = interpolate(
@@ -144,65 +273,73 @@ const ReportCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
     [0, 1, 0],
     CLAMP,
   );
+  const reportStartFrame = Math.round(
+    (v3Script.scenes.find((item) => item.id === 'hook')?.sceneDuration ?? 0) * fps,
+  );
   return (
-    <Card
-      label="THE STREET"
-      kicker="PAPER CUT"
-      style={{ left: 18, top: 126, width: CAST_W, height: 318 }}
-      rotate={-1.4}
-    >
-      <Pothole variant="open" scale={0.34} style={{ left: 8, bottom: 44 }} />
-      <Neighbor
-        pose="hold-phone"
-        width={52}
-        height={104}
-        frame={frame}
-        fps={fps}
-        animated
-        enterAt={4}
-        style={{ position: 'absolute', left: 10, bottom: 36, opacity: 0.88 }}
-      />
-      <Sam
-        pose="take-photo"
-        width={98}
-        height={198}
-        frame={frame}
-        fps={fps}
-        animated
-        enterAt={8}
-        flash={snapping}
-        style={{ position: 'absolute', right: 8, bottom: 34 }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          right: 12,
-          top: 12,
-          fontFamily: fonts.mono,
-          fontSize: 8,
-          color: palette.amberStrong,
-          letterSpacing: '0.08em',
-        }}
+    <>
+      <Card
+        label="THE STREET"
+        kicker="PAPER CUT"
+        style={{ left: 18, top: 126, width: CAST_W, height: 318 }}
+        rotate={-1.4}
       >
-        {scene.caption.split('\n')[1] ?? 'REPORT · EXIF STRIPPED'}
-      </div>
-      <div
-        style={{
-          position: 'absolute',
-          right: 12,
-          top: 26,
-          fontFamily: fonts.mono,
-          fontSize: 7.5,
-          letterSpacing: '0.08em',
-          color: palette.green,
-          opacity: snap,
-          transform: `translateY(${(1 - snap) * 3}px)`,
-        }}
-      >
-        SNAP · GPS STRIPPED
-      </div>
-      <BottomLabel>2 REPORTS · 1 POTHOLE · SAM + NEIGHBOR</BottomLabel>
-    </Card>
+        <Pothole variant="open" scale={0.34} style={{ left: 8, bottom: 44 }} />
+        <Neighbor
+          pose="hold-phone"
+          width={52}
+          height={104}
+          frame={frame}
+          fps={fps}
+          animated
+          enterAt={4}
+          style={{ position: 'absolute', left: 10, bottom: 36, opacity: 0.88 }}
+        />
+        <Sam
+          pose="take-photo"
+          width={98}
+          height={198}
+          frame={frame}
+          fps={fps}
+          animated
+          enterAt={8}
+          flash={snapping}
+          style={{ position: 'absolute', right: 8, bottom: 34 }}
+        />
+        <div
+          style={{
+            position: 'absolute',
+            right: 12,
+            top: 12,
+            fontFamily: fonts.mono,
+            fontSize: 8,
+            color: palette.amberStrong,
+            letterSpacing: '0.08em',
+          }}
+        >
+          {scene.caption.split('\n')[1] ?? 'REPORT · EXIF STRIPPED'}
+        </div>
+        <div
+          style={{
+            position: 'absolute',
+            right: 12,
+            top: 26,
+            fontFamily: fonts.mono,
+            fontSize: 7.5,
+            letterSpacing: '0.08em',
+            color: palette.green,
+            opacity: snap,
+            transform: `translateY(${(1 - snap) * 3}px)`,
+          }}
+        >
+          SNAP · GPS STRIPPED
+        </div>
+        <BottomLabel>2 REPORTS · 1 POTHOLE · SAM + NEIGHBOR</BottomLabel>
+      </Card>
+      <Sequence from={reportStartFrame} durationInFrames={durationInFrames - reportStartFrame}>
+        <PrivateAiCard />
+      </Sequence>
+    </>
   );
 };
 

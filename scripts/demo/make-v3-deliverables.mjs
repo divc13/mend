@@ -48,7 +48,7 @@ const voiceTimeline = JSON.parse(
   readFileSync(path.join(AD, 'public/audio/v3/voice-timeline.json'), 'utf8'),
 );
 const total = script.durationSeconds;
-const captionEnd = 152.4;
+const captionEnd = total;
 const master = path.resolve(ROOT, arg('master', 'demo/ad/out/mend-ad-v3-master.mp4'));
 const font = '/System/Library/Fonts/Helvetica.ttc';
 const remotionBin = path.join(ROOT, 'node_modules/.bin/remotion');
@@ -368,7 +368,7 @@ const buildCaptionCues = () => {
   }
 
   // Display times: a small lead-in, a short hold after the last word, never
-  // overlapping the next cue, and the final cue pinned to 02:32.400.
+  // overlapping the next cue, and the final cue pinned to the end of the cut.
   const displayCues = [];
   for (let index = 0; index < cues.length; index += 1) {
     const cue = cues[index];
@@ -420,13 +420,13 @@ if (cueText !== spokenText) {
   throw new Error('caption text does not match the spoken script');
 }
 if (cues.at(-1).endMs !== Math.round(captionEnd * 1000)) {
-  throw new Error('final caption does not end at 02:32.400');
+  throw new Error(`final caption does not end at ${captionEnd.toFixed(3)}s`);
 }
 
 for (let i = 0; i < cues.length; i += 1) {
   const cue = cues[i];
   if (cue.startMs < 0 || cue.endMs > Math.round(captionEnd * 1000)) {
-    throw new Error(`cue ${i + 1} is outside 00:00.000-02:32.400`);
+    throw new Error(`cue ${i + 1} is outside 00:00.000-${captionEnd.toFixed(3)}s`);
   }
   if (i > 0 && cue.startMs < cues[i - 1].endMs) {
     throw new Error(`cue ${i + 1} overlaps cue ${i}`);
@@ -601,7 +601,7 @@ console.log(
 );
 console.log(
   `captions: final end ${clockMs(cues.at(-1).endMs, '.')} ` +
-    `(02:32.400 required), max gap ${Math.round(maxGap)}ms, ` +
+    `(${clockMs(Math.round(captionEnd * 1000), '.')} required), max gap ${Math.round(maxGap)}ms, ` +
     `word timing: ${Object.entries(timingSources).map(([id, source]) => `${id}=${source}`).join(', ')}`,
 );
 if (shortCues.length > 0) {

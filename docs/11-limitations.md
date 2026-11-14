@@ -1,10 +1,10 @@
 # 11 — Limitations
 
 MEND is a working protocol with a tested local core, a real NEAR **testnet**
-lifecycle and an in-progress application. It is **not** a finished production
-system, not audited, and not deployed to mainnet or to public hosting. This page
-lists the limits that matter to a judge, operator, sponsor or reporter. The
-single authoritative matrix is [`STATUS.md`](../STATUS.md).
+lifecycle and a live API-backed demo. It is **not** a finished production
+system, not audited, and not deployed to mainnet. This page lists the limits
+that matter to a judge, operator, sponsor or reporter. The single authoritative
+matrix is [`STATUS.md`](../STATUS.md).
 
 If a claim is not supported here or in
 [16 — Integration evidence](./16-integration-evidence.md), treat it as unproven.
@@ -13,15 +13,15 @@ If a claim is not supported here or in
 
 | Claim | Current reality |
 |---|---|
-| Live testnet lifecycle | **PASS_WITH_CAVEATS** — `WO-BENCH-001-0003` `CLOSED`, 57 tx, exact 100/20/72/8 (`orchestration/reports/G3-evidence.md`) |
-| Mainnet Intents execution | **BLOCKED_ON_HUMAN** — mainnet only; no funds, no approval |
-| OutLayer live scoring | **BLOCKED_ON_HUMAN** — no published MEND WASM or funded execution; testnet score was `LOCAL_DETERMINISTIC` |
-| NEAR AI authenticated inference | **BLOCKED_ON_HUMAN** — no API key or credits |
-| Sputnik DAO deployment | **BLOCKED_ON_HUMAN** — factory failed; `mend-dao.testnet` plain-account fallback used |
-| Agent Market live job | **BLOCKED_ON_HUMAN** — no account/token/balance |
-| Hosted demo | **BLOCKED_ON_HUMAN** — no deployment credentials |
-| Demo video | **RECORDED (silent)** — 91.6 s REPLAY MP4; narration and captions **NOT COLLECTED** |
-| Before/after repair media | **NOT COLLECTED** — no repair has been performed for MEND |
+| Live testnet lifecycle | **PASS_WITH_CAVEATS** — V2 `WO-BENCH-V2-001-0002` `CLOSED`, 42 tx, exact 100/20/72/8, escrow 0 (`infra/testnet-v2/LIVE-V2.md`); the earlier 57-tx run is historical |
+| Mainnet Intents execution | **BLOCKED_ON_HUMAN** — mainnet only; signed quote is `PENDING_DEPOSIT`; no funds moved |
+| OutLayer live scoring | **VERIFIED (testnet) with caveat** — request `15579` executed with a captured attestation; the V2 score was `LOCAL_DETERMINISTIC` and the full Intel DCAP/ITA chain is not verified |
+| NEAR AI authenticated inference | **VERIFIED with caveat** — live `R-001` triage and `provider_tee` signature; the matching TEE report is `UNAVAILABLE`, so the artifact is `UNVERIFIED_INFERENCE` |
+| Sputnik DAO deployment | **VERIFIED (testnet)** — real `mend-dao.sputnikv2.testnet`; proposal 1 approved 2/3 and executed `dao_authorize` |
+| Agent Market live job | **VERIFIED with caveat** — live listing and paid `$0.01` self-hire; seller payout ledger `NOT_COLLECTED` |
+| Hosted demo | **LIVE — TESTNET** — https://mend-demo.vercel.app, API-backed, canonical case `CLOSED`, no demo runner |
+| Demo video | **RECORDED — 2:32.40** — 51 MB v3 pitch; public upload and human watch-through remain pending |
+| Before/after repair media | **NOT COLLECTED** — no repair has been performed for MEND; the film uses labelled illustrative stock |
 | Physical durability verification | **NOT COLLECTED** — no durability inspection of a real repair has happened |
 | Real users or city adoption | **NONE** — no city, municipality or community has adopted MEND |
 | Partnerships | **NONE** — no partner, sponsor or vendor relationship is claimed |
@@ -61,9 +61,9 @@ If a claim is not supported here or in
   standard `non_transferable` flag. Third-party marketplaces or indexers may not
   understand it. It is not listed for sale and confers no legal ownership.
 - **Runtime behaviour is partially testnet-proven.** The escrow lifecycle, role
-  boundaries, passport transfer rejection and payment events were exercised on
-  NEAR testnet. Gas and meta-transaction edge cases (including a live NEP-366
-  relayer transaction) still need dedicated testnet evidence.
+  boundaries, passport transfer rejection, payment events and a live NEP-366
+  relayed transaction were exercised on NEAR testnet. Gasless escrow funding
+  remains impossible with a function-call key.
 - **The relayer is a hot wallet.** NEP-366 requires a full-access key for the outer
   transaction. Isolation, minimal balance, rotation and monitoring are mandatory.
 - **Storage registration is a deployment prerequisite.** The hub must be
@@ -72,9 +72,11 @@ If a claim is not supported here or in
 ### Application
 
 - The web app, API, contracts, compute, services and infrastructure are
-  implemented and integrated locally. The testnet escrow lifecycle is proven;
-  live AI, Sputnik DAO, Intents deposit, OutLayer execution, NEP-366 relayer,
-  Agent Market and all mainnet paths remain `BLOCKED_ON_HUMAN`.
+  implemented and integrated. The testnet escrow lifecycle, Sputnik DAO,
+  OutLayer execution, NEP-366 relay, NEAR AI signature and Agent Market hire are
+  proven with the caveats above. The Intents deposit/settlement, public
+  repository, X post and submission remain `BLOCKED_ON_HUMAN`; a fully verified
+  TEE chain remains `UNAVAILABLE`.
 - The indexer can lag; the UI must show `INDEXING`.
 - No load, performance, soak or disaster-recovery test has been run.
 - No multi-region or high-availability deployment exists.
@@ -128,19 +130,19 @@ If a claim is not supported here or in
 - No real contractor or inspector has been onboarded.
 - No reputation system is live; Agent Market reputation is external and may not
   reflect MEND work.
-- The public map, case timeline, passport page, dashboard and trust center exist
-  in the local app and pass local E2E checks; they are not hosted publicly.
+- The public map, case timeline, passport page, dashboard and trust center are
+  live in the API-backed app at https://mend-demo.vercel.app. Production load and
+  independent accessibility review are not claimed.
 - Mobile and screen-reader behaviour has been exercised in local E2E checks but
   not independently audited.
 
 ## What would need to change before production
 
-1. Complete the live integrations that are still incomplete: NEAR AI
-   inference/signature/attestation, a real Sputnik DAO, an Intents deposit and
-   settlement, OutLayer TEE execution, a NEP-366 relayer transaction and an
-   Agent Market job.
-2. Get the first GitHub Actions CI run to a verified green state.
-3. Deploy and verify a hosted demo and a public repository.
+1. Complete the remaining live integration: a NEAR Intents deposit and
+   settlement. Full TEE attestation-chain verification and public submission are
+   separate gaps.
+2. Keep GitHub Actions green on `main`.
+3. Make the repository public, publish the X post and submit the event form.
 4. Complete a third-party security review.
 5. Verify WASM/source provenance and TEE evidence end-to-end.
 6. Approve privacy retention, consent and legal terms.

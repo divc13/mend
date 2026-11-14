@@ -3,8 +3,26 @@
 This is a draft package for human review. It does not submit anything. The
 orchestrator and a human must verify every field, link and claim before posting.
 
-**Identity, wallet, repository URL, hosted demo URL, track name, event tags,
-transaction links and final confirmation are HUMAN SUPPLIED — DO NOT INVENT.**
+**Identity, wallet, public repository URL, public video URL, exact track names,
+additional event tags and final confirmation are HUMAN SUPPLIED — DO NOT INVENT.**
+
+The live demo URL, API URL and testnet transaction links below are real and
+verified; they are not placeholders. No mainnet protocol transaction exists.
+
+## The story in one breath
+
+A pothole sits at the end of a street for months. Everyone swerves; nobody owns
+it. Sam photographs it and writes one sentence. No wallet. The browser strips
+GPS and EXIF before upload. Private AI suggests a duplicate and a scope, but a
+human steward confirms both. The community's Sputnik DAO approves the budget
+2-of-3. Contractors submit sealed bids; a hash-pinned deterministic policy picks
+the best total value, not the lowest sticker price. A different human inspects
+the repair. **72 is paid, 8 is held** for durability. The non-transferable
+passport keeps the whole history. If the repair fails, the same work order
+reopens — no new bounty, no new money.
+
+The film tells this with a pothole in `REPLAY / SIMULATION`. The real money proof
+is the separate V2 testnet lifecycle described below.
 
 ## Human-supplied fields
 
@@ -12,13 +30,14 @@ transaction links and final confirmation are HUMAN SUPPLIED — DO NOT INVENT.**
 |---|---|---|
 | Project/team identity | **HUMAN SUPPLIED — DO NOT INVENT** | Do not guess a person, company or handle |
 | Wallet / payout address | **HUMAN SUPPLIED — DO NOT INVENT** | No address in this repo |
-| Public repository URL | **HUMAN SUPPLIED — DO NOT INVENT** | Only after human approval to publish |
-| Hosted demo URL | **HUMAN SUPPLIED — DO NOT INVENT** | Only after deployment works |
-| Demo video URL | **HUMAN SUPPLIED — DO NOT INVENT** | Only after the real recording |
-| Track name | **HUMAN SUPPLIED — DO NOT INVENT** | Copy from the current event rules |
-| Required event tags | **HUMAN SUPPLIED — DO NOT INVENT** | Copy from the current event rules |
-| Testnet transaction links | **HUMAN SUPPLIED — DO NOT INVENT** | Only real, inspected links |
-| Mainnet transaction link | **HUMAN SUPPLIED — DO NOT INVENT** | Only after explicit per-transaction approval |
+| Public repository URL | **HUMAN SUPPLIED — DO NOT INVENT** | The current repo is private; publish only with human approval |
+| Live demo URL | https://mend-demo.vercel.app | **Verified live** on 2026-11-14; API-backed, no demo runner |
+| API base | https://mend-api-phi.vercel.app | **Verified live**; see `/health` |
+| Public video URL | **HUMAN SUPPLIED — DO NOT INVENT** | The local master exists; no public upload URL yet |
+| Track name | Recommendation below | Exact event name is **HUMAN SUPPLIED — DO NOT INVENT** |
+| Required event tags | `@NEARProtocol` `#NEARHackathon` plus any event-specific tags | Confirm against the current rules before posting |
+| Testnet transaction links | See “Live proof” below | Real and inspected; do not replace with placeholders |
+| Mainnet transaction link | **NONE — DO NOT INVENT** | No mainnet protocol action has executed |
 | Submission confirmation | **HUMAN SUPPLIED — DO NOT INVENT** | A human presses submit |
 
 ## Repository description
@@ -34,79 +53,160 @@ transaction links and final confirmation are HUMAN SUPPLIED — DO NOT INVENT.**
 > MEND is a community asset repair protocol on NEAR. A broken bench, bicycle rack,
 > fence or community-centre door moves through one permanent lifecycle: walletless
 > report, private triage, steward scope, Sputnik DAO authorization, cross-chain
-> sponsorship, sealed contractor bids, deterministic hash-pinned scoring, physical
-> repair, independent human inspection, 90% completion payment and a 10% durability
-> holdback. If durability fails, MEND reopens the original work order and warranty
-> history instead of creating a new bounty. Raw media and precise locations stay
-> off-chain; only redacted hashes and public state go on-chain. AI suggests but never
-> approves, awards or pays. A real NEAR testnet repair lifecycle completed on
-> `mend-hub-v2.testnet` with 42 transactions and exact 100/20/72/8 accounting
-> (`WO-BENCH-V2-001-0002`, final `CLOSED`); an earlier 57-transaction run is
-> historical. Live NEAR AI inference/signature, a real Sputnik DAO, live OutLayer
-> execution, a live NEP-366 relayer transaction and a disclosed live Agent Market
-> self-hire have evidence. The Intents deposit/settlement and
-> real physical repair evidence remain incomplete or human-gated. The
-> authoritative matrix is `STATUS.md`.
+> sponsorship (pending), sealed contractor bids, deterministic hash-pinned scoring,
+> physical repair, independent human inspection, 90% completion payment and a 10%
+> durability holdback. If durability fails, MEND reopens the original work order and
+> warranty history instead of creating a new bounty. Raw media and precise locations
+> stay off-chain; the browser strips EXIF/GPS before upload and only redacted hashes
+> and public state go on-chain. AI suggests but never approves, awards or pays. A full
+> API-backed live app runs at https://mend-demo.vercel.app with Vercel Functions and
+> Neon Postgres. A real NEAR testnet repair lifecycle completed on
+> `mend-hub-v2.testnet` with a real Sputnik DAO, 42 transactions and exact 100/20/72/8
+> accounting (`WO-BENCH-V2-001-0002`, final `CLOSED`); an earlier 57-transaction run
+> remains historical. Live NEAR AI inference/signature, OutLayer execution, a NEP-366
+> relayer transaction and a disclosed Agent Market self-hire have evidence with
+> labelled caveats. The Intents deposit/settlement and real physical repair evidence
+> remain incomplete or human-gated. The authoritative matrix is `STATUS.md`.
+
+## Why the AI is private
+
+A pothole photo can reveal a home, a school route, a daily timetable or a licence
+plate. MEND removes those signals before anything leaves the browser:
+
+- EXIF/XMP/GPS is stripped in the browser; manual redaction is burned into the
+  pixels before upload.
+- The AI gets the cleaned report and redacted media only — not the reporter's
+  identity, case link, precise location or raw EXIF.
+- AI output is a duplicate suggestion, category, confidence and scope draft. It
+  cannot sign, pay, award, change a recipient or accept an inspection.
+- A steward confirms the merge and scope. The DAO authorizes the budget. A
+  rostered human inspector accepts completion.
+
+The response is labelled, not oversold:
+
+> **`SIGNED RESPONSE · TEE PROOF UNAVAILABLE (LABELLED)`**
+>
+> The live NEAR AI run returned a `provider_tee` ECDSA signature over the exact
+> request and response bytes. The request hash, response hash, signed text and
+> signature checks pass. No matching TEE attestation report was retained
+> (`signerMatchesReport: false`), so the artifact stays `verified: false`, the API
+> label is `UNVERIFIED_INFERENCE`, and the UI shows **Unavailable evidence**. MEND
+> does not claim a fully verified TEE or a complete Intel DCAP/ITA chain. See
+> [`scripts/near-ai-live/LIVE-NEAR-AI.md`](../scripts/near-ai-live/LIVE-NEAR-AI.md).
+
+Full detail: [README — Why the AI is private](../README.md#why-the-ai-is-private).
+
+## One complete moment
+
+Report → private triage → steward scope → DAO authorization → **100 funded**,
+**20 refunded** at award → sealed bids (B **9270**, C **5200**, A **2873**) →
+independent inspector → **72 paid / 8 held** → later durability pass releases
+**8** → escrow **0** → passport `CLOSED`.
+
+If durability fails, the same work order becomes `WARRANTY_REOPENED` with no new
+funds. That failed branch is proven in contract and replay tests; the live V2 run
+exercised the passing branch.
+
+Full table: [README — One complete moment](../README.md#one-complete-moment).
 
 ## NEAR integration explanation
 
 MEND uses NEAR where on-chain enforcement matters, and labels every integration
-honestly.
+honestly. The “In the V2 repair?” column prevents the stack from overclaiming
+what the 42 transactions actually did.
 
-| NEAR capability | How MEND uses it | Evidence label |
-|---|---|---|
-| **Hub contract** (`contracts/hub`) | Assets, work orders, role registry, DAO authorization, sealed bids, score hash binding, escrow, 90/10 payment, durability, warranty, disputes, pause | Implemented; 30 tests + WASM build |
-| **Non-transferable passport** | NEP-171 token owned by the hub; every transfer/approval/burn path fails; history is public; no legal title | Testnet-proven: `BENCH-001` minted, hub-owned, `nft_transfer` rejected |
-| **NEP-141 escrow** | `ft_transfer_call` into the hub; exact token/sponsor/amount; underfund refund, overfund excess refund, duplicate refund | Testnet-proven: exact 100/20/72/8, escrow 0 |
-| **Sputnik DAO v2** | Approved `FunctionCall` proposal pushes `dao_authorize`; hub trusts only `config.dao` as predecessor | Live testnet DAO + proposal execution **VERIFIED**; testnet-only |
-| **OutLayer** | Hash-pinned `wasm32-wasip1` deterministic scorer; private promise callback; TEE attestation captured | Live testnet publish/execute **VERIFIED**; full Intel DCAP/ITA chain not verified |
-| **NEAR AI Cloud** | Server-only private triage; schema-validated suggestions; signature/attestation evidence shown separately | Live inference + `provider_tee` signature **VERIFIED**; full TEE report/DCAP/ITA `UNAVAILABLE` |
-| **NEAR Intents / 1Click** | Cross-chain sponsorship quotes and status; dry preview by default; mainnet only | Read-only API + signed non-dry quote **VERIFIED**; live deposit/settlement `BLOCKED_ON_HUMAN` |
-| **NEAR Agent Market** | External evidence-completeness review; no worker accept endpoint; human acceptance | Live listing + paid self-hire **VERIFIED**; seller payout `NOT_COLLECTED`; disclosed self-hire |
-| **Function-call keys / NEP-366** | Separate agent sub-accounts, scoped keys, allowlisted relayer; zero-deposit gasless actions where valid | Scoped keys + live NEP-366 relayer transaction **VERIFIED**; gasless escrow funding still unavailable |
+| NEAR capability | How MEND uses it | Evidence label | In the V2 repair? |
+|---|---|---|---|
+| **Hub contract** (`contracts/hub`) | Assets, work orders, role registry, DAO authorization, sealed bids, score hash binding, escrow, 90/10 payment, durability, warranty, disputes, pause | Implemented; 30 tests + WASM build | Yes |
+| **Non-transferable passport** | NEP-171 token owned by the hub; every transfer/approval/burn path fails; history is public; no legal title | Testnet-proven: `BENCH-V2-001` minted, hub-owned, `nft_transfer` rejected | Yes |
+| **NEP-141 escrow** | `ft_transfer_call` into the hub; exact token/sponsor/amount; underfund refund, overfund excess refund, duplicate refund | Testnet-proven: exact 100/20/72/8, escrow 0 | Yes |
+| **Sputnik DAO v2** | Approved `FunctionCall` proposal pushes `dao_authorize`; hub trusts only `config.dao` as predecessor | Live testnet DAO + proposal execution **VERIFIED**; testnet-only | Yes — `mend-dao.sputnikv2.testnet`, proposal 1, 2/3 |
+| **OutLayer** | Hash-pinned `wasm32-wasip1` deterministic scorer; private promise callback; TEE attestation captured | Live testnet publish/execute **VERIFIED**; full Intel DCAP/ITA chain not verified | No — separate request `15579`; V2 score was `LOCAL_DETERMINISTIC` |
+| **NEAR AI Cloud** | Server-only private triage; schema-validated suggestions; signature/attestation evidence shown separately | Live inference + `provider_tee` signature **VERIFIED**; full TEE report/DCAP/ITA `UNAVAILABLE` | No — separate live triage on `R-001` |
+| **NEAR Intents / 1Click** | Cross-chain sponsorship quotes and status; dry preview by default; mainnet only | Signed non-dry quote **VERIFIED**; live deposit/settlement `BLOCKED_ON_HUMAN` | No — `PENDING_DEPOSIT`, no funds moved |
+| **NEAR Agent Market** | External evidence-completeness review; no worker accept endpoint; human acceptance | Live listing + paid self-hire **VERIFIED**; seller payout `NOT_COLLECTED`; disclosed self-hire | No — separate listing and `$0.01` hire |
+| **Function-call keys / NEP-366** | Separate agent sub-accounts, scoped keys, allowlisted relayer; zero-deposit gasless actions where valid | Scoped keys + live NEP-366 relayer transaction **VERIFIED**; gasless escrow funding still unavailable | No — separate unfunded `DRAFT` proof |
 
 MEND does **not** claim a complete NEAR AI end-to-end attestation chain, a full
-Intel DCAP/ITA verification, a live Intents deposit/settlement, or independent
-Agent Market reputation. The Intents deposit is `BLOCKED_ON_HUMAN`; the Agent
-Market job is a disclosed self-hire. These limits are labelled in the product,
-the evidence files and `STATUS.md`.
+Intel DCAP/ITA verification, a live Intents deposit/settlement, independent
+Agent Market reputation, or gasless escrow funding. These limits are labelled in
+the product, the evidence files and [`STATUS.md`](../STATUS.md).
 
-## Track justification
+Full detail: [README — What NEAR is doing](../README.md#what-near-is-doing).
 
-**Track name: HUMAN SUPPLIED — DO NOT INVENT.** Copy the exact current track name
-from the event rules; do not infer it from this document.
+## Live proof
 
-The justification below is written to fit a **consumer / community infrastructure
-or public-goods** framing. A human must confirm it matches the actual track before
-submission.
+| What | Link | State |
+|---|---|---|
+| Live app | https://mend-demo.vercel.app | Full API-backed `LIVE_TESTNET`, no auth, no demo runner |
+| Canonical case | https://mend-demo.vercel.app/cases/WO-BENCH-V2-001-0002 | Real V2 case, final `CLOSED` |
+| API health | https://mend-api-phi.vercel.app/health | `LIVE_TESTNET`, Postgres reachable, chain adapter live |
+| Hub contract | https://explorer.testnet.near.org/accounts/mend-hub-v2.testnet | Real testnet contract |
+| Sputnik DAO | https://explorer.testnet.near.org/accounts/mend-dao.sputnikv2.testnet | Real testnet DAO, 3-member council |
+| All 42 transactions | [`infra/testnet-v2/LIVE-V2.md`](../infra/testnet-v2/LIVE-V2.md) | 42/42 resolve with success |
+| Machine-readable state | [`infra/testnet-v2/live-state.json`](../infra/testnet-v2/live-state.json) | Balances, bids, statuses |
 
-> MEND is not another marketplace listing. It closes the loop after a repair:
-> who approved the scope, who paid, who won, who inspected, what was paid, what was
-> held back, and what happened when the repair failed. The durability holdback and
-> the same-work-order warranty reopening are the core differentiators. NEAR is used
-> for the parts that need public verifiability — escrow, roles, sealed bids, score
-> binding and a non-transferable asset passport — while private evidence and precise
-> locations stay off-chain. The project is built for a low-risk community pilot,
-> with explicit human inspection and no claim of municipal adoption.
+Key receipts: DAO authorization
+[`8LuSGzjxQ5W4xFb2eW4HZTocstHJgBby4uYhh5mdUJ6h`](https://explorer.testnet.near.org/transactions/8LuSGzjxQ5W4xFb2eW4HZTocstHJgBby4uYhh5mdUJ6h),
+funding
+[`3HzfWvJci4Drt1YMsx4Ei6NTgzsZYR3jNufAWYhWQ6Q2`](https://explorer.testnet.near.org/transactions/3HzfWvJci4Drt1YMsx4Ei6NTgzsZYR3jNufAWYhWQ6Q2),
+completion acceptance
+[`EQ8HoNvDazagbM5zdUq38EK7cyhgi8hqPXJkDhzdxN2o`](https://explorer.testnet.near.org/transactions/EQ8HoNvDazagbM5zdUq38EK7cyhgi8hqPXJkDhzdxN2o),
+and durability release
+[`CmmAPvfonQa7Y9CEXpcnWQhbUVcRK3nWXAADH84kJS4g`](https://explorer.testnet.near.org/transactions/CmmAPvfonQa7Y9CEXpcnWQhbUVcRK3nWXAADH84kJS4g).
+
+The 42 transactions include setup, roles, DAO creation, the successful V2
+lifecycle, the cancel/refund cleanup of the aborted pre-award work order
+`WO-BENCH-V2-001-0001`, and an orphan-balance sweep. They do **not** include the
+failed first DAO factory attempt; that attempt is recorded separately in
+`LIVE-V2.md` and is not counted as a successful lifecycle transaction.
+
+## Current film
+
+The current cut is a **recorded 2:37.00 narrated 1080p v3 product pitch** at
+`demo/ad/out/mend-ad-v3-master.mp4`: 1920×1080/30fps, H.264/AAC, 48 kHz stereo,
+**53 MB**, SHA-256
+`df08dd0c99d482703229e40e02adba10fb25ebfbad83d4962576346a17214158`.
+It is a full-bleed live app with paper-cut cast dioramas and per-beat tech-stack
+callouts, one continuous voice/music/SFX bed, and a QR to
+https://mend-demo.vercel.app.
+
+Honest labels: the pothole story is `REPLAY / SIMULATION`; repair B-roll is
+illustrative Pexels stock, not a real MEND repair; the voice is the trimmed v1
+George render, not a new synthesis; the human watch/listen-through is pending.
+The video agent may change the duration. Replace this number only when the parent
+publishes a new master and hash.
+
+## Track recommendation
+
+Multiple tracks are allowed. Recommended, with one sentence each:
+
+| Track | Why MEND fits |
+|---|---|
+| `social` | A walletless report and private evidence let neighbours fix shared assets without publishing a home, school route or plate, while the repair history stays public. |
+| `realworld` | The 42-transaction V2 testnet run is an actual escrow-and-inspection lifecycle — DAO vote, sealed bids, escrow, independent inspection and a durability holdback — not a mock of one. |
+| `security` | Privacy is enforced before upload, money moves only through a Rust escrow under human and DAO authority, and every AI or OutLayer claim is labelled instead of rounded up. |
+| `agents` (optional) | NEAR AI drafts and checks, NEP-366 lets a scoped relayer act, and Agent Market adds an outside reviewer — each bounded, receipted and never the approver. |
+
+**Track name to enter: HUMAN SUPPLIED — DO NOT INVENT.** Copy the exact current
+name from the event form; do not infer it from this table.
 
 ## Demo post draft
 
-**Required event tags: HUMAN SUPPLIED — DO NOT INVENT.** The `#NEAR` and `#MEND`
-tags below are product/ecosystem descriptors, not a claim about event-required
-tags.
+**Publish by a human only.** The required core tags are `@NEARProtocol` and
+`#NEARHackathon`; add any event-specific tags from the current rules.
 
 ```text
-One broken bench. One permanent repair history.
+One pothole. One permanent repair history.
 
-MEND: walletless report → DAO budget → sealed bids → deterministic scoring → human inspection → 72 paid / 8 held. A failed durability check reopens the SAME work order.
+MEND: walletless report → private triage → DAO budget → sealed bids → human inspection → 72 paid / 8 held. A failed durability check reopens the SAME work order.
 
-Demo: [DEMO LINK]
-#NEAR #MEND [EVENT TAGS]
+Live demo: https://mend-demo.vercel.app
+@NEARProtocol #NEARHackathon
 ```
 
-This draft is 261 characters with the placeholders. Replace `[DEMO LINK]` and
-`[EVENT TAGS]` with real values and re-count before posting; X allows 280
-characters.
+Re-count before posting; X allows 280 characters. This draft is 275 characters
+including the real URL and tags.
 
 Rules for the post:
 
@@ -119,11 +219,10 @@ Rules for the post:
 ## Submission description (20–2,000 characters)
 
 The exact text is in
-[`fixtures/demo/submission-description.txt`](../fixtures/demo/submission-description.txt).
-`node scripts/demo/check-docs.mjs` verifies the 20–2,000 character bound.
-
-Character count and exact text are reported by the checker. Do not add claims that
-are not in this document.
+[`fixtures/demo/submission-description.txt`](../fixtures/demo/submission-description.txt),
+now updated to the live app, the 42-transaction V2 lifecycle and the labelled
+TEE limit. `node scripts/demo/check-docs.mjs` verifies the 20–2,000 character
+bound. Do not add claims that are not in this document.
 
 ## Baseline and library disclosures
 
@@ -140,8 +239,8 @@ are not in this document.
 | NEAR AI SDK | `@nearai/inference-sdk@0.3.0` is MIT per R0-A; server-only. Live authenticated inference and signature fetch passed with a key; full TEE attestation remains unavailable. |
 | OutLayer verify | `outlayer-verify` is Apache-2.0 per R0-B; not installed or run here. |
 | 1Click SDK | `@defuse-protocol/one-click-sdk-typescript` 0.1.26 was used for signature verification research; verify license and pin before shipping. |
-| Agent Market | External production service; no vendor code copied. |
-| Fonts/images/music | Must be original, licensed or public domain. No stock repair footage may be presented as MEND. Disclose licenses in the final package. |
+| Agent Market | External production service; no vendor code copied. The live paid job was a disclosed self-hire. |
+| Fonts/images/music | Must be original, licensed or public domain. The v3 film uses Pexels repair B-roll as clearly labelled illustration, not as a real MEND repair. Music is “Mountains” by Andrew Ev under the Mixkit Free License; see `demo/ad/CREDITS.md`. |
 | AI-generated assets | No AI-generated repair media may be presented as real. Diagrams may be generated but must be labelled `ILLUSTRATION`. |
 
 ## License
@@ -150,36 +249,53 @@ Project license: **MIT**. The repository `LICENSE` file is present at the repo
 root. Third-party dependencies keep their own licenses; the disclosure table
 above must be reconciled with the final lockfile.
 
+## Submission checklist
+
+Nothing here has been submitted or published. A human must complete and verify
+each item.
+
+- [ ] **Public repository:** make the GitHub repository public, with the MIT
+      license, README, CI status and no secrets in history.
+- [ ] **Public X post:** publish from the human account, tagging
+      `@NEARProtocol` and `#NEARHackathon`, linking the live demo and the final
+      film.
+- [ ] **Form fields:** team identity, track name(s), public repository URL, live
+      demo URL, video URL, 20–2,000 character description, and wallet/payout if
+      the form requires one. Do not invent any field.
+- [ ] **Live demo stays up:** keep https://mend-demo.vercel.app, the API and Neon
+      Postgres available through judging. The canonical case is `CLOSED`, so
+      award/accept are disabled by design.
+- [ ] **Re-verify proof:** open the canonical case, the API `/health`, the 42
+      transactions and the video hash on submission day.
+- [ ] **Human watch/listen:** a person reviews the final cut for claims, captions,
+      audio and the labelled stock footage.
+- [ ] **Claims review:** confirm the TEE caveat, the pending 1Click quote, the
+      illustrative repair footage and the test-value label are all still visible.
+- [ ] **Docs check:** run `node scripts/demo/check-docs.mjs` and
+      `git diff --check`; both must pass.
+- [ ] **Submit:** a human presses submit and records the confirmation.
+- [ ] **After submitting:** keep the demo live through judging and answer judge
+      questions from the evidence files, not from memory.
+
 ## What this package does not claim
 
-- a real V2 NEAR testnet escrow lifecycle is proven; live NEAR AI
-  inference/signature, Sputnik DAO, OutLayer execution, NEP-366 relayer and a
-  disclosed Agent Market self-hire are proven with caveats; an Intents
-  deposit/settlement is not;
-- no mainnet execution;
-- the full API-backed live app is live at https://mend-demo.vercel.app with Vercel Functions at https://mend-api-phi.vercel.app and Neon Free Postgres (LIVE_TESTNET, real V2 CLOSED case seeded; demo runner disabled);
-- the current demo cut is a **recorded 2:32.40 v3 product pitch** at `demo/ad/out/mend-ad-v3-master.mp4` (1920×1080/30fps, H.264/AAC, 48 kHz stereo, 51 MB; SHA-256 `2e4b016eb885d830b7b2265b4bb27c99a0e97a0654f52424a1ebe320c073fc29`): full-bleed live app with animated paper-cut cast dioramas, per-beat tech-stack callouts, one continuous voice/music/SFX bed, paper-cut close; the voice is the trimmed v1 George render, **not a new synth**, and the end-card QR encodes https://mend-demo.vercel.app. The public repository and X post are pending;
-- no physical repair or durability inspection;
-- no real users, city adoption or partnership;
-- no security audit or accessibility certification;
-- no complete NEAR AI attestation chain;
-- no full Intel DCAP/ITA verification for the live NEAR AI or OutLayer
-  attestations;
-- no independent Agent Market reputation; the live job was a disclosed
-  self-hire and the seller payout ledger was not collected.
-
-## Final human review checklist
-
-- [ ] Identity, wallet, repository URL and demo URL filled by a human.
-- [ ] Track name and required tags copied from the current rules.
-- [ ] Description character count is 20–2,000.
-- [ ] Every transaction link is real and inspected.
-- [ ] Every media file has consent and a real/staged label.
-- [ ] No forbidden trust language.
-- [ ] License present in the public repository.
-- [ ] Baseline/library disclosures match the final lockfile.
-- [ ] Demo video matches the script and the evidence package.
-- [ ] A human explicitly approves submission.
+- **No fully verified AI TEE.** The signature over the exact bytes is valid; the
+  matching TEE report and Intel DCAP/ITA chain are unavailable and labelled.
+- **No mainnet protocol execution.** The live protocol is NEAR testnet only;
+  test mUSDC has no value.
+- **No live Intents funding.** The signed 1Click quote is `PENDING_DEPOSIT`; no
+  deposit, swap or settlement moved funds.
+- **No OutLayer score on the V2 repair.** The V2 score is `LOCAL_DETERMINISTIC`;
+  OutLayer executed a separate testnet request with a captured attestation.
+- **No real repair.** The film's pothole and repair footage are illustrative
+  stock, clearly labelled; no MEND repair or physical durability inspection has
+  been performed.
+- **No independent Agent Market reputation.** The live paid job was a disclosed
+  self-hire, and the seller payout ledger row was not collected.
+- **No gasless escrow funding.** A function-call key cannot attach the 1
+  yoctoNEAR deposit; the NEP-366 proof creates an unfunded `DRAFT`.
+- **No city adoption, partnership, security audit or accessibility
+  certification.** None exists.
 
 ## Related documents
 
@@ -188,6 +304,7 @@ above must be reconciled with the final lockfile.
 - [11 — Limitations](./11-limitations.md)
 - [16 — Integration evidence](./16-integration-evidence.md)
 - [17 — Copy and accessibility](./17-copy-and-accessibility.md)
+- [README — plain-English stack](../README.md#the-stack-in-plain-english)
 
 ---
 

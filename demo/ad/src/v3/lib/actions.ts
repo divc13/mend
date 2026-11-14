@@ -7,46 +7,89 @@
  *
  *   sceneSeconds = (sourceMilliseconds / 1000 - sourceStart) / playbackRate
  *
- * Camera keyframes and cast reactions both read from this table so the
- * punch-ins and micro-reactions cannot drift away from the app.
+ * `SCENE_TRIM` is the single source of truth for both the Remotion player and
+ * this table. The v4 timing pass adds a 0.60 s breath to every scene, so the
+ * clips are trimmed/slowed just enough to keep playing through the hold
+ * instead of freezing on their last frame. Keeping the action times derived
+ * means a future rate change cannot desync the camera punch-ins or cast.
  */
+export const SCENE_TRIM = {
+  report: { sourceStart: 0.85, playbackRate: 0.96 },
+  dao: { sourceStart: 0.85, playbackRate: 1 },
+  bids: { sourceStart: 1.05, playbackRate: 0.91 },
+  repair: { sourceStart: 1.05, playbackRate: 1 },
+  payment: { sourceStart: 1.3, playbackRate: 0.44 },
+  passport: { sourceStart: 1.05, playbackRate: 0.57 },
+  tech: { sourceStart: 0.45, playbackRate: 0.31 },
+} as const;
+
+type TrimmedScene = keyof typeof SCENE_TRIM;
+
+const at = (scene: TrimmedScene, sourceMs: number): number => {
+  const { sourceStart, playbackRate } = SCENE_TRIM[scene];
+  return Number(((sourceMs / 1000 - sourceStart) / playbackRate).toFixed(3));
+};
+
 export const ACTIONS = {
   report: {
-    photo: 11.1,
-    privacy: 14.32,
-    duplicate: 16.65,
-    merge: 18.54,
-    submit: 25.4,
+    /** source 11.869 s: upload pothole.jpg */
+    photo: at('report', 11869),
+    /** source 15.022 s: continue from the privacy step */
+    privacy: at('report', 15022),
+    /** source 17.331 s: choose the matching duplicate */
+    duplicate: at('report', 17331),
+    /** source 19.201 s: acknowledge the possible merge */
+    merge: at('report', 19201),
+    /** source 25.992 s: submit the report */
+    submit: at('report', 25992),
   },
   dao: {
-    scope: 3.62,
-    saveDraft: 10.69,
-    award: 14.96,
+    /** source 4.470 s: steward confirms the acting role */
+    scope: at('dao', 4470),
+    /** source 11.540 s: save the replay draft */
+    saveDraft: at('dao', 11540),
+    /** source 15.807 s: confirm the award */
+    award: at('dao', 15807),
   },
   bids: {
-    reveal: 2.1,
-    score: 5.05,
-    hashes: 10.34,
+    /** source 3.024 s: reveal the comparison */
+    reveal: at('bids', 3024),
+    /** source 5.794 s: scroll the deterministic score */
+    score: at('bids', 5794),
+    /** source 10.767 s: scroll to policy + execution hashes */
+    hashes: at('bids', 10767),
   },
   repair: {
-    checklist: 4.16,
-    notes: 7.74,
-    confirmations: 10.85,
-    accept: 14.04,
+    /** source 5.212 s: tick the checklist */
+    checklist: at('repair', 5212),
+    /** source 8.788 s: type inspector notes */
+    notes: at('repair', 8788),
+    /** source 11.900 s: check the three human confirmations */
+    confirmations: at('repair', 11900),
+    /** source 15.087 s: accept completion */
+    accept: at('repair', 15087),
   },
   payment: {
-    accounting: 1.09,
-    split: 5,
-    payments: 10.43,
+    /** source 1.800 s: scroll to accounting */
+    accounting: at('payment', 1800),
+    /** source 3.600 s: review the 100/20/72/8 split */
+    split: at('payment', 3600),
+    /** source 6.100 s: scroll to payments */
+    payments: at('payment', 6100),
   },
   passport: {
-    history: 2.74,
-    entries: 7.9,
+    /** source 2.669 s: scroll to maintenance history */
+    history: at('passport', 2669),
+    /** source 5.709 s: scroll through history entries */
+    entries: at('passport', 5709),
   },
   tech: {
-    stack: 4.27,
-    cards: 12.18,
-    proof: 17.95,
+    /** source 1.815 s: scroll to the stack */
+    stack: at('tech', 1815),
+    /** source 4.347 s: scroll through stack cards */
+    cards: at('tech', 4347),
+    /** source 6.195 s: scroll to proof cards */
+    proof: at('tech', 6195),
   },
 } as const;
 

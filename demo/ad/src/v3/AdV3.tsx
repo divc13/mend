@@ -3,21 +3,28 @@ import { AbsoluteFill, Sequence } from 'remotion';
 import { AppScene, type LiveSceneConfig } from './components/AppScene';
 import { CloseV3 } from './scenes/CloseV3';
 import { CastOverlays } from './components/CastOverlays';
-import { ACTIONS } from './lib/actions';
+import { ACTIONS, SCENE_TRIM } from './lib/actions';
 import { FPS, sceneById, sceneFrames, TOTAL_FRAMES, v3Script, type V3Scene } from './lib/script';
 
 type AppSceneId = Exclude<V3Scene['id'], 'hook' | 'close'>;
 
 /**
+ * The report player starts with the hook, so its scene begins at 0 while the
+ * stack strip only appears when the report section does.
+ */
+const HOOK_END = sceneById('hook').sceneDuration;
+
+/**
  * Camera keyframes are scene-local and peak on the captured action. The
  * strongest punch stays at 1.13x; the app remains full-bleed, never a slide.
+ * Source trims and rates come from `lib/actions.ts` so they stay in sync with
+ * the action table and with the 0.60 s breath at the end of every scene.
  */
 const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   report: {
     sceneId: 'report',
     asset: 'assets/live/report-live.mp4',
-    sourceStart: 0.85,
-    playbackRate: 0.99,
+    ...SCENE_TRIM.report,
     origin: '50% 42%',
     camera: [
       { at: 0, scale: 1.04, x: 0, y: 0 },
@@ -29,7 +36,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
       { at: ACTIONS.report.submit, scale: 1.13, x: 8, y: 20 },
     ],
     hookStrip: true,
-    stackRevealAt: 11.94,
+    stackRevealAt: HOOK_END,
     chapter: '01 / INTAKE',
     headline: 'No wallet. No forms.',
     sub: 'A photo, a location, one sentence. The browser strips EXIF and GPS before upload; a private duplicate check proposes a merge.',
@@ -43,8 +50,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   dao: {
     sceneId: 'dao',
     asset: 'assets/live/steward-live.mp4',
-    sourceStart: 0.85,
-    playbackRate: 1,
+    ...SCENE_TRIM.dao,
     origin: '50% 10%',
     camera: [
       { at: 0, scale: 1.035, x: 0, y: 0 },
@@ -63,8 +69,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   bids: {
     sceneId: 'bids',
     asset: 'assets/live/bids-live.mp4',
-    sourceStart: 1.05,
-    playbackRate: 0.94,
+    ...SCENE_TRIM.bids,
     origin: '50% 44%',
     camera: [
       { at: 0, scale: 1.045, x: 0, y: 0 },
@@ -83,8 +88,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   repair: {
     sceneId: 'repair',
     asset: 'assets/live/inspector-live.mp4',
-    sourceStart: 1.05,
-    playbackRate: 1,
+    ...SCENE_TRIM.repair,
     offsetY: -84,
     origin: '50% 10%',
     camera: [
@@ -102,8 +106,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   payment: {
     sceneId: 'payment',
     asset: 'assets/live/payment-live.mp4',
-    sourceStart: 1.3,
-    playbackRate: 0.46,
+    ...SCENE_TRIM.payment,
     origin: '63% 32%',
     camera: [
       { at: 0, scale: 1.075, x: 0, y: 0 },
@@ -120,8 +123,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   passport: {
     sceneId: 'passport',
     asset: 'assets/live/passport-live.mp4',
-    sourceStart: 1.05,
-    playbackRate: 0.59,
+    ...SCENE_TRIM.passport,
     origin: '48% 40%',
     camera: [
       { at: 0, scale: 1.055, x: 0, y: 0 },
@@ -136,8 +138,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   tech: {
     sceneId: 'tech',
     asset: 'assets/live/tech-live.mp4',
-    sourceStart: 0.45,
-    playbackRate: 0.32,
+    ...SCENE_TRIM.tech,
     offsetY: -46,
     origin: '50% 40%',
     camera: [

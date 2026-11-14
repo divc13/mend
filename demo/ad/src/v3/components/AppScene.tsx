@@ -13,7 +13,7 @@ import { Logo } from '../../components/Logo';
 import { fonts, palette } from '../../theme';
 import { liveMedia, mediaAt } from '../../v2/lib/assets';
 import type { SceneId } from '../../v2/lib/script';
-import { FPS, type V3Scene } from '../lib/script';
+import { FPS, type V3Scene, v3Script } from '../lib/script';
 
 export type CameraKeyframe = {
   /** Scene-local seconds. */
@@ -319,7 +319,7 @@ const StackBlock: React.FC<{ scene: V3Scene; activeIndex: number }> = ({ scene, 
       <div
         style={{
           fontFamily: fonts.display,
-          fontSize: 38,
+          fontSize: 34,
           lineHeight: 1,
           letterSpacing: '-0.03em',
           color: palette.ink,
@@ -330,8 +330,8 @@ const StackBlock: React.FC<{ scene: V3Scene; activeIndex: number }> = ({ scene, 
       <div
         style={{
           fontFamily: fonts.body,
-          fontSize: 18,
-          lineHeight: 1.32,
+          fontSize: 20,
+          lineHeight: 1.28,
           color: palette.inkSoft,
         }}
       >
@@ -359,65 +359,69 @@ type TechItem = {
   layer: TechLayer;
 };
 
+const TECH_STACK = v3Script.scenes.find((scene) => scene.id === 'tech')?.stack ?? [];
+const techPurpose = (name: string, fallback: string): string =>
+  TECH_STACK.find((item) => item.name === name)?.purpose ?? fallback;
+
 const TECH_ITEMS: TechItem[] = [
   {
     id: 'nextjs',
     name: 'Next.js + React',
-    purpose: 'walletless resident client',
+    purpose: techPurpose('Next.js + React', 'front door, report from a phone'),
     layer: 'interface',
   },
   {
     id: 'relayer',
     name: 'NEP-366 relayer',
-    purpose: 'gasless actions, live on testnet',
+    purpose: techPurpose('NEP-366 relayer', 'free stamp, relayer pays gas'),
     layer: 'interface',
   },
   {
     id: 'fastify',
     name: 'Fastify',
-    purpose: 'API + authorization boundary',
+    purpose: techPurpose('Fastify', 'town clerk, receives the report'),
     layer: 'trust',
   },
   {
     id: 'postgres',
     name: 'Postgres',
-    purpose: 'case + timeline state',
+    purpose: techPurpose('Postgres', 'ledger, one case + history'),
     layer: 'trust',
   },
   {
     id: 'rust',
     name: 'Rust on NEAR',
-    purpose: 'escrow + policy on-chain',
+    purpose: techPurpose('Rust on NEAR', 'lockbox, holds 100 / pays 72 / refunds 20 / holds 8'),
     layer: 'trust',
   },
   {
     id: 'sputnik',
     name: 'Sputnik DAO',
-    purpose: '2-of-3 human approval',
+    purpose: techPurpose('Sputnik DAO', 'committee, 2 of 3 humans'),
     layer: 'trust',
   },
   {
     id: 'nearai',
     name: 'NEAR AI',
-    purpose: 'private triage; signature valid, TEE unavailable',
+    purpose: techPurpose('NEAR AI', 'private tutor, reads cleaned note, never touches money'),
     layer: 'proof',
   },
   {
     id: 'outlayer',
     name: 'OutLayer',
-    purpose: 'deterministic scorer + receipt',
+    purpose: techPurpose('OutLayer', 'referee, same scoring rules'),
     layer: 'proof',
   },
   {
     id: 'oneclick',
     name: '1Click',
-    purpose: 'cross-chain quote / sponsorship',
+    purpose: techPurpose('1Click', 'cross-chain quote rail, pending not used here'),
     layer: 'proof',
   },
   {
     id: 'agentmarket',
     name: 'Agent Market',
-    purpose: 'evidence review, self-hire disclosed',
+    purpose: techPurpose('Agent Market', 'outside reviewer, evidence completeness'),
     layer: 'proof',
   },
 ];
@@ -512,42 +516,46 @@ const TechRail: React.FC<{ activeId: string }> = ({ activeId }) => {
         </span>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginTop: 9 }}>
-        <span
+      <div style={{ marginTop: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span
+            style={{
+              fontFamily: fonts.mono,
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: '0.16em',
+              color: palette.amberStrong,
+            }}
+          >
+            {active.name.toUpperCase()}
+          </span>
+          <span style={{ flex: 1, height: 1, backgroundColor: palette.line }} />
+          <span
+            style={{
+              fontFamily: fonts.mono,
+              fontSize: 9,
+              letterSpacing: '0.08em',
+              color: palette.muted,
+            }}
+          >
+            {active.id === 'receipts' ? 'PROOF' : `${TECH_ITEMS.findIndex((item) => item.id === active.id) + 1}/10`}
+          </span>
+        </div>
+        <div
           style={{
+            marginTop: 5,
             fontFamily: fonts.display,
-            fontSize: 31,
-            lineHeight: 1,
-            letterSpacing: '-0.03em',
+            fontSize: 33,
+            lineHeight: 1.04,
+            letterSpacing: '-0.025em',
             color: palette.ink,
           }}
         >
-          {active.name}
-        </span>
-        <span
-          style={{
-            fontFamily: fonts.body,
-            fontSize: 16,
-            lineHeight: 1.2,
-            color: palette.inkSoft,
-          }}
-        >
           {active.purpose}
-        </span>
-        <span style={{ flex: 1 }} />
-        <span
-          style={{
-            fontFamily: fonts.mono,
-            fontSize: 9,
-            letterSpacing: '0.08em',
-            color: palette.muted,
-          }}
-        >
-          {active.id === 'receipts' ? 'PROOF' : `${TECH_ITEMS.findIndex((item) => item.id === active.id) + 1}/10`}
-        </span>
+        </div>
       </div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginTop: 9 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginTop: 8 }}>
         {TECH_LAYERS.map((layer) => {
           const items = TECH_ITEMS.filter((item) => item.layer === layer.id);
           const layerActive = active.id === 'receipts' ? layer.id === 'proof' : layer.id === activeLayer;

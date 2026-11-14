@@ -66,6 +66,8 @@ export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
   const { fps } = useVideoConfig();
   const card = spring({ frame: frame - 12, fps, config: { damping: 200, stiffness: 85 } });
   const hasUrl = v3Script.siteUrl.trim().length > 0;
+  const totalSeconds = Math.round(v3Script.durationSeconds);
+  const runtimeLabel = `${Math.floor(totalSeconds / 60)}:${String(totalSeconds % 60).padStart(2, '0')}`;
   return (
     <AbsoluteFill style={{ backgroundColor: palette.paper, overflow: 'hidden' }}>
       <SceneBackdrop tone="paper" glow="both" />
@@ -114,13 +116,38 @@ export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
 
         <div style={{ display: 'flex', alignItems: 'stretch', gap: 44 }}>
           <div style={{ flex: 1, maxWidth: 1090 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 11, marginBottom: 10 }}>
+              <span
+                style={{
+                  fontFamily: fonts.mono,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  letterSpacing: '0.06em',
+                  color: palette.paper,
+                  backgroundColor: palette.green,
+                  padding: '6px 9px',
+                }}
+              >
+                $55K
+              </span>
+              <span
+                style={{
+                  fontFamily: fonts.mono,
+                  fontSize: 12,
+                  letterSpacing: '0.14em',
+                  color: palette.amberStrong,
+                }}
+              >
+                NEAR HACKATHON 2026 · SOCIAL MONEY / REAL-WORLD MONEY
+              </span>
+            </div>
             <div
               style={{
                 fontFamily: fonts.mono,
-                fontSize: 12,
-                letterSpacing: '0.2em',
-                color: palette.amberStrong,
-                marginBottom: 16,
+                fontSize: 11,
+                letterSpacing: '0.18em',
+                color: palette.muted,
+                marginBottom: 15,
               }}
             >
               MEND / MAINTENANCE WITH MEMORY
@@ -150,7 +177,22 @@ export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
             >
               For the price of a small repair, a neighborhood gets a memory. One work order, one passport, one receipt.
             </div>
-            <div style={{ display: 'flex', gap: 9, marginTop: 28, flexWrap: 'wrap' }}>
+            <div
+              style={{
+                marginTop: 20,
+                padding: '11px 16px',
+                borderLeft: `5px solid ${palette.green}`,
+                backgroundColor: 'rgba(143,211,180,0.2)',
+                fontFamily: fonts.display,
+                fontSize: 28,
+                lineHeight: 1.12,
+                letterSpacing: '-0.01em',
+                color: palette.ink,
+              }}
+            >
+              AI HELPS · HUMANS DECIDE · NEAR ENFORCES
+            </div>
+            <div style={{ display: 'flex', gap: 9, marginTop: 26, flexWrap: 'wrap' }}>
               <Metric value="100" label="USDC FUNDED" />
               <Metric value="20" label="REFUNDED AT AWARD" />
               <Metric value="72" label="PAID ON ACCEPT" accent />
@@ -258,7 +300,7 @@ export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
                     color: palette.ink,
                   }}
                 >
-                  2:32 product tour
+                  {`${runtimeLabel} product tour`}
                 </div>
               </div>
             </div>
@@ -310,7 +352,7 @@ export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
               textAlign: 'right',
             }}
           >
-            MEND · 2:32 PRODUCT TOUR
+            {`MEND · ${runtimeLabel} PRODUCT TOUR`}
             <br />
             SCRIPTED REPLAY · REAL APP
           </div>

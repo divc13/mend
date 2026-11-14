@@ -3,9 +3,10 @@
  * Build a tight v3 narration bed from the existing v1 George VO.
  *
  * ElevenLabs v2 synthesis is blocked on the free tier (HTTP 401), so v3 keeps
- * the proven v1 voice but trims leading/trailing silence and runs the lines
- * back-to-back with a short air gap. The resulting scene starts are written to
- * demo/ad/script-v3.json for Remotion.
+ * the proven v1 voice but trims leading/trailing silence. Lines are separated
+ * by a deliberate 0.60 s breath and the final card gets a 1.0 s tail so the
+ * music can carry each section change. The resulting scene starts are written
+ * to demo/ad/script-v3.json for Remotion; each scene runs until the next start.
  */
 import { existsSync, readFileSync } from 'node:fs';
 import { mkdir, rm, writeFile } from 'node:fs/promises';
@@ -21,8 +22,8 @@ const V1 = path.join(AD, 'public/audio/vo');
 const OUT = path.join(AD, 'public/audio/v3');
 const TMP = path.join(OUT, '.trim');
 const ORDER = ['hook', 'report', 'dao', 'bids', 'repair', 'payment', 'passport', 'tech', 'close'];
-const GAP = 0.12;
-const TAIL = 0.25;
+const GAP = 0.6;
+const TAIL = 1.0;
 
 function run(args, options = {}) {
   const result = spawnSync(ffmpegPath, args, { encoding: 'utf8', ...options });
@@ -48,44 +49,44 @@ const v2 = JSON.parse(readFileSync(path.join(AD, 'script-v2.json'), 'utf8'));
 const source = Object.fromEntries(v2.scenes.map((scene) => [scene.id, scene]));
 const STACK = {
   hook: [
-    { name: 'Next.js + React', purpose: 'walletless resident client' },
+    { name: 'Next.js + React', purpose: 'front door, report from a phone' },
   ],
   report: [
-    { name: 'Next.js + React', purpose: 'report flow, no wallet' },
-    { name: 'Browser EXIF', purpose: 'GPS + metadata stripped before upload' },
-    { name: 'Fastify + Postgres', purpose: 'duplicate merge, one case ledger' },
-    { name: 'NEAR AI', purpose: 'private triage; no payment authority' },
+    { name: 'Next.js + React', purpose: 'front door, report from a phone' },
+    { name: 'Browser EXIF', purpose: 'eraser, GPS + photo details gone before upload' },
+    { name: 'Fastify + Postgres', purpose: 'town clerk + ledger, one case, one history' },
+    { name: 'NEAR AI', purpose: 'private tutor, reads cleaned note, never touches money' },
   ],
   dao: [
-    { name: 'Sputnik DAO', purpose: '2-of-3 human scope approval' },
-    { name: 'NEAR AI', purpose: 'advice only; cannot move money' },
+    { name: 'Sputnik DAO', purpose: 'committee, 2 of 3 humans' },
+    { name: 'NEAR AI', purpose: 'private tutor, advice only, never touches money' },
   ],
   bids: [
-    { name: 'Deterministic scoring', purpose: 'policy hash; no LLM picks the winner' },
-    { name: 'Rust on NEAR', purpose: 'escrow holds the budget' },
+    { name: 'Deterministic scoring', purpose: 'scorekeeper, same rules for every bid' },
+    { name: 'Rust on NEAR', purpose: 'lockbox, holds the budget' },
   ],
   repair: [
-    { name: 'Human inspector', purpose: 'checklist + evidence signature' },
-    { name: 'Rust on NEAR', purpose: 'payment waits for acceptance' },
+    { name: 'Human inspector', purpose: 'second pair of eyes, checks and signs' },
+    { name: 'Rust on NEAR', purpose: 'lockbox, pays only after a human signs' },
   ],
   payment: [
-    { name: 'Rust escrow on NEAR', purpose: '100 funded → 20 refund / 72 pay / 8 holdback' },
+    { name: 'Rust escrow on NEAR', purpose: 'lockbox, holds 100 / pays 72 / refunds 20 / holds 8' },
   ],
   passport: [
-    { name: 'Fastify + Postgres', purpose: 'same work order, one durable history' },
-    { name: 'NEAR passport', purpose: 'repair attached to the asset' },
+    { name: 'Fastify + Postgres', purpose: 'town clerk + ledger, one case, one history' },
+    { name: 'NEAR passport', purpose: 'asset diary, every repair stays with the pothole' },
   ],
   tech: [
-    { name: 'Next.js + React', purpose: 'walletless client' },
-    { name: 'Fastify', purpose: 'API + authorization' },
-    { name: 'Postgres', purpose: 'case + timeline state' },
-    { name: 'Rust on NEAR', purpose: 'escrow + policy' },
-    { name: 'Sputnik DAO', purpose: '2-of-3 approval' },
-    { name: 'NEAR AI', purpose: 'private triage' },
-    { name: 'OutLayer', purpose: 'deterministic scorer + receipt' },
-    { name: '1Click', purpose: 'cross-chain quote / sponsorship' },
-    { name: 'Agent Market', purpose: 'evidence review (self-hire disclosed)' },
-    { name: 'NEP-366 relayer', purpose: 'gasless actions' },
+    { name: 'Next.js + React', purpose: 'front door, report from a phone' },
+    { name: 'Fastify', purpose: 'town clerk, receives the report' },
+    { name: 'Postgres', purpose: 'ledger, one case + history' },
+    { name: 'Rust on NEAR', purpose: 'lockbox, holds 100 / pays 72 / refunds 20 / holds 8' },
+    { name: 'Sputnik DAO', purpose: 'committee, 2 of 3 humans' },
+    { name: 'NEAR AI', purpose: 'private tutor, reads cleaned note, never touches money' },
+    { name: 'OutLayer', purpose: 'referee, same scoring rules' },
+    { name: '1Click', purpose: 'cross-chain quote rail, pending not used here' },
+    { name: 'Agent Market', purpose: 'outside reviewer, evidence completeness' },
+    { name: 'NEP-366 relayer', purpose: 'free stamp, relayer pays gas' },
   ],
 
   close: [
@@ -111,8 +112,8 @@ for (const id of ORDER) {
     // v1 lines are mono. A stereo upmix must feed both outputs from channel 0;
     // `c1=c1` reads a non-existent second input channel and silences the right side.
     // The two areverse legs add a 20 ms fade at each end of every line. The trims
-    // leave >100 ms of silence at each edge, so the fades land in the 0.12 s splice
-    // gaps and never clip the read itself.
+    // leave >100 ms of silence at each edge, so the fades land in the 0.60 s
+    // breath gaps and never clip the read itself.
     'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.10,areverse,aresample=48000,pan=stereo|c0=c0|c1=c0,afade=t=in:st=0:d=0.02,areverse,afade=t=in:st=0:d=0.02,areverse',
     '-c:a',
     'pcm_s16le',
@@ -132,7 +133,8 @@ for (const id of ORDER) {
     stack: STACK[id],
   });
   segments.push(trimmed);
-  // Add a tiny air gap after every line except the last; the last gets TAIL.
+  // Add a breath after every line except the last; the last gets a longer tail
+  // so the QR card holds under music instead of stopping on the final word.
   const gap = id === ORDER.at(-1) ? TAIL : GAP;
   const silence = path.join(TMP, `${id}-gap.wav`);
   run(['-y', '-f', 'lavfi', '-i', `anullsrc=r=48000:cl=stereo`, '-t', String(gap), '-c:a', 'pcm_s16le', silence]);
@@ -142,8 +144,9 @@ for (const id of ORDER) {
 
 const total = Number(cursor.toFixed(3));
 
-// Scene duration includes the small air gap to the next line; the voice
-// timeline keeps the pure spoken duration.
+// Scene duration is exactly the distance to the next line start (or the end of
+// the tail). The app and cast therefore hold through the breath while the
+// music continues; only the voice track has silence there.
 for (let index = 0; index < timeline.length; index += 1) {
   const next = timeline[index + 1];
   timeline[index].sceneDuration = Number(
