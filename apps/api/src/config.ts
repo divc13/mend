@@ -1,3 +1,5 @@
+import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { DEFAULT_SCORING_POLICY_BPS, SCORING_POLICY_VERSION, TESTNET_HUB_ACCOUNT, TESTNET_TOKEN_ACCOUNT } from '@mend/protocol';
 
@@ -141,7 +143,20 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): AppConfig {
   const intentsUnavailable = !intentsEnabled
     ? 'NEAR Intents 1Click is disabled (INTENTS_ENABLED is not true). Dry previews are disabled until it is enabled; live execution additionally requires INTENTS_ALLOW_LIVE=true and explicit human confirmation.'
     : undefined;
-  const keysFile = env.MEND_TESTNET_KEYS_FILE ?? env.NEAR_KEYS_FILE;
+  let keysFile = env.MEND_TESTNET_KEYS_FILE ?? env.NEAR_KEYS_FILE;
+  // Hosted deployments can provide the key file as a base64 secret rather than
+  // a mounted path. Materialize it to a private temp file; never log its value.
+  const keysJsonB64 = env.MEND_TESTNET_KEYS_JSON_B64?.trim();
+  if (!keysFile && keysJsonB64) {
+    const decoded = Buffer.from(keysJsonB64, 'base64');
+    if (decoded.length < 32) {
+      throw new Error('MEND_TESTNET_KEYS_JSON_B64 did not decode to a usable key file');
+    }
+    const keyDir = fs.mkdtempSync(path.join(os.tmpdir(), 'mend-testnet-keys-'));
+    const keyPath = path.join(keyDir, 'keys.json');
+    fs.writeFileSync(keyPath, decoded, { mode: 0o600 });
+    keysFile = keyPath;
+  }
   const legacySignerConfigured = Boolean(env.NEAR_SIGNER_ACCOUNT && env.NEAR_SIGNER_SECRET);
   const signerConfigured = Boolean(keysFile) || legacySignerConfigured;
   const liveScenarioEnabled = bool(env.MEND_LIVE_SCENARIO_ENABLED, false);
