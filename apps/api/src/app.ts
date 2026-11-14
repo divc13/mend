@@ -13,6 +13,7 @@ import { NearLiveChain, type LiveChainExecutor } from './services/testnet-chain.
 import { NearTestnetOnboarding, type TestnetOnboarding } from './services/testnet-onboarding.js';
 import { LiveScenarioRunner } from './services/live-scenario.js';
 import { registerPublicRoutes } from './routes/public.js';
+import { registerCaseRoutes } from './routes/cases.js';
 import { registerAssetRoutes } from './routes/assets.js';
 import { registerReportRoutes } from './routes/reports.js';
 import { registerWorkOrderRoutes } from './routes/work-orders.js';
@@ -136,6 +137,7 @@ export async function buildApp(options: BuildAppOptions = {}): Promise<BuiltApp>
   });
 
   await registerPublicRoutes(app, deps);
+  await registerCaseRoutes(app, deps);
   await registerAssetRoutes(app, deps);
   await registerReportRoutes(app, deps);
   await registerWorkOrderRoutes(app, deps);

@@ -1,7 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { CASES, getCase, getAsset } from '@/lib/fixtures';
+import type { CaseBundle } from '@/lib/types';
+import { getAsset } from '@/lib/fixtures';
+import { assetFromCase, loadCase } from '@/lib/server-api';
 import { STATE_COPY } from '@/lib/status';
 import { formatDateTime, shortAccount, usdc } from '@/lib/format';
 import { Badge, HashDisplay, StatusPill } from '@/components/ui';
@@ -22,9 +24,7 @@ import {
   Users,
 } from '@/components/Icons';
 
-export function generateStaticParams() {
-  return CASES.map((item) => ({ workOrderId: item.id }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -32,7 +32,7 @@ export async function generateMetadata({
   params: Promise<{ workOrderId: string }>;
 }): Promise<Metadata> {
   const { workOrderId } = await params;
-  const caseData = getCase(workOrderId);
+  const { caseData } = await loadCase(workOrderId);
   if (!caseData) return { title: 'Case not found' };
   return {
     title: caseData.title,
@@ -42,11 +42,20 @@ export async function generateMetadata({
 
 export default async function CasePage({ params }: { params: Promise<{ workOrderId: string }> }) {
   const { workOrderId } = await params;
-  const caseData = getCase(workOrderId);
+  const { caseData, source, apiConfigured, fallbackReason } = await loadCase(workOrderId);
   if (!caseData) notFound();
-  const asset = getAsset(caseData.assetId);
+  const asset = source === 'api' ? assetFromCase(caseData) : getAsset(caseData.assetId);
   if (!asset) notFound();
   const stateCopy = STATE_COPY[caseData.status];
+  const caseIsReplay = source === 'fixture' || caseData.mode === 'REPLAY';
+  const sourceLabel =
+    source === 'api'
+      ? caseData.mode === 'REPLAY'
+        ? 'LIVE API · REPLAY RECORD'
+        : 'LIVE API'
+      : apiConfigured
+        ? 'REPLAY / SIMULATION · FIXTURE FALLBACK'
+        : 'REPLAY / SIMULATION';
 
   return (
     <>
@@ -62,7 +71,7 @@ export default async function CasePage({ params }: { params: Promise<{ workOrder
             </nav>
             <div className="case-hero__badges">
               <StatusPill status={caseData.status} />
-              <Badge tone="warning">REPLAY / SIMULATION</Badge>
+              <Badge tone={caseIsReplay ? 'warning' : 'positive'}>{sourceLabel}</Badge>
               <Badge tone="neutral">{caseData.reports.length} report{caseData.reports.length === 1 ? '' : 's'}</Badge>
             </div>
             <h1 className="case-hero__title" style={{ marginTop: 16 }}>
@@ -80,6 +89,16 @@ export default async function CasePage({ params }: { params: Promise<{ workOrder
                 <Users size={15} aria-hidden="true" /> {shortAccount(caseData.contractorId ?? 'No contractor yet')}
               </span>
             </p>
+            {source === 'fixture' && apiConfigured ? (
+              <p className="source-note source-note--replay" data-testid="fixture-fallback" style={{ marginTop: 12 }}>
+                <ShieldCheck size={16} aria-hidden="true" />
+                <span>
+                  <strong>Fixture fallback.</strong>{' '}
+                  {fallbackReason ?? 'The live API did not return usable data for this case.'} No live transaction,
+                  attestation or physical verification is claimed.
+                </span>
+              </p>
+            ) : null}
           </div>
 
           <div className="case-hero__side">
@@ -172,19 +191,20 @@ export default async function CasePage({ params }: { params: Promise<{ workOrder
               <div className="source-note source-note--replay">
                 <ShieldCheck size={16} aria-hidden="true" />
                 <span>
-                  DAO authorization is a push path: a Sputnik FunctionCall proposal executes <code>dao_authorize</code> only
-                  after approval. MEND does not trust proposal text. This replay reference is not a live proposal lookup.
+                  {source === 'api'
+                    ? 'The API supplied this DAO reference. It is not a live Sputnik proposal lookup: MEND trusts only a FunctionCall that executes dao_authorize after approval, never proposal text.'
+                    : 'DAO authorization is a push path: a Sputnik FunctionCall proposal executes dao_authorize only after approval. MEND does not trust proposal text. This replay reference is not a live proposal lookup.'}
                 </span>
               </div>
             </section>
 
             <TimelinePanel caseData={caseData} />
 
-            <MoneyRail caseData={caseData} />
+            <MoneyRail caseData={caseData} source={source} />
 
             <EvidencePanel caseData={caseData} />
 
-            <TrustPanel caseData={caseData} />
+            <TrustPanel caseData={caseData} source={source} />
           </div>
 
           <aside className="case-aside" aria-label="Case side panel">
@@ -218,7 +238,7 @@ export default async function CasePage({ params }: { params: Promise<{ workOrder
                 </li>
                 <li>
                   <Gavel size={15} aria-hidden="true" />
-                  <Link className="text-link" href="/steward">
+                  <Link className="text-link" href={`/steward?case=${encodeURIComponent(caseData.id)}`}>
                     Steward console <ArrowRight size={13} aria-hidden="true" />
                   </Link>
                 </li>
@@ -266,7 +286,15 @@ export default async function CasePage({ params }: { params: Promise<{ workOrder
               </div>
             </section>
 
-            <DataSourceNote detail="This case timeline, evidence ledger and payment rail come from frozen protocol fixtures. No live transaction or attestation is claimed." />
+            <DataSourceNote
+              source={source}
+              detail={fallbackReason}
+              liveDetail={
+                caseData.mode === 'REPLAY'
+                  ? 'Data source: the configured MEND API. The API marks this record REPLAY / SIMULATION, so no live transaction or attestation is claimed.'
+                  : 'Data source: the configured MEND live API. Explorer links appear only for real transaction hashes.'
+              }
+            />
           </aside>
         </div>
       </div>
@@ -274,7 +302,7 @@ export default async function CasePage({ params }: { params: Promise<{ workOrder
   );
 }
 
-function TimelinePanel({ caseData }: { caseData: NonNullable<ReturnType<typeof getCase>> }) {
+function TimelinePanel({ caseData }: { caseData: CaseBundle }) {
   return (
     <section className="panel" aria-labelledby="timeline-title">
       <div className="panel__head">
@@ -290,7 +318,7 @@ function TimelinePanel({ caseData }: { caseData: NonNullable<ReturnType<typeof g
   );
 }
 
-function EvidencePanel({ caseData }: { caseData: NonNullable<ReturnType<typeof getCase>> }) {
+function EvidencePanel({ caseData }: { caseData: CaseBundle }) {
   return (
     <section className="panel" aria-labelledby="evidence-title">
       <div className="panel__head">

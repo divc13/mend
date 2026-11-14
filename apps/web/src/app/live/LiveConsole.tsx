@@ -1,149 +1,75 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DataSourceNote } from '@/components/DataSourceNote';
 import { useMode } from '@/components/ModeProvider';
 import { Timeline } from '@/components/Timeline';
-import { TxHashRow } from '@/components/TxHashRow';
 import { Badge, Callout, PageHero } from '@/components/ui';
-import { runLiveTestnetScenario, type ApiFailure } from '@/lib/api';
+import { readDemoIdentity, type DemoIdentity } from '@/lib/api';
 import { FIXTURE_VERSION, getCase } from '@/lib/fixtures';
-import {
-  TESTNET_EXPLORER,
-  TESTNET_HUB_ACCOUNT,
-  TESTNET_TOKEN_ACCOUNT,
-  normalizeScenarioRun,
-  type RunStepStatus,
-  type ScenarioRunView,
-} from '@/lib/testnet';
+import { formatDateTime } from '@/lib/format';
+import { TESTNET_EXPLORER, TESTNET_HUB_ACCOUNT, TESTNET_TOKEN_ACCOUNT } from '@/lib/testnet';
 import {
   AlertTriangle,
   ArrowRight,
   Check,
-  CircleDot,
   Clock,
-  Coins,
   ExternalLink,
   Info,
   Lock,
-  Play,
   Refresh,
   ShieldCheck,
   Users,
-  X,
 } from '@/components/Icons';
 
 const REPLAY_CASE_ID = 'WO-BENCH-001-0001';
 
-const statusMeta: Record<
-  RunStepStatus,
-  { label: string; tone: 'positive' | 'danger' | 'active' | 'warning' | 'neutral'; icon: React.ReactNode }
-> = {
-  SUCCESS: { label: 'Reported success', tone: 'positive', icon: <Check size={13} aria-hidden="true" /> },
-  FAILED: { label: 'Reported failure', tone: 'danger', icon: <X size={13} aria-hidden="true" /> },
-  RUNNING: { label: 'Running', tone: 'active', icon: <Refresh size={13} aria-hidden="true" /> },
-  PENDING: { label: 'Pending', tone: 'warning', icon: <Clock size={13} aria-hidden="true" /> },
-  SKIPPED: { label: 'Skipped', tone: 'neutral', icon: <CircleDot size={13} aria-hidden="true" /> },
-  UNKNOWN: { label: 'Status not reported', tone: 'neutral', icon: <CircleDot size={13} aria-hidden="true" /> },
-};
-
-function friendlyRunError(error: ApiFailure): string {
-  if (error.code === 'API_UNCONFIGURED') {
-    return 'MEND_API_BASE_URL is not configured, so the live scenario cannot run. No request left this server.';
-  }
-  if (error.code === 'API_UNREACHABLE') {
-    return 'The testnet API is unreachable. Nothing was executed and no live transaction is claimed.';
-  }
-  if (error.status === 429 || /RATE|LIMIT/i.test(error.code)) {
-    const retry = error.retryAfterSeconds
-      ? ` Try again in ${error.retryAfterSeconds} second${error.retryAfterSeconds === 1 ? '' : 's'}.`
-      : ' Wait for the API cooldown before retrying.';
-    return `The live run was rate-limited.${retry}`;
-  }
-  return `${error.message} (${error.code})`;
+function healthTone(live: boolean, healthy: boolean): 'positive' | 'warning' | 'danger' | 'neutral' {
+  if (healthy) return 'positive';
+  if (live) return 'warning';
+  return 'neutral';
 }
 
 export function LiveConsole() {
-  const { mode, apiConfigured, setMode } = useMode();
+  const { mode, apiConfigured, apiHealth, refreshApiHealth, setMode } = useMode();
   const live = mode === 'LIVE_TESTNET';
-  const [running, setRunning] = useState(false);
-  const [run, setRun] = useState<ScenarioRunView | null>(null);
-  const [error, setError] = useState<ApiFailure | null>(null);
-  const [showReplayPath, setShowReplayPath] = useState(false);
-  const resultRef = useRef<HTMLDivElement>(null);
-  const modeRef = useRef(mode);
-
-  // Selecting REPLAY must remove every live claim from the page immediately.
-  useEffect(() => {
-    modeRef.current = mode;
-    if (mode === 'LIVE_TESTNET') return;
-    setRun(null);
-    setError(null);
-    setRunning(false);
-    setShowReplayPath(true);
-  }, [mode]);
+  const healthy = live && apiHealth?.ok === true;
+  const [checking, setChecking] = useState(false);
+  const [demoIdentity, setDemoIdentity] = useState<DemoIdentity | null>(null);
 
   useEffect(() => {
-    if (run) resultRef.current?.focus();
-  }, [run]);
+    setDemoIdentity(readDemoIdentity());
+  }, []);
 
-  async function onRun() {
-    if (!live || running) return;
-    setRunning(true);
-    setError(null);
-    setRun(null);
-    setShowReplayPath(false);
-
-    const result = await runLiveTestnetScenario();
-    setRunning(false);
-    if (modeRef.current !== 'LIVE_TESTNET') {
-      // The user switched back to REPLAY while the request was in flight. No
-      // live result may be rendered in replay.
-      setShowReplayPath(true);
-      return;
+  async function onRefresh() {
+    if (checking) return;
+    setChecking(true);
+    try {
+      await refreshApiHealth();
+    } finally {
+      setChecking(false);
     }
-    if (!result.ok) {
-      setError(result);
-      setShowReplayPath(true);
-      return;
-    }
-
-    const normalised = normalizeScenarioRun(result.data);
-    if (!normalised) {
-      setError({
-        ok: false,
-        status: 200,
-        code: 'NO_STEPS',
-        message: 'The API returned no ordered steps. Nothing is shown as a live execution.',
-        replayFallback: true,
-      });
-      setShowReplayPath(true);
-      return;
-    }
-
-    setRun(normalised);
   }
-
-  const runTone =
-    run?.status === 'SUCCESS' ? 'positive' : run?.status === 'FAILED' ? 'danger' : run ? 'warning' : 'neutral';
 
   return (
     <div className="container">
       <PageHero
-        eyebrow="Live control"
-        title="Run the testnet scenario, or watch the recording."
-        lead={`LIVE TESTNET executes a real scenario against ${TESTNET_HUB_ACCOUNT} and ${TESTNET_TOKEN_ACCOUNT}. Every step is shown in order with the transaction hashes the API returns. If live is unavailable, the recorded replay path takes over — clearly labelled.`}
+        eyebrow="Live control · read-only"
+        title="The testnet API, without a live runner."
+        lead={`This console verifies the configured MEND API and shows its LIVE_TESTNET health. It does not execute testnet actions and does not start the scenario lifecycle. If the API is missing, unreachable or not in LIVE_TESTNET mode, the app stays in REPLAY / SIMULATION with frozen fixtures.`}
         aside={
           <div className="side-card wallet-status-card">
             <div className="wallet-status-card__top">
-              <h2>Run mode</h2>
-              <Badge tone={live ? 'positive' : 'warning'}>{live ? 'LIVE TESTNET' : 'REPLAY'}</Badge>
+              <h2>API mode</h2>
+              <Badge tone={healthTone(live, healthy)}>
+                {healthy ? 'LIVE_TESTNET verified' : live ? 'LIVE TESTNET selected' : 'REPLAY'}
+              </Badge>
             </div>
             <p className="wallet-status-card__value">TEST VALUE ONLY</p>
             <p className="side-card__note">
-              No mainnet, no deploy, no real funds. Explorer links are testnet-only and only appear for plausible NEAR
-              transaction hashes returned by the API.
+              No mainnet, no deploy, no real funds, no scenario runner. Explorer links are testnet-only and only appear
+              for plausible NEAR transaction hashes returned by the API.
             </p>
             <dl>
               <div>
@@ -155,8 +81,8 @@ export function LiveConsole() {
                 <dd className="mono">{TESTNET_TOKEN_ACCOUNT}</dd>
               </div>
               <div>
-                <dt>Explorer</dt>
-                <dd className="mono">explorer.testnet.near.org</dd>
+                <dt>Checks</dt>
+                <dd className="mono">GET /api/mend/health</dd>
               </div>
             </dl>
           </div>
@@ -164,16 +90,17 @@ export function LiveConsole() {
       >
         <div className="wallet-test-banner" role="note">
           <span className="wallet-test-banner__dot" aria-hidden="true" />
-          <strong>LIVE TESTNET — TEST VALUE ONLY</strong>
+          <strong>READ-ONLY TESTNET CONSOLE — TEST VALUE ONLY</strong>
           <span>REPLAY is the default · MAINNET is never selectable</span>
         </div>
       </PageHero>
 
       {!live ? (
-        <Callout tone="warning" title="LIVE TESTNET is not selected" icon={<Lock size={18} />}>
+        <Callout tone="warning" title="LIVE_TESTNET is not verified" icon={<Lock size={18} />}>
           <p>
-            This page is showing the replay path. Select LIVE TESTNET only when you mean to execute against the testnet
-            API. The run button stays disabled in REPLAY.
+            The app is in REPLAY / SIMULATION. Selecting LIVE TESTNET performs a fresh health check against{' '}
+            <code>/api/mend/health</code>. The mode only changes when the API answers with mode{' '}
+            <code>LIVE_TESTNET</code> and is not degraded.
           </p>
           <div className="wallet-actions wallet-actions--tight">
             <button
@@ -182,233 +109,168 @@ export function LiveConsole() {
               onClick={() => void setMode('LIVE_TESTNET')}
               disabled={!apiConfigured}
             >
-              <ShieldCheck size={15} aria-hidden="true" /> Switch to LIVE TESTNET
+              <ShieldCheck size={15} aria-hidden="true" /> Check API and select LIVE TESTNET
             </button>
             <Link className="button button--small button--ghost" href="/demo">
-              Open mode controls <ArrowRight size={14} aria-hidden="true" />
+              Open mode &amp; demo role <ArrowRight size={14} aria-hidden="true" />
             </Link>
           </div>
           {!apiConfigured ? (
             <p className="small muted">
-              This build has no <code>MEND_API_BASE_URL</code>. The replay fixtures stay visible and no network request
-              is made.
+              This build has no <code>MEND_API_BASE_URL</code>. The replay fixtures stay visible and no external
+              request is made.
             </p>
           ) : null}
         </Callout>
       ) : null}
 
       <div className="live-shell">
-        <section className="panel live-run-panel" aria-labelledby="live-run-title">
+        <section className="panel live-run-panel" aria-labelledby="api-health-title">
           <div className="panel__head">
             <div>
-              <p className="eyebrow">Scenario runner</p>
-              <h2 id="live-run-title">One ordered run, real testnet hashes</h2>
+              <p className="eyebrow">API health · read only</p>
+              <h2 id="api-health-title">Health check, not a scenario runner</h2>
               <p>
-                Calls <code>POST /v1/live/run-scenario</code>. The response is rendered as an ordered timeline. A step
-                with no hash is not described as confirmed on-chain.
+                The page calls <code>GET /api/mend/health</code> through the same-origin proxy. It never calls{' '}
+                <code>/v1/live/run-scenario</code> and never claims a transaction.
               </p>
             </div>
-            <Badge tone="warning" icon={<Coins size={14} aria-hidden="true" />}>
-              100 mUSDC test value
+            <Badge tone={healthTone(live, healthy)}>
+              {healthy ? 'LIVE_TESTNET' : apiHealth ? apiHealth.mode : 'Checking'}
             </Badge>
           </div>
+
+          <div className="live-summary-grid">
+            <div>
+              <span>API mode</span>
+              <strong className="mono">{apiHealth?.mode ?? 'checking…'}</strong>
+            </div>
+            <div>
+              <span>Health status</span>
+              <strong>{apiHealth?.status ?? 'not checked'}</strong>
+            </div>
+            <div>
+              <span>Database</span>
+              <strong>{apiHealth?.database ?? 'not reported'}</strong>
+            </div>
+            <div>
+              <span>Runner flag</span>
+              <strong>{apiHealth ? (apiHealth.liveScenarioEnabled ? 'enabled (UI hidden)' : 'disabled') : 'not checked'}</strong>
+            </div>
+          </div>
+
+          <p className="small muted" role="status" aria-live="polite">
+            {apiHealth ? apiHealth.message : 'Checking the same-origin API proxy…'}
+          </p>
 
           <div className="live-run-actions">
             <button
               type="button"
               className="button"
-              onClick={() => void onRun()}
-              disabled={!live || running}
-              aria-busy={running}
-              data-testid="run-live-scenario"
+              onClick={() => void onRefresh()}
+              disabled={checking}
+              aria-busy={checking}
+              data-testid="refresh-api-health"
             >
-              {running ? (
+              {checking ? (
                 <>
-                  <span className="spinner" aria-hidden="true" /> Running live testnet scenario…
+                  <span className="spinner" aria-hidden="true" /> Checking API…
                 </>
               ) : (
                 <>
-                  <Play size={17} aria-hidden="true" /> Run live testnet scenario
+                  <Refresh size={17} aria-hidden="true" /> Refresh API status
                 </>
               )}
             </button>
             <span className="small muted">
-              {live
-                ? 'LIVE TESTNET selected. This will create real testnet transactions, not replay state.'
-                : 'Disabled in REPLAY / SIMULATION.'}
+              Last checked {apiHealth ? formatDateTime(apiHealth.checkedAt) : '—'}
+              {demoIdentity ? (
+                <>
+                  {' · '}Demo role <code>{demoIdentity.role}</code> · <code>{demoIdentity.account}</code>
+                </>
+              ) : (
+                <>
+                  {' · '}No demo role stored (see <Link href="/demo">/demo</Link>)
+                </>
+              )}
             </span>
           </div>
 
-          {running ? (
-            <div className="live-loading" role="status" aria-live="polite">
-              <span className="spinner" aria-hidden="true" />
-              <div>
-                <strong>Executing against testnet…</strong>
-                <p>Waiting for the API to return the ordered steps. Do not start a second run.</p>
+          {apiHealth && apiHealth.mode !== 'UNKNOWN' ? (
+            <dl className="facts-grid">
+              <div className="fact">
+                <dt>Service</dt>
+                <dd className="mono">{apiHealth.service ?? 'not reported'}</dd>
               </div>
-            </div>
+              <div className="fact">
+                <dt>Repository</dt>
+                <dd className="mono">{apiHealth.repository ?? 'not reported'}</dd>
+              </div>
+              <div className="fact">
+                <dt>HTTP</dt>
+                <dd className="mono">{apiHealth.httpStatus || '—'}</dd>
+              </div>
+              <div className="fact">
+                <dt>Mode label</dt>
+                <dd>{healthy ? 'LIVE TESTNET — TEST VALUE ONLY' : 'REPLAY / SIMULATION'}</dd>
+              </div>
+            </dl>
           ) : null}
 
-          {error ? (
+          <div className="demo-note" role="note">
+            <Lock size={16} aria-hidden="true" /> The web UI exposes no live scenario runner. This deployment is
+            expected to run with <code>MEND_LIVE_SCENARIO_ENABLED=false</code>; the same-origin proxy also refuses the
+            runner endpoint unless it is explicitly enabled. There is no &ldquo;run scenario&rdquo; button, no wallet
+            creation and no transaction from this page. Switching to LIVE TESTNET only enables this read-only status
+            view.
+          </div>
+
+          {healthy ? (
+            <Callout tone="positive" title="API verified in LIVE_TESTNET mode" icon={<Check size={18} />}>
+              <p>
+                Only the health response above is live API data. No transaction has been executed. Public case pages
+                must still label their own data source; when a live read is unavailable they fall back to frozen
+                fixtures instead of presenting replay values as live.
+              </p>
+              {apiHealth.roleAccounts ? (
+                <p className="small muted">
+                  Demo role accounts are configured server-side. Use <Link href="/demo">/demo</Link> to store a
+                  testnet-only role for same-origin reads.
+                </p>
+              ) : null}
+              <p style={{ marginTop: 10 }}>
+                <Link className="text-link" href="/cases/WO-BENCH-V2-001-0002" data-testid="live-case-link">
+                  Open the seeded live testnet case <ArrowRight size={14} aria-hidden="true" />
+                </Link>
+              </p>
+            </Callout>
+          ) : (
             <div className="wallet-error" role="alert">
               <AlertTriangle size={18} aria-hidden="true" />
               <div>
-                <strong>The live run was not confirmed.</strong>
-                <p>{friendlyRunError(error)}</p>
+                <strong>No verified live read state.</strong>
+                <p>{apiHealth ? apiHealth.message : 'The API health check has not completed.'}</p>
                 <p className="small">
-                  The replay path below is a recording. It is not a substitute for a live transaction and gets no
-                  explorer links.
+                  The replay reference below is a recording. It is not a substitute for a live API response and gets
+                  no explorer links.
                 </p>
               </div>
             </div>
-          ) : null}
-
-          {!run && !running && !error ? (
-            <div className="wallet-empty live-empty">
-              <span className="wallet-empty__icon" aria-hidden="true">
-                <Play size={26} />
-              </span>
-              <h3>{live ? 'Ready to run' : 'Replay path is active'}</h3>
-              <p>
-                {live
-                  ? 'Start the scenario to see every step, the returned transaction hashes and the verified testnet explorer links.'
-                  : 'Select LIVE TESTNET to enable the run button. Until then, only the recorded repair is shown below.'}
-              </p>
-            </div>
-          ) : null}
+          )}
         </section>
 
-        {run ? (
-          <section
-            className="panel live-result-panel"
-            aria-labelledby="live-result-title"
-            ref={resultRef}
-            tabIndex={-1}
-          >
-            <div className="panel__head">
-              <div>
-                <p className="eyebrow">Live run result</p>
-                <h2 id="live-result-title">{run.title ?? 'Live testnet scenario'}</h2>
-                {run.summary ? <p>{run.summary}</p> : null}
-              </div>
-              <Badge tone={runTone}>{run.status}</Badge>
-            </div>
-
-            <div className="live-summary-grid">
-              <div>
-                <span>Scenario</span>
-                <strong className="mono">{run.scenarioId ?? 'canonical'}</strong>
-              </div>
-              <div>
-                <span>Ordered steps</span>
-                <strong>{run.steps.length}</strong>
-              </div>
-              <div>
-                <span>Transaction hashes</span>
-                <strong>{run.transactionCount}</strong>
-              </div>
-              <div>
-                <span>Explorer links</span>
-                <strong>{run.linkableTransactionCount}</strong>
-              </div>
-            </div>
-
-            {run.transactionCount === 0 ? (
-              <p className="wallet-inline-warning" role="status">
-                <AlertTriangle size={15} aria-hidden="true" /> The API returned steps but no transaction hashes. This run
-                is not presented as an on-chain execution.
-              </p>
-            ) : null}
-            {run.transactionCount > run.linkableTransactionCount ? (
-              <p className="wallet-inline-warning" role="status">
-                <AlertTriangle size={15} aria-hidden="true" /> {run.transactionCount - run.linkableTransactionCount}{' '}
-                hash{run.transactionCount - run.linkableTransactionCount === 1 ? '' : 'es'} did not match the NEAR
-                transaction-hash format. They are shown without an explorer link.
-              </p>
-            ) : null}
-
-            <ol className="live-steps" aria-label="Live testnet scenario steps">
-              {run.steps.map((step) => {
-                const meta = statusMeta[step.status];
-                return (
-                  <li
-                    key={step.id}
-                    className={`live-step live-step--${step.status.toLowerCase()}`}
-                  >
-                    <div className="live-step__rail" aria-hidden="true">
-                      <span className="live-step__index">{step.index}</span>
-                      <span className="live-step__line" />
-                    </div>
-                    <div className="live-step__body">
-                      <div className="live-step__top">
-                        <h3>{step.title}</h3>
-                        <Badge tone={meta.tone} icon={meta.icon}>
-                          {meta.label}
-                        </Badge>
-                      </div>
-                      {step.detail ? <p>{step.detail}</p> : null}
-                      {step.at ? (
-                        <p className="small muted">
-                          <Clock size={13} aria-hidden="true" /> <time dateTime={step.at}>{step.at}</time>
-                        </p>
-                      ) : null}
-                      {step.txHashes.length > 0 ? (
-                        <div className="live-step__txs">
-                          {step.txHashes.map((hash, hashIndex) => (
-                            <TxHashRow
-                              key={`${step.id}-${hashIndex}`}
-                              hash={hash}
-                              label={`Step ${step.index} transaction`}
-                            />
-                          ))}
-                        </div>
-                      ) : (
-                        <p className="live-step__no-tx">
-                          No transaction hash reported for this step. Nothing is claimed as confirmed on-chain.
-                        </p>
-                      )}
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
-
-            <div className="form-actions">
-              <button
-                type="button"
-                className="button button--small button--ghost"
-                onClick={() => void onRun()}
-                disabled={!live || running}
-              >
-                <Refresh size={14} aria-hidden="true" /> Run again
-              </button>
-              <Link className="button button--small button--ghost" href="/wallet">
-                Back to the testnet wallet <ArrowRight size={14} aria-hidden="true" />
-              </Link>
-            </div>
-          </section>
-        ) : null}
-
-        {showReplayPath || !live ? <ReplayPath /> : null}
+        <ReplayPath />
       </div>
 
-      {run && live ? (
+      {healthy ? (
         <DataSourceNote
           source="api"
-          detail="Live steps and transaction hashes come from the configured testnet API. Only shape-valid testnet hashes receive explorer links."
+          liveDetail="Only the health response is live API data. The timeline below is a frozen recording and is labelled separately."
         />
-      ) : live && !error ? (
-        <p className="source-note source-note--replay">
-          <Info size={16} aria-hidden="true" />
-          <span>
-            <strong>No live run yet.</strong> LIVE TESTNET is selected and the API is configured, but no transaction is
-            claimed until you run the scenario. The replay path is only shown when you opt into REPLAY or the API fails.
-          </span>
-        </p>
       ) : (
         <DataSourceNote
           source="fixture"
-          detail="The recorded repair is shown because LIVE TESTNET is not selected or the live API did not return usable data. No live transaction is claimed."
+          detail="The API was not verified in LIVE_TESTNET mode. Frozen protocol fixtures are shown; no live transaction or attestation is claimed."
         />
       )}
     </div>
@@ -422,11 +284,11 @@ function ReplayPath() {
     <section className="panel replay-path" aria-labelledby="replay-path-title">
       <div className="panel__head">
         <div>
-          <p className="eyebrow">Replay path · no live transaction</p>
+          <p className="eyebrow">Recorded reference · no live transaction</p>
           <h2 id="replay-path-title">The recorded repair, clearly labelled</h2>
           <p>
-            The live run is unavailable or LIVE TESTNET is not selected. This is the frozen canonical repair from{' '}
-            <code>{FIXTURE_VERSION}</code>. It is a recording — not a testnet execution — and receives no explorer links.
+            This is the frozen canonical repair from <code>{FIXTURE_VERSION}</code>. It is a recording — not a testnet
+            execution — and receives no explorer links.
           </p>
         </div>
         <Badge tone="warning" icon={<Info size={14} aria-hidden="true" />}>
@@ -440,8 +302,8 @@ function ReplayPath() {
           occurred.
         </p>
         <p>
-          <Lock size={15} aria-hidden="true" /> Replay state never becomes a live claim. Use the mode controls to opt in
-          to testnet explicitly.
+          <Clock size={15} aria-hidden="true" /> The live console verifies API health only. It does not replay
+          fixtures into a live claim and never converts recorded hashes into explorer links.
         </p>
       </div>
 

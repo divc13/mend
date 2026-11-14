@@ -1,9 +1,18 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useMode } from '@/components/ModeProvider';
 import { MODE_META } from '@/lib/modes';
+import {
+  DEMO_ROLES,
+  clearDemoIdentity,
+  isDemoAccount,
+  readDemoIdentity,
+  storeDemoIdentity,
+  type DemoIdentity,
+  type DemoRole,
+} from '@/lib/api';
 import { CASES, FIXTURE_VERSION, SCENARIOS, getCase } from '@/lib/fixtures';
 import { formatDateTime } from '@/lib/format';
 import { Badge, Callout, PageHero } from '@/components/ui';
@@ -22,14 +31,75 @@ import {
 
 const START = '2026-11-10T08:00:00.000Z';
 
+const ROLE_ACCOUNT_KEYS: Partial<Record<DemoRole, string>> = {
+  STEWARD: 'steward',
+  SPONSOR: 'sponsor',
+  DAO: 'dao',
+  CONTRACTOR: 'contractor',
+  INSPECTOR: 'inspector',
+  ADMIN: 'admin',
+};
+
 export function DemoRoom() {
-  const { mode, apiConfigured, setMode } = useMode();
+  const { mode, apiConfigured, apiHealth, setMode } = useMode();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [clock, setClock] = useState(START);
   const [status, setStatus] = useState('Replay idle. Select a scenario or fast-forward the recorded clock.');
+  const [demoRole, setDemoRole] = useState<DemoRole>('STEWARD');
+  const [demoAccount, setDemoAccount] = useState('mend-steward.testnet');
+  const [savedIdentity, setSavedIdentity] = useState<DemoIdentity | null>(null);
+  const [demoError, setDemoError] = useState('');
+  const [demoStatus, setDemoStatus] = useState('No demo role stored. API calls carry no role headers.');
   const activeScenario = SCENARIOS.find((scenario) => scenario.id === activeId);
   const activeCase = activeScenario?.caseId ? getCase(activeScenario.caseId) : undefined;
   const meta = MODE_META[mode];
+
+  useEffect(() => {
+    const stored = readDemoIdentity();
+    if (!stored) return;
+    setDemoRole(stored.role);
+    setDemoAccount(stored.account);
+    setSavedIdentity(stored);
+    setDemoStatus(`Stored for this tab: ${stored.role} · ${stored.account}`);
+  }, []);
+
+  function suggestedAccount(role: DemoRole): string | undefined {
+    const key = ROLE_ACCOUNT_KEYS[role];
+    return key ? apiHealth?.roleAccounts?.[key] : undefined;
+  }
+
+  function onDemoRoleChange(role: DemoRole) {
+    setDemoRole(role);
+    setDemoError('');
+    const suggested = suggestedAccount(role);
+    if (suggested) setDemoAccount(suggested);
+  }
+
+  function saveDemoRole(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const account = demoAccount.trim();
+    if (!isDemoAccount(account)) {
+      setDemoError('Enter a valid NEAR testnet account ending in .testnet. This demo selector never accepts a key.');
+      return;
+    }
+    const identity: DemoIdentity = { role: demoRole, account };
+    if (!storeDemoIdentity(identity)) {
+      setDemoError('Session storage is unavailable in this browser, so the demo role could not be stored.');
+      return;
+    }
+    setSavedIdentity(identity);
+    setDemoError('');
+    setDemoStatus(
+      `Stored for this tab: ${identity.role} · ${identity.account}. Only same-origin /api/mend calls receive the demo headers.`,
+    );
+  }
+
+  function onClearDemoRole() {
+    clearDemoIdentity();
+    setSavedIdentity(null);
+    setDemoError('');
+    setDemoStatus('Demo role cleared. API calls carry no role headers.');
+  }
 
   const nextEvent = useMemo(() => {
     if (!activeCase) return undefined;
@@ -152,6 +222,98 @@ export function DemoRoom() {
           <div className="demo-note" style={{ marginTop: 14 }}>
             <AlertTriangle size={16} aria-hidden="true" /> No private key, API secret or signing material exists in this
             browser. No mainnet transaction can be initiated from this page.
+          </div>
+        </section>
+
+        <section className="panel" aria-labelledby="demo-role-title">
+          <div className="panel__head">
+            <div>
+              <p className="eyebrow">TESTNET DEMO ROLE</p>
+              <h2 id="demo-role-title">Demo auth, not authentication</h2>
+              <p>
+                Store a role and testnet account for this tab. <code>apiFetch</code> forwards them as{' '}
+                <code>x-mend-role</code> and <code>x-mend-account</code> only to the same-origin{' '}
+                <code>/api/mend/*</code> proxy. The API must also have demo headers enabled.
+              </p>
+            </div>
+            <Badge tone={savedIdentity ? 'warning' : 'neutral'}>
+              {savedIdentity ? 'DEMO ROLE STORED' : 'NO DEMO ROLE'}
+            </Badge>
+          </div>
+
+          <form onSubmit={saveDemoRole}>
+            <div className="form-grid">
+              <div className="field">
+                <label htmlFor="demo-role">Testnet demo role</label>
+                <select
+                  id="demo-role"
+                  className="select"
+                  value={demoRole}
+                  onChange={(event) => onDemoRoleChange(event.target.value as DemoRole)}
+                >
+                  {DEMO_ROLES.map((role) => (
+                    <option key={role} value={role}>
+                      {role}
+                    </option>
+                  ))}
+                </select>
+                <span className="field__hint">
+                  Selects which demo actor the API should evaluate. It is not a wallet and grants no real authority.
+                </span>
+              </div>
+              <div className="field">
+                <label htmlFor="demo-account">Testnet account</label>
+                <input
+                  id="demo-account"
+                  className="input"
+                  value={demoAccount}
+                  onChange={(event) => setDemoAccount(event.target.value)}
+                  placeholder="mend-steward.testnet"
+                  autoComplete="off"
+                  spellCheck={false}
+                  aria-invalid={demoError ? true : undefined}
+                />
+                <span className="field__hint">
+                  Must end in <code>.testnet</code>. Never enter a private key, seed phrase or mainnet account.
+                </span>
+              </div>
+            </div>
+
+            {demoError ? (
+              <p className="field__error" role="alert">
+                {demoError}
+              </p>
+            ) : null}
+
+            <div className="form-actions">
+              <button type="submit" className="button button--small" data-testid="save-demo-role">
+                <ShieldCheck size={15} aria-hidden="true" /> Save demo role for this tab
+              </button>
+              <button
+                type="button"
+                className="button button--small button--ghost"
+                onClick={onClearDemoRole}
+                disabled={!savedIdentity}
+              >
+                Clear demo role
+              </button>
+              <span className="small muted" role="status" aria-live="polite">
+                {demoStatus}
+              </span>
+            </div>
+          </form>
+
+          {savedIdentity ? (
+            <p className="small muted">
+              Forwarded on API calls: <code>x-mend-role: {savedIdentity.role}</code> ·{' '}
+              <code>x-mend-account: {savedIdentity.account}</code>. Stored in sessionStorage for this tab only.
+            </p>
+          ) : null}
+
+          <div className="demo-note" role="note">
+            <AlertTriangle size={16} aria-hidden="true" /> <strong>DEMO AUTH ONLY.</strong> These headers are trivially
+            spoofable and are not production authentication. They are testnet-only, never a wallet signature, and must
+            not be used to authorize real funds. No secret material belongs in this form.
           </div>
         </section>
 
@@ -300,7 +462,7 @@ export function DemoRoom() {
           do not exist, never claim a live AI attestation and never present a dry quote as a payment.
         </Callout>
 
-        <DataSourceNote detail="Demo control room is replay-only unless a configured testnet API passes a health check. MAINNET remains locked." />
+        <DataSourceNote detail="Demo control room is replay-only unless a configured testnet API reports LIVE_TESTNET health. Demo role headers are session-only testnet demo auth, not authentication. MAINNET remains locked." />
       </div>
     </div>
   );

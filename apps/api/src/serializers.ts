@@ -6,6 +6,7 @@ import type {
   BidCommitmentRecord,
   BidRevealRecord,
   ChainCommandRecord,
+  DaoApprovalRecord,
   EscrowRecord,
   EvidenceObjectRecord,
   EvidencePackageRecord,
@@ -66,6 +67,20 @@ export function clusterView(cluster: ReportClusterRecord): Record<string, unknow
     status: cluster.status,
     ...(cluster.confirmedBy ? { confirmedBy: cluster.confirmedBy } : {}),
     createdAt: cluster.createdAt,
+  };
+}
+
+export function daoApprovalView(approval: DaoApprovalRecord): Record<string, unknown> {
+  return {
+    id: approval.id,
+    daoAccount: approval.daoAccount,
+    proposalId: approval.proposalId,
+    budgetMicro: approval.budgetMicro,
+    contractorRoster: approval.contractorRoster,
+    inspectorRoster: approval.inspectorRoster,
+    policyHash: approval.policyHash,
+    state: approval.state,
+    ...(approval.approvedAt ? { approvedAt: approval.approvedAt } : {}),
   };
 }
 

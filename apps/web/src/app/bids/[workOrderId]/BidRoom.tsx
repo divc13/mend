@@ -28,7 +28,17 @@ const EXPLANATIONS: Record<string, string> = {
     'Lowest sticker price among the three, but the weakest warranty and slowest completion reduce total value.',
 };
 
-export function BidRoom({ caseData }: { caseData: CaseBundle }) {
+export function BidRoom({
+  caseData,
+  dataSource = 'fixture',
+  apiConfigured = false,
+  fallbackReason,
+}: {
+  caseData: CaseBundle;
+  dataSource?: 'api' | 'fixture';
+  apiConfigured?: boolean;
+  fallbackReason?: string;
+}) {
   const hasReveals = caseData.reveals.length > 0 && Boolean(caseData.score);
   const [showRevealed, setShowRevealed] = useState(hasReveals && isRevealed(caseData));
   const revealed = hasReveals && showRevealed;
@@ -50,6 +60,17 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
             <p className="side-card__note">{caseData.title}</p>
             <div style={{ marginTop: 10 }}>
               <StatusPill status={caseData.status} />
+            </div>
+            <div style={{ marginTop: 8 }}>
+              <Badge tone={dataSource === 'api' && caseData.mode !== 'REPLAY' ? 'positive' : 'warning'}>
+                {dataSource === 'api'
+                  ? caseData.mode === 'REPLAY'
+                    ? 'LIVE API · REPLAY RECORD'
+                    : 'LIVE API'
+                  : apiConfigured
+                    ? 'REPLAY / SIMULATION · FIXTURE FALLBACK'
+                    : 'REPLAY / SIMULATION'}
+              </Badge>
             </div>
             <dl>
               <div>
@@ -224,9 +245,14 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
           ) : null}
 
           {!hasReveals ? (
-            <Callout tone="warning" title="No reveal in this recording">
-              This work order is frozen at the sealed phase. The recording does not contain reveal values, so the interface
-              does not invent them. Open the bench case to compare a completed reveal and deterministic score.
+            <Callout
+              tone="warning"
+              title={dataSource === 'api' ? 'No public reveal yet' : 'No reveal in this recording'}
+            >
+              {dataSource === 'api'
+                ? 'The live API has not published reveal values for this work order. The interface does not invent them.'
+                : 'This work order is frozen at the sealed phase. The recording does not contain reveal values, so the interface does not invent them.'}{' '}
+              Open the bench case to compare a completed reveal and deterministic score.
               <div style={{ marginTop: 10 }}>
                 <Link className="text-link" href="/bids/WO-BENCH-001-0001">
                   Open the revealed bench market <ArrowRight size={14} aria-hidden="true" />
@@ -248,7 +274,13 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
                     execution hashes are recorded with the result.
                   </p>
                 </div>
-                <Badge tone="warning">Replay execution</Badge>
+                <Badge tone="warning">
+                  {caseData.score.verified
+                    ? 'Verified execution'
+                    : caseData.mode === 'REPLAY'
+                      ? 'Replay execution'
+                      : 'Unverified execution'}
+                </Badge>
               </div>
 
               <div className="weights" aria-label="Scoring policy weights">
@@ -427,7 +459,16 @@ export function BidRoom({ caseData }: { caseData: CaseBundle }) {
           </article>
         </div>
 
-        <DataSourceNote detail={`Sealed bid room for ${caseData.id} (${statusLabel(caseData.status)}). Replay values are frozen; no live reveal or OutLayer callback is claimed.`} />
+        <DataSourceNote
+          source={dataSource}
+          detail={
+            fallbackReason ??
+            `Sealed bid room for ${caseData.id} (${statusLabel(caseData.status)}). Frozen replay values are shown; no live reveal or OutLayer callback is claimed.`
+          }
+          liveDetail={`Sealed bid room for ${caseData.id} (${statusLabel(caseData.status)}). Data comes from the configured MEND API${
+            caseData.mode === 'REPLAY' ? ' and is marked REPLAY / SIMULATION' : ''
+          }. No OutLayer callback is claimed without a verified execution.`}
+        />
       </div>
     </div>
   );

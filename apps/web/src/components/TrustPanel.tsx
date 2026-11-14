@@ -3,12 +3,24 @@ import { formatDateTime } from '@/lib/format';
 import { Badge, EvidenceTag, HashDisplay } from './ui';
 import { AlertTriangle, Check, ExternalLink, ShieldCheck, Sparkles, Users, Eye } from './Icons';
 
-function ExplorerLink({ href, hash, label }: { href?: string; hash?: string; label: string }) {
+function ExplorerLink({
+  href,
+  hash,
+  label,
+  source,
+}: {
+  href?: string;
+  hash?: string;
+  label: string;
+  source: 'fixture' | 'api';
+}) {
   if (!href || !hash) {
     return (
       <span className="explorer-missing">
         <AlertTriangle size={14} aria-hidden="true" />
-        No explorer link — no real transaction hash in this replay fixture.
+        {source === 'api'
+          ? 'No explorer link — the API did not return a real transaction hash for this reference.'
+          : 'No explorer link — no real transaction hash in this replay fixture.'}
       </span>
     );
   }
@@ -19,7 +31,13 @@ function ExplorerLink({ href, hash, label }: { href?: string; hash?: string; lab
   );
 }
 
-export function TrustPanel({ caseData }: { caseData: CaseBundle }) {
+export function TrustPanel({
+  caseData,
+  source = 'fixture',
+}: {
+  caseData: CaseBundle;
+  source?: 'fixture' | 'api';
+}) {
   const ai = caseData.attestations.find((item) => item.kind === 'NEAR_AI');
   const outlayer = caseData.attestations.find((item) => item.kind === 'OUTLAYER');
   const dao = caseData.attestations.find((item) => item.kind === 'DAO');
@@ -172,8 +190,9 @@ export function TrustPanel({ caseData }: { caseData: CaseBundle }) {
             </p>
           ) : null}
           <p className="trust-footnote">
-            A named decision is not the same as a cryptographic signature. Replay fixtures label human actors but do not
-            bundle their wallet signatures.
+            {source === 'api'
+              ? 'A named decision is not the same as a cryptographic signature. The API labels human actors but no wallet signature is inferred.'
+              : 'A named decision is not the same as a cryptographic signature. Replay fixtures label human actors but do not bundle their wallet signatures.'}
           </p>
         </article>
 
@@ -217,9 +236,14 @@ export function TrustPanel({ caseData }: { caseData: CaseBundle }) {
         <div>
           <h3>Transaction links</h3>
           {caseData.fundingTxHash ? (
-            <ExplorerLink href={caseData.attestations.find((item) => item.explorerUrl)?.explorerUrl} hash={caseData.fundingTxHash} label="Funding transaction" />
+            <ExplorerLink
+              href={caseData.attestations.find((item) => item.explorerUrl)?.explorerUrl}
+              hash={caseData.fundingTxHash}
+              label="Funding transaction"
+              source={source}
+            />
           ) : (
-            <ExplorerLink label="Funding transaction" />
+            <ExplorerLink label="Funding transaction" source={source} />
           )}
         </div>
         <div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   AbsoluteFill,
+  Easing,
   Img,
   OffthreadVideo,
   interpolate,
@@ -14,15 +15,27 @@ import { liveMedia, mediaAt } from '../../v2/lib/assets';
 import type { SceneId } from '../../v2/lib/script';
 import { FPS, type V3Scene } from '../lib/script';
 
+export type CameraKeyframe = {
+  /** Scene-local seconds. */
+  at: number;
+  scale: number;
+  x?: number;
+  y?: number;
+};
+
 export type LiveSceneConfig = {
   sceneId: Exclude<V3Scene['id'], 'close'>;
   asset: string;
   /** Seconds into the source clip where populated app content begins. */
   sourceStart?: number;
   playbackRate?: number;
-  zoom?: number;
   offsetY?: number;
   origin?: string;
+  /** Config-driven punch-ins. The first keyframe is the resting frame. */
+  camera?: CameraKeyframe[];
+  /** Keep the stack hidden until the hook has earned it (scene-local seconds). */
+  stackRevealAt?: number;
+  hookStrip?: boolean;
   chapter: string;
   headline: string;
   sub: string;
@@ -30,8 +43,42 @@ export type LiveSceneConfig = {
   opening?: { title: string; sub: string; until: number };
 };
 
-const panelHeight = (sceneId: V3Scene['id']): number => (sceneId === 'tech' ? 238 : 202);
 const TOP_BAND = 104;
+
+const panelHeight = (sceneId: V3Scene['id']): number => (sceneId === 'tech' ? 276 : 202);
+
+const cameraAt = (
+  seconds: number,
+  keys: CameraKeyframe[] | undefined,
+): { scale: number; x: number; y: number } => {
+  const fallback: CameraKeyframe = { at: 0, scale: 1.035, x: 0, y: 0 };
+  const list = keys && keys.length > 0 ? keys : [fallback];
+  const first = list[0];
+  if (seconds <= first.at) {
+    return { scale: first.scale, x: first.x ?? 0, y: first.y ?? 0 };
+  }
+  let previous = first;
+  let next: CameraKeyframe | undefined;
+  for (const key of list) {
+    if (key.at <= seconds) {
+      previous = key;
+    } else {
+      next = key;
+      break;
+    }
+  }
+  if (!next) {
+    return { scale: previous.scale, x: previous.x ?? 0, y: previous.y ?? 0 };
+  }
+  const span = Math.max(0.001, next.at - previous.at);
+  const raw = Math.min(1, Math.max(0, (seconds - previous.at) / span));
+  const eased = Easing.bezier(0.42, 0, 0.18, 1)(raw);
+  return {
+    scale: previous.scale + (next.scale - previous.scale) * eased,
+    x: (previous.x ?? 0) + ((next.x ?? 0) - (previous.x ?? 0)) * eased,
+    y: (previous.y ?? 0) + ((next.y ?? 0) - (previous.y ?? 0)) * eased,
+  };
+};
 
 const TopBar: React.FC<{ config: LiveSceneConfig; index: number }> = ({ config, index }) => {
   const frame = useCurrentFrame();
@@ -78,7 +125,7 @@ const TopBar: React.FC<{ config: LiveSceneConfig; index: number }> = ({ config, 
               fontSize: 11,
               letterSpacing: '0.18em',
               color: palette.mint,
-              borderLeft: `1px solid rgba(143,211,180,0.45)`,
+              borderLeft: '1px solid rgba(143,211,180,0.45)',
               paddingLeft: 14,
             }}
           >
@@ -151,7 +198,7 @@ const StackChip: React.FC<{ name: string; active: boolean; index: number }> = ({
         backgroundColor: active ? palette.green : 'rgba(255,253,248,0.7)',
         color: active ? palette.paper : palette.muted,
         fontFamily: fonts.mono,
-        fontSize: 10,
+        fontSize: 11,
         lineHeight: 1,
         letterSpacing: '0.04em',
         opacity: enter,
@@ -172,30 +219,566 @@ const StackChip: React.FC<{ name: string; active: boolean; index: number }> = ({
   );
 };
 
+const HookStrip: React.FC = () => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <span
+        style={{
+          fontFamily: fonts.mono,
+          fontSize: 10,
+          letterSpacing: '0.18em',
+          color: palette.amberStrong,
+        }}
+      >
+        BEFORE THE STACK
+      </span>
+      <span style={{ width: 28, height: 1, backgroundColor: palette.amber, display: 'inline-block' }} />
+      <span
+        style={{
+          fontFamily: fonts.mono,
+          fontSize: 9,
+          letterSpacing: '0.08em',
+          color: palette.muted,
+        }}
+      >
+        HUMAN STORY FIRST
+      </span>
+    </div>
+    <div
+      style={{
+        fontFamily: fonts.display,
+        fontSize: 29,
+        lineHeight: 1.06,
+        letterSpacing: '-0.025em',
+        color: palette.ink,
+      }}
+    >
+      No wallet · No forms · <span style={{ color: palette.green }}>Private by default.</span>
+    </div>
+    <div
+      style={{
+        fontFamily: fonts.body,
+        fontSize: 16,
+        lineHeight: 1.35,
+        color: palette.inkSoft,
+        maxWidth: 660,
+      }}
+    >
+      EXIF + GPS stripped in the browser before upload. Duplicate reports merge privately.
+    </div>
+    <div style={{ display: 'flex', gap: 7, marginTop: 1 }}>
+      {['NO ACCOUNT', 'NO PAYMENT', 'HUMAN APPROVAL'].map((label) => (
+        <span
+          key={label}
+          style={{
+            fontFamily: fonts.mono,
+            fontSize: 9,
+            letterSpacing: '0.08em',
+            color: palette.green,
+            border: `1px solid ${palette.lineStrong}`,
+            backgroundColor: 'rgba(255,253,248,0.72)',
+            borderRadius: 999,
+            padding: '5px 8px',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {label}
+        </span>
+      ))}
+    </div>
+  </div>
+);
+
+const StackBlock: React.FC<{ scene: V3Scene; activeIndex: number }> = ({ scene, activeIndex }) => {
+  const active = scene.stack[activeIndex] ?? scene.stack[0];
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <span
+          style={{
+            fontFamily: fonts.mono,
+            fontSize: 10,
+            letterSpacing: '0.18em',
+            color: palette.amberStrong,
+          }}
+        >
+          STACK IN PLAY
+        </span>
+        <span style={{ width: 28, height: 1, backgroundColor: palette.amber, display: 'inline-block' }} />
+        <span
+          style={{
+            fontFamily: fonts.mono,
+            fontSize: 9,
+            letterSpacing: '0.08em',
+            color: palette.muted,
+          }}
+        >
+          {activeIndex + 1}/{scene.stack.length}
+        </span>
+      </div>
+      <div
+        style={{
+          fontFamily: fonts.display,
+          fontSize: 38,
+          lineHeight: 1,
+          letterSpacing: '-0.03em',
+          color: palette.ink,
+        }}
+      >
+        {active.name}
+      </div>
+      <div
+        style={{
+          fontFamily: fonts.body,
+          fontSize: 18,
+          lineHeight: 1.32,
+          color: palette.inkSoft,
+        }}
+      >
+        {active.purpose}
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 2 }}>
+        {scene.stack.map((item, index) => (
+          <StackChip key={item.name} name={item.name} active={index === activeIndex} index={index} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+/* ------------------------------------------------------------------ */
+/* Tech rail: three legible layers instead of ten tiny chips.         */
+/* ------------------------------------------------------------------ */
+
+type TechLayer = 'interface' | 'trust' | 'proof';
+
+type TechItem = {
+  id: string;
+  name: string;
+  purpose: string;
+  layer: TechLayer;
+};
+
+const TECH_ITEMS: TechItem[] = [
+  {
+    id: 'nextjs',
+    name: 'Next.js + React',
+    purpose: 'walletless resident client',
+    layer: 'interface',
+  },
+  {
+    id: 'relayer',
+    name: 'NEP-366 relayer',
+    purpose: 'gasless actions, live on testnet',
+    layer: 'interface',
+  },
+  {
+    id: 'fastify',
+    name: 'Fastify',
+    purpose: 'API + authorization boundary',
+    layer: 'trust',
+  },
+  {
+    id: 'postgres',
+    name: 'Postgres',
+    purpose: 'case + timeline state',
+    layer: 'trust',
+  },
+  {
+    id: 'rust',
+    name: 'Rust on NEAR',
+    purpose: 'escrow + policy on-chain',
+    layer: 'trust',
+  },
+  {
+    id: 'sputnik',
+    name: 'Sputnik DAO',
+    purpose: '2-of-3 human approval',
+    layer: 'trust',
+  },
+  {
+    id: 'nearai',
+    name: 'NEAR AI',
+    purpose: 'private triage; signature valid, TEE unavailable',
+    layer: 'proof',
+  },
+  {
+    id: 'outlayer',
+    name: 'OutLayer',
+    purpose: 'deterministic scorer + receipt',
+    layer: 'proof',
+  },
+  {
+    id: 'oneclick',
+    name: '1Click',
+    purpose: 'cross-chain quote / sponsorship',
+    layer: 'proof',
+  },
+  {
+    id: 'agentmarket',
+    name: 'Agent Market',
+    purpose: 'evidence review, self-hire disclosed',
+    layer: 'proof',
+  },
+];
+
+const TECH_LAYERS: Array<{ id: TechLayer; label: string; status: string; statusTone: 'green' | 'amber' | 'mint' }> = [
+  { id: 'interface', label: 'INTERFACE', status: 'INTEGRATED', statusTone: 'mint' },
+  { id: 'trust', label: 'TRUST', status: 'LIVE TESTNET', statusTone: 'green' },
+  { id: 'proof', label: 'PROOF', status: '42 TX VERIFIED', statusTone: 'amber' },
+];
+
+/** Roughly follows the voice-over list from "Next.js and React" to "Agent Market". */
+const TECH_ACTIVE: Array<{ at: number; id: string }> = [
+  { at: 0.6, id: 'nextjs' },
+  { at: 2.3, id: 'fastify' },
+  { at: 3.6, id: 'postgres' },
+  { at: 5.1, id: 'rust' },
+  { at: 6.9, id: 'sputnik' },
+  { at: 8.7, id: 'nearai' },
+  { at: 10.5, id: 'outlayer' },
+  { at: 12.3, id: 'oneclick' },
+  { at: 14.2, id: 'agentmarket' },
+  { at: 17.9, id: 'receipts' },
+];
+
+const TECH_RECEIPTS: TechItem = {
+  id: 'receipts',
+  name: 'Verifiable receipts',
+  purpose: '42 transactions: every payment, vote and attestation',
+  layer: 'proof',
+};
+
+const StatusPill: React.FC<{ children: React.ReactNode; tone?: 'green' | 'amber' | 'mint' }> = ({
+  children,
+  tone = 'mint',
+}) => {
+  const style =
+    tone === 'green'
+      ? { background: palette.green, color: palette.paper, border: palette.green }
+      : tone === 'amber'
+        ? { background: palette.amberSoft, color: palette.amberStrong, border: 'rgba(169,103,18,0.42)' }
+        : { background: 'rgba(255,253,248,0.78)', color: palette.green, border: palette.lineStrong };
+  return (
+    <span
+      style={{
+        display: 'inline-flex',
+        alignItems: 'center',
+        fontFamily: fonts.mono,
+        fontSize: 9,
+        fontWeight: 600,
+        letterSpacing: '0.08em',
+        lineHeight: 1,
+        borderRadius: 999,
+        padding: '5px 8px',
+        whiteSpace: 'nowrap',
+        ...style,
+      }}
+    >
+      {children}
+    </span>
+  );
+};
+
+const TechRail: React.FC<{ activeId: string }> = ({ activeId }) => {
+  const active = TECH_ITEMS.find((item) => item.id === activeId) ?? TECH_RECEIPTS;
+  const activeLayer = active.layer;
+  return (
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
+        <span
+          style={{
+            fontFamily: fonts.mono,
+            fontSize: 10,
+            letterSpacing: '0.18em',
+            color: palette.amberStrong,
+          }}
+        >
+          STACK IN PLAY
+        </span>
+        <span style={{ width: 24, height: 1, backgroundColor: palette.amber, display: 'inline-block' }} />
+        <StatusPill tone="green">LIVE TESTNET</StatusPill>
+        <StatusPill tone="amber">REPLAY</StatusPill>
+        <span style={{ flex: 1 }} />
+        <span
+          style={{
+            fontFamily: fonts.mono,
+            fontSize: 10,
+            letterSpacing: '0.09em',
+            color: palette.green,
+          }}
+        >
+          42 TX VERIFIED
+        </span>
+      </div>
+
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, marginTop: 9 }}>
+        <span
+          style={{
+            fontFamily: fonts.display,
+            fontSize: 31,
+            lineHeight: 1,
+            letterSpacing: '-0.03em',
+            color: palette.ink,
+          }}
+        >
+          {active.name}
+        </span>
+        <span
+          style={{
+            fontFamily: fonts.body,
+            fontSize: 16,
+            lineHeight: 1.2,
+            color: palette.inkSoft,
+          }}
+        >
+          {active.purpose}
+        </span>
+        <span style={{ flex: 1 }} />
+        <span
+          style={{
+            fontFamily: fonts.mono,
+            fontSize: 9,
+            letterSpacing: '0.08em',
+            color: palette.muted,
+          }}
+        >
+          {active.id === 'receipts' ? 'PROOF' : `${TECH_ITEMS.findIndex((item) => item.id === active.id) + 1}/10`}
+        </span>
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginTop: 9 }}>
+        {TECH_LAYERS.map((layer) => {
+          const items = TECH_ITEMS.filter((item) => item.layer === layer.id);
+          const layerActive = active.id === 'receipts' ? layer.id === 'proof' : layer.id === activeLayer;
+          return (
+            <div
+              key={layer.id}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                minHeight: 27,
+                padding: '2px 8px 2px 6px',
+                borderLeft: `3px solid ${layerActive ? palette.green : 'transparent'}`,
+                background: layerActive ? 'rgba(143,211,180,0.16)' : 'transparent',
+              }}
+            >
+              <span
+                style={{
+                  width: 74,
+                  flexShrink: 0,
+                  fontFamily: fonts.mono,
+                  fontSize: 9,
+                  fontWeight: 700,
+                  letterSpacing: '0.12em',
+                  color: palette.amberStrong,
+                }}
+              >
+                {layer.label}
+              </span>
+              <span
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 6,
+                  flex: 1,
+                  minWidth: 0,
+                  fontFamily: fonts.body,
+                  fontSize: 16,
+                  lineHeight: 1.2,
+                  color: palette.inkSoft,
+                }}
+              >
+                {items.map((item, index) => {
+                  const isActive = item.id === active.id;
+                  return (
+                    <React.Fragment key={item.id}>
+                      {index > 0 ? (
+                        <span style={{ color: palette.lineStrong, fontSize: 13 }}>·</span>
+                      ) : null}
+                      <span
+                        style={{
+                          color: isActive ? palette.green : palette.inkSoft,
+                          fontWeight: isActive ? 700 : 400,
+                          whiteSpace: 'nowrap',
+                          borderBottom: isActive ? `2px solid ${palette.mint}` : '2px solid transparent',
+                          paddingBottom: 1,
+                        }}
+                      >
+                        {item.name}
+                      </span>
+                    </React.Fragment>
+                  );
+                })}
+              </span>
+              <StatusPill tone={layer.statusTone}>{layer.status}</StatusPill>
+            </div>
+          );
+        })}
+      </div>
+
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: 12,
+          marginTop: 'auto',
+          paddingTop: 6,
+          fontFamily: fonts.mono,
+          fontSize: 9.5,
+          letterSpacing: '0.06em',
+        }}
+      >
+        <span style={{ color: palette.amberStrong }}>SIGNATURE VALID · TEE UNAVAILABLE (LABELLED)</span>
+        <span style={{ width: 1, height: 10, background: palette.lineStrong }} />
+        <span style={{ color: palette.muted }}>PAYMENTS · VOTES · ATTESTATIONS</span>
+      </div>
+    </div>
+  );
+};
+
+const TechBottomPanel: React.FC<{ scene: V3Scene; config: LiveSceneConfig }> = ({
+  scene,
+  config,
+}) => {
+  const frame = useCurrentFrame();
+  const seconds = frame / FPS;
+  const activeEntry = TECH_ACTIVE.reduce(
+    (current, entry) => (seconds >= entry.at ? entry : current),
+    TECH_ACTIVE[0],
+  );
+  const enter = spring({ frame, fps: 30, config: { damping: 200, stiffness: 100 } });
+  return (
+    <div
+      style={{
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 0,
+        height: panelHeight(scene.id),
+        display: 'flex',
+        backgroundColor: palette.paper,
+        borderTop: `4px solid ${palette.mint}`,
+        boxShadow: '0 -24px 70px rgba(7,27,21,0.22)',
+        zIndex: 25,
+        transform: `translateY(${(1 - enter) * 26}px)`,
+        opacity: enter,
+      }}
+    >
+      <div
+        style={{
+          width: 1110,
+          padding: '15px 26px 12px 46px',
+          borderRight: `1px solid ${palette.line}`,
+        }}
+      >
+        <TechRail activeId={activeEntry.id} />
+      </div>
+      <div
+        style={{
+          flex: 1,
+          padding: '16px 42px 14px 30px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          gap: 8,
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 16 }}>
+          <div>
+            <div
+              style={{
+                fontFamily: fonts.mono,
+                fontSize: 10,
+                letterSpacing: '0.16em',
+                color: palette.amberStrong,
+                marginBottom: 6,
+              }}
+            >
+              {config.chapter}
+            </div>
+            <div
+              style={{
+                fontFamily: fonts.display,
+                fontSize: 41,
+                lineHeight: 0.98,
+                letterSpacing: '-0.035em',
+                color: palette.ink,
+              }}
+            >
+              {config.headline}
+            </div>
+          </div>
+          <div
+            style={{
+              flexShrink: 0,
+              marginTop: 20,
+              padding: '8px 11px',
+              borderRadius: 4,
+              backgroundColor: palette.green,
+              color: palette.paper,
+              fontFamily: fonts.mono,
+              fontSize: 9,
+              letterSpacing: '0.05em',
+              textTransform: 'uppercase',
+              maxWidth: 300,
+            }}
+          >
+            {config.metric}
+          </div>
+        </div>
+        <div
+          style={{
+            fontFamily: fonts.body,
+            fontSize: 17,
+            lineHeight: 1.32,
+            color: palette.muted,
+            maxWidth: 700,
+          }}
+        >
+          {config.sub}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const BottomPanel: React.FC<{
   scene: V3Scene;
   config: LiveSceneConfig;
 }> = ({ scene, config }) => {
   const frame = useCurrentFrame();
-  const { durationInFrames } = useVideoConfig();
-  const progress = interpolate(frame, [0, durationInFrames], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
+  const { fps } = useVideoConfig();
+  const seconds = frame / fps;
+  const hookEnd = config.stackRevealAt ?? 0;
+  const stackReveal = config.hookStrip
+    ? spring({
+        frame: Math.max(0, frame - Math.round(hookEnd * fps)),
+        fps,
+        config: { damping: 200, stiffness: 92 },
+      })
+    : 1;
+  const stackStart = config.hookStrip ? hookEnd : 0;
+  const stackWindow = Math.max(0.4, scene.sceneDuration - stackStart - 0.35);
+  const stackProgress = Math.min(
+    1,
+    Math.max(0, (seconds - stackStart) / stackWindow),
+  );
   const activeIndex = Math.min(
     scene.stack.length - 1,
-    Math.floor(progress * scene.stack.length),
+    Math.floor(stackProgress * scene.stack.length),
   );
-  const active = scene.stack[activeIndex] ?? scene.stack[0];
   const enter = spring({
     frame,
-    fps: 30,
+    fps,
     config: { damping: 200, stiffness: 100 },
   });
   const height = panelHeight(scene.id);
-  const openingActive = Boolean(config.opening) && frame < (config.opening?.until ?? 0) * 30;
+  const openingActive = Boolean(config.opening) && frame < (config.opening?.until ?? 0) * fps;
   const headline = openingActive ? config.opening!.title : config.headline;
   const subline = openingActive ? config.opening!.sub : config.sub;
+  const leftPad = '22px 34px 18px 46px';
   return (
     <div
       style={{
@@ -216,76 +799,41 @@ const BottomPanel: React.FC<{
       <div
         style={{
           width: 760,
-          padding: '22px 34px 18px 46px',
+          position: 'relative',
           borderRight: `1px solid ${palette.line}`,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 9,
+          overflow: 'hidden',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <span
-            style={{
-              fontFamily: fonts.mono,
-              fontSize: 10,
-              letterSpacing: '0.18em',
-              color: palette.amberStrong,
-            }}
-          >
-            STACK IN PLAY
-          </span>
-          <span
-            style={{
-              width: 28,
-              height: 1,
-              backgroundColor: palette.amber,
-              display: 'inline-block',
-            }}
-          />
-          <span
-            style={{
-              fontFamily: fonts.mono,
-              fontSize: 9,
-              letterSpacing: '0.08em',
-              color: palette.muted,
-            }}
-          >
-            {activeIndex + 1}/{scene.stack.length}
-          </span>
-        </div>
-        <div
-          style={{
-            fontFamily: fonts.display,
-            fontSize: scene.id === 'tech' ? 34 : 38,
-            lineHeight: 1,
-            letterSpacing: '-0.03em',
-            color: palette.ink,
-          }}
-        >
-          {active.name}
-        </div>
-        <div
-          style={{
-            fontFamily: fonts.body,
-            fontSize: 18,
-            lineHeight: 1.32,
-            color: palette.inkSoft,
-          }}
-        >
-          {active.purpose}
-        </div>
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: 6,
-            marginTop: 2,
-          }}
-        >
-          {scene.stack.map((item, index) => (
-            <StackChip key={item.name} name={item.name} active={index === activeIndex} index={index} />
-          ))}
-        </div>
+        {config.hookStrip ? (
+          <>
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                padding: leftPad,
+                opacity: 1 - stackReveal,
+                transform: `translateY(${-stackReveal * 10}px)`,
+              }}
+            >
+              <HookStrip />
+            </div>
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                padding: leftPad,
+                opacity: stackReveal,
+                transform: `translateY(${(1 - stackReveal) * 14}px)`,
+              }}
+            >
+              <StackBlock scene={scene} activeIndex={activeIndex} />
+            </div>
+          </>
+        ) : (
+          <div style={{ padding: leftPad }}>
+            <StackBlock scene={scene} activeIndex={activeIndex} />
+          </div>
+        )}
       </div>
       <div
         style={{
@@ -312,7 +860,7 @@ const BottomPanel: React.FC<{
             <div
               style={{
                 fontFamily: fonts.display,
-                fontSize: scene.id === 'tech' ? 40 : 45,
+                fontSize: 45,
                 lineHeight: 0.98,
                 letterSpacing: '-0.035em',
                 color: palette.ink,
@@ -361,14 +909,9 @@ export const AppScene: React.FC<{ scene: V3Scene; config: LiveSceneConfig; index
   index,
 }) => {
   const frame = useCurrentFrame();
-  const { durationInFrames } = useVideoConfig();
   const media = mediaAt(config.asset) ?? liveMedia(config.sceneId as SceneId);
-  const progress = interpolate(frame, [0, durationInFrames], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-  const baseZoom = config.zoom ?? 1.035;
-  const zoom = baseZoom + progress * 0.03;
+  const seconds = frame / FPS;
+  const camera = cameraAt(seconds, config.camera);
   const sourceStartFrame = Math.round((config.sourceStart ?? 0) * FPS);
   return (
     <AbsoluteFill style={{ backgroundColor: palette.greenDeep }}>
@@ -383,7 +926,7 @@ export const AppScene: React.FC<{ scene: V3Scene; config: LiveSceneConfig; index
           style={{
             position: 'absolute',
             inset: 0,
-            transform: `translateY(${config.offsetY ?? 0}px) scale(${zoom})`,
+            transform: `translate(${camera.x}px, ${(config.offsetY ?? 0) + camera.y}px) scale(${camera.scale})`,
             transformOrigin: config.origin ?? '50% 40%',
           }}
         >
@@ -421,7 +964,11 @@ export const AppScene: React.FC<{ scene: V3Scene; config: LiveSceneConfig; index
         }}
       />
       <TopBar config={config} index={index} />
-      <BottomPanel scene={scene} config={config} />
+      {scene.id === 'tech' ? (
+        <TechBottomPanel scene={scene} config={config} />
+      ) : (
+        <BottomPanel scene={scene} config={config} />
+      )}
     </AbsoluteFill>
   );
 };

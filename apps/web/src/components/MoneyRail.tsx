@@ -4,7 +4,13 @@ import { formatDateTime, microToUsdc, usdc } from '@/lib/format';
 import { StatusPill } from './ui';
 import { ArrowRight, Coins } from './Icons';
 
-export function MoneyRail({ caseData }: { caseData: CaseBundle }) {
+export function MoneyRail({
+  caseData,
+  source = 'fixture',
+}: {
+  caseData: CaseBundle;
+  source?: 'fixture' | 'api';
+}) {
   const escrow = caseData.escrow;
   const accounted =
     BigInt(escrow.refundedMicro) +
@@ -130,7 +136,9 @@ export function MoneyRail({ caseData }: { caseData: CaseBundle }) {
         </p>
       ) : (
         <p className="source-note source-note--replay">
-          No payment above carries a real transaction hash in this replay fixture, so no explorer link is shown.
+          {source === 'api'
+            ? 'No payment above carries a transaction hash in the API response, so no explorer link is shown.'
+            : 'No payment above carries a real transaction hash in this replay fixture, so no explorer link is shown.'}
         </p>
       )}
 

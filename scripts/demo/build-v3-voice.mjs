@@ -110,7 +110,10 @@ for (const id of ORDER) {
     '-af',
     // v1 lines are mono. A stereo upmix must feed both outputs from channel 0;
     // `c1=c1` reads a non-existent second input channel and silences the right side.
-    'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.10,areverse,aresample=48000,pan=stereo|c0=c0|c1=c0',
+    // The two areverse legs add a 20 ms fade at each end of every line. The trims
+    // leave >100 ms of silence at each edge, so the fades land in the 0.12 s splice
+    // gaps and never clip the read itself.
+    'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.10,areverse,aresample=48000,pan=stereo|c0=c0|c1=c0,afade=t=in:st=0:d=0.02,areverse,afade=t=in:st=0:d=0.02,areverse',
     '-c:a',
     'pcm_s16le',
     trimmed,

@@ -194,7 +194,7 @@ export interface WarrantyView {
   note: string;
 }
 
-export type AttestationKind = 'NEAR_AI' | 'OUTLAYER' | 'DAO' | 'TRANSACTION' | 'HUMAN';
+export type AttestationKind = 'NEAR_AI' | 'OUTLAYER' | 'DAO' | 'TRANSACTION' | 'HUMAN' | 'LOCAL_REPLAY';
 
 export interface AttestationView {
   id: string;

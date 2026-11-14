@@ -1,12 +1,18 @@
 'use client';
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import type { CaseBundle, WorkOrderState } from '@/lib/types';
-import { CASES, statusLabel } from '@/lib/fixtures';
+import { statusLabel } from '@/lib/fixtures';
 import { bpsToPercent, formatDateTime, microToUsdc, shortAccount, usdc } from '@/lib/format';
+import { storeDemoIdentity } from '@/lib/api';
+import { caseSourceLabel, caseSourceTone, type CaseDataSource } from '@/lib/case-source';
+import { postWorkOrderAction, summarizeActionResult } from '@/lib/work-order-actions';
 import { Badge, Callout, PageHero, StatusPill } from '@/components/ui';
 import { DataSourceNote } from '@/components/DataSourceNote';
+import { TxHashRow } from '@/components/TxHashRow';
+import { useMode } from '@/components/ModeProvider';
 import {
   AlertTriangle,
   ArrowRight,
@@ -30,19 +36,43 @@ const AWARDED_STATES: WorkOrderState[] = [
   'DISPUTED',
 ];
 
-export function StewardConsole() {
-  const [caseId, setCaseId] = useState(CASES[0]!.id);
-  const caseData = CASES.find((item) => item.id === caseId) ?? CASES[0]!;
-  const [scope, setScope] = useState(caseData.scope);
-  const [budget, setBudget] = useState(microToUsdc(caseData.budgetMicro, 2));
-  const [proposal, setProposal] = useState(caseData.daoApproval.proposalId);
+export function StewardConsole({
+  cases,
+  dataSource,
+  apiConfigured,
+  fallbackReason,
+  initialCaseId,
+}: {
+  cases: CaseBundle[];
+  dataSource: CaseDataSource;
+  apiConfigured: boolean;
+  fallbackReason?: string;
+  initialCaseId?: string;
+}) {
+  const router = useRouter();
+  const { mode, apiHealth } = useMode();
+  const availableCases = cases.length > 0 ? cases : [];
+  const firstCase = availableCases.find((item) => item.id === initialCaseId) ?? availableCases[0]!;
+  const [caseId, setCaseId] = useState(firstCase.id);
+  const caseData = availableCases.find((item) => item.id === caseId) ?? firstCase;
+  const [scope, setScope] = useState(firstCase.scope);
+  const [budget, setBudget] = useState(microToUsdc(firstCase.budgetMicro, 2));
+  const [proposal, setProposal] = useState(firstCase.daoApproval.proposalId);
   const [acting, setActing] = useState(false);
   const [draftStatus, setDraftStatus] = useState('No local changes.');
   const [awardStatus, setAwardStatus] = useState<string | null>(null);
+  const [awardTxHash, setAwardTxHash] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const live = mode === 'LIVE_TESTNET';
+  const liveData = live && dataSource === 'api';
+  const stewardAccount = apiHealth?.roleAccounts?.steward ?? 'mend-steward.testnet';
+  const sourceLabel = caseSourceLabel(dataSource, caseData.mode, apiConfigured);
 
   const winner = useMemo(() => caseData.score?.ranking.find((bid) => bid.rank === 1), [caseData]);
   const alreadyAwarded = AWARDED_STATES.includes(caseData.status) && Boolean(caseData.contractorId);
   const canRehearseAward = Boolean(winner) && !alreadyAwarded;
+  const canLiveAward = liveData && canRehearseAward && caseData.status === 'SCORED';
   const budgetMicro = useMemo(() => {
     const value = Number(budget);
     return Number.isFinite(value) && value >= 0 ? Math.round(value * 1_000_000) : 0;
@@ -53,7 +83,7 @@ export function StewardConsole() {
   }, [budgetMicro, caseData.winningBidMicro]);
 
   function chooseCase(nextId: string) {
-    const next = CASES.find((item) => item.id === nextId);
+    const next = availableCases.find((item) => item.id === nextId);
     if (!next) return;
     setCaseId(nextId);
     setScope(next.scope);
@@ -61,6 +91,49 @@ export function StewardConsole() {
     setProposal(next.daoApproval.proposalId);
     setDraftStatus('No local changes.');
     setAwardStatus(null);
+    setAwardTxHash(null);
+  }
+
+  function setActingRole(next: boolean) {
+    setActing(next);
+    if (!next || !live) return;
+    const stored = storeDemoIdentity({ role: 'STEWARD', account: stewardAccount });
+    if (!stored) {
+      setDraftStatus(
+        'Could not store the testnet-only STEWARD demo role in this browser. Live actions will not send a role header.',
+      );
+    }
+  }
+
+  async function confirmAward() {
+    if (!winner) return;
+    if (!liveData) {
+      setAwardStatus(
+        `Replay award confirmation for ${shortAccount(winner.contractorId)} recorded locally. No chain transaction, signature or escrow movement occurred.`,
+      );
+      return;
+    }
+
+    setSubmitting(true);
+    const stored = storeDemoIdentity({ role: 'STEWARD', account: stewardAccount });
+    if (!stored) {
+      setAwardStatus(
+        'The STEWARD demo role could not be stored in this browser. No API request was sent and no award is shown as applied.',
+      );
+      setSubmitting(false);
+      return;
+    }
+    try {
+      const result = await postWorkOrderAction(caseData.id, 'award', { bidId: winner.bidId });
+      const summary = summarizeActionResult(result, 'award');
+      setAwardStatus(
+        `${summary.message}${summary.txHash ? ` Testnet transaction ${summary.txHash}.` : ''}`,
+      );
+      setAwardTxHash(summary.realTransaction && summary.txHash ? summary.txHash : null);
+      if (summary.applied && summary.realTransaction) router.refresh();
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -71,22 +144,30 @@ export function StewardConsole() {
         lead="A steward edits the scope, sets the maximum budget and confirms the deterministic top-ranked eligible bid. The DAO authorizes the envelope and roster. AI may propose, but it cannot approve its own scope, contractor or payment."
         aside={
           <div className="side-card">
-            <h2>Replay steward session</h2>
+            <h2>{live ? 'Live testnet steward session' : 'Replay steward session'}</h2>
             <p className="side-card__value" style={{ fontSize: '1rem', fontFamily: 'var(--font-mono)' }}>
-              steward.mend.testnet
+              {live ? stewardAccount : 'steward.mend.testnet'}
             </p>
             <p className="side-card__note">
-              No wallet is connected. This console demonstrates role gates and actions; it does not sign or submit a
-              transaction.
+              {live
+                ? 'Live actions call the same-origin API proxy with the testnet-only x-mend-role demo header. This is not a wallet signature. Test value only.'
+                : 'No wallet is connected. This console demonstrates role gates and actions; it does not sign or submit a transaction.'}
             </p>
+            <div style={{ marginTop: 8 }}>
+              <Badge tone={caseSourceTone(dataSource, caseData.mode)}>{sourceLabel}</Badge>
+            </div>
             <label className="checkbox-row" style={{ marginTop: 12 }}>
               <input
                 type="checkbox"
                 data-testid="steward-acting"
                 checked={acting}
-                onChange={(event) => setActing(event.target.checked)}
+                onChange={(event) => setActingRole(event.target.checked)}
               />
-              <span>I am acting as the steward in this replay and understand no transaction will be sent.</span>
+              <span>
+                {live
+                  ? 'I am acting as the testnet steward. This stores the STEWARD demo role and enables API-backed actions; it is not a wallet signature.'
+                  : 'I am acting as the steward in this replay and understand no transaction will be sent.'}
+              </span>
             </label>
           </div>
         }
@@ -105,7 +186,7 @@ export function StewardConsole() {
                   value={caseId}
                   onChange={(event) => chooseCase(event.target.value)}
                 >
-                  {CASES.map((item) => (
+                  {availableCases.map((item) => (
                     <option key={item.id} value={item.id}>
                       {item.id} — {statusLabel(item.status)}
                     </option>
@@ -209,17 +290,26 @@ export function StewardConsole() {
                   disabled={!acting}
                   onClick={() =>
                     setDraftStatus(
-                      `Replay draft saved locally at ${formatDateTime(new Date().toISOString())}. No transaction was sent and no scope hash changed.`,
+                      live
+                        ? `Draft saved locally at ${formatDateTime(new Date().toISOString())}. The live API has no scope-edit endpoint in this build, so no scope hash changed and no transaction was sent.`
+                        : `Replay draft saved locally at ${formatDateTime(new Date().toISOString())}. No transaction was sent and no scope hash changed.`,
                     )
                   }
                 >
-                  <FileText size={16} aria-hidden="true" /> Save replay draft
+                  <FileText size={16} aria-hidden="true" /> {live ? 'Save local draft' : 'Save replay draft'}
                 </button>
               </div>
             </div>
             {!acting ? (
               <p className="field__hint" role="status">
-                Confirm the steward role above to enable replay controls.
+                {live
+                  ? 'Confirm the steward role above to enable API-backed controls.'
+                  : 'Confirm the steward role above to enable replay controls.'}
+              </p>
+            ) : null}
+            {live && !liveData ? (
+              <p className="field__hint" role="status">
+                LIVE_TESTNET is selected, but this console is showing a replay fixture. API actions stay disabled.
               </p>
             ) : null}
           </section>
@@ -360,7 +450,11 @@ export function StewardConsole() {
                     {awardStatus ??
                       (alreadyAwarded
                         ? `Already awarded to ${shortAccount(caseData.contractorId ?? '')}. A closed or advanced work order cannot be re-awarded.`
-                        : 'The rank-1 bid is eligible. A steward confirmation would lock the award and return unallocated budget.')}
+                        : liveData
+                          ? canLiveAward
+                            ? 'The rank-1 bid is eligible. Confirming sends a testnet award through the API; it is only shown as applied when the API reports a real transaction hash.'
+                            : `The live API can only award a SCORED work order. This case is ${statusLabel(caseData.status)}, so the action stays disabled.`
+                          : 'The rank-1 bid is eligible. A steward confirmation would lock the award and return unallocated budget.')}
                   </span>
                   <div className="form-actions__right">
                     <Link className="button button--ghost button--small" href={`/bids/${caseData.id}`}>
@@ -370,14 +464,11 @@ export function StewardConsole() {
                       type="button"
                       className="button button--small"
                       data-testid="steward-confirm-award"
-                      disabled={!acting || !canRehearseAward}
-                      onClick={() => {
-                        setAwardStatus(
-                          `Replay award confirmation for ${shortAccount(winner.contractorId)} recorded locally. No chain transaction, signature or escrow movement occurred.`,
-                        );
-                      }}
+                      disabled={submitting || !acting || (liveData ? !canLiveAward : !canRehearseAward)}
+                      onClick={() => void confirmAward()}
                     >
-                      <Gavel size={15} aria-hidden="true" /> Confirm award in replay
+                      <Gavel size={15} aria-hidden="true" />{' '}
+                      {submitting ? 'Sending…' : liveData ? 'Confirm award on testnet' : 'Confirm award in replay'}
                     </button>
                   </div>
                 </div>
@@ -390,7 +481,11 @@ export function StewardConsole() {
             )}
           </section>
 
-          <DataSourceNote detail={`Steward console for ${caseData.id}. All edits and confirmations are replay-only and never claim a transaction.`} />
+          <DataSourceNote
+            source={dataSource}
+            detail={fallbackReason}
+            liveDetail={`Steward console for ${caseData.id}. Case data is read from the configured MEND API. API-backed award actions are enabled only after the global mode banner verifies LIVE_TESTNET; the API data source alone does not enable them.`}
+          />
         </div>
 
         <aside className="form-aside" aria-label="Role and transaction notes">
@@ -416,7 +511,7 @@ export function StewardConsole() {
             <div className="status-bars" style={{ marginTop: 8 }}>
               <div className="evidence-mix__row">
                 <span>Scope draft</span>
-                <Badge tone="warning">Replay only</Badge>
+                <Badge tone="warning">{live ? 'Local only' : 'Replay only'}</Badge>
               </div>
               <div className="evidence-mix__row">
                 <span>DAO authorization</span>
@@ -430,11 +525,13 @@ export function StewardConsole() {
               </div>
               <div className="evidence-mix__row">
                 <span>Explorer link</span>
-                <Badge tone="warning">None</Badge>
+                <Badge tone={awardTxHash ? 'positive' : 'warning'}>{awardTxHash ? 'Testnet tx' : 'None'}</Badge>
               </div>
             </div>
+            {awardTxHash ? <TxHashRow hash={awardTxHash} label="Award transaction" compact /> : null}
             <p className="side-card__note" style={{ marginTop: 10 }}>
-              No action on this page is shown as executed without a real transaction hash.
+              No action on this page is shown as executed without a real transaction hash. Live actions use the
+              testnet-only demo role header, not a wallet signature.
             </p>
           </section>
           <section className="side-card">

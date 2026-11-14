@@ -486,7 +486,11 @@ export default function HowItWorksPage() {
                 </div>
                 <div className="hiw-proof__fact">
                   <dt>Work order</dt>
-                  <dd className="mono">WO-BENCH-V2-001-0002</dd>
+                  <dd className="mono">
+                    <Link className="hiw-explorer" href="/cases/WO-BENCH-V2-001-0002">
+                      WO-BENCH-V2-001-0002 <ArrowRight size={13} aria-hidden="true" />
+                    </Link>
+                  </dd>
                 </div>
                 <div className="hiw-proof__fact">
                   <dt>Status</dt>

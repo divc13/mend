@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { CASES, getCase } from '@/lib/fixtures';
+import { loadCase } from '@/lib/server-api';
 import { InspectorConsole } from './InspectorConsole';
 
-export function generateStaticParams() {
-  return CASES.map((item) => ({ workOrderId: item.id }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,
@@ -13,7 +11,7 @@ export async function generateMetadata({
   params: Promise<{ workOrderId: string }>;
 }): Promise<Metadata> {
   const { workOrderId } = await params;
-  const caseData = getCase(workOrderId);
+  const { caseData } = await loadCase(workOrderId);
   return {
     title: caseData ? `Inspector · ${caseData.assetId}` : 'Inspector console',
     description: 'Evidence checklist, AI completeness suggestions and human-only inspection decisions.',
@@ -22,7 +20,14 @@ export async function generateMetadata({
 
 export default async function InspectorPage({ params }: { params: Promise<{ workOrderId: string }> }) {
   const { workOrderId } = await params;
-  const caseData = getCase(workOrderId);
+  const { caseData, source, apiConfigured, fallbackReason } = await loadCase(workOrderId);
   if (!caseData) notFound();
-  return <InspectorConsole caseData={caseData} />;
+  return (
+    <InspectorConsole
+      caseData={caseData}
+      dataSource={source}
+      apiConfigured={apiConfigured}
+      fallbackReason={fallbackReason}
+    />
+  );
 }

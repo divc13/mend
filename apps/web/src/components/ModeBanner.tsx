@@ -24,7 +24,7 @@ export function ModeBanner() {
         <p className="mode-banner__detail">{meta.description}</p>
         <Link className="mode-banner__link" href="/demo">
           <Info size={15} aria-hidden="true" />
-          <span>{apiConfigured ? 'Mode controls' : 'Why replay?'}</span>
+          <span>{apiConfigured ? 'Mode & demo role' : 'Why replay?'}</span>
         </Link>
       </div>
     </div>

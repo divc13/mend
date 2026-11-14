@@ -7,27 +7,30 @@ import { AlertTriangle, Info } from './Icons';
 export function DataSourceNote({
   source = 'fixture',
   detail,
+  liveDetail,
 }: {
   source?: 'fixture' | 'api';
   detail?: string;
+  liveDetail?: string;
 }) {
   const { mode, apiConfigured } = useMode();
 
-  if (source === 'api' && mode !== 'REPLAY') {
+  if (source === 'api') {
     return (
-      <p className="source-note source-note--live">
+      <p className="source-note source-note--live" data-testid="data-source-api">
         <Info size={16} />
         <span>
-          Data source: {mode === 'LIVE_TESTNET' ? 'live testnet API' : 'live API'}. Only real transaction hashes receive
-          explorer links.
+          <strong>LIVE API.</strong>{' '}
+          {liveDetail ??
+            'Data source: the configured MEND API. Explorer links are shown only for real transaction hashes.'}
         </span>
       </p>
     );
   }
 
-  if (source === 'fixture' && mode !== 'REPLAY') {
+  if (mode !== 'REPLAY') {
     return (
-      <p className="source-note source-note--replay">
+      <p className="source-note source-note--replay" data-testid="data-source-fallback">
         <AlertTriangle size={16} />
         <span>
           <strong>API data unavailable.</strong>{' '}
@@ -39,13 +42,13 @@ export function DataSourceNote({
   }
 
   return (
-    <p className="source-note source-note--replay">
+    <p className="source-note source-note--replay" data-testid="data-source-fallback">
       <AlertTriangle size={16} />
       <span>
         <strong>REPLAY / SIMULATION.</strong>{' '}
         {detail ??
           (apiConfigured
-            ? 'Frozen protocol fixtures are shown because replay mode is selected.'
+            ? 'The live API did not return usable data, so frozen protocol fixtures are shown. This is a replay fallback, not live data.'
             : 'No MEND_API_BASE_URL is configured; frozen protocol fixtures are shown.')}
       </span>
     </p>

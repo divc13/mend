@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ASSETS, casesForAsset, getAsset } from '@/lib/fixtures';
+import { loadAsset } from '@/lib/server-api';
 import { formatDate, formatDateTime, usdc } from '@/lib/format';
 import { Badge, HashDisplay, StatusPill } from '@/components/ui';
 import { DataSourceNote } from '@/components/DataSourceNote';
@@ -17,13 +17,11 @@ import {
   ShieldCheck,
 } from '@/components/Icons';
 
-export function generateStaticParams() {
-  return ASSETS.map((asset) => ({ assetId: asset.id }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({ params }: { params: Promise<{ assetId: string }> }): Promise<Metadata> {
   const { assetId } = await params;
-  const asset = getAsset(assetId);
+  const { asset } = await loadAsset(assetId);
   return {
     title: asset ? `${asset.id} passport` : 'Asset passport',
     description: asset?.publicDescription ?? 'MEND non-transferable maintenance passport.',
@@ -32,9 +30,8 @@ export async function generateMetadata({ params }: { params: Promise<{ assetId: 
 
 export default async function AssetPage({ params }: { params: Promise<{ assetId: string }> }) {
   const { assetId } = await params;
-  const asset = getAsset(assetId);
+  const { asset, cases, source, apiConfigured, fallbackReason } = await loadAsset(assetId);
   if (!asset) notFound();
-  const cases = casesForAsset(asset.id);
   const history = cases
     .flatMap((caseData) =>
       caseData.events
@@ -117,11 +114,21 @@ export default async function AssetPage({ params }: { params: Promise<{ assetId:
         <header className="passport-head">
           <div>
             <div className="case-hero__badges">
-              <Badge tone="positive">
-                <ShieldCheck size={14} aria-hidden="true" /> NEP-171 passport
+              <Badge tone={asset.passportTokenId === 'Not minted' ? 'warning' : 'positive'}>
+                <ShieldCheck size={14} aria-hidden="true" />{' '}
+                {asset.passportTokenId === 'Not minted' ? 'Passport not minted' : 'NEP-171 passport'}
               </Badge>
               <Badge tone="warning">Non-transferable</Badge>
               <Badge tone="neutral">{asset.assetType.replace(/_/g, ' ')}</Badge>
+              <Badge tone={source === 'api' && cases[0]?.mode !== 'REPLAY' ? 'positive' : 'warning'}>
+                {source === 'api'
+                  ? cases[0]?.mode === 'REPLAY'
+                    ? 'LIVE API · REPLAY RECORD'
+                    : 'LIVE API'
+                  : apiConfigured
+                    ? 'REPLAY / SIMULATION · FIXTURE FALLBACK'
+                    : 'REPLAY / SIMULATION'}
+              </Badge>
             </div>
             <h1 style={{ marginTop: 14 }} data-testid="passport-id">
               {asset.id}
@@ -141,6 +148,16 @@ export default async function AssetPage({ params }: { params: Promise<{ assetId:
                 {asset.repeatFailures} repeat failure{asset.repeatFailures === 1 ? '' : 's'}
               </span>
             </p>
+            {source === 'fixture' && apiConfigured ? (
+              <p className="source-note source-note--replay" data-testid="fixture-fallback" style={{ marginTop: 12 }}>
+                <ShieldCheck size={16} aria-hidden="true" />
+                <span>
+                  <strong>Fixture fallback.</strong>{' '}
+                  {fallbackReason ?? 'The live API did not return usable data for this passport.'} No NEP-171
+                  transaction is claimed.
+                </span>
+              </p>
+            ) : null}
           </div>
           <div className="passport-seal" aria-label="Maintenance passport, non-transferable">
             <div>
@@ -551,13 +568,20 @@ export default async function AssetPage({ params }: { params: Promise<{ assetId:
             <p className="source-note source-note--replay" style={{ marginTop: 12 }}>
               <FileText size={16} aria-hidden="true" />
               <span>
-                No payment in this replay carries a real transaction hash. Explorer links are never fabricated; a live case
-                would show one only for a real transaction.
+                {source === 'api'
+                  ? 'Explorer links are shown only where the API supplies a real transaction hash. A missing hash is not a payment claim.'
+                  : 'No payment in this replay carries a real transaction hash. Explorer links are never fabricated; a live case would show one only for a real transaction.'}
               </span>
             </p>
           </section>
 
-          <DataSourceNote detail={`Passport ${asset.id} is a replay record. The non-transferability rule and history structure are real UI behaviour; no NEP-171 transaction is claimed.`} />
+          <DataSourceNote
+            source={source}
+            detail={fallbackReason}
+            liveDetail={`Passport ${asset.id} was resolved from the live case API${
+              cases[0]?.mode === 'REPLAY' ? ' and is marked REPLAY / SIMULATION' : ''
+            }. The non-transferability rule and history structure are real UI behaviour; no NEP-171 transaction is claimed without a real hash.`}
+          />
         </div>
 
         <aside className="passport-aside" aria-label="Passport side panel">
@@ -582,9 +606,13 @@ export default async function AssetPage({ params }: { params: Promise<{ assetId:
           <section className="side-card">
             <h2>Public location</h2>
             <p className="side-card__note">{asset.publicLocation.label}</p>
-            <p className="side-card__note mono">
-              {asset.publicLocation.coarseLat.toFixed(3)}, {asset.publicLocation.coarseLng.toFixed(3)} (coarse)
-            </p>
+            {asset.publicLocation.label === 'Location not published by the API' ? (
+              <p className="side-card__note">Coarse coordinates are not available in the API response.</p>
+            ) : (
+              <p className="side-card__note mono">
+                {asset.publicLocation.coarseLat.toFixed(3)}, {asset.publicLocation.coarseLng.toFixed(3)} (coarse)
+              </p>
+            )}
             <p className="side-card__note" style={{ marginTop: 8 }}>
               Precise coordinates are private and shared only with authorized roles.
             </p>

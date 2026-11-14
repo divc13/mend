@@ -1,15 +1,33 @@
 import Link from 'next/link';
 import { SchematicMap } from '@/components/SchematicMap';
 import { DataSourceNote } from '@/components/DataSourceNote';
-import { EvidenceTag, SectionHead, StatusPill } from '@/components/ui';
-import { ArrowRight, Check, Eye, FileText, Hammer, Lock, MapPin, Scale, ShieldCheck, Sparkles, Users } from '@/components/Icons';
-import { ASSETS, CASES, FIXTURE_VERSION, getPublicMetrics, statusLabel } from '@/lib/fixtures';
-import { usdc } from '@/lib/format';
+import { Badge, EvidenceTag, SectionHead, StatusPill } from '@/components/ui';
+import { ArrowRight, Check, Eye, FileText, Gavel, Hammer, Lock, MapPin, Scale, ShieldCheck, Sparkles, Users } from '@/components/Icons';
+import { ASSETS, FIXTURE_VERSION, getPublicMetrics, statusLabel } from '@/lib/fixtures';
+import { metricsForCases } from '@/lib/case-metrics';
+import { caseSourceLabel, caseSourceTone } from '@/lib/case-source';
+import { assetFromCase, loadCases } from '@/lib/server-api';
+import { formatTime, usdc } from '@/lib/format';
+import type { TimelineKind } from '@/lib/types';
 
-const bench = CASES[0]!;
-const metrics = getPublicMetrics();
+export const dynamic = 'force-dynamic';
 
-export default function HomePage() {
+export default async function HomePage() {
+  const { cases, source, apiConfigured, fallbackReason } = await loadCases();
+  const live = source === 'api';
+  const metrics = live ? metricsForCases(cases) : getPublicMetrics();
+  const mapAssets = live
+    ? [...new Map(cases.map((caseData) => {
+        const asset = assetFromCase(caseData);
+        return [asset.id, asset] as const;
+      })).values()]
+    : ASSETS;
+  const heroCase = cases[0]!;
+  const heroAsset = mapAssets.find((asset) => asset.id === heroCase.assetId);
+  const heroLocation = heroCase.reports[0]?.publicLocation.label ?? heroAsset?.publicLocation.label ?? 'Public location withheld';
+  const sourceLabel = caseSourceLabel(source, heroCase.mode, apiConfigured);
+  const heroSteps = live ? heroCase.events.slice(-4) : [];
+
   return (
     <>
       <div className="container">
@@ -32,8 +50,8 @@ export default function HomePage() {
               <Link className="button" href="/report">
                 Report a problem <ArrowRight size={18} aria-hidden="true" />
               </Link>
-              <Link className="button button--ghost" href={`/cases/${bench.id}`}>
-                Follow the bench repair
+              <Link className="button button--ghost" href={`/cases/${heroCase.id}`}>
+                {live ? 'Follow the live case' : 'Follow the bench repair'}
               </Link>
             </div>
             <p className="hero__note">
@@ -50,82 +68,72 @@ export default function HomePage() {
           </div>
 
           <div className="hero__visual">
-            <article className="hero-card" aria-label="Replay case snapshot: Riverside Park bench">
+            <article
+              className="hero-card"
+              aria-label={`${live ? 'Live API' : 'Replay'} case snapshot: ${heroCase.title}`}
+            >
               <div className="hero-card__top">
                 <div>
-                  <span className="hero-card__id">{bench.id}</span>
-                  <h2>{bench.title}</h2>
+                  <span className="hero-card__id">{heroCase.id}</span>
+                  <h2>{heroCase.title}</h2>
                 </div>
-                <StatusPill status={bench.status} />
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 6 }}>
+                  <StatusPill status={heroCase.status} />
+                  <Badge tone={caseSourceTone(source, heroCase.mode)}>{sourceLabel}</Badge>
+                </div>
               </div>
               <p className="hero-card__location">
-                <MapPin size={14} aria-hidden="true" /> {bench.reports[0]?.publicLocation.label}
+                <MapPin size={14} aria-hidden="true" /> {heroLocation}
               </p>
               <div className="hero-card__mini">
-                <div className="hero-mini-step">
-                  <span className="hero-mini-step__dot">
-                    <FileText size={12} />
-                  </span>
-                  <span className="hero-mini-step__copy">
-                    <strong>Two reports merged privately</strong>
-                    <span>Steward confirmed a 94% duplicate suggestion</span>
-                  </span>
-                  <time>08:20</time>
-                </div>
-                <div className="hero-mini-step">
-                  <span className="hero-mini-step__dot">
-                    <Scale size={12} />
-                  </span>
-                  <span className="hero-mini-step__copy">
-                    <strong>Sealed market → deterministic winner</strong>
-                    <span>Contractor B · 80 USDC · 180-day warranty</span>
-                  </span>
-                  <time>09:21</time>
-                </div>
-                <div className="hero-mini-step">
-                  <span className="hero-mini-step__dot">
-                    <Hammer size={12} />
-                  </span>
-                  <span className="hero-mini-step__copy">
-                    <strong>Human inspector accepted completion</strong>
-                    <span>72 USDC paid · 8 USDC holdback retained</span>
-                  </span>
-                  <time>11:30</time>
-                </div>
-                <div className="hero-mini-step">
-                  <span className="hero-mini-step__dot">
-                    <Check size={12} />
-                  </span>
-                  <span className="hero-mini-step__copy">
-                    <strong>Durability passed, holdback released</strong>
-                    <span>Same asset history · work order closed</span>
-                  </span>
-                  <time>13:35</time>
-                </div>
+                {live ? (
+                  heroSteps.length > 0 ? (
+                    heroSteps.map((event) => (
+                      <div key={event.id} className="hero-mini-step">
+                        <span className="hero-mini-step__dot">{heroEventIcon(event.kind)}</span>
+                        <span className="hero-mini-step__copy">
+                          <strong>{event.title}</strong>
+                          <span>{event.detail || event.actor}</span>
+                        </span>
+                        <time>{formatTime(event.at)}</time>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="hero-mini-step__copy">
+                      The live API returned this case without public timeline events. No events are invented.
+                    </p>
+                  )
+                ) : (
+                  <ReplayHeroSteps />
+                )}
               </div>
               <div className="hero-card__split">
                 <div className="hero-split-item">
                   <span>Funded</span>
-                  <strong>{usdc(bench.budgetMicro)}</strong>
+                  <strong>{usdc(heroCase.budgetMicro)}</strong>
                 </div>
                 <div className="hero-split-item">
                   <span>Awarded</span>
-                  <strong>{usdc(bench.winningBidMicro ?? '0')}</strong>
+                  <strong>{usdc(heroCase.winningBidMicro ?? '0')}</strong>
                 </div>
                 <div className="hero-split-item">
                   <span>Holdback</span>
-                  <strong>{usdc(bench.holdbackMicro ?? '0')}</strong>
+                  <strong>{usdc(heroCase.holdbackMicro ?? '0')}</strong>
                 </div>
               </div>
               <p className="hero-trust">
-                <ShieldCheck size={15} aria-hidden="true" /> Replay recording — no live transaction or AI attestation is
-                claimed.
+                <ShieldCheck size={15} aria-hidden="true" />{' '}
+                {live
+                  ? `Data source: the configured MEND API. ${sourceLabel}. Explorer links appear only for real testnet transaction hashes.`
+                  : apiConfigured
+                    ? 'The live API did not return usable case data, so this is a frozen replay recording. No live transaction or AI attestation is claimed.'
+                    : 'Replay recording — no live transaction or AI attestation is claimed.'}
               </p>
             </article>
           </div>
         </section>
 
-        <div className="hero-stats" aria-label="Pilot at a glance">
+        <div className="hero-stats" aria-label={live ? 'Live API at a glance' : 'Replay pilot at a glance'}>
           <div className="hero-stat">
             <strong>{metrics.assets}</strong>
             <span>Public assets</span>
@@ -158,8 +166,12 @@ export default function HomePage() {
               </Link>
             }
           />
-          <SchematicMap assets={ASSETS} cases={CASES} />
-          <DataSourceNote detail="The map and all case cards use frozen protocol fixtures. Exact coordinates and private evidence URLs are never included." />
+          <SchematicMap assets={mapAssets} cases={cases} />
+          <DataSourceNote
+            source={source}
+            detail={fallbackReason}
+            liveDetail="The map and case cards use public records returned by the configured MEND API. Exact coordinates and private evidence URLs are never included."
+          />
         </div>
       </section>
 
@@ -167,12 +179,16 @@ export default function HomePage() {
         <div className="container">
           <SectionHead
             id="cases-title"
-            eyebrow="Live case cards"
+            eyebrow={live ? 'Live API cases' : apiConfigured ? 'Replay fallback cases' : 'Replay case cards'}
             title="Every case has a next decision, not a spinner"
-            lead="Each state has a plain-language meaning, a named actor and the evidence that moved it forward."
+            lead={
+              live
+                ? 'These are the public work orders returned by the configured MEND API. Each state has a plain-language meaning, a named actor and the evidence that moved it forward.'
+                : 'Each state has a plain-language meaning, a named actor and the evidence that moved it forward.'
+            }
           />
           <div className="case-grid">
-            {CASES.map((item) => (
+            {cases.map((item) => (
               <Link key={item.id} href={`/cases/${item.id}`} className="case-card">
                 <div className="case-card__top">
                   <span className="case-card__id">{item.assetId}</span>
@@ -180,6 +196,11 @@ export default function HomePage() {
                 </div>
                 <h3>{item.title}</h3>
                 <p className="case-card__summary">{item.summary}</p>
+                <div style={{ marginTop: 10 }}>
+                  <Badge tone={caseSourceTone(source, item.mode)}>
+                    {caseSourceLabel(source, item.mode, apiConfigured)}
+                  </Badge>
+                </div>
                 <div className="case-card__facts">
                   <span>
                     Envelope <strong>{usdc(item.budgetMicro, 0)}</strong>
@@ -201,6 +222,11 @@ export default function HomePage() {
               </Link>
             ))}
           </div>
+          <DataSourceNote
+            source={source}
+            detail={fallbackReason}
+            liveDetail="These case cards are live API records. A record whose own mode is REPLAY is labelled as a replay record, not as a live testnet transaction."
+          />
         </div>
       </section>
 
@@ -282,8 +308,13 @@ export default function HomePage() {
               </div>
             </div>
             <div className="hero__actions">
-              <Link className="button button--light" href="/cases/WO-RACK-002-0001">
-                See the failed-durability case <ArrowRight size={16} aria-hidden="true" />
+              {live ? (
+                <Link className="button button--light" href={`/cases/${heroCase.id}`}>
+                  Open the live testnet case <ArrowRight size={16} aria-hidden="true" />
+                </Link>
+              ) : null}
+              <Link className="button button--ghost" href="/cases/WO-RACK-002-0001" style={{ color: 'var(--paper)', borderColor: 'rgba(245,241,230,.3)' }}>
+                See the replay failed-durability case <ArrowRight size={16} aria-hidden="true" />
               </Link>
             </div>
           </div>
@@ -366,22 +397,97 @@ export default function HomePage() {
               <Link className="button button--light" href="/report">
                 Report a problem <ArrowRight size={17} aria-hidden="true" />
               </Link>
-              <Link className="button button--ghost" href="/demo" style={{ color: 'var(--paper)', borderColor: 'rgba(245,241,230,.3)' }}>
-                Open the demo room
+              <Link className="button button--ghost" href="/live" style={{ color: 'var(--paper)', borderColor: 'rgba(245,241,230,.3)' }}>
+                Live API status
               </Link>
             </div>
           </div>
           <p className="source-note source-note--replay">
             <Sparkles size={16} aria-hidden="true" />
             <span>
-              <strong>Replay / simulation.</strong> {FIXTURE_VERSION}. No live transaction, AI attestation or physical
-              verification is claimed on this page.
+              {live ? (
+                <>
+                  <strong>Live API data source.</strong> Case records come from the configured MEND API. Test value only;
+                  static explanatory sections and the replay example are labelled separately. No mainnet transaction is
+                  claimed.
+                </>
+              ) : (
+                <>
+                  <strong>Replay / simulation.</strong> {FIXTURE_VERSION}. No live transaction, AI attestation or physical
+                  verification is claimed on this page.
+                </>
+              )}
             </span>
           </p>
         </div>
       </section>
     </>
   );
+}
+
+function ReplayHeroSteps() {
+  return (
+    <>
+      <div className="hero-mini-step">
+        <span className="hero-mini-step__dot">
+          <FileText size={12} />
+        </span>
+        <span className="hero-mini-step__copy">
+          <strong>Two reports merged privately</strong>
+          <span>Steward confirmed a 94% duplicate suggestion</span>
+        </span>
+        <time>08:20</time>
+      </div>
+      <div className="hero-mini-step">
+        <span className="hero-mini-step__dot">
+          <Scale size={12} />
+        </span>
+        <span className="hero-mini-step__copy">
+          <strong>Sealed market → deterministic winner</strong>
+          <span>Contractor B · 80 USDC · 180-day warranty</span>
+        </span>
+        <time>09:21</time>
+      </div>
+      <div className="hero-mini-step">
+        <span className="hero-mini-step__dot">
+          <Hammer size={12} />
+        </span>
+        <span className="hero-mini-step__copy">
+          <strong>Human inspector accepted completion</strong>
+          <span>72 USDC paid · 8 USDC holdback retained</span>
+        </span>
+        <time>11:30</time>
+      </div>
+      <div className="hero-mini-step">
+        <span className="hero-mini-step__dot">
+          <Check size={12} />
+        </span>
+        <span className="hero-mini-step__copy">
+          <strong>Durability passed, holdback released</strong>
+          <span>Same asset history · work order closed</span>
+        </span>
+        <time>13:35</time>
+      </div>
+    </>
+  );
+}
+
+function heroEventIcon(kind: TimelineKind) {
+  switch (kind) {
+    case 'score':
+    case 'bid':
+      return <Scale size={12} />;
+    case 'award':
+      return <Gavel size={12} />;
+    case 'work':
+      return <Hammer size={12} />;
+    case 'inspection':
+      return <Check size={12} />;
+    case 'payment':
+      return <Sparkles size={12} />;
+    default:
+      return <FileText size={12} />;
+  }
 }
 
 function AlertTriangleIcon() {

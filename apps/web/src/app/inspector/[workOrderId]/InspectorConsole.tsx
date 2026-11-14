@@ -1,11 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
 import type { CaseBundle } from '@/lib/types';
 import { formatDateTime, shortAccount, usdc } from '@/lib/format';
+import { apiFetch, storeDemoIdentity } from '@/lib/api';
+import { caseSourceLabel, caseSourceTone, type CaseDataSource } from '@/lib/case-source';
+import { createInspection, postWorkOrderAction, sha256Hex, summarizeActionResult } from '@/lib/work-order-actions';
 import { Badge, Callout, HashDisplay, PageHero } from '@/components/ui';
 import { DataSourceNote } from '@/components/DataSourceNote';
+import { TxHashRow } from '@/components/TxHashRow';
+import { useMode } from '@/components/ModeProvider';
 import {
   AlertTriangle,
   ArrowRight,
@@ -22,7 +28,19 @@ import {
 
 type Decision = 'APPROVED' | 'REJECTED';
 
-export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
+export function InspectorConsole({
+  caseData,
+  dataSource,
+  apiConfigured,
+  fallbackReason,
+}: {
+  caseData: CaseBundle;
+  dataSource: CaseDataSource;
+  apiConfigured: boolean;
+  fallbackReason?: string;
+}) {
+  const router = useRouter();
+  const { mode, apiHealth } = useMode();
   const evidence = caseData.evidence[caseData.evidence.length - 1];
   const [checklist, setChecklist] = useState<Record<string, boolean>>(() =>
     Object.fromEntries((evidence?.checklist ?? []).map((item) => [item.label, item.complete])),
@@ -32,6 +50,53 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
   const [confirmHuman, setConfirmHuman] = useState(false);
   const [notes, setNotes] = useState('');
   const [decision, setDecision] = useState<Decision | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [actionStatus, setActionStatus] = useState<string | null>(null);
+  const [actionTxHash, setActionTxHash] = useState<string | null>(null);
+  const [liveCounts, setLiveCounts] = useState<{
+    commitments: number;
+    reveals: number;
+    evidence: number;
+  } | null>(null);
+  const [liveCountsError, setLiveCountsError] = useState<string | null>(null);
+
+  const live = mode === 'LIVE_TESTNET';
+  const liveData = live && dataSource === 'api';
+  const sourceLabel = caseSourceLabel(dataSource, caseData.mode, apiConfigured);
+  const inspectorAccount =
+    caseData.inspectorId ?? apiHealth?.roleAccounts?.inspector ?? 'mend-inspector.testnet';
+
+  useEffect(() => {
+    if (dataSource !== 'api') return;
+    let cancelled = false;
+    const id = encodeURIComponent(caseData.id);
+
+    void Promise.all([
+      apiFetch<{ commitments?: unknown[]; reveals?: unknown[] }>(`/v1/work-orders/${id}/bids`),
+      apiFetch<unknown[]>(`/v1/work-orders/${id}/evidence`),
+    ]).then(([bids, packages]) => {
+      if (cancelled) return;
+      if (!bids.ok || !packages.ok) {
+        setLiveCountsError(
+          !bids.ok
+            ? `Bids endpoint: ${bids.message}`
+            : !packages.ok
+              ? `Evidence endpoint: ${packages.message}`
+              : null,
+        );
+        return;
+      }
+      setLiveCounts({
+        commitments: Array.isArray(bids.data.commitments) ? bids.data.commitments.length : 0,
+        reveals: Array.isArray(bids.data.reveals) ? bids.data.reveals.length : 0,
+        evidence: Array.isArray(packages.data) ? packages.data.length : 0,
+      });
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [caseData.id, dataSource]);
 
   const missing = useMemo(
     () => (evidence?.checklist ?? []).filter((item) => !checklist[item.label]),
@@ -40,6 +105,78 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
   const canDecide = caseData.status === 'COMPLETION_SUBMITTED' && Boolean(evidence) && !decision;
   const readyToDecide = canDecide && confirmRole && confirmReviewed && confirmHuman;
   const separationOk = caseData.contractorId !== caseData.inspectorId;
+
+  async function recordLiveDecision(nextDecision: Decision) {
+    if (!evidence) return;
+    setSubmitting(true);
+    setActionStatus(null);
+    setActionTxHash(null);
+    const stored = storeDemoIdentity({ role: 'INSPECTOR', account: inspectorAccount });
+    if (!stored) {
+      setActionStatus(
+        'The INSPECTOR demo role could not be stored in this browser. No API request was sent and no inspection was recorded.',
+      );
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      const notesHash = await sha256Hex(notes);
+      const inspection = await createInspection(caseData.id, {
+        kind: 'COMPLETION',
+        decision: nextDecision,
+        evidencePackageId: evidence.id,
+        ...(notesHash ? { notesHash } : {}),
+      });
+
+      if (!inspection.ok) {
+        setActionStatus(`The API did not record the inspection: ${inspection.message}`);
+        return;
+      }
+
+      if (!inspection.data?.id) {
+        setActionStatus(
+          'The API accepted the inspection but returned no inspection id, so no completion acceptance was sent.',
+        );
+        return;
+      }
+
+      setDecision(nextDecision);
+
+      if (nextDecision === 'REJECTED') {
+        setActionStatus(
+          'The API recorded a REJECTED completion inspection. The work order state was not changed; a human dispute/resolution path is still required.',
+        );
+        router.refresh();
+        return;
+      }
+
+      const action = await postWorkOrderAction(caseData.id, 'accept_completion', {
+        inspectionId: inspection.data.id,
+      });
+      const summary = summarizeActionResult(action, 'completion acceptance');
+      setActionStatus(summary.message);
+      setActionTxHash(summary.realTransaction && summary.txHash ? summary.txHash : null);
+      if (summary.applied && summary.realTransaction) router.refresh();
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function recordReplayDecision(nextDecision: Decision) {
+    setDecision(nextDecision);
+    setActionStatus(
+      `Replay decision recorded: ${nextDecision === 'APPROVED' ? 'accept completion' : 'reject completion'}. No wallet signature, transaction hash or live contract state was produced.`,
+    );
+  }
+
+  function decide(nextDecision: Decision) {
+    if (liveData) {
+      void recordLiveDecision(nextDecision);
+      return;
+    }
+    recordReplayDecision(nextDecision);
+  }
 
   const suggestions = [
     ...missing.map((item) => ({
@@ -72,6 +209,9 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
               {caseData.id}
             </p>
             <p className="side-card__note">{caseData.title}</p>
+            <div style={{ marginTop: 8 }}>
+              <Badge tone={caseSourceTone(dataSource, caseData.mode)}>{sourceLabel}</Badge>
+            </div>
             <dl>
               <div>
                 <dt>Inspector</dt>
@@ -86,6 +226,18 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
                 <dd>{usdc(caseData.escrow.escrowedMicro ?? '0')}</dd>
               </div>
               <div>
+                <dt>Bid commitments</dt>
+                <dd>{liveCounts ? liveCounts.commitments : caseData.commitments.length}</dd>
+              </div>
+              <div>
+                <dt>Bid reveals</dt>
+                <dd>{liveCounts ? liveCounts.reveals : caseData.reveals.length}</dd>
+              </div>
+              <div>
+                <dt>Evidence packages</dt>
+                <dd>{liveCounts ? liveCounts.evidence : caseData.evidence.length}</dd>
+              </div>
+              <div>
                 <dt>Decision</dt>
                 <dd>{decision ? decision.toLowerCase() : caseData.status === 'COMPLETION_SUBMITTED' ? 'Pending' : 'No pending review'}</dd>
               </div>
@@ -98,6 +250,18 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
           </div>
         }
       />
+
+      {dataSource === 'api' ? (
+        <p className="source-note source-note--live" style={{ marginBottom: 14 }}>
+          <ShieldCheck size={16} aria-hidden="true" />
+          <span>
+            <strong>Live API record.</strong>{' '}
+            {liveCounts
+              ? `Read-only bids and evidence endpoints returned ${liveCounts.commitments} commitments, ${liveCounts.reveals} reveals and ${liveCounts.evidence} evidence package${liveCounts.evidence === 1 ? '' : 's'}.`
+              : liveCountsError ?? 'Loading the live bids and evidence endpoints…'}
+          </span>
+        </p>
+      ) : null}
 
       <div className="form-shell" style={{ paddingTop: 0 }}>
         <div className="form-main">
@@ -132,15 +296,16 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
                         <span>Evidence {index + 1}</span>
                         <code title={hash}>{hash.slice(0, 14)}…</code>
                       </div>
-                      <p>Private preview withheld from public replay.</p>
+                      <p>Private preview withheld from public view.</p>
                     </div>
                   ))}
                 </div>
                 <p className="source-note source-note--replay" style={{ marginTop: 12 }}>
                   <Lock size={16} aria-hidden="true" />
                   <span>
-                    This public replay deliberately does not render private evidence URLs or raw media. A live inspector
-                    view would use short-lived, role-scoped access and the same redacted hashes.
+                    {dataSource === 'api'
+                      ? 'The live API supplies redacted hashes only. This console never receives raw media or a private evidence URL.'
+                      : 'This public replay deliberately does not render private evidence URLs or raw media. A live inspector view would use short-lived, role-scoped access and the same redacted hashes.'}
                   </span>
                 </p>
 
@@ -222,9 +387,11 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
             </div>
 
             {!canDecide ? (
-              <Callout tone="warning" title={decision ? 'Replay decision already recorded' : 'No valid pending decision'}>
+              <Callout tone="warning" title={decision ? 'Decision already recorded' : 'No valid pending decision'}>
                 {decision
-                  ? 'A replay decision was recorded below. No wallet signature or transaction was produced.'
+                  ? liveData
+                    ? 'An inspection decision was recorded through the API. The case is not shown as advanced unless the API reported the corresponding action.'
+                    : 'A replay decision was recorded below. No wallet signature or transaction was produced.'
                   : caseData.status === 'CLOSED'
                     ? 'This work order is closed. Its human decisions are recorded in the timeline and cannot be replayed again.'
                     : `The work order is in ${caseData.status}, which does not accept a completion decision. The controls are disabled rather than pretending the transition is valid.`}
@@ -277,7 +444,7 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
             </fieldset>
 
             <div className="field">
-              <label htmlFor="inspection-notes">Inspector notes (optional in replay)</label>
+              <label htmlFor="inspection-notes">Inspector notes (optional)</label>
               <textarea
                 id="inspection-notes"
                 className="textarea"
@@ -287,7 +454,9 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
                 disabled={!canDecide}
               />
               <span className="field__hint">
-                Notes are hashed in the live flow. This public replay does not store or transmit them.
+                {liveData
+                  ? 'Notes are hashed in the browser and only the hash is sent to the API. Raw notes are not persisted here.'
+                  : 'Notes are hashed in the live flow. This public replay does not store or transmit them.'}
               </span>
             </div>
 
@@ -296,19 +465,21 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
                 type="button"
                 className="button"
                 data-testid="inspector-accept"
-                disabled={!readyToDecide}
-                onClick={() => setDecision('APPROVED')}
+                disabled={submitting || !readyToDecide}
+                onClick={() => decide('APPROVED')}
               >
-                <Check size={16} aria-hidden="true" /> Accept completion
+                <Check size={16} aria-hidden="true" />{' '}
+                {submitting ? 'Sending…' : liveData ? 'Accept completion on testnet' : 'Accept completion'}
               </button>
               <button
                 type="button"
                 className="button button--danger"
                 data-testid="inspector-reject"
-                disabled={!readyToDecide}
-                onClick={() => setDecision('REJECTED')}
+                disabled={submitting || !readyToDecide}
+                onClick={() => decide('REJECTED')}
               >
-                <X size={16} aria-hidden="true" /> Reject completion
+                <X size={16} aria-hidden="true" />{' '}
+                {liveData ? 'Record rejection inspection' : 'Reject completion'}
               </button>
               <Link className="button button--ghost" href={`/cases/${caseData.id}`}>
                 Full case <ArrowRight size={15} aria-hidden="true" />
@@ -321,17 +492,30 @@ export function InspectorConsole({ caseData }: { caseData: CaseBundle }) {
               </p>
             ) : null}
 
-            {decision ? (
+            {actionStatus ? (
               <div className="signed-note" role="status">
-                <strong>Replay decision recorded: {decision === 'APPROVED' ? 'accept completion' : 'reject completion'}.</strong>{' '}
-                No wallet signature, transaction hash or live contract state was produced. In live testnet, this action
-                would require a real transaction and would not be shown as executed until the hash existed.
+                <strong>Inspector decision status.</strong> {actionStatus}
+                {actionTxHash ? <TxHashRow hash={actionTxHash} label="Acceptance transaction" compact /> : null}
+              </div>
+            ) : decision ? (
+              <div className="signed-note" role="status">
+                <strong>
+                  {liveData ? 'Inspection decision' : 'Replay decision'} recorded:{' '}
+                  {decision === 'APPROVED' ? 'accept completion' : 'reject completion'}.
+                </strong>{' '}
+                {liveData
+                  ? 'Only the API response determines whether the work order advanced. The interface does not supply a chain result.'
+                  : 'No wallet signature, transaction hash or live contract state was produced. In live testnet, this action would require a real transaction and would not be shown as executed until the hash existed.'}
                 {notes ? <span style={{ display: 'block', marginTop: 6 }}>Notes length: {notes.length} characters (not persisted).</span> : null}
               </div>
             ) : null}
           </section>
 
-          <DataSourceNote detail={`Inspector console for ${caseData.id}. Evidence, checklist and AI suggestions are replay fixtures. No private media URL or live inspection signature is present.`} />
+          <DataSourceNote
+            source={dataSource}
+            detail={fallbackReason}
+            liveDetail={`Inspector console for ${caseData.id}. Case, bid and evidence data are read from the configured MEND API. Inspection and acceptance actions are enabled only after the global mode banner verifies LIVE_TESTNET, and use the INSPECTOR demo header path rather than a wallet signature.`}
+          />
         </div>
 
         <aside className="form-aside" aria-label="Evidence and authority notes">

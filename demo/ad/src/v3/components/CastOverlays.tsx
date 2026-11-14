@@ -16,14 +16,20 @@ import {
   Inspector,
   Neighbor,
   Sam,
-  StickFigure,
 } from '../../characters';
 import { Pothole } from '../../v2/components/PaperCast';
 import { mediaAt } from '../../v2/lib/assets';
 import { fonts, palette } from '../../theme';
+import { ACTIONS } from '../lib/actions';
 import { FPS, v3Script, type V3Scene } from '../lib/script';
 
 const CARD_SHADOW = '0 26px 60px rgba(7,27,21,0.32)';
+/** Paper-cut cast never leaves a 320px edge lane. */
+const CAST_W = 300;
+const CLAMP = {
+  extrapolateLeft: 'clamp',
+  extrapolateRight: 'clamp',
+} as const;
 
 type CardProps = {
   label: string;
@@ -113,11 +119,14 @@ const BottomLabel: React.FC<{ children: React.ReactNode; dark?: boolean }> = ({
       bottom: 6,
       fontFamily: fonts.mono,
       fontSize: 8,
-      letterSpacing: '0.08em',
+      letterSpacing: '0.06em',
       color: dark ? palette.paper : palette.muted,
       background: dark ? 'rgba(7,27,21,0.75)' : 'rgba(255,253,248,0.82)',
       padding: '4px 6px',
       textAlign: 'center',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      textOverflow: 'ellipsis',
     }}
   >
     {children}
@@ -127,8 +136,21 @@ const BottomLabel: React.FC<{ children: React.ReactNode; dark?: boolean }> = ({
 const ReportCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const photoFrame = ACTIONS.report.photo * fps;
+  const snapping = frame >= photoFrame - 2 && frame <= photoFrame + 12;
+  const snap = interpolate(
+    frame,
+    [photoFrame, photoFrame + 4, photoFrame + 28],
+    [0, 1, 0],
+    CLAMP,
+  );
   return (
-    <Card label="THE STREET" kicker="PAPER CUT" style={{ left: 22, top: 126, width: 306, height: 318 }} rotate={-1.4}>
+    <Card
+      label="THE STREET"
+      kicker="PAPER CUT"
+      style={{ left: 18, top: 126, width: CAST_W, height: 318 }}
+      rotate={-1.4}
+    >
       <Pothole variant="open" scale={0.34} style={{ left: 8, bottom: 44 }} />
       <Neighbor
         pose="hold-phone"
@@ -148,6 +170,7 @@ const ReportCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
         fps={fps}
         animated
         enterAt={8}
+        flash={snapping}
         style={{ position: 'absolute', right: 8, bottom: 34 }}
       />
       <div
@@ -161,70 +184,135 @@ const ReportCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
           letterSpacing: '0.08em',
         }}
       >
-        {scene.caption.split('\n')[0]}
+        {scene.caption.split('\n')[1] ?? 'REPORT · EXIF STRIPPED'}
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          right: 12,
+          top: 26,
+          fontFamily: fonts.mono,
+          fontSize: 7.5,
+          letterSpacing: '0.08em',
+          color: palette.green,
+          opacity: snap,
+          transform: `translateY(${(1 - snap) * 3}px)`,
+        }}
+      >
+        SNAP · GPS STRIPPED
       </div>
       <BottomLabel>2 REPORTS · 1 POTHOLE · SAM + NEIGHBOR</BottomLabel>
     </Card>
   );
 };
 
-const CouncilCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
+const CouncilCast: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const progress = Math.min(1, frame / Math.max(1, scene.sceneDuration * fps));
-  const votes: ['yes' | 'abstain', 'yes' | 'abstain', 'yes' | 'abstain'] =
-    progress > 0.48 ? ['yes', 'yes', 'abstain'] : ['yes', 'abstain', 'abstain'];
+  const voteFrame = ACTIONS.dao.award * fps;
+  const voted = frame >= voteFrame;
+  const votes: ['yes' | 'abstain', 'yes' | 'abstain', 'yes' | 'abstain'] = voted
+    ? ['yes', 'yes', 'abstain']
+    : ['yes', 'abstain', 'abstain'];
+  const reveal = voted
+    ? 1
+    : Math.min(0.62, 0.3 + (frame / Math.max(1, voteFrame)) * 0.32);
+  const pulse = interpolate(
+    frame,
+    [voteFrame, voteFrame + 6, voteFrame + 20],
+    [1, 1.045, 1],
+    CLAMP,
+  );
   return (
-    <Card label="THE COUNCIL" kicker="2 OF 3" style={{ left: 22, top: 126, width: 306, height: 252 }} rotate={-1.1}>
-      <CouncilTable
-        votes={votes}
-        revealProgress={Math.min(1, progress * 1.4)}
-        width={288}
-        height={186}
-        frame={frame}
-        fps={fps}
-        style={{ position: 'absolute', left: 9, top: 4 }}
-      />
-      <BottomLabel>YES · YES · ABSTAIN · NO AI VOTE</BottomLabel>
+    <Card
+      label="THE COUNCIL"
+      kicker="2 OF 3"
+      style={{ left: 18, top: 126, width: CAST_W, height: 252 }}
+      rotate={-1.1}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          left: 6,
+          top: 4,
+          transform: `scale(${pulse})`,
+          transformOrigin: '50% 80%',
+        }}
+      >
+        <CouncilTable
+          votes={votes}
+          revealProgress={reveal}
+          width={288}
+          height={186}
+          frame={frame}
+          fps={fps}
+        />
+      </div>
+      <BottomLabel>{voted ? 'MOTION CARRIED · 2 OF 3 · NO AI VOTE' : 'YES · ABSTAIN · ABSTAIN · NO AI VOTE'}</BottomLabel>
     </Card>
   );
 };
 
-const BidderCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
+const BidderCast: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const progress = Math.min(1, frame / Math.max(1, scene.sceneDuration * fps));
+  const revealFrame = ACTIONS.bids.reveal * fps;
+  const revealed = Math.min(1, Math.max(0, (frame - revealFrame) / 16));
+  const winner = frame >= revealFrame + 10 ? 'B' : null;
   return (
-    <Card label="THE BIDDERS" kicker="SEALED" style={{ left: 22, bottom: 214, width: 306, height: 238 }} rotate={0.8}>
+    <Card
+      label="THE BIDDERS"
+      kicker="SEALED"
+      style={{ left: 18, bottom: 214, width: CAST_W, height: 238 }}
+      rotate={0.8}
+    >
       <BidderRow
-        revealed={Math.min(1, progress * 1.5)}
-        winner={progress > 0.5 ? 'B' : null}
+        revealed={revealed}
+        winner={winner}
         bids={{ A: 2873, B: 9270, C: 5200 }}
         width={288}
         height={190}
         frame={frame}
         fps={fps}
-        style={{ position: 'absolute', left: 8, top: 6 }}
+        style={{ position: 'absolute', left: 6, top: 6 }}
       />
-      <BottomLabel>B 9,270 · VALUE WINNER</BottomLabel>
+      <BottomLabel>{winner ? 'B 9,270 · VALUE WINNER' : 'SEALED · REVEAL WINDOW'}</BottomLabel>
     </Card>
   );
 };
 
-const RepairCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
+const RepairCast: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const progress = Math.min(1, frame / Math.max(1, scene.sceneDuration * fps));
+  const checklistFrame = ACTIONS.repair.checklist * fps;
+  const acceptFrame = ACTIONS.repair.accept * fps;
+  const accepted = frame >= acceptFrame;
   const video = mediaAt('assets/footage/repair.mp4');
+  const checks: Array<{ label: string; on: boolean }> = [
+    { label: 'CHECKLIST', on: frame >= checklistFrame },
+    { label: 'EVIDENCE', on: frame >= checklistFrame + 8 },
+    { label: 'SIGNATURE', on: accepted },
+  ];
   return (
     <>
-      <Card label="THE REPAIR" kicker="VIDEO" style={{ left: 22, top: 126, width: 330, height: 236 }} rotate={-1.1}>
+      <Card
+        label="THE REPAIR"
+        kicker="VIDEO"
+        style={{ left: 18, top: 126, width: CAST_W, height: 236 }}
+        rotate={-1.1}
+      >
         {video?.kind === 'video' ? (
           <OffthreadVideo
             src={video.src}
             muted
             playbackRate={0.67}
-            style={{ position: 'absolute', inset: 8, width: 'calc(100% - 16px)', height: 'calc(100% - 16px)', objectFit: 'cover' }}
+            style={{
+              position: 'absolute',
+              inset: 8,
+              width: 'calc(100% - 16px)',
+              height: 'calc(100% - 16px)',
+              objectFit: 'cover',
+            }}
           />
         ) : (
           <Pothole variant="patched" scale={0.38} style={{ left: 8, bottom: 34 }} />
@@ -249,11 +337,16 @@ const RepairCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
           fps={fps}
           animated
           enterAt={6}
-          style={{ position: 'absolute', right: 10, bottom: 28, zIndex: 2 }}
+          style={{ position: 'absolute', right: 8, bottom: 28, zIndex: 2 }}
         />
         <BottomLabel dark>ILLUSTRATIVE REPAIR B-ROLL · LOCAL CONTRACTOR</BottomLabel>
       </Card>
-      <Card label="THE INSPECTOR" kicker="HUMAN" style={{ right: 22, bottom: 214, width: 316, height: 230 }} rotate={1.2}>
+      <Card
+        label="THE INSPECTOR"
+        kicker="HUMAN"
+        style={{ right: 18, bottom: 214, width: CAST_W, height: 230 }}
+        rotate={1.2}
+      >
         <Inspector
           pose="hold-clipboard"
           width={86}
@@ -262,13 +355,13 @@ const RepairCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
           fps={fps}
           animated
           enterAt={5}
-          stamp={progress > 0.62}
-          style={{ position: 'absolute', left: 42, bottom: 26 }}
+          stamp={accepted}
+          style={{ position: 'absolute', left: 38, bottom: 26 }}
         />
         <div
           style={{
             position: 'absolute',
-            right: 16,
+            right: 14,
             top: 16,
             width: 132,
             fontFamily: fonts.mono,
@@ -277,50 +370,92 @@ const RepairCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
             color: palette.inkSoft,
           }}
         >
-          CHECKLIST
-          <br />
-          EVIDENCE
-          <br />
-          SIGNATURE
-          <br />
+          {checks.map((check) => (
+            <div key={check.label} style={{ color: check.on ? palette.green : palette.muted }}>
+              {check.on ? '✓ ' : '· '}
+              {check.label}
+            </div>
+          ))}
           <span style={{ color: palette.green }}>NOT THE CONTRACTOR</span>
         </div>
-        <BottomLabel>INDEPENDENT HUMAN INSPECTION</BottomLabel>
+        <BottomLabel>{accepted ? 'SIGNED · ACCEPTED · PAYMENT RELEASED' : 'CHECKLIST · EVIDENCE · SIGNATURE'}</BottomLabel>
       </Card>
     </>
   );
 };
 
-const PaymentCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
+const PaymentCast: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const progress = Math.min(1, frame / Math.max(1, scene.sceneDuration * fps));
+  const splitFrame = ACTIONS.payment.split * fps;
+  const paid = Math.round(interpolate(frame, [splitFrame, splitFrame + 14], [0, 72], CLAMP));
+  const held = Math.round(interpolate(frame, [splitFrame + 16, splitFrame + 28], [0, 8], CLAMP));
+  const paidNow = frame >= splitFrame + 14;
+  const pulse = interpolate(
+    frame,
+    [splitFrame + 12, splitFrame + 18, splitFrame + 34],
+    [1, 1.05, 1],
+    CLAMP,
+  );
+  const bar = interpolate(frame, [splitFrame, splitFrame + 24], [0, 100], CLAMP);
   return (
-    <Card label="THE PAYOUT" kicker="SETTLED" style={{ right: 22, bottom: 214, width: 306, height: 232 }} rotate={-1}>
-      <Contractor
-        pose="stand"
-        width={82}
-        height={154}
-        frame={frame}
-        fps={fps}
-        animated
-        enterAt={4}
-        style={{ position: 'absolute', left: 24, bottom: 30 }}
-      />
-      <div style={{ position: 'absolute', left: 118, top: 16, width: 164 }}>
-        <div style={{ fontFamily: fonts.display, fontSize: 34, color: palette.green, lineHeight: 1 }}>72</div>
-        <div style={{ fontFamily: fonts.mono, fontSize: 9, letterSpacing: '0.08em', color: palette.muted }}>USDC PAID</div>
-        <div style={{ marginTop: 14, fontFamily: fonts.display, fontSize: 26, color: palette.amberStrong, lineHeight: 1 }}>8</div>
-        <div style={{ fontFamily: fonts.mono, fontSize: 9, letterSpacing: '0.08em', color: palette.muted }}>HELD → RELEASED</div>
-        <div
-          style={{
-            marginTop: 13,
-            height: 4,
-            width: 130,
-            background: palette.line,
-          }}
-        >
-          <div style={{ height: '100%', width: `${Math.min(1, progress * 1.4) * 100}%`, background: palette.green }} />
+    <Card
+      label="THE PAYOUT"
+      kicker="SETTLED"
+      style={{ right: 18, bottom: 214, width: CAST_W, height: 232 }}
+      rotate={-1}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          left: 22,
+          bottom: 30,
+          transform: `scale(${pulse})`,
+          transformOrigin: '50% 100%',
+        }}
+      >
+        <Contractor
+          pose="stand"
+          width={82}
+          height={154}
+          frame={frame}
+          fps={fps}
+          animated
+          enterAt={4}
+        />
+      </div>
+      <div style={{ position: 'absolute', left: 110, top: 16, width: 172 }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+          <span style={{ fontFamily: fonts.display, fontSize: 34, color: palette.green, lineHeight: 1 }}>
+            {paid}
+          </span>
+          {paidNow ? (
+            <span
+              style={{
+                fontFamily: fonts.mono,
+                fontSize: 8,
+                letterSpacing: '0.08em',
+                color: palette.paper,
+                background: palette.green,
+                borderRadius: 999,
+                padding: '3px 6px',
+              }}
+            >
+              PAID
+            </span>
+          ) : null}
+        </div>
+        <div style={{ fontFamily: fonts.mono, fontSize: 9, letterSpacing: '0.08em', color: palette.muted }}>
+          USDC PAID
+        </div>
+        <div style={{ marginTop: 14, fontFamily: fonts.display, fontSize: 26, color: palette.amberStrong, lineHeight: 1 }}>
+          {held}
+        </div>
+        <div style={{ fontFamily: fonts.mono, fontSize: 9, letterSpacing: '0.08em', color: palette.muted }}>
+          HELD → RELEASED
+        </div>
+        <div style={{ marginTop: 13, height: 4, width: 140, background: palette.line }}>
+          <div style={{ height: '100%', width: `${bar}%`, background: palette.green }} />
         </div>
       </div>
       <BottomLabel>EXACT 100 · 20 · 72 · 8</BottomLabel>
@@ -328,22 +463,79 @@ const PaymentCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
   );
 };
 
-const PassportCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
+const PassportCast: React.FC = () => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
+  const historyFrame = ACTIONS.passport.history * fps;
+  const entriesFrame = ACTIONS.passport.entries * fps;
+  const recorded = frame >= entriesFrame;
+  const samPulse = interpolate(
+    frame,
+    [historyFrame, historyFrame + 8, historyFrame + 24],
+    [1, 1.035, 1],
+    CLAMP,
+  );
   return (
-    <Card label="THE PASSPORT" kicker="SAME ASSET" style={{ left: 22, bottom: 214, width: 334, height: 238 }} rotate={1.1}>
+    <Card
+      label="THE PASSPORT"
+      kicker="SAME ASSET"
+      style={{ left: 18, bottom: 214, width: CAST_W, height: 238 }}
+      rotate={1.1}
+    >
       <Pothole variant="fixed" scale={0.36} style={{ left: 5, bottom: 40 }} />
-      <Sam
-        pose="look-at-screen"
-        width={86}
-        height={172}
-        frame={frame}
-        fps={fps}
-        animated
-        enterAt={5}
-        style={{ position: 'absolute', right: 8, bottom: 26 }}
-      />
+      <div
+        style={{
+          position: 'absolute',
+          left: 14,
+          top: 12,
+          fontFamily: fonts.mono,
+          fontSize: 9,
+          color: palette.green,
+          lineHeight: 1.55,
+        }}
+      >
+        PATH-006
+        <br />
+        FIXED
+        <br />
+        REMEMBERED
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          right: 10,
+          top: 10,
+          fontFamily: fonts.mono,
+          fontSize: 7.5,
+          letterSpacing: '0.06em',
+          color: palette.paper,
+          background: palette.green,
+          padding: '3px 6px',
+          opacity: recorded ? 1 : 0,
+          transform: `translateY(${recorded ? 0 : 3}px)`,
+        }}
+      >
+        RECORDED
+      </div>
+      <div
+        style={{
+          position: 'absolute',
+          right: 8,
+          bottom: 26,
+          transform: `scale(${samPulse})`,
+          transformOrigin: '50% 100%',
+        }}
+      >
+        <Sam
+          pose="look-at-screen"
+          width={86}
+          height={172}
+          frame={frame}
+          fps={fps}
+          animated
+          enterAt={5}
+        />
+      </div>
       <Neighbor
         pose="stand"
         width={42}
@@ -354,75 +546,7 @@ const PassportCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
         enterAt={8}
         style={{ position: 'absolute', left: 10, bottom: 26 }}
       />
-      <div
-        style={{
-          position: 'absolute',
-          right: 12,
-          top: 16,
-          fontFamily: fonts.mono,
-          fontSize: 9,
-          color: palette.green,
-          lineHeight: 1.6,
-          textAlign: 'right',
-        }}
-      >
-        PATH-006
-        <br />
-        FIXED
-        <br />
-        REMEMBERED
-      </div>
       <BottomLabel>THE REPAIR STAYS WITH THE ASSET</BottomLabel>
-    </Card>
-  );
-};
-
-const TechCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
-  const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
-  const figures = [
-    { pose: 'hold-phone' as const, accessory: 'phone' as const, label: 'REPORTER', color: palette.mint },
-    { pose: 'raise-card' as const, accessory: 'card' as const, label: 'STEWARD', color: palette.amber },
-    { pose: 'hold-envelope' as const, accessory: 'envelope' as const, label: 'BIDDER', color: palette.blue },
-    { pose: 'hold-clipboard' as const, accessory: 'clipboard' as const, label: 'INSPECTOR', color: palette.green },
-  ];
-  return (
-    <Card label="THE CAST" kicker="HUMAN LAYER" style={{ right: 22, bottom: 250, width: 360, height: 286 }} rotate={1}>
-      <div
-        style={{
-          position: 'absolute',
-          inset: 10,
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: 4,
-        }}
-      >
-        {figures.map((figure, index) => (
-          <div
-            key={figure.label}
-            style={{
-              position: 'relative',
-              border: `1px solid ${palette.line}`,
-              background: 'rgba(250,247,238,0.8)',
-            }}
-          >
-            <StickFigure
-              pose={figure.pose}
-              accessory={figure.accessory}
-              width={66}
-              height={104}
-              colorTag={figure.color}
-              tagLabel={figure.label}
-              frame={frame}
-              fps={fps}
-              animated
-              enterAt={4 + index * 3}
-              style={{ position: 'absolute', left: '50%', top: 12, transform: 'translateX(-50%)' }}
-            />
-          </div>
-        ))}
-      </div>
-      <BottomLabel>{scene.stack.length} LAYERS · HUMANS HOLD THE PAYMENT KEYS</BottomLabel>
     </Card>
   );
 };
@@ -432,16 +556,17 @@ const CastForScene: React.FC<{ scene: V3Scene }> = ({ scene }) => {
     case 'report':
       return <ReportCast scene={scene} />;
     case 'dao':
-      return <CouncilCast scene={scene} />;
+      return <CouncilCast />;
     case 'bids':
-      return <BidderCast scene={scene} />;
+      return <BidderCast />;
     case 'repair':
-      return <RepairCast scene={scene} />;
+      return <RepairCast />;
     case 'payment':
-      return <PaymentCast scene={scene} />;
+      return <PaymentCast />;
     case 'passport':
-      return <PassportCast scene={scene} />;
+      return <PassportCast />;
     case 'tech':
+      // Tech beat is deliberately cast-free: the three-layer rail needs the room.
       return null;
     default:
       return null;
@@ -454,7 +579,8 @@ export const CastOverlays: React.FC = () => (
       .filter((scene) => scene.id !== 'hook' && scene.id !== 'close')
       .map((scene) => {
         const start = scene.id === 'report' ? 0 : scene.start;
-        const duration = scene.id === 'report' ? scene.start + scene.sceneDuration : scene.sceneDuration;
+        const duration =
+          scene.id === 'report' ? scene.start + scene.sceneDuration : scene.sceneDuration;
         return (
           <Sequence
             key={scene.id}

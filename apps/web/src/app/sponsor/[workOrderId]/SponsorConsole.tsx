@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import type { CaseBundle } from '@/lib/types';
 import { formatDateTime, shortAccount, usdc } from '@/lib/format';
+import { caseSourceLabel, caseSourceTone, type CaseDataSource } from '@/lib/case-source';
 import { Badge, Callout, PageHero, StatusPill } from '@/components/ui';
 import { MoneyRail } from '@/components/MoneyRail';
 import { DataSourceNote } from '@/components/DataSourceNote';
@@ -56,13 +57,24 @@ const STATUS_COPY: Record<
   },
 };
 
-export function SponsorConsole({ caseData }: { caseData: CaseBundle }) {
+export function SponsorConsole({
+  caseData,
+  dataSource,
+  apiConfigured,
+  fallbackReason,
+}: {
+  caseData: CaseBundle;
+  dataSource: CaseDataSource;
+  apiConfigured: boolean;
+  fallbackReason?: string;
+}) {
   const quote = caseData.intent;
   const [preview, setPreview] = useState(quote.status);
   const previewCopy = STATUS_COPY[preview];
   const dry = quote.dry;
   const reconciled = Boolean(quote.destinationTxHash);
-
+  const hasIntent = quote.id !== 'INTENT-UNAVAILABLE' && quote.depositAddress !== 'Unavailable';
+  const sourceLabel = caseSourceLabel(dataSource, caseData.mode, apiConfigured);
   return (
     <div className="container">
       <PageHero
@@ -79,6 +91,9 @@ export function SponsorConsole({ caseData }: { caseData: CaseBundle }) {
             <div style={{ marginTop: 10 }}>
               <StatusPill status={caseData.status} />
             </div>
+            <div style={{ marginTop: 8 }}>
+              <Badge tone={caseSourceTone(dataSource, caseData.mode)}>{sourceLabel}</Badge>
+            </div>
             <dl>
               <div>
                 <dt>Budget</dt>
@@ -90,7 +105,7 @@ export function SponsorConsole({ caseData }: { caseData: CaseBundle }) {
               </div>
               <div>
                 <dt>Intent status</dt>
-                <dd>{quote.status}</dd>
+                <dd>{hasIntent ? quote.status : 'Not linked'}</dd>
               </div>
             </dl>
           </div>
@@ -100,87 +115,108 @@ export function SponsorConsole({ caseData }: { caseData: CaseBundle }) {
       <div className="intent-shell" style={{ paddingBottom: 'clamp(50px, 8vw, 90px)' }}>
         <div className="dry-live" role="note" aria-label="Quote mode">
           <span className="dry-pill">
-            <Lock size={13} aria-hidden="true" /> DRY QUOTE · preview only
+            <Lock size={13} aria-hidden="true" /> {hasIntent ? 'DRY QUOTE · preview only' : 'NO INTENT QUOTE LINKED'}
           </span>
           <span className="live-pill live-pill--disabled">
-            <Wallet size={13} aria-hidden="true" /> LIVE QUOTE unavailable in replay
+            <Wallet size={13} aria-hidden="true" />{' '}
+            {hasIntent ? 'LIVE QUOTE unavailable' : 'LIVE QUOTE unavailable — Intents disabled'}
           </span>
           <Badge tone="danger">MAINNET ONLY</Badge>
         </div>
 
-        <Callout tone="warning" title="Intents is a mainnet path. This build does not initiate a mainnet transaction.">
-          A real Intents execution needs a separate human approval, real funds and a server-side API. No private key, API
-          secret or mainnet signature exists in this browser.
+        <Callout
+          tone="warning"
+          title={
+            hasIntent
+              ? 'Intents is a mainnet path. This build does not initiate a mainnet transaction.'
+              : 'No NEAR Intents quote is linked to this work order.'
+          }
+        >
+          {hasIntent
+            ? 'A real Intents execution needs a separate human approval, real funds and a server-side API. No private key, API secret or mainnet signature exists in this browser.'
+            : dataSource === 'api'
+              ? 'The configured MEND API reports no Intents quote for this case. The page shows the work-order funding state and does not invent a quote, address or memo.'
+              : 'This replay fixture contains no Intents quote for the selected case. The page shows the work-order funding state and does not invent a quote, address or memo.'}
         </Callout>
 
         <section className="quote-card" aria-labelledby="quote-title">
           <div className="quote-card__head">
             <div>
               <p className="eyebrow">1Click / Intents quote</p>
-              <h2 id="quote-title">Sponsor preview · {quote.id}</h2>
+              <h2 id="quote-title">Sponsor preview · {hasIntent ? quote.id : 'unavailable'}</h2>
             </div>
             <div className="dry-live">
-              <span className="dry-pill">{dry ? 'dry: true' : 'dry: false'}</span>
+              <span className="dry-pill">{hasIntent ? (dry ? 'dry: true' : 'dry: false') : 'intent: not linked'}</span>
               <span className="live-pill live-pill--disabled">live execution locked</span>
             </div>
           </div>
 
-          <div className="quote-route" aria-label="Quote route">
-            <div className="quote-asset">
-              <span>Source</span>
-              <strong>{quote.srcAsset}</strong>
-              <small>{quote.srcChain}</small>
-              <small>{quote.amountIn}</small>
-            </div>
-            <ArrowRight className="quote-arrow" size={22} aria-hidden="true" />
-            <div className="quote-asset">
-              <span>Destination</span>
-              <strong>{quote.dstAsset}</strong>
-              <small>NEAR</small>
-              <small>to {shortAccount(quote.recipient)}</small>
-            </div>
-          </div>
+          {hasIntent ? (
+            <>
+              <div className="quote-route" aria-label="Quote route">
+                <div className="quote-asset">
+                  <span>Source</span>
+                  <strong>{quote.srcAsset}</strong>
+                  <small>{quote.srcChain}</small>
+                  <small>{quote.amountIn}</small>
+                </div>
+                <ArrowRight className="quote-arrow" size={22} aria-hidden="true" />
+                <div className="quote-asset">
+                  <span>Destination</span>
+                  <strong>{quote.dstAsset}</strong>
+                  <small>NEAR</small>
+                  <small>to {shortAccount(quote.recipient)}</small>
+                </div>
+              </div>
 
-          <div className="quote-facts">
-            <div className="quote-fact">
-              <span>Estimated output</span>
-              <strong>{quote.amountOut}</strong>
-            </div>
-            <div className="quote-fact">
-              <span>Quoted fees</span>
-              <strong>${quote.feesUsd.toFixed(2)}</strong>
-            </div>
-            <div className="quote-fact">
-              <span>Quote deadline</span>
-              <strong style={{ fontSize: '0.74rem' }}>{formatDateTime(quote.deadline)}</strong>
-            </div>
-          </div>
+              <div className="quote-facts">
+                <div className="quote-fact">
+                  <span>Estimated output</span>
+                  <strong>{quote.amountOut}</strong>
+                </div>
+                <div className="quote-fact">
+                  <span>Quoted fees</span>
+                  <strong>${quote.feesUsd.toFixed(2)}</strong>
+                </div>
+                <div className="quote-fact">
+                  <span>Quote deadline</span>
+                  <strong style={{ fontSize: '0.74rem' }}>{formatDateTime(quote.deadline)}</strong>
+                </div>
+              </div>
 
-          <div className="deposit">
-            <h3>Deposit instructions (preview only)</h3>
-            <div className="deposit__row">
-              <span>Address</span>
-              <code>{quote.depositAddress}</code>
-              <CopyButton value={quote.depositAddress} label="Copy address" />
-            </div>
-            <div className="deposit__row">
-              <span>Memo</span>
-              <code>{quote.depositMemo}</code>
-              <CopyButton value={quote.depositMemo} label="Copy memo" />
-            </div>
-            <p className="field__hint" style={{ marginTop: 8 }}>
-              Do not send real funds to a replay address. In live mode, recipient binding and work-order metadata must be
-              re-checked by a human before deposit.
+              <div className="deposit">
+                <h3>Deposit instructions (preview only)</h3>
+                <div className="deposit__row">
+                  <span>Address</span>
+                  <code>{quote.depositAddress}</code>
+                  <CopyButton value={quote.depositAddress} label="Copy address" />
+                </div>
+                <div className="deposit__row">
+                  <span>Memo</span>
+                  <code>{quote.depositMemo}</code>
+                  <CopyButton value={quote.depositMemo} label="Copy memo" />
+                </div>
+                <p className="field__hint" style={{ marginTop: 8 }}>
+                  Do not send real funds to a replay address. In live mode, recipient binding and work-order metadata must
+                  be re-checked by a human before deposit.
+                </p>
+              </div>
+
+              <div className="source-note source-note--replay">
+                <AlertTriangle size={16} aria-hidden="true" />
+                <span>
+                  <strong>Fees and output are estimates.</strong> This quote is not a guarantee of price, delivery or
+                  settlement. A dry quote never makes the work order funded.
+                </span>
+              </div>
+            </>
+          ) : (
+            <p className="empty-state" data-testid="intent-unavailable">
+              {dataSource === 'api'
+                ? 'The API record has no quote id, deposit address or memo for this work order. Nothing is fabricated to fill the panel.'
+                : 'This replay fixture has no linked Intents quote for this work order. Nothing is fabricated to fill the panel.'}
             </p>
-          </div>
-
-          <div className="source-note source-note--replay">
-            <AlertTriangle size={16} aria-hidden="true" />
-            <span>
-              <strong>Fees and output are estimates.</strong> This quote is not a guarantee of price, delivery or
-              settlement. A dry quote never makes the work order funded.
-            </span>
-          </div>
+          )}
         </section>
 
         <section className="quote-card" aria-labelledby="intent-status-title">
@@ -189,8 +225,15 @@ export function SponsorConsole({ caseData }: { caseData: CaseBundle }) {
               <p className="eyebrow">Execution status</p>
               <h2 id="intent-status-title">Every documented outcome, handled honestly</h2>
             </div>
-            <Badge tone={previewCopy.tone}>{previewCopy.label}</Badge>
+            <Badge tone={hasIntent ? previewCopy.tone : 'neutral'}>{hasIntent ? previewCopy.label : 'No quote'}</Badge>
           </div>
+
+          {!hasIntent ? (
+            <p className="field__hint" role="status">
+              The status buttons below document how every Intents outcome is handled. They are not the status of this work
+              order because no quote is linked to it.
+            </p>
+          ) : null}
 
           <div className="intent-statuses" aria-label="Intent status reference">
             {(Object.keys(STATUS_COPY) as CaseBundle['intent']['status'][]).map((status) => (
@@ -206,28 +249,36 @@ export function SponsorConsole({ caseData }: { caseData: CaseBundle }) {
             ))}
           </div>
 
-          <div className="intent-steps" aria-label="Intent settlement steps">
-            <div className={`intent-step${quote.status !== 'PENDING' ? ' intent-step--done' : ' intent-step--current'}`}>
-              <span>1. Quote</span>
-              <strong>{dry ? 'Dry' : 'Live'}</strong>
+          {hasIntent ? (
+            <div className="intent-steps" aria-label="Intent settlement steps">
+              <div className={`intent-step${quote.status !== 'PENDING' ? ' intent-step--done' : ' intent-step--current'}`}>
+                <span>1. Quote</span>
+                <strong>{dry ? 'Dry' : 'Live'}</strong>
+              </div>
+              <div className={`intent-step${['SUCCESS', 'REFUNDED'].includes(quote.status) ? ' intent-step--done' : ''}${quote.status === 'PENDING' ? ' intent-step--current' : ''}`}>
+                <span>2. Deposit</span>
+                <strong>{quote.status === 'PENDING' ? 'Awaiting' : quote.status === 'FAILED' ? 'Failed' : 'Recorded'}</strong>
+              </div>
+              <div className={`intent-step${reconciled ? ' intent-step--done' : ''}${quote.status === 'INCOMPLETE' ? ' intent-step--failed' : ''}`}>
+                <span>3. Deliver</span>
+                <strong>{reconciled ? 'Delivered' : quote.status === 'SUCCESS' ? 'No tx hash' : quote.status === 'INCOMPLETE' ? 'Incomplete' : 'Pending'}</strong>
+              </div>
+              <div className={`intent-step${reconciled ? ' intent-step--done' : ''}${quote.status === 'FAILED' ? ' intent-step--failed' : ''}`}>
+                <span>4. Reconcile</span>
+                <strong>{reconciled ? 'Matched' : 'No tx hash'}</strong>
+              </div>
+              <div className={`intent-step${quote.status === 'SUCCESS' && reconciled ? ' intent-step--done' : ''}`}>
+                <span>5. Fund order</span>
+                <strong>
+                  {caseData.escrow.fundedMicro !== '0'
+                    ? dataSource === 'api'
+                      ? 'API record'
+                      : 'Fixture recorded'
+                    : 'Not funded'}
+                </strong>
+              </div>
             </div>
-            <div className={`intent-step${['SUCCESS', 'REFUNDED'].includes(quote.status) ? ' intent-step--done' : ''}${quote.status === 'PENDING' ? ' intent-step--current' : ''}`}>
-              <span>2. Deposit</span>
-              <strong>{quote.status === 'PENDING' ? 'Awaiting' : quote.status === 'FAILED' ? 'Failed' : 'Recorded'}</strong>
-            </div>
-            <div className={`intent-step${reconciled ? ' intent-step--done' : ''}${quote.status === 'INCOMPLETE' ? ' intent-step--failed' : ''}`}>
-              <span>3. Deliver</span>
-              <strong>{reconciled ? 'Delivered' : quote.status === 'SUCCESS' ? 'Fixture only' : quote.status === 'INCOMPLETE' ? 'Incomplete' : 'Pending'}</strong>
-            </div>
-            <div className={`intent-step${reconciled ? ' intent-step--done' : ''}${quote.status === 'FAILED' ? ' intent-step--failed' : ''}`}>
-              <span>4. Reconcile</span>
-              <strong>{reconciled ? 'Matched' : 'No tx hash'}</strong>
-            </div>
-            <div className={`intent-step${quote.status === 'SUCCESS' && reconciled ? ' intent-step--done' : ''}`}>
-              <span>5. Fund order</span>
-              <strong>{caseData.escrow.fundedMicro !== '0' ? 'Fixture recorded' : 'Not funded'}</strong>
-            </div>
-          </div>
+          ) : null}
 
           <div className={`callout callout--${previewCopy.tone === 'positive' ? 'positive' : previewCopy.tone === 'danger' ? 'danger' : 'warning'}`} style={{ marginTop: 16 }}>
             <div className="callout__icon">
@@ -347,7 +398,11 @@ export function SponsorConsole({ caseData }: { caseData: CaseBundle }) {
           </article>
         </div>
 
-        <DataSourceNote detail={`Sponsor view for ${caseData.id}. The quote, fees and status are frozen replay fixtures. No mainnet transaction, deposit or payment is claimed.`} />
+        <DataSourceNote
+          source={dataSource}
+          detail={fallbackReason}
+          liveDetail={`Sponsor view for ${caseData.id}. Work-order funding and payment state are read from the configured MEND API. ${hasIntent ? 'The displayed Intents quote comes from the API record.' : 'The API record has no linked Intents quote, so no quote, address or memo is rendered.'}`}
+        />
       </div>
     </div>
   );

@@ -1,26 +1,37 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { CASES, getPublicMetrics, statusLabel } from '@/lib/fixtures';
+import { getPublicMetrics, statusLabel } from '@/lib/fixtures';
+import { metricsForCases } from '@/lib/case-metrics';
+import { caseSourceLabel, caseSourceTone } from '@/lib/case-source';
+import { loadCases } from '@/lib/server-api';
 import { usdc } from '@/lib/format';
 import { Badge, Callout, Metric, SectionHead, StatusPill } from '@/components/ui';
 import { DataSourceNote } from '@/components/DataSourceNote';
 import { ArrowRight, AlertTriangle, Eye, ShieldCheck, Users } from '@/components/Icons';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Public metrics',
-  description: 'Public MEND pilot metrics from frozen replay fixtures: reports, duplicate clusters, funding, payments and evidence honesty.',
+  description:
+    'Public MEND pilot metrics from live API case records when available, or frozen replay fixtures with a visible fallback label.',
 };
 
-export default function DashboardPage() {
-  const metrics = getPublicMetrics();
+export default async function DashboardPage() {
+  const { cases, source, apiConfigured, fallbackReason } = await loadCases();
+  const live = source === 'api';
+  const metrics = live ? metricsForCases(cases) : getPublicMetrics();
   const maxStatus = Math.max(...metrics.statusDistribution.map((item) => item.count), 1);
   const accounted = (
     BigInt(metrics.refundedMicro) +
     BigInt(metrics.completionPaidMicro) +
     BigInt(metrics.holdbackReleasedMicro) +
     BigInt(metrics.holdbackHeldMicro) +
-    BigInt(CASES.reduce((sum, item) => sum + BigInt(item.escrow.escrowedMicro ?? '0'), 0n).toString())
+    cases.reduce((sum, item) => sum + BigInt(item.escrow.escrowedMicro ?? '0'), 0n)
   ).toString();
+  const firstCase = cases[0]!;
+  const sourceLabel = caseSourceLabel(source, firstCase.mode, apiConfigured);
+  const apiReplay = live && firstCase.mode === 'REPLAY';
 
   return (
     <>
@@ -30,22 +41,26 @@ export default function DashboardPage() {
             <p className="eyebrow">Public dashboard</p>
             <h1 className="page-title">A pilot measured without theatre.</h1>
             <p className="page-lead">
-              Reports, duplicate clusters, funding, human decisions and evidence honesty. Every figure is computed from the
-              frozen replay fixtures and labelled accordingly.
+              Reports, duplicate clusters, funding, human decisions and evidence honesty. Every figure is computed from
+              the public case records shown below — live API records when available, frozen replay fixtures otherwise,
+              always labelled.
             </p>
+            <div style={{ marginTop: 12 }}>
+              <Badge tone={caseSourceTone(source, firstCase.mode)}>{sourceLabel}</Badge>
+            </div>
           </div>
           <div className="page-hero__aside">
             <div className="side-card">
-              <h2>Replay funding total</h2>
+              <h2>{live ? (apiReplay ? 'Live API · replay record total' : 'Live testnet funding total') : 'Replay funding total'}</h2>
               <p className="side-card__value" style={{ fontSize: '1.1rem' }}>
                 {usdc(metrics.fundedMicro, 0)}
               </p>
               <p className="side-card__note">
                 {usdc(metrics.completionPaidMicro, 0)} completion + {usdc(metrics.holdbackReleasedMicro, 0)} holdback
-                released across the replay.
+                released across {live ? 'the live API records' : 'the replay'}.
               </p>
-              <Link className="text-link" href="/cases/WO-BENCH-001-0001" style={{ marginTop: 10 }}>
-                Open the bench case <ArrowRight size={14} aria-hidden="true" />
+              <Link className="text-link" href={`/cases/${firstCase.id}`} style={{ marginTop: 10 }}>
+                Open {live ? 'the live case' : 'the bench case'} <ArrowRight size={14} aria-hidden="true" />
               </Link>
             </div>
           </div>
@@ -66,7 +81,11 @@ export default function DashboardPage() {
             <Metric label="Reports received" value={metrics.reports} note="Walletless submissions" />
             <Metric label="Duplicate clusters" value={metrics.duplicateClusters} note="Human-confirmed merges" />
             <Metric label="Work orders" value={metrics.cases} note="Every state explained" tone="active" />
-            <Metric label="Test value funded" value={usdc(metrics.fundedMicro, 0)} note="Test USDC, not real value" />
+            <Metric
+              label="Test value funded"
+              value={usdc(metrics.fundedMicro, 0)}
+              note={live ? (apiReplay ? 'API replay record · test value' : 'Live testnet record · test value, not real funds') : 'Test USDC, not real value'}
+            />
             <Metric label="Completion paid" value={usdc(metrics.completionPaidMicro, 0)} note="90% after human acceptance" tone="positive" />
             <Metric label="Holdback released" value={usdc(metrics.holdbackReleasedMicro, 0)} note="10% after durability pass" tone="positive" />
             <Metric label="Warranty reopened" value={metrics.reopenedCases} note="Same work order, no new funds" tone="warning" />
@@ -75,7 +94,7 @@ export default function DashboardPage() {
           <div className="dashboard-grid" style={{ marginTop: 16 }}>
             <section className="chart-card" aria-labelledby="status-chart-title">
               <h2 id="status-chart-title">Cases by current state</h2>
-              <p>Replay fixture snapshot. One case can represent more than one story over time.</p>
+              <p>{live ? 'Live API case snapshot. One case can represent more than one story over time.' : 'Replay fixture snapshot. One case can represent more than one story over time.'}</p>
               <div className="status-bars" role="img" aria-label="Bar chart of case counts by state">
                 {metrics.statusDistribution.map((item) => (
                   <div key={item.status} className="status-bar">
@@ -111,7 +130,7 @@ export default function DashboardPage() {
 
             <section className="chart-card" aria-labelledby="evidence-mix-title">
               <h2 id="evidence-mix-title">Evidence honesty</h2>
-              <p>What the interface can and cannot verify in this replay.</p>
+              <p>What the interface can and cannot verify in this {live ? 'API dataset' : 'replay'}.</p>
               <div className="evidence-mix">
                 <div className="evidence-mix__row">
                   <span className="badge badge--positive">
@@ -159,8 +178,9 @@ export default function DashboardPage() {
               <p className="source-note source-note--replay">
                 <AlertTriangle size={16} aria-hidden="true" />
                 <span>
-                  Zero verified inference evidence means exactly that. No live AI attestation is bundled with the replay.
-                  The deterministic ranking is reproducible, but it is not presented as a live OutLayer callback.
+                  Zero verified inference evidence means exactly that. No live AI attestation is bundled with the{' '}
+                  {live ? 'public API records' : 'replay'}. The deterministic ranking is reproducible, but it is not
+                  presented as a live OutLayer callback.
                 </span>
               </p>
             </section>
@@ -182,6 +202,7 @@ export default function DashboardPage() {
               <thead>
                 <tr>
                   <th scope="col">Case</th>
+                  <th scope="col">Source</th>
                   <th scope="col">State</th>
                   <th scope="col">Funded</th>
                   <th scope="col">Refunded</th>
@@ -193,12 +214,17 @@ export default function DashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {CASES.map((caseData) => (
+                {cases.map((caseData) => (
                   <tr key={caseData.id}>
                     <td data-label="Case">
                       <Link className="text-link" href={`/cases/${caseData.id}`}>
                         {caseData.assetId}
                       </Link>
+                    </td>
+                    <td data-label="Source">
+                      <Badge tone={caseSourceTone(source, caseData.mode)}>
+                        {caseSourceLabel(source, caseData.mode, apiConfigured)}
+                      </Badge>
                     </td>
                     <td data-label="State">
                       <StatusPill status={caseData.status} />
@@ -219,18 +245,23 @@ export default function DashboardPage() {
           </div>
 
           <Callout tone="warning" title="What this dashboard does not claim">
-            It does not claim city adoption, verified physical safety, live AI attestations, a real transaction volume or
-            that a replay is a live network. It is a deterministic presentation of the pilot fixtures.
+            {live
+              ? 'It does not claim city adoption, verified physical safety, live AI attestations, mainnet activity or that every API record is a real chain action. A record whose own mode is REPLAY stays labelled as replay.'
+              : 'It does not claim city adoption, verified physical safety, live AI attestations, a real transaction volume or that a replay is a live network. It is a deterministic presentation of the pilot fixtures.'}
           </Callout>
           <div className="form-actions" style={{ borderTop: 0 }}>
             <Link className="button button--ghost" href="/trust">
               Privacy &amp; limitations <ArrowRight size={16} aria-hidden="true" />
             </Link>
-            <Link className="button" href="/demo">
-              Open the demo control room <ArrowRight size={16} aria-hidden="true" />
+            <Link className="button" href="/live">
+              Live API status <ArrowRight size={16} aria-hidden="true" />
             </Link>
           </div>
-          <DataSourceNote detail="All dashboard values are computed from frozen protocol fixtures. No analytics, wallet addresses or private evidence are used." />
+          <DataSourceNote
+            source={source}
+            detail={fallbackReason}
+            liveDetail="Every value on this dashboard is computed from public case records returned by the configured MEND API. No analytics, wallet addresses or private evidence are used."
+          />
         </div>
       </section>
     </>

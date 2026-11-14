@@ -2,32 +2,64 @@
 
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
-import { checkApiHealth } from '@/lib/api';
-import { MODE_META, isMode, safeMode } from '@/lib/modes';
+import { checkApiHealth, type ApiHealth } from '@/lib/api';
+import { MODE_META, safeMode } from '@/lib/modes';
 import type { Mode } from '@/lib/types';
 
 interface ModeContextValue {
   mode: Mode;
   apiConfigured: boolean;
+  apiHealth: ApiHealth | null;
+  refreshApiHealth: () => Promise<ApiHealth>;
   setMode: (mode: Mode) => Promise<boolean>;
   notice: string;
   dismissNotice: () => void;
 }
 
 const ModeContext = createContext<ModeContextValue | null>(null);
+const MODE_STORAGE_KEY = 'mend-mode';
+
+function readStoredMode(): string | null {
+  try {
+    return window.sessionStorage.getItem(MODE_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function writeStoredMode(mode: Mode): void {
+  try {
+    window.sessionStorage.setItem(MODE_STORAGE_KEY, mode);
+  } catch {
+    // Ignore storage failures.
+  }
+}
 
 export function ModeProvider({
   children,
-  initialMode = 'REPLAY',
   apiConfigured = false,
 }: {
   children: ReactNode;
+  /**
+   * Server-rendered hint only. It is intentionally not trusted: a build can
+   * have MEND_API_BASE_URL while the API reports REPLAY or is unreachable.
+   * The `/health` response decides whether LIVE_TESTNET is selectable.
+   */
   initialMode?: Mode;
   apiConfigured?: boolean;
 }) {
-  const [mode, setModeState] = useState<Mode>(initialMode === 'MAINNET' ? 'REPLAY' : initialMode);
+  // Always start in REPLAY. The mount effect promotes to LIVE_TESTNET only
+  // after the API answers with mode LIVE_TESTNET and a non-degraded status.
+  const [mode, setModeState] = useState<Mode>('REPLAY');
+  const [apiHealth, setApiHealth] = useState<ApiHealth | null>(null);
   const [notice, setNotice] = useState('');
+  const modeRef = useRef<Mode>('REPLAY');
   const noticeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const applyMode = useCallback((nextMode: Mode) => {
+    modeRef.current = nextMode;
+    setModeState(nextMode);
+  }, []);
 
   const announce = useCallback((message: string) => {
     setNotice(message);
@@ -43,42 +75,40 @@ export function ModeProvider({
 
   useEffect(() => {
     let cancelled = false;
-    let storedMode: string | null = null;
-    try {
-      storedMode = window.sessionStorage.getItem('mend-mode');
-    } catch {
-      storedMode = null;
-    }
+    const storedMode = readStoredMode();
 
-    fetch('/api/config', { cache: 'no-store' })
-      .then((response) => (response.ok ? response.json() : null))
-      .then(async (config: { mode?: string; apiConfigured?: boolean } | null) => {
-        if (cancelled || !config) return;
-        const detected = config.mode;
-        if (
-          config.apiConfigured &&
-          isMode(detected) &&
-          detected === 'LIVE_TESTNET' &&
-          storedMode !== 'REPLAY'
-        ) {
-          const health = await checkApiHealth();
-          if (!cancelled && health.ok) setModeState('LIVE_TESTNET');
-        }
-      })
-      .catch(() => undefined);
+    void checkApiHealth().then((health) => {
+      if (cancelled) return;
+      setApiHealth(health);
+
+      if (health.ok && storedMode === 'LIVE_TESTNET') {
+        applyMode('LIVE_TESTNET');
+        return;
+      }
+
+      applyMode('REPLAY');
+      if (storedMode === 'LIVE_TESTNET') {
+        announce(`${health.message} Returned to REPLAY / SIMULATION.`);
+      }
+    });
+
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [announce, applyMode]);
 
-  useEffect(() => {
-    try {
-      const stored = window.sessionStorage.getItem('mend-mode');
-      if (isMode(stored) && stored !== 'MAINNET') setModeState(stored);
-    } catch {
-      // Session storage may be unavailable in locked-down browsers.
+  const refreshApiHealth = useCallback(async () => {
+    const health = await checkApiHealth();
+    setApiHealth(health);
+
+    if (!health.ok && modeRef.current === 'LIVE_TESTNET') {
+      applyMode('REPLAY');
+      writeStoredMode('REPLAY');
+      announce(`${health.message} Returned to REPLAY / SIMULATION.`);
     }
-  }, []);
+
+    return health;
+  }, [announce, applyMode]);
 
   const setMode = useCallback(
     async (nextMode: Mode) => {
@@ -90,38 +120,46 @@ export function ModeProvider({
       }
 
       if (nextMode === 'LIVE_TESTNET') {
-        if (!apiConfigured) {
-          announce(
-            'No MEND_API_BASE_URL is configured for this build. Staying in REPLAY / SIMULATION with frozen fixtures.',
-          );
-          return false;
-        }
         const health = await checkApiHealth();
+        setApiHealth(health);
         if (!health.ok) {
+          applyMode('REPLAY');
+          writeStoredMode('REPLAY');
           announce(`${health.message} Staying in REPLAY / SIMULATION.`);
           return false;
         }
-        announce('LIVE TESTNET selected. Every action still requires a real testnet transaction hash before it is shown as executed.');
+        announce(
+          'LIVE TESTNET selected. The console is read-only: no scenario runner is exposed and every displayed API value must still be a real testnet response.',
+        );
       }
 
       if (nextMode === 'REPLAY') {
         announce('REPLAY / SIMULATION selected. Frozen fixtures are labelled throughout.');
       }
 
-      setModeState(nextMode);
-      try {
-        window.sessionStorage.setItem('mend-mode', nextMode);
-      } catch {
-        // Ignore storage failures.
-      }
+      applyMode(nextMode);
+      writeStoredMode(nextMode);
       return true;
     },
-    [announce, apiConfigured],
+    [announce, applyMode],
   );
 
+  // The server-rendered flag may be stale if an operator sets the API URL at
+  // runtime. A health response with a known mode proves the API is configured.
+  const resolvedApiConfigured =
+    apiConfigured || (apiHealth !== null && apiHealth.mode !== 'UNKNOWN');
+
   const value = useMemo<ModeContextValue>(
-    () => ({ mode, apiConfigured, setMode, notice, dismissNotice: () => setNotice('') }),
-    [mode, apiConfigured, setMode, notice],
+    () => ({
+      mode,
+      apiConfigured: resolvedApiConfigured,
+      apiHealth,
+      refreshApiHealth,
+      setMode,
+      notice,
+      dismissNotice: () => setNotice(''),
+    }),
+    [mode, resolvedApiConfigured, apiHealth, refreshApiHealth, setMode, notice],
   );
 
   return (
