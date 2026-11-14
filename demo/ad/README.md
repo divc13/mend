@@ -6,7 +6,7 @@ relevant JSON, then re-render; no timeline editing is required.
 
 ## Final outputs
 
-- `out/mend-ad-v2-master.mp4` — current 5:00 v2 master, 1920×1080, 30fps, H.264/AAC, −13.88 LUFS.
+- `out/mend-ad-v2-master.mp4` — current 5:00 v2 master, 1920×1080, 30fps, H.264/AAC, −13.94 LUFS.
 - `out/mend-ad-v2-thumbnail.png` — v2 thumbnail (1920×1080).
 - `out/mend-ad-v2-thumbnail-1280.jpg` — YouTube-ready 1280×720 thumbnail.
 - `out/mend-ad-v2-contact-sheet.png` — v2 scene contact sheet.

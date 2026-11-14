@@ -103,7 +103,7 @@ const sfxLabels = sfxLabelList.join('');
 
 const filters = [];
 filters.push(...voFilters, ...sfxFilters);
-filters.push(`${voLabels}amix=inputs=${vo.length}:normalize=0:duration=longest,asplit=2[voSide][voMix]`);
+filters.push(`${voLabels}amix=inputs=${vo.length}:normalize=0:duration=longest,apad=whole_dur=${total},asplit=2[voSide][voMix]`);
 filters.push(`[0:a]atrim=0:${total},asetpts=PTS-STARTPTS,volume=0.20[music]`);
 filters.push(`[music][voSide]sidechaincompress=threshold=0.04:ratio=8:attack=20:release=500[ducked]`);
 let mixInputs = `[voMix][ducked]`;
