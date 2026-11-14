@@ -25,7 +25,7 @@ money and the failure stay attached to the asset.
 | API health | https://mend-api-phi.vercel.app/health | `LIVE_TESTNET`, `repository: postgres`, `database: reachable` |
 | Proof page | https://mend-demo.vercel.app/how-it-works | Stack, transactions and labelled evidence |
 | Trust model | https://mend-demo.vercel.app/trust | Verified, unavailable and human evidence kept separate |
-| Current film | `demo/ad/out/mend-ad-v3-master.mp4` | 2:37.00, 53 MB, SHA-256 `df08dd0c99d482703229e40e02adba10fb25ebfbad83d4962576346a17214158`; public video URL not assigned |
+| Current film | `demo/ad/out/mend-ad-v4-master.mp4` | 3:33.57, 61 MB, SHA-256 `080e87b6d93d4a7756e48df8c024cffc51b6253e3601d197c3ba3f2d549bcd7b`; public video URL not assigned |
 
 The hosted app runs on Vercel Functions plus Neon Free Postgres. The canonical
 case is `CLOSED`, so award and accept controls are correctly disabled. Everything

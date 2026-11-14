@@ -163,19 +163,21 @@ failed first DAO factory attempt; that attempt is recorded separately in
 
 ## Current film
 
-The current cut is a **recorded 2:37.00 narrated 1080p v3 product pitch** at
-`demo/ad/out/mend-ad-v3-master.mp4`: 1920×1080/30fps, H.264/AAC, 48 kHz stereo,
-**53 MB**, SHA-256
-`df08dd0c99d482703229e40e02adba10fb25ebfbad83d4962576346a17214158`.
+The current cut is a **recorded 3:33.57 narrated 1080p v4 product pitch** at
+`demo/ad/out/mend-ad-v4-master.mp4`: 1920×1080/30fps, H.264/AAC, 48 kHz stereo,
+**61 MB**, SHA-256
+`080e87b6d93d4a7756e48df8c024cffc51b6253e3601d197c3ba3f2d549bcd7b`.
 It is a full-bleed live app with paper-cut cast dioramas and per-beat tech-stack
-callouts, one continuous voice/music/SFX bed, and a QR to
-https://mend-demo.vercel.app.
+callouts, a new **Liam** narration, 0.45-second music-only section handoffs, a
+plain-English private-AI explainer, and a QR to
+https://mend-demo.vercel.app. Loudness is **−13.9 LUFS** with **−1.4 dBTP** true
+peak; there is no silence gap longer than 1.2 seconds.
 
 Honest labels: the pothole story is `REPLAY / SIMULATION`; repair B-roll is
-illustrative Pexels stock, not a real MEND repair; the voice is the trimmed v1
-George render, not a new synthesis; the human watch/listen-through is pending.
-The video agent may change the duration. Replace this number only when the parent
-publishes a new master and hash.
+illustrative Pexels stock, not a real MEND repair; the AI response is signed but
+its matching TEE proof is unavailable and labelled; the human watch/listen-through
+is pending. The v3 master is retained as a fallback. Replace this number only
+when the parent publishes a new master and hash.
 
 ## Track recommendation
 

@@ -14,7 +14,7 @@ today, which are unavailable, and which are waiting on a human.
 > (`WO-BENCH-V2-001-0002`); testnet only, test value only. The full API-backed
 > live app is at https://mend-demo.vercel.app (API
 > https://mend-api-phi.vercel.app, Neon Postgres), and the current film is a
-> recorded 2:32.40 v3 pitch. Live NEAR AI signature, Sputnik DAO, OutLayer,
+> recorded 3:33.57 v4 Liam pitch. Live NEAR AI signature, Sputnik DAO, OutLayer,
 > NEP-366 and Agent Market evidence exist with labelled caveats: the NEAR AI TEE
 > report is unavailable, the Intents deposit/settlement is pending, and the
 > Agent Market run was a disclosed self-hire. The public repository, X post,
@@ -58,7 +58,7 @@ today, which are unavailable, and which are waiting on a human.
 - [Evidence package templates](../fixtures/demo/README.md) — media checklist, consent record, manifest and real-vs-staged log.
 - [Docs checker](../scripts/demo/check-docs.mjs) — `node scripts/demo/check-docs.mjs`.
 - [REPLAY capture harness](../scripts/demo/capture-replay-demo.mjs) — records the web app once it is integrated.
-- [Demo capture plan](./15-demo-capture-plan.md) — the 2:32.40 v3 pitch is **RECORDED**; public upload and human watch-through remain **PENDING (human)**.
+- [Demo capture plan](./15-demo-capture-plan.md) — the 3:33.57 v4 Liam pitch is **RECORDED**; public upload and human watch/listen-through remain **PENDING (human)**.
 
 ## Evidence labels used in this documentation
 
@@ -90,7 +90,7 @@ more fully in [16 — Integration evidence matrix](./16-integration-evidence.md)
 | Documented external endpoints, versions and limits are traceable to the research docs | **VERIFIED (research)** | [16](./16-integration-evidence.md) |
 | MEND real testnet escrow lifecycle | **VERIFIED (testnet)** | V2 `WO-BENCH-V2-001-0002` `CLOSED`, 42 tx, exact 100/20/72/8, escrow 0; [G3 evidence](../orchestration/reports/G3-evidence.md) and [`LIVE-V2.md`](../infra/testnet-v2/LIVE-V2.md) |
 | Full API-backed live app | **LIVE — TESTNET** | https://mend-demo.vercel.app; API https://mend-api-phi.vercel.app; Neon Postgres; canonical V2 case seeded; no demo runner |
-| Narrated product pitch | **RECORDED — 2:32.40** | `demo/ad/out/mend-ad-v3-master.mp4`, 51 MB, SHA-256 `2e4b016e...c073fc29`; public URL and human watch-through pending |
+| Narrated product pitch | **RECORDED — 3:33.57** | `demo/ad/out/mend-ad-v4-master.mp4`, 61 MB, SHA-256 `080e87b6...549bcd7b`; public URL and human watch/listen-through pending |
 | Real repair media, durability inspection | **NOT COLLECTED** | The film uses labelled illustrative stock; no MEND repair was performed |
 
 ## Cross-document rule

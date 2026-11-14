@@ -1,42 +1,45 @@
-# MEND product pitch (v3)
+# MEND product pitch (v4)
 
 This folder is the Remotion composition for MEND's demo film. The **current cut is
-v3**, a recorded 2:37.00 product pitch. The earlier 5:00 v2 and v1 cuts are kept
-as history; see [History](#history).
+v4**, a recorded 3:33.57 product pitch with a new Liam narration. The 2:37 v3
+master is retained as a fallback; earlier v2 and v1 cuts are kept as history.
 
-## Current cut: v3 (2:37.00)
+## Current cut: v4 (3:33.57)
 
-- `out/mend-ad-v3-master.mp4` — v3 master: 1920×1080, 30fps, H.264/AAC,
-  48 kHz stereo, 2:37.00, 53 MB. See [Render verification](#render-verification).
-- Composition `MendAdV3`, built from `script-v3.json`.
+- `out/mend-ad-v4-master.mp4` — v4 master: 1920×1080, 30fps, H.264/AAC,
+  48 kHz stereo, 3:33.57, 61 MB. See [Render verification](#render-verification).
+- Composition `MendAdV3` renders the v4 timeline from `script-v4.json`.
 - Full-bleed live app for the whole product tour, with animated paper-cut cast
-  dioramas overlaid in the app margins and tech-stack callouts inside each beat (Next.js/React, Fastify/Postgres, NEAR AI, Rust on NEAR, Sputnik DAO,
-  OutLayer, 1Click, Agent Market, NEP-366 relayer).
-- One continuous voice/music/SFX bed.
+  dioramas overlaid in the app margins and tech-stack callouts inside each beat
+  (Next.js/React, Fastify/Postgres, NEAR AI, Rust escrow, Sputnik DAO, OutLayer,
+  1Click, Agent Market, NEP-366 relayer, 42 testnet tx).
+- One continuous Liam voice/music/SFX bed, with 0.45 s music-only section
+  handoffs and a 1.2 s close tail.
 - Live interactions: report, steward award, bid reveal, inspector accept,
   payment/accounting, passport and tech.
-- Close: paper-cut Sam + stick-figure Neighbor and a **real QR to https://mend-demo.vercel.app**.
-  The v2 5:00 cast cut remains in the v2 history.
+- Close: paper-cut Sam + stick-figure Neighbor and a **real QR to
+  https://mend-demo.vercel.app**.
 
-## Render v3
+## Render v4
 
 ```bash
 # from the repository root
 npm install
-node demo/ad/scripts/sync-v3.cjs          # copy script-v3.json into src/v3
-node scripts/demo/render-v3.mjs           # render silent v3 + mux mix-v3.m4a
-# -> demo/ad/out/mend-ad-v3-silent.mp4
-# -> demo/ad/out/mend-ad-v3-master.mp4
+node demo/ad/scripts/sync-v3.cjs          # prefers script-v4.json
+node scripts/demo/render-v4.mjs           # render silent v4 + mux mix-v4.m4a
+# -> demo/ad/out/mend-ad-v4-silent.mp4
+# -> demo/ad/out/mend-ad-v4-master.mp4
 ```
 
 `sync-v3.cjs` writes `src/v3/script.generated.json` so Remotion can import the
-timeline statically. `render-v3.mjs` renders `MendAdV3` at 1920×1080/30fps, then
-calls `scripts/demo/build-audio-mix-v3.mjs` to build and mux the audio bed.
+timeline statically. `render-v4.mjs` renders `MendAdV3` at 1920×1080/30fps, then
+calls `scripts/demo/build-audio-mix-v4.mjs` to build and mux the audio bed.
+`make-v4-deliverables.mjs` rebuilds captions, thumbnail and contact sheet.
 
-## Capture v3 app clips
+## Capture app clips
 
-The live clips are under `public/assets/live/` (ignored by git). The current v3
-cut expects the pothole case to be staged and then captured:
+The live clips are under `public/assets/live/` (ignored by git). The cut expects
+the pothole case to be staged and then captured:
 
 ```bash
 node scripts/demo/stage-pothole-case.mjs BIDDING
@@ -49,26 +52,27 @@ passport and tech. `capture-payment-live.mjs` records the CLOSED accounting view
 used by the payment beat. The capture scripts drive the real app; no runtime
 `?demo=` flag is used. Missing media falls back to a branded placeholder.
 
-## V3 voice: trimmed v1 George, not a new synth
+## V4 voice: new Liam synthesis
 
-The v3 narration is **not a new voice take**. `scripts/demo/build-v3-voice.mjs`
-trims leading/trailing silence from the existing v1 ElevenLabs George lines
-(`public/audio/vo/*.mp3`), concatenates them with a 0.12 s air gap and writes
-`public/audio/v3/voice-v3.mp3` plus the scene timeline. ElevenLabs v2
-synthesis is blocked on the free tier (HTTP 401 `detected_unusual_activity`), so
-v3 reuses the proven v1 render. Do not describe it as a new v3 voice.
+The v4 narration is a **new ElevenLabs synthesis** using **Liam**
+(`TX3LPaxmHKxFdv7VOQHJ`), model `eleven_multilingual_v2`, output
+`mp3_44100_128`, stability `0.42`, similarity `0.80`, style `0.38`, speaker boost
+on and speed `1.0`. `demo/ad/scripts/generate-v4-vo-elevenlabs.mjs` writes nine
+scene MP3s and word-alignment timestamps under `public/audio/v4/vo/`;
+`scripts/demo/retime-v4-voice.mjs` rebuilds the scene starts from the actual MP3
+durations. It is not the v1 George render and must not be labelled as such.
 
 ## Render verification
 
-Final v3 master rendered 2026-11-14:
+Final v4 master rendered 2026-11-15:
 
-- Duration 2:37.00 at 1920×1080, 30fps; H.264 video + AAC 48 kHz stereo audio;
-  53 MB.
-- Loudness `input_i −14.06 LUFS`, true peak `−1.38 dBTP`; no silence gap longer
-  than 1.2 s; stereo L/R are balanced. Verbatim captions are generated from the
-  voice timestamps.
+- Duration 3:33.57 at 1920×1080, 30fps; H.264 video + AAC 48 kHz stereo audio;
+  61 MB.
+- Loudness `input_i −13.9 LUFS`, LRA `2.4 LU`, true peak `−1.4 dBTP`; no silence
+  gap longer than 1.2 s; stereo L/R are balanced. Verbatim captions are generated
+  from all nine Liam word alignments (48 cues).
 - SHA-256
-  `df08dd0c99d482703229e40e02adba10fb25ebfbad83d4962576346a17214158`.
+  `080e87b6d93d4a7756e48df8c024cffc51b6253e3601d197c3ba3f2d549bcd7b`.
 
 ## History
 
@@ -101,15 +105,15 @@ Render v1 with the `MendAd` composition, `script.json` and
 
 ## Audio
 
-- **Voice (v3):** trimmed/concatenated v1 ElevenLabs George
-  (`JBFqnCBsd6RMkjVDRZzb`), not a new synthesis. Source v1 output is 44.1 kHz;
-  the v3 bed is 48 kHz.
+- **Voice (v4):** new ElevenLabs Liam (`TX3LPaxmHKxFdv7VOQHJ`) synthesis at
+  44.1 kHz, placed at scripted scene starts and rendered into the 48 kHz bed.
+  It is not the v1 George render.
 - **Music:** “Mountains” by Andrew Ev (Mixkit Free License). The licensed
-  `music-1.mp3` bed is trimmed to the v3 duration. See
+  `music-1.mp3` bed is looped/trimmed to the v4 duration. See
   `public/audio/music-selection.json` and `CREDITS.md`.
-- **Mix:** `build-audio-mix-v3.mjs` mixes one continuous voice track, ducked
-  music and action SFX, then normalizes to I=−14 LUFS / TP=−1 dBTP, 48 kHz
-  stereo AAC. The v3 bed is `out/mix-v3.m4a`.
+- **Mix:** `build-audio-mix-v4.mjs` mixes nine Liam lines, ducked music and
+  sparse action SFX, then normalizes to I=−14 LUFS / TP=−1.5 dBTP, 48 kHz
+  stereo AAC. The v4 bed is `out/mix-v4.m4a`.
 
 ## Honesty
 
@@ -119,8 +123,8 @@ Render v1 with the `MendAd` composition, `script.json` and
   MEND repair.
 - The contracts, DAO vote, AI signature and Agent Market listing shown in the
   tech beat are real testnet/production evidence; the film says so.
-- The v3 voice is a trimmed v1 George bed, not a new voice.
-- The end-card QR is generated from `siteUrl` in `script-v3.json`; the current
+- The v4 voice is a new **Liam** synthesis, not the v1 George render.
+- The end-card QR is generated from `siteUrl` in `script-v4.json`; the current
   `siteUrl` is https://mend-demo.vercel.app. Re-render the close only if that URL changes.
 - No transaction link is invented, no AI approval is claimed, and no city
   adoption is implied.

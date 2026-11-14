@@ -131,7 +131,7 @@ pending integration.
 | 200% / 400% zoom | **NOT RUN** — manual human step |
 | Reduced-motion check | **IMPLEMENTED** — reduced-motion media query |
 | Mobile viewport check | **PASS** — 390×844 Playwright project |
-| Caption/transcript review | **PENDING** — demo video is silent |
+| Caption/transcript review | **RECORDED — v4 Liam** — 48 alignment-derived verbatim cues, `.srt`/`.vtt`; human watch/listen-through still pending |
 | Color-contrast audit | **PARTIAL** — axe contrast rules pass on public pages |
 
 ## Writing style

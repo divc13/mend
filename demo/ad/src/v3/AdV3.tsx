@@ -3,7 +3,7 @@ import { AbsoluteFill, Sequence } from 'remotion';
 import { AppScene, type LiveSceneConfig } from './components/AppScene';
 import { CloseV3 } from './scenes/CloseV3';
 import { CastOverlays } from './components/CastOverlays';
-import { ACTIONS, SCENE_TRIM } from './lib/actions';
+import { ACTIONS, sceneTiming } from './lib/timing';
 import { FPS, sceneById, sceneFrames, TOTAL_FRAMES, v3Script, type V3Scene } from './lib/script';
 
 type AppSceneId = Exclude<V3Scene['id'], 'hook' | 'close'>;
@@ -13,6 +13,10 @@ type AppSceneId = Exclude<V3Scene['id'], 'hook' | 'close'>;
  * stack strip only appears when the report section does.
  */
 const HOOK_END = sceneById('hook').sceneDuration;
+const trim = (id: AppSceneId) => {
+  const timing = sceneTiming(id);
+  return { sourceStart: timing.sourceStart, playbackRate: timing.playbackRate };
+};
 
 /**
  * Camera keyframes are scene-local and peak on the captured action. The
@@ -24,7 +28,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   report: {
     sceneId: 'report',
     asset: 'assets/live/report-live.mp4',
-    ...SCENE_TRIM.report,
+    ...trim('report'),
     origin: '50% 42%',
     camera: [
       { at: 0, scale: 1.04, x: 0, y: 0 },
@@ -44,13 +48,13 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
     opening: {
       title: 'Every neighborhood\nhas one.',
       sub: 'A pothole nobody owns. This morning, Sam reports it.',
-      until: 4.6,
+      until: 6.0,
     },
   },
   dao: {
     sceneId: 'dao',
     asset: 'assets/live/steward-live.mp4',
-    ...SCENE_TRIM.dao,
+    ...trim('dao'),
     origin: '50% 10%',
     camera: [
       { at: 0, scale: 1.035, x: 0, y: 0 },
@@ -69,7 +73,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   bids: {
     sceneId: 'bids',
     asset: 'assets/live/bids-live.mp4',
-    ...SCENE_TRIM.bids,
+    ...trim('bids'),
     origin: '50% 44%',
     camera: [
       { at: 0, scale: 1.045, x: 0, y: 0 },
@@ -88,7 +92,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   repair: {
     sceneId: 'repair',
     asset: 'assets/live/inspector-live.mp4',
-    ...SCENE_TRIM.repair,
+    ...trim('repair'),
     offsetY: -84,
     origin: '50% 10%',
     camera: [
@@ -106,7 +110,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   payment: {
     sceneId: 'payment',
     asset: 'assets/live/payment-live.mp4',
-    ...SCENE_TRIM.payment,
+    ...trim('payment'),
     origin: '63% 32%',
     camera: [
       { at: 0, scale: 1.075, x: 0, y: 0 },
@@ -123,7 +127,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   passport: {
     sceneId: 'passport',
     asset: 'assets/live/passport-live.mp4',
-    ...SCENE_TRIM.passport,
+    ...trim('passport'),
     origin: '48% 40%',
     camera: [
       { at: 0, scale: 1.055, x: 0, y: 0 },
@@ -138,7 +142,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   tech: {
     sceneId: 'tech',
     asset: 'assets/live/tech-live.mp4',
-    ...SCENE_TRIM.tech,
+    ...trim('tech'),
     offsetY: -46,
     origin: '50% 40%',
     camera: [

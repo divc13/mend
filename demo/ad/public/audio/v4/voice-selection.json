@@ -1,0 +1,132 @@
+{
+  "voice_id": "TX3LPaxmHKxFdv7VOQHJ",
+  "name": "Liam",
+  "model": "eleven_multilingual_v2",
+  "settings": {
+    "stability": 0.42,
+    "similarity_boost": 0.8,
+    "style": 0.38,
+    "use_speaker_boost": true,
+    "speed": 1
+  },
+  "output_format": "mp3_44100_128",
+  "selection_status": "generated",
+  "selection_rationale": "Liam was selected for the v4 warm, conversational read. The 19.3s test passed before the full script; the 9-scene read is a new synthesis, not reused v3 audio.",
+  "test": {
+    "file": "public/audio/v4/vo-test-liam.mp3",
+    "timestamps": "public/audio/v4/vo-test-liam.timestamps.json",
+    "text_characters": 282,
+    "duration_seconds": 19.3,
+    "words": 53,
+    "words_per_minute": 165,
+    "status": 200,
+    "ok": true
+  },
+  "render": {
+    "status": "generated",
+    "provider": "elevenlabs",
+    "endpoint": "/v1/text-to-speech/{voice_id}/with-timestamps",
+    "output_format": "mp3_44100_128",
+    "files": "public/audio/v4/vo/<scene>.mp3",
+    "timestamps": "public/audio/v4/vo/<scene>.timestamps.json",
+    "generated_at": "2026-11-14T19:18:38.718Z",
+    "note": "Timing rebuilt from actual Liam MP3 durations after synthesis; no audio regenerated."
+  },
+  "character_usage": {
+    "account_before": 3191,
+    "account_after": 3191,
+    "used_this_run": 0,
+    "characters_planned": 2864,
+    "account_limit": 10000,
+    "account_remaining": 6809
+  },
+  "scenes": [
+    {
+      "id": "hook",
+      "characters": 260,
+      "words": 48,
+      "duration_seconds": 15.28,
+      "scene_duration": 15.73,
+      "start": 0,
+      "end": 15.73
+    },
+    {
+      "id": "report",
+      "characters": 520,
+      "words": 93,
+      "duration_seconds": 40.36,
+      "scene_duration": 40.81,
+      "start": 15.73,
+      "end": 56.54
+    },
+    {
+      "id": "dao",
+      "characters": 328,
+      "words": 61,
+      "duration_seconds": 23.64,
+      "scene_duration": 24.09,
+      "start": 56.54,
+      "end": 80.63
+    },
+    {
+      "id": "bids",
+      "characters": 326,
+      "words": 53,
+      "duration_seconds": 21.32,
+      "scene_duration": 21.77,
+      "start": 80.63,
+      "end": 102.4
+    },
+    {
+      "id": "repair",
+      "characters": 277,
+      "words": 47,
+      "duration_seconds": 20.43,
+      "scene_duration": 20.88,
+      "start": 102.4,
+      "end": 123.28
+    },
+    {
+      "id": "payment",
+      "characters": 308,
+      "words": 47,
+      "duration_seconds": 24.66,
+      "scene_duration": 25.11,
+      "start": 123.28,
+      "end": 148.39
+    },
+    {
+      "id": "passport",
+      "characters": 240,
+      "words": 44,
+      "duration_seconds": 15.12,
+      "scene_duration": 15.57,
+      "start": 148.39,
+      "end": 163.96
+    },
+    {
+      "id": "tech",
+      "characters": 414,
+      "words": 72,
+      "duration_seconds": 33.15,
+      "scene_duration": 33.6,
+      "start": 163.96,
+      "end": 197.56
+    },
+    {
+      "id": "close",
+      "characters": 191,
+      "words": 29,
+      "duration_seconds": 14.81,
+      "scene_duration": 16.01,
+      "start": 197.56,
+      "end": 213.57
+    }
+  ],
+  "pronunciation_notes": [
+    "The close is synthesized as \"mend-demo.vercel.app\"; listen for the domain cadence in the close.",
+    "V2, NEP-366 and 42 are read from the written forms; alignment is preserved in the timestamps.",
+    "No TEE verification is claimed. The spoken line says the response is signed and TEE proof is unavailable and labelled."
+  ],
+  "generated_at": "2026-11-14T18:39:32.802Z"
+}

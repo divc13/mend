@@ -20,7 +20,7 @@ import {
 import { Pothole } from '../../v2/components/PaperCast';
 import { mediaAt } from '../../v2/lib/assets';
 import { fonts, palette } from '../../theme';
-import { ACTIONS } from '../lib/actions';
+import { ACTIONS } from '../lib/timing';
 import { FPS, v3Script, type V3Scene } from '../lib/script';
 
 const CARD_SHADOW = '0 26px 60px rgba(7,27,21,0.32)';

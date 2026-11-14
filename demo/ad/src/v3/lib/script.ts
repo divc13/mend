@@ -5,13 +5,20 @@ export type StackItem = {
   purpose: string;
 };
 
+/**
+ * Scene ids are intentionally open: v4 keeps the same nine beats, but the
+ * timeline file is the source of truth and must not need a code edit if a beat
+ * is renamed. Components dispatch on the known ids and fall back gracefully.
+ */
 export type V3Scene = {
-  id: 'hook' | 'report' | 'dao' | 'bids' | 'repair' | 'payment' | 'passport' | 'tech' | 'close';
+  id: string;
   start: number;
   duration: number;
   sceneDuration: number;
   voDuration: number;
-  gap: number;
+  /** Silence between scenes; v4 uses 0.45 s handoffs. */
+  gap?: number;
+  handoffSeconds?: number;
   vo: string;
   caption: string;
   stack: StackItem[];
@@ -33,10 +40,22 @@ export const FPS = v3Script.fps;
 export const WIDTH = v3Script.width;
 export const HEIGHT = v3Script.height;
 export const TOTAL_FRAMES = Math.round(v3Script.durationSeconds * FPS);
+
 export const sceneFrames = (scene: V3Scene): number => Math.round(scene.sceneDuration * FPS);
 
-export const sceneById = (id: V3Scene['id']): V3Scene => {
+export const sceneStartFrame = (scene: V3Scene): number => Math.round(scene.start * FPS);
+
+export const sceneById = (id: string): V3Scene => {
   const scene = v3Script.scenes.find((item) => item.id === id);
-  if (!scene) throw new Error(`missing v3 scene ${id}`);
+  if (!scene) throw new Error(`missing ad scene ${id}`);
   return scene;
 };
+
+export const hasScene = (id: string): boolean => v3Script.scenes.some((scene) => scene.id === id);
+
+/** App beats are everything between the cold open and the prize close. */
+export const appScenes = (): V3Scene[] =>
+  v3Script.scenes.filter((scene) => scene.id !== 'hook' && scene.id !== 'cold-open' && scene.id !== 'close');
+
+export const handoffSeconds = (scene: V3Scene): number =>
+  scene.handoffSeconds ?? scene.gap ?? 0.45;

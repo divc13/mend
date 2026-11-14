@@ -20,7 +20,7 @@ If a claim is not supported here or in
 | Sputnik DAO deployment | **VERIFIED (testnet)** — real `mend-dao.sputnikv2.testnet`; proposal 1 approved 2/3 and executed `dao_authorize` |
 | Agent Market live job | **VERIFIED with caveat** — live listing and paid `$0.01` self-hire; seller payout ledger `NOT_COLLECTED` |
 | Hosted demo | **LIVE — TESTNET** — https://mend-demo.vercel.app, API-backed, canonical case `CLOSED`, no demo runner |
-| Demo video | **RECORDED — 2:32.40** — 51 MB v3 pitch; public upload and human watch-through remain pending |
+| Demo video | **RECORDED — 3:33.57** — 61 MB v4 Liam pitch; public upload and human watch/listen-through remain pending |
 | Before/after repair media | **NOT COLLECTED** — no repair has been performed for MEND; the film uses labelled illustrative stock |
 | Physical durability verification | **NOT COLLECTED** — no durability inspection of a real repair has happened |
 | Real users or city adoption | **NONE** — no city, municipality or community has adopted MEND |

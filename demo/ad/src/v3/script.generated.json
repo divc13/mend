@@ -1,225 +1,279 @@
 {
-  "version": 3,
-  "title": "MEND — live proof, no slides",
+  "version": 4,
+  "title": "MEND — maintenance with memory",
   "fps": 30,
   "width": 1920,
   "height": 1080,
   "siteUrl": "https://mend-demo.vercel.app",
-  "durationSeconds": 157,
+  "durationSeconds": 213.57,
+  "targetRuntimeSeconds": [
+    200,
+    220
+  ],
   "voice": {
-    "name": "George",
-    "source": "v1 ElevenLabs render",
-    "track": "public/audio/v3/voice-v3.mp3",
-    "note": "v1 lines trimmed and concatenated; v2 synthesis blocked with HTTP 401."
+    "provider": "elevenlabs",
+    "name": "Liam",
+    "voiceId": "TX3LPaxmHKxFdv7VOQHJ",
+    "model": "eleven_multilingual_v2",
+    "outputFormat": "mp3_44100_128",
+    "endpoint": "/v1/text-to-speech/{voice_id}/with-timestamps",
+    "settings": {
+      "stability": 0.42,
+      "similarity_boost": 0.8,
+      "style": 0.38,
+      "use_speaker_boost": true,
+      "speed": 1
+    },
+    "files": "public/audio/v4/vo/<scene>.mp3",
+    "timestamps": "public/audio/v4/vo/<scene>.timestamps.json",
+    "test": {
+      "file": "public/audio/v4/vo-test-liam.mp3",
+      "timestamps": "public/audio/v4/vo-test-liam.timestamps.json",
+      "durationSeconds": 19.3,
+      "words": 53,
+      "wordsPerMinute": 165
+    },
+    "measuredWordsPerMinute": 140.6,
+    "note": "New v4 Liam narration. No v3 files were overwritten. Word times come from the ElevenLabs with-timestamps alignment.",
+    "runtimeNote": "Final read is 226.240s (3:46.240), longer than the 180-195s target. Liam's measured pace on this copy was about 141 wpm because of short sentences, the number list and the URL. Accepted per brief; no words were added or removed after synthesis."
+  },
+  "honesty": {
+    "story": "REPLAY / SIMULATION",
+    "rails": "LIVE NEAR TESTNET — TEST VALUE ONLY",
+    "ai": "SIGNED RESPONSE · TEE PROOF UNAVAILABLE (LABELLED)",
+    "note": "The pothole story is a replay. The V2 testnet rails are real: 42 recorded transactions, all resolving. The AI response is signed, but no matching TEE report was retained; the UI labels it unavailable and MEND does not claim a verified TEE."
   },
   "scenes": [
     {
       "id": "hook",
+      "chapter": "01 / THE POTHOLE",
       "start": 0,
-      "duration": 11.82,
-      "voDuration": 11.82,
-      "gap": 0.6,
-      "vo": "Every neighborhood has one. A pothole everyone avoids. And nobody owns. It has been there for months. A near miss for every cyclist. This morning, Sam decides to change that.",
-      "caption": "Every neighborhood has one.\nA pothole nobody owns.",
+      "duration": 15.28,
+      "sceneDuration": 15.73,
+      "voOffset": 0,
+      "handoff": 0.45,
+      "vo": "You know the pothole. The one everyone swerves. The one nobody owns. It has been there for months. This morning, it nearly takes out a cyclist. So you stop. You take one photo. And you decide this little patch of street gets fixed. Not by waiting. By starting.",
+      "caption": "You know the pothole.\nEveryone swerves. Nobody owns it.",
       "stack": [
         {
           "name": "Next.js + React",
-          "purpose": "front door, report from a phone"
+          "purpose": "front door — the site you can open on any phone"
         }
       ],
-      "sceneDuration": 12.42
+      "voDuration": 15.28,
+      "gap": 0.45
     },
     {
       "id": "report",
-      "start": 12.42,
-      "duration": 23.04,
-      "voDuration": 23.04,
-      "gap": 0.6,
-      "vo": "He opens MEND. No wallet. No forms. A photo, a location, one sentence. The browser strips the GPS and metadata before anything leaves his phone. Private AI reads the report, checks for duplicates, and drafts a repair scope. It suggests. It never approves. Two neighbors reported the same pothole. MEND merges them privately.",
-      "caption": "No wallet. No forms.\nEXIF and GPS stripped in the browser.",
+      "chapter": "02 / PRIVATE INTAKE",
+      "start": 15.73,
+      "duration": 40.36,
+      "sceneDuration": 40.81,
+      "voOffset": 0,
+      "handoff": 0.45,
+      "vo": "A pothole photo can carry GPS, a timestamp, your home route, your kid's school, even a plate. So MEND cleans it in your browser first. EXIF and GPS are gone before anything leaves your phone. Think of the AI as a private tutor. It reads only the cleaned note. It flags duplicates and drafts a scope. That is all. No wallet. No approval button. No payment authority. A steward confirms the merge. Two neighbors reported it, so one case moves forward. Humans decide. Fastify and Postgres are the town clerk and the ledger.",
+      "caption": "Your photo. Your privacy.\nEXIF + GPS erased before upload.",
       "stack": [
         {
-          "name": "Next.js + React",
-          "purpose": "front door, report from a phone"
+          "name": "Browser EXIF",
+          "purpose": "the eraser — GPS and photo details gone before upload"
         },
         {
-          "name": "Browser EXIF",
-          "purpose": "eraser, GPS + photo details gone before upload"
+          "name": "NEAR AI",
+          "purpose": "the private tutor — reads the cleaned note, suggests only; no wallet, approval or payment authority"
         },
         {
           "name": "Fastify + Postgres",
-          "purpose": "town clerk + ledger, one case, one history"
-        },
-        {
-          "name": "NEAR AI",
-          "purpose": "private tutor, reads cleaned note, never touches money"
+          "purpose": "the town clerk and ledger — one case, one history"
         }
       ],
-      "sceneDuration": 23.64
+      "voDuration": 40.36,
+      "gap": 0.45
     },
     {
       "id": "dao",
-      "start": 36.06,
-      "duration": 16.23,
-      "voDuration": 16.23,
-      "gap": 0.6,
-      "vo": "A steward turns the report into a scope and a maximum budget. Then the community's DAO authorizes it. Not the AI. Not a platform. The budget, the contractor roster and the scoring policy are on-chain. Two of three council votes. Every decision has a receipt.",
-      "caption": "Steward proposes.\nDAO authorizes. 2 of 3.",
+      "chapter": "03 / AUTHORIZE",
+      "start": 56.54,
+      "duration": 23.64,
+      "sceneDuration": 24.09,
+      "voOffset": 0,
+      "handoff": 0.45,
+      "vo": "Next, a steward sets the scope and a maximum budget. Then a real Sputnik DAO votes. Two of three council members. Not the AI. The budget, roster and scoring policy become public rules. A committee in the open, with a receipt for every decision. The money waits in a Rust escrow: a lockbox that opens only when the rules are met.",
+      "caption": "Steward proposes.\nSputnik DAO: 2 of 3 humans approve.",
       "stack": [
         {
           "name": "Sputnik DAO",
-          "purpose": "committee, 2 of 3 humans"
+          "purpose": "the committee — 2 of 3 humans approve"
         },
         {
-          "name": "NEAR AI",
-          "purpose": "private tutor, advice only, never touches money"
+          "name": "Rust escrow on NEAR",
+          "purpose": "the lockbox — holds the budget and follows written rules"
         }
       ],
-      "sceneDuration": 16.83
+      "voDuration": 23.64,
+      "gap": 0.45
     },
     {
       "id": "bids",
-      "start": 52.89,
-      "duration": 14.32,
-      "voDuration": 14.32,
-      "gap": 0.6,
-      "vo": "Three contractors submit sealed bids. When the window closes, a hash-pinned policy scores price, warranty, duration and materials. B wins on total value, not the lowest sticker price. No language model picks the winner.",
-      "caption": "Sealed bids. Deterministic score.\nB 9270 · C 5200 · A 2873",
+      "chapter": "04 / COMPETE",
+      "start": 80.63,
+      "duration": 21.32,
+      "sceneDuration": 21.77,
+      "voOffset": 0,
+      "handoff": 0.45,
+      "vo": "Three contractors submit sealed bids. When the window closes, a referee runs one hash-pinned rule. Price, warranty, duration, materials. Same rule for everyone. No language model picks the winner. Bid B wins on total value, not the cheapest sticker. That referee is OutLayer. You can check the score. You can check the policy.",
+      "caption": "Sealed bids. One referee.\nB wins on total value, not sticker price.",
       "stack": [
         {
-          "name": "Deterministic scoring",
-          "purpose": "scorekeeper, same rules for every bid"
+          "name": "OutLayer",
+          "purpose": "the referee — one hash-pinned scoring rule"
         },
         {
-          "name": "Rust on NEAR",
-          "purpose": "lockbox, holds the budget"
+          "name": "Deterministic scoring",
+          "purpose": "the scorecard — same rule for every bid"
+        },
+        {
+          "name": "Rust escrow on NEAR",
+          "purpose": "the lockbox — holds the money while bids compete"
         }
       ],
-      "sceneDuration": 14.92
+      "voDuration": 21.32,
+      "gap": 0.45
     },
     {
       "id": "repair",
-      "start": 67.81,
-      "duration": 15.62,
-      "voDuration": 15.62,
-      "gap": 0.6,
-      "vo": "The repair begins. The pothole is cleaned, filled, compacted and sealed. Every photo, receipt and note is hashed onto the work order. Then a different human inspects the work. Not the contractor. Not the AI. A checklist, evidence, and a signature.",
-      "caption": "Independent human inspection.\nChecklist. Evidence. Signature.",
+      "chapter": "05 / INSPECT",
+      "start": 102.4,
+      "duration": 20.43,
+      "sceneDuration": 20.88,
+      "voOffset": 0,
+      "handoff": 0.45,
+      "vo": "The repair is physical. Clean, fill, compact, seal. Every photo and note is hashed onto the work order. Then a different human shows up. Not the contractor. Not the AI. An outside inspector with a checklist, evidence and a signature. The lockbox pays only after that signature.",
+      "caption": "A different human inspects.\nChecklist. Evidence. Signature.",
       "stack": [
         {
           "name": "Human inspector",
-          "purpose": "second pair of eyes, checks and signs"
+          "purpose": "the outside inspector — not the contractor, not the AI"
         },
         {
-          "name": "Rust on NEAR",
-          "purpose": "lockbox, pays only after a human signs"
+          "name": "Rust escrow on NEAR",
+          "purpose": "the lockbox — pays only after a human signs"
         }
       ],
-      "sceneDuration": 16.22
+      "voDuration": 20.43,
+      "gap": 0.45
     },
     {
       "id": "payment",
-      "start": 84.03,
-      "duration": 14.8,
-      "voDuration": 14.8,
-      "gap": 0.6,
-      "vo": "On acceptance, exactly seventy-two USDC goes to the contractor. Eight stays in a durability holdback. One hundred was funded. Twenty was refunded at award. The contractor gets paid. The community keeps leverage.",
-      "caption": "100 funded · 20 refunded\n72 paid · 8 held",
+      "chapter": "06 / SETTLE",
+      "start": 123.28,
+      "duration": 24.66,
+      "sceneDuration": 25.11,
+      "voOffset": 0,
+      "handoff": 0.45,
+      "vo": "On acceptance, the escrow splits exactly. One hundred funded. Twenty refunded at award. Seventy-two paid to the contractor. Eight held for durability. One hundred, twenty, seventy-two, eight. The job is done. The community keeps leverage. A later durability pass releases the last eight. Escrow ends at zero.",
+      "caption": "100 funded · 20 refunded\n72 paid · 8 held · escrow 0",
       "stack": [
         {
           "name": "Rust escrow on NEAR",
-          "purpose": "lockbox, holds 100 / pays 72 / refunds 20 / holds 8"
+          "purpose": "the lockbox — exact split, no operator discretion"
         }
       ],
-      "sceneDuration": 15.4
+      "voDuration": 24.66,
+      "gap": 0.45
     },
     {
       "id": "passport",
-      "start": 99.43,
-      "duration": 14.49,
-      "voDuration": 14.49,
-      "gap": 0.6,
-      "vo": "If the repair fails, MEND reopens the same work order and the same history. No new bounty. No new money. One asset. One permanent record. The passport keeps the failure, the remedy, and every payment in one place.",
+      "chapter": "07 / REMEMBER",
+      "start": 148.39,
+      "duration": 15.12,
+      "sceneDuration": 15.57,
+      "voOffset": 0,
+      "handoff": 0.45,
+      "vo": "Now the repair has a memory. The pothole gets a passport: a permanent report card owned by the work order, not a platform. If the repair fails, you reopen the same case. Same history. No new bounty. No new money. The failure stays attached.",
       "caption": "Same work order. Same history.\nNo new bounty. No new money.",
       "stack": [
         {
           "name": "Fastify + Postgres",
-          "purpose": "town clerk + ledger, one case, one history"
+          "purpose": "the ledger — keeps the case history"
         },
         {
           "name": "NEAR passport",
-          "purpose": "asset diary, every repair stays with the pothole"
+          "purpose": "the receipt — a permanent report card for the asset"
         }
       ],
-      "sceneDuration": 15.09
+      "voDuration": 15.12,
+      "gap": 0.45
     },
     {
       "id": "tech",
-      "start": 114.52,
-      "duration": 28.81,
-      "voDuration": 28.81,
-      "gap": 0.6,
-      "vo": "Under the hood: Next.js and React, a Fastify API, Postgres, Rust contracts on NEAR, a real Sputnik DAO, NEAR AI, OutLayer, 1Click and Agent Market. The infrastructure is live on NEAR testnet. The pothole story is a replay demo. The contracts, the DAO vote, the AI signature and the Agent Market listing are real. Every payment, vote and attestation has a verifiable receipt.",
-      "caption": "Live on NEAR testnet.\nContracts, vote, AI signature, listing: real.",
+      "chapter": "08 / UNDER THE HOOD",
+      "start": 163.96,
+      "duration": 33.15,
+      "sceneDuration": 33.6,
+      "voOffset": 0,
+      "handoff": 0.45,
+      "vo": "Under the hood, it's a neighborhood. Next.js and React are the front door. Fastify and Postgres are the town clerk. NEAR AI is the private tutor. Rust escrow is the lockbox. Sputnik is the committee. OutLayer is the referee. NEP-366 is the free stamp. Agent Market is the outside inspector. The V2 run recorded 42 transactions. The pothole story is replay; the rails are real. Every payment and vote has a receipt.",
+      "caption": "REPLAY / SIMULATION story.\nReal NEAR testnet rails · 42 tx",
       "stack": [
         {
           "name": "Next.js + React",
-          "purpose": "front door, report from a phone"
+          "purpose": "front door — report from any phone"
         },
         {
-          "name": "Fastify",
-          "purpose": "town clerk, receives the report"
-        },
-        {
-          "name": "Postgres",
-          "purpose": "ledger, one case + history"
-        },
-        {
-          "name": "Rust on NEAR",
-          "purpose": "lockbox, holds 100 / pays 72 / refunds 20 / holds 8"
-        },
-        {
-          "name": "Sputnik DAO",
-          "purpose": "committee, 2 of 3 humans"
+          "name": "Fastify + Postgres",
+          "purpose": "town clerk and ledger — one case, one history"
         },
         {
           "name": "NEAR AI",
-          "purpose": "private tutor, reads cleaned note, never touches money"
+          "purpose": "private tutor — signed response; TEE proof unavailable and labelled"
+        },
+        {
+          "name": "Rust escrow on NEAR",
+          "purpose": "lockbox — exact 100 / 20 / 72 / 8 split"
+        },
+        {
+          "name": "Sputnik DAO",
+          "purpose": "committee — 2 of 3 humans"
         },
         {
           "name": "OutLayer",
-          "purpose": "referee, same scoring rules"
-        },
-        {
-          "name": "1Click",
-          "purpose": "cross-chain quote rail, pending not used here"
-        },
-        {
-          "name": "Agent Market",
-          "purpose": "outside reviewer, evidence completeness"
+          "purpose": "referee — deterministic bid score"
         },
         {
           "name": "NEP-366 relayer",
-          "purpose": "free stamp, relayer pays gas"
+          "purpose": "free stamp — a relayer pays the gas"
+        },
+        {
+          "name": "Agent Market",
+          "purpose": "outside inspector — evidence completeness review"
+        },
+        {
+          "name": "42 testnet tx",
+          "purpose": "receipts — all recorded transactions resolve"
         }
       ],
-      "sceneDuration": 29.41
+      "voDuration": 33.15,
+      "gap": 0.45
     },
     {
       "id": "close",
-      "start": 143.93,
-      "duration": 12.07,
-      "voDuration": 12.07,
-      "gap": 0.6,
-      "vo": "This is maintenance with memory. Report it. Fix it. Remember it. For the price of a small repair, a neighborhood gets a memory. MEND. Get it fixed. Keep it fixed.",
-      "caption": "MEND — Maintenance with memory.\nGet it fixed. Keep it fixed.",
+      "chapter": "09 / KEEP IT FIXED",
+      "start": 197.56,
+      "duration": 14.81,
+      "sceneDuration": 16.01,
+      "voOffset": 0,
+      "handoff": 1.2,
+      "vo": "That is MEND. Maintenance with memory. You report it. Humans decide. The contract enforces. The neighborhood remembers. Try the live demo at mend-demo.vercel.app. Get it fixed. Keep it fixed.",
+      "caption": "MEND — maintenance with memory.\nmend-demo.vercel.app",
       "stack": [
         {
           "name": "MEND",
-          "purpose": "maintenance with memory"
+          "purpose": "maintenance with memory — report it, fix it, remember it"
         }
       ],
-      "sceneDuration": 13.07
+      "voDuration": 14.81,
+      "gap": 1.2
     }
   ],
   "cuts": {
@@ -234,5 +288,9 @@
       "tech",
       "close"
     ]
-  }
+  },
+  "totalWords": 494,
+  "speechSeconds": 208.77,
+  "generatedAt": "2026-11-14T18:47:35.490Z",
+  "timingSource": "script-v4"
 }

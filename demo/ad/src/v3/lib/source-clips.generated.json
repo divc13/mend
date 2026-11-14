@@ -1,0 +1,252 @@
+{
+  "generatedAt": "2026-11-13T22:31:44.935Z",
+  "clips": {
+    "report-live": {
+      "id": "report-live",
+      "durationMs": 35830,
+      "actions": [
+        {
+          "atMs": 122,
+          "action": "open /report",
+          "ok": true
+        },
+        {
+          "atMs": 2970,
+          "action": "select category Pothole / path surface",
+          "ok": true
+        },
+        {
+          "atMs": 4561,
+          "action": "select area Riverside path — north gate",
+          "ok": true
+        },
+        {
+          "atMs": 5856,
+          "action": "type pothole description",
+          "ok": true
+        },
+        {
+          "atMs": 10088,
+          "action": "click Continue from problem step",
+          "ok": true
+        },
+        {
+          "atMs": 11869,
+          "action": "upload pothole.jpg",
+          "ok": true
+        },
+        {
+          "atMs": 15022,
+          "action": "click Continue from privacy step",
+          "ok": true
+        },
+        {
+          "atMs": 17331,
+          "action": "choose same duplicate",
+          "ok": true
+        },
+        {
+          "atMs": 19201,
+          "action": "acknowledge possible merge",
+          "ok": true
+        },
+        {
+          "atMs": 21032,
+          "action": "click Continue from duplicate step",
+          "ok": true
+        },
+        {
+          "atMs": 23145,
+          "action": "review the report",
+          "ok": true
+        },
+        {
+          "atMs": 25992,
+          "action": "submit report",
+          "ok": true
+        }
+      ]
+    },
+    "steward-live": {
+      "id": "steward-live",
+      "durationMs": 19930,
+      "actions": [
+        {
+          "atMs": 55,
+          "action": "stage WO-PATH-001-0002 BIDDING and open /steward",
+          "ok": true
+        },
+        {
+          "atMs": 2453,
+          "action": "select WO-PATH-001-0002",
+          "ok": true
+        },
+        {
+          "atMs": 4470,
+          "action": "confirm acting as steward",
+          "ok": true
+        },
+        {
+          "atMs": 6195,
+          "action": "edit approved repair scope",
+          "ok": true
+        },
+        {
+          "atMs": 9476,
+          "action": "edit maximum budget",
+          "ok": true
+        },
+        {
+          "atMs": 11540,
+          "action": "click Save replay draft",
+          "ok": true
+        },
+        {
+          "atMs": 13572,
+          "action": "scroll to award confirmation",
+          "ok": true
+        },
+        {
+          "atMs": 15807,
+          "action": "click Confirm award in replay",
+          "ok": true
+        }
+      ]
+    },
+    "bids-live": {
+      "id": "bids-live",
+      "durationMs": 14930,
+      "actions": [
+        {
+          "atMs": 56,
+          "action": "stage WO-PATH-001-0002 BIDDING and open /bids/WO-PATH-001-0002",
+          "ok": true
+        },
+        {
+          "atMs": 3024,
+          "action": "click Reveal comparison",
+          "ok": true
+        },
+        {
+          "atMs": 5794,
+          "action": "scroll through deterministic score",
+          "ok": true
+        },
+        {
+          "atMs": 10767,
+          "action": "scroll to policy and execution hashes",
+          "ok": true
+        }
+      ]
+    },
+    "inspector-live": {
+      "id": "inspector-live",
+      "durationMs": 19930,
+      "actions": [
+        {
+          "atMs": 51,
+          "action": "stage WO-PATH-001-0002 COMPLETION_SUBMITTED and open inspector",
+          "ok": true
+        },
+        {
+          "atMs": 2839,
+          "action": "review redacted evidence and checklist",
+          "ok": true
+        },
+        {
+          "atMs": 5212,
+          "action": "tick the checklist",
+          "ok": true
+        },
+        {
+          "atMs": 8788,
+          "action": "type inspector notes",
+          "ok": true
+        },
+        {
+          "atMs": 11900,
+          "action": "check the three human confirmations",
+          "ok": true
+        },
+        {
+          "atMs": 15087,
+          "action": "click Accept completion",
+          "ok": true
+        }
+      ]
+    },
+    "passport-live": {
+      "id": "passport-live",
+      "durationMs": 9870,
+      "actions": [
+        {
+          "atMs": 52,
+          "action": "stage WO-PATH-001-0002 CLOSED and open /assets/PATH-006",
+          "ok": true
+        },
+        {
+          "atMs": 2669,
+          "action": "scroll to maintenance history",
+          "ok": true
+        },
+        {
+          "atMs": 5709,
+          "action": "scroll through the history entries",
+          "ok": true
+        }
+      ]
+    },
+    "tech-live": {
+      "id": "tech-live",
+      "durationMs": 9930,
+      "actions": [
+        {
+          "atMs": 45,
+          "action": "open /how-it-works",
+          "ok": true
+        },
+        {
+          "atMs": 1815,
+          "action": "scroll to the stack",
+          "ok": true
+        },
+        {
+          "atMs": 4347,
+          "action": "scroll through stack cards",
+          "ok": true
+        },
+        {
+          "atMs": 6195,
+          "action": "scroll to proof cards",
+          "ok": true
+        }
+      ]
+    },
+    "payment-live": {
+      "id": "payment-live",
+      "durationMs": 8400,
+      "actions": [
+        {
+          "atMs": 0,
+          "action": "open closed case",
+          "ok": false
+        },
+        {
+          "atMs": 1800,
+          "action": "scroll to accounting",
+          "ok": false
+        },
+        {
+          "atMs": 3600,
+          "action": "review exact 100/20/72/8 split",
+          "ok": false
+        },
+        {
+          "atMs": 6100,
+          "action": "scroll to payments",
+          "ok": false
+        }
+      ]
+    }
+  }
+}
