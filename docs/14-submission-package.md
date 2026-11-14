@@ -157,8 +157,8 @@ above must be reconciled with the final lockfile.
   disclosed Agent Market self-hire are proven with caveats; an Intents
   deposit/settlement is not;
 - no mainnet execution;
-- the hosted REPLAY demo is live at https://mend-demo.vercel.app (Vercel Hobby, canonical CLOSED state; no live API);
-- the current demo cut is a **recorded 2:32.40 v3 product pitch** at `demo/ad/out/mend-ad-v3-master.mp4` (1920×1080/30fps, H.264/AAC, 48 kHz stereo, 60 MB; SHA-256 `a95a7aad6dfe05300182c30e605c1d3494eef899a7aeaaf214328a8d872f0626`): full-bleed live app with animated paper-cut cast dioramas, per-beat tech-stack callouts, one continuous voice/music/SFX bed, paper-cut close; the voice is the trimmed v1 George render, **not a new synth**, and the end-card QR encodes https://mend-demo.vercel.app. The public repository and X post are pending;
+- the full API-backed live app is live at https://mend-demo.vercel.app with Vercel Functions at https://mend-api-phi.vercel.app and Neon Free Postgres (LIVE_TESTNET, real V2 CLOSED case seeded; demo runner disabled);
+- the current demo cut is a **recorded 2:32.40 v3 product pitch** at `demo/ad/out/mend-ad-v3-master.mp4` (1920×1080/30fps, H.264/AAC, 48 kHz stereo, 51 MB; SHA-256 `2e4b016eb885d830b7b2265b4bb27c99a0e97a0654f52424a1ebe320c073fc29`): full-bleed live app with animated paper-cut cast dioramas, per-beat tech-stack callouts, one continuous voice/music/SFX bed, paper-cut close; the voice is the trimmed v1 George render, **not a new synth**, and the end-card QR encodes https://mend-demo.vercel.app. The public repository and X post are pending;
 - no physical repair or durability inspection;
 - no real users, city adoption or partnership;
 - no security audit or accessibility certification;

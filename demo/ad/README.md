@@ -7,7 +7,7 @@ as history; see [History](#history).
 ## Current cut: v3 (2:32.40)
 
 - `out/mend-ad-v3-master.mp4` — v3 master: 1920×1080, 30fps, H.264/AAC,
-  48 kHz stereo, 2:32.40, 60 MB. See [Render verification](#render-verification).
+  48 kHz stereo, 2:32.40, 51 MB. See [Render verification](#render-verification).
 - Composition `MendAdV3`, built from `script-v3.json`.
 - Full-bleed live app for the whole product tour, with animated paper-cut cast
   dioramas overlaid in the app margins and tech-stack callouts inside each beat (Next.js/React, Fastify/Postgres, NEAR AI, Rust on NEAR, Sputnik DAO,
@@ -63,11 +63,12 @@ v3 reuses the proven v1 render. Do not describe it as a new v3 voice.
 Final v3 master rendered 2026-11-14:
 
 - Duration 2:32.40 at 1920×1080, 30fps; H.264 video + AAC 48 kHz stereo audio;
-  60 MB.
-- Loudness `input_i −14.16 LUFS`, true peak `−2.61 dBTP`; no silence gap longer
-  than 1.2 s; stereo L/R are balanced.
+  51 MB.
+- Loudness `input_i −14.07 LUFS`, true peak `−1.32 dBTP`; no silence gap longer
+  than 1.2 s; stereo L/R are balanced. Verbatim captions are generated from the
+  voice timestamps.
 - SHA-256
-  `a95a7aad6dfe05300182c30e605c1d3494eef899a7aeaaf214328a8d872f0626`.
+  `2e4b016eb885d830b7b2265b4bb27c99a0e97a0654f52424a1ebe320c073fc29`.
 
 ## History
 
