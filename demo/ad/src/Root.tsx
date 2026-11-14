@@ -4,7 +4,9 @@ import scriptJson from '../script.json';
 import { Ad } from './Ad';
 import { CharacterGallery } from './characters/CharacterGallery';
 import { AdV2 } from './v2/AdV2';
+import { AdV3 } from './v3/AdV3';
 import { FPS as V2_FPS, HEIGHT as V2_HEIGHT, TOTAL_FRAMES as V2_TOTAL_FRAMES, WIDTH as V2_WIDTH } from './v2/lib/script';
+import { FPS as V3_FPS, HEIGHT as V3_HEIGHT, TOTAL_FRAMES as V3_TOTAL_FRAMES, WIDTH as V3_WIDTH } from './v3/lib/script';
 import { cutDurationInFrames, masterDurationInFrames } from './cuts';
 import type { Script } from './types';
 
@@ -32,6 +34,14 @@ export const RemotionRoot: React.FC = () => {
         fps={V2_FPS}
         width={V2_WIDTH}
         height={V2_HEIGHT}
+      />
+      <Composition
+        id="MendAdV3"
+        component={AdV3}
+        durationInFrames={V3_TOTAL_FRAMES}
+        fps={V3_FPS}
+        width={V3_WIDTH}
+        height={V3_HEIGHT}
       />
       <Composition
         id="MendSubmission"

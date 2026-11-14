@@ -1,6 +1,6 @@
 # 16 — Integration evidence matrix
 
-> **Status note (2026-11-13):** This file began as the 2026-11-09 Wave 0 research
+> **Status note (2026-11-14):** This file began as the 2026-11-09 Wave 0 research
 > matrix. Later live evidence is reconciled in the affected rows below;
 > [`STATUS.md`](../STATUS.md) is authoritative. Research-only labels remain
 > historical where no later evidence exists.
@@ -186,7 +186,7 @@ valid”, not “gasless funding”. Never imply the passport is legal ownership
 | G4 | Real NEAR testnet escrow lifecycle with real links | **VERIFIED (testnet) with caveats** | V2 `WO-BENCH-V2-001-0002` `CLOSED`, 42 tx, exact 100/20/72/8, escrow 0; earlier 57-tx `WO-BENCH-001-0003` remains historical; [G3 evidence](../orchestration/reports/G3-evidence.md) |
 | G5 | Live NEAR AI inference, Sputnik DAO, Intents deposit, OutLayer execution, NEP-366 relayer, Agent Market job | **VERIFIED with caveats / PARTIAL** | AI signature valid but no matching TEE report; Sputnik DAO, OutLayer, NEP-366 and Agent Market job live; Intents deposit/settlement not executed. See `STATUS.md` |
 | G6 | Hosted demo | **BLOCKED_ON_HUMAN** | No deployment credentials |
-| G7 | Demo video | **RECORDED (5:00, narrated + captions)** | `demo/ad/out/mend-ad-v2-master.mp4`, 1920×1080/30fps, H.264/AAC, −13.94 LUFS; live app interactions, paper-cut Sam + stick-figure cast, pothole case staged `BIDDING`→`COMPLETION_SUBMITTED`→`CLOSED`; repair B-roll is illustrative Pexels stock. Earlier v1 and silent 91.6 s REPLAY video remain as history. |
+| G7 | Demo video | **RECORDED — 2:32.40 v3 product pitch** | `demo/ad/out/mend-ad-v3-master.mp4`, 1920×1080/30fps, H.264/AAC, 48 kHz stereo, 54 MB, SHA-256 `351de62d41533d1b5c07718edf1d557eed3ccc74b4a59bb61a885dcf2cb46e91`; input_i −14.35 LUFS, true peak −1.30 dBTP, no silence gap longer than 1.2 s; full-bleed live app with per-beat tech-stack callouts, one continuous voice/music/SFX bed, paper-cut Sam + stick-figure Neighbor close; pothole case staged `BIDDING`→`COMPLETION_SUBMITTED`→`CLOSED`. The voice is the existing v1 George render, trimmed and concatenated (ElevenLabs v2 blocked with HTTP 401), not a new v3 synth. Repair B-roll is illustrative Pexels stock, REPLAY is labelled, and the end-card QR is a placeholder until a hosted URL exists. The 5:00 v2 master, 5:00 v1 cut and silent 91.6 s REPLAY video remain as history. |
 | G8 | Real repair media and durability inspection | **BLOCKED_ON_HUMAN / NOT COLLECTED** | No repair performed; no consent |
 | G9 | Security audit or accessibility certification | **UNAVAILABLE** | None performed |
 | G10 | City adoption or partnership | **UNAVAILABLE** | No such relationship exists or is claimed |

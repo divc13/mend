@@ -1,6 +1,6 @@
 # MEND — authoritative status
 
-Last updated: 2026-11-13
+Last updated: 2026-11-14
 This file is the single source of truth for feature and gate status. If another
 document disagrees with this matrix, this file wins. No percentage is used: the
 project is a **strong prototype with a proven testnet escrow lifecycle and several
@@ -35,7 +35,7 @@ Statuses used here: `PASS`, `PASS_WITH_CAVEATS`, `PARTIAL`,
 | F10 | Independent inspection and Agent Market | **PASS_WITH_CAVEATS** | Inspector agent 9 tests (missing items only, no certification language); market worker 12 tests (poll/start/submit, redacted brief, no auto-accept, null bid id); API inspection flow with human acceptance; testnet completion and durability inspections by separate inspector accounts. **Live Agent Market listing is `live`** (`delivered_jobs: 1`, `success_rate: 100`); the worker started and submitted a paid `$0.01` USDC hire (`76ef7a92-b654-46cc-87d9-dc032c3a8500`, escrow `0.0100 USDC`) and the human buyer accepted it (`finalizedAt 2026-11-13T11:50:00Z`); see `scripts/agent-market-live/LIVE-AGENT-MARKET.md`. | Self-hire, not independent market reputation. The actual seller payout/5% fee ledger row is `NOT_COLLECTED` because a worker `aat_` token cannot read `/v1/wallet/ledger`; escrow and acceptance are verified. |
 | F11 | Settlement, durability and warranty | **PASS_WITH_CAVEATS** | Contract failed-durability test reopens the same work order with no new escrow and releases the holdback once; E2E contract replay; real testnet durability pass released 8 mUSDC and closed the order. | The **failed-durability branch was proven in contract/replay tests, not on live testnet**. The testnet run exercised the passing-durability branch. |
 | F12 | Public case experience | **PASS** | Next.js build passes all routes; Playwright 32 passed including axe (no serious/critical), keyboard-only, mobile 390×844 and the REPLAY banner; the case page renders the exact `100 / 20 / 72 / 8` split. | Production load, real-user and public-map/dashboard coverage are not claimed. |
-| F13 | Demo, replay and simulation | **PASS_WITH_CAVEATS** | A **5:00 narrated, captioned 1080p v2 master** exists at `demo/ad/out/mend-ad-v2-master.mp4` (H.264/AAC, 30fps), with live app interactions (report, steward award, bid reveal, inspector accept, passport, `/how-it-works`), paper-cut Sam and stick-figure council/bidders/contractor/inspector/neighbor, a pothole case staged through `BIDDING` → `COMPLETION_SUBMITTED` → `CLOSED`, ElevenLabs George voice, SFX and licensed Mixkit music. The earlier 5:00 v1 and silent 91.6 s REPLAY video remain as history. | **Physical repair media is illustrative Pexels stock footage, not a real MEND repair**; the pothole software scenario is `REPLAY / SIMULATION`. The v2 voice reuses the existing v1 George render because ElevenLabs free-tier v2 synthesis returned HTTP 401; the end-card QR remains a labelled placeholder until the hosted URL is set. The master still needs a human watch/listen-through. |
+| F13 | Demo, replay and simulation | **PASS_WITH_CAVEATS** | The current cut is the **recorded 2:32.40 narrated 1080p v3 product pitch** at `demo/ad/out/mend-ad-v3-master.mp4` (1920×1080/30fps, H.264/AAC, 48 kHz stereo, 54 MB; SHA-256 `351de62d41533d1b5c07718edf1d557eed3ccc74b4a59bb61a885dcf2cb46e91`). It is full-bleed live app with per-beat tech-stack callouts (Next.js/React, Fastify/Postgres, NEAR AI, Rust on NEAR, Sputnik DAO, OutLayer, 1Click, Agent Market, NEP-366 relayer), one continuous voice/music/SFX bed, live interactions (report, steward award, bid reveal, inspector accept, payment/accounting, passport, tech), and a paper-cut Sam + stick-figure Neighbor close. The pothole case is staged through `BIDDING` → `COMPLETION_SUBMITTED` → `CLOSED`. The earlier 5:00 v2 master, 5:00 v1 cut and silent 91.6 s REPLAY video remain as history; the v2 stick-figure council/bidder cast is historical. | **Physical repair media is illustrative Pexels stock footage, not a real MEND repair**; the pothole software scenario is `REPLAY / SIMULATION`. The v3 voice is the existing v1 ElevenLabs George render, trimmed and concatenated, because ElevenLabs v2 synthesis returned HTTP 401; there is no new v3 voice take. The end-card QR remains a labelled placeholder until a hosted URL is set. The final render measures input_i −14.35 LUFS and true peak −1.30 dBTP, with no silence gap longer than 1.2 s. A human watch/listen-through is still required. |
 | F14 | Production-quality submission | **PARTIAL** | Docs package, valid relative links, threat/privacy models, README `Do X → See Y`, local test suites, clean-room checks, CI workflow definition, license. The repo is pushed to a private GitHub repo. | CI is green on `main`. The human will handle hosting and make the repository public. **X post and final submission fields are not done** (`BLOCKED_ON_HUMAN`). |
 
 ### Feature summary
@@ -56,7 +56,7 @@ Statuses used here: `PASS`, `PASS_WITH_CAVEATS`, `PARTIAL`,
 | G1 — Each track passes local tests and reports only owned-path changes | **PASS** | `orchestration/reports/G1-evidence.md`: protocol 26, contracts 35, intents 99, AI 41 + Rust 12, verified by the orchestrator. | None for the local scope. |
 | G2 — Local/sandbox vertical slice without hand-editing the database | **PASS** | `orchestration/reports/G2-evidence.md`: real API + Postgres + web, exact 100 → 20 refund → 72 → 8 holdback → 8 release → `CLOSED`. | REPLAY/SIMULATION only, as labelled. |
 | G3 — Successful testnet repair lifecycle with real transaction links | **PASS_WITH_CAVEATS** | Fresh final hub `mend-hub-v2.testnet` + real Sputnik DAO `mend-dao.sputnikv2.testnet`: `WO-BENCH-V2-001-0002` `CLOSED`, 42 tx, funding 100, refund 20, completion 72, holdback 8 released, escrow 0; 42/42 hashes resolved; payment events exact; passport transfer rejected. Earlier `mend-hub.testnet` / 57-tx run remains in `infra/testnet/live-state.json`. | OutLayer live execution used a separate testnet request (see F07), not the hub score; testnet only; one aborted pre-award work order was cancelled/refunded; no hosted demo. |
-| G4 — Every feature F01–F14 has passing evidence | **PARTIAL** | F01, F03, F04, F06, F08, F12 pass; F02, F07, F09, F10, F11, F13 pass with caveats; F05 and F14 are partial. | **G4 is not fully complete.** Remaining live gaps: Intents deposit/settlement; hosted demo/public repo/X post/submission. The 5:00 film uses illustrative repair stock footage, not a real MEND repair. |
+| G4 — Every feature F01–F14 has passing evidence | **PARTIAL** | F01, F03, F04, F06, F08, F12 pass; F02, F07, F09, F10, F11, F13 pass with caveats; F05 and F14 are partial. | **G4 is not fully complete.** Remaining live gaps: Intents deposit/settlement; hosted demo/public repo/X post/submission. The recorded 2:32.40 v3 pitch uses illustrative repair stock footage, not a real MEND repair. |
 | G5 — Human accepts the complete submission payload | **BLOCKED_ON_HUMAN** | Submission drafts exist; nothing has been posted or submitted. | Team identity, wallet, public repo URL, hosted demo URL, video URL, track, tags and final confirmation are human-supplied. |
 
 ## What is proven
@@ -102,13 +102,18 @@ Statuses used here: `PASS`, `PASS_WITH_CAVEATS`, `PARTIAL`,
     request/response bytes and all four cryptographic checks pass. The artifact
     remains `UNAVAILABLE` because no matching TEE report was retained; the UI
     labels it `UNVERIFIED_INFERENCE`.
-12. **A 5:00 narrated MEND film.** `demo/ad/out/mend-ad-v2-master.mp4` is a
-    1920×1080/30fps H.264/AAC v2 master with captions, ElevenLabs George voice,
-    SFX, licensed music, live app interactions (report, steward award, bid
-    reveal, inspector accept, passport, `/how-it-works`), paper-cut Sam and a
-    stick-figure council/bidder/contractor/inspector/neighbor cast. The pothole
-    case is staged through `BIDDING` → `COMPLETION_SUBMITTED` → `CLOSED`; repair
-    B-roll is illustrative Pexels footage and is labelled as such.
+12. **A recorded 2:32.40 narrated MEND product pitch.** The current v3 cut is
+    `demo/ad/out/mend-ad-v3-master.mp4`: 1920×1080/30fps H.264/AAC, 48 kHz
+    stereo, 54 MB, SHA-256
+    `351de62d41533d1b5c07718edf1d557eed3ccc74b4a59bb61a885dcf2cb46e91`,
+    full-bleed live app with per-beat tech-stack callouts, one continuous
+    voice/music/SFX bed, live interactions (report, steward award, bid reveal,
+    inspector accept, payment/accounting, passport, tech), and a paper-cut Sam +
+    stick-figure Neighbor close. The pothole case is staged through `BIDDING` →
+    `COMPLETION_SUBMITTED` → `CLOSED`; repair B-roll is illustrative Pexels
+    footage. The earlier 5:00 v2 and v1 cuts remain history. The v3 voice is the
+    trimmed v1 George render because ElevenLabs v2 synthesis was blocked with
+    HTTP 401.
 
 ## What is not proven
 
@@ -133,7 +138,7 @@ Statuses used here: `PASS`, `PASS_WITH_CAVEATS`, `PARTIAL`,
    hire's `0.0100 USDC` escrow and human acceptance are verified, but the worker
    `aat_` token cannot read the owner wallet ledger; the expected payout is
    `0.0095 USDC`, not an observed balance.
-7. **Real repair media and a physical durability inspection.** The 5:00 film
+7. **Real repair media and a physical durability inspection.** The v3 pitch
    uses illustrative Pexels stock footage; no MEND repair was performed and no
    physical durability inspection exists.
 8. **A hosted demo, public repository, X post or submitted entry.** The GitHub
@@ -154,7 +159,8 @@ Statuses used here: `PASS`, `PASS_WITH_CAVEATS`, `PARTIAL`,
 - `scripts/intents-live/LIVE-INTENTS.md`
 - `scripts/near-ai-live/LIVE-NEAR-AI.md`
 - `demo/ad/README.md`
-- `demo/ad/out/mend-ad-v2-master.mp4` (large generated v2 master; not committed)
+- `demo/ad/out/mend-ad-v3-master.mp4` (large generated v3 master; not committed)
+- `demo/ad/out/mend-ad-v2-master.mp4` (historical 5:00 v2 master; not committed)
 - `tests/live/LIVE-EVIDENCE.md`
 - [docs/16 — Integration evidence](./docs/16-integration-evidence.md)
 - [docs/11 — Limitations](./docs/11-limitations.md)

@@ -1,75 +1,126 @@
-# MEND 5:00 advertisement
+# MEND product pitch (v3)
 
-This folder is the Remotion composition for the MEND 5:00 film. The current v2
-cut uses `script-v2.json`; the earlier v1 cut uses `script.json`. Change the
-relevant JSON, then re-render; no timeline editing is required.
+This folder is the Remotion composition for MEND's demo film. The **current cut is
+v3**, a recorded 2:32.40 product pitch. The earlier 5:00 v2 and v1 cuts are kept
+as history; see [History](#history).
 
-## Final outputs
+## Current cut: v3 (2:32.40)
 
-- `out/mend-ad-v2-master.mp4` — current 5:00 v2 master, 1920×1080, 30fps, H.264/AAC, −13.94 LUFS.
-- `out/mend-ad-v2-thumbnail.png` — v2 thumbnail (1920×1080).
-- `out/mend-ad-v2-thumbnail-1280.jpg` — YouTube-ready 1280×720 thumbnail.
-- `out/mend-ad-v2-contact-sheet.png` — v2 scene contact sheet.
-- `out/mend-ad-v2.srt`, `out/mend-ad-v2.vtt` — v2 captions.
-- `out/mend-ad-v2-silent.mp4` — v2 silent picture lock.
-- v1 history: `out/mend-ad-5min.mp4`, `out/mend-ad-thumbnail.png`, `out/mend-ad.srt`, `out/mend-ad.vtt`, `out/mend-ad-silent.mp4`.
+- `out/mend-ad-v3-master.mp4` — v3 master: 1920×1080, 30fps, H.264/AAC,
+  48 kHz stereo, 2:32.40, 54 MB. See [Render verification](#render-verification).
+- Composition `MendAdV3`, built from `script-v3.json`.
+- Full-bleed live app for the whole product tour, with tech-stack callouts inside
+  each beat (Next.js/React, Fastify/Postgres, NEAR AI, Rust on NEAR, Sputnik DAO,
+  OutLayer, 1Click, Agent Market, NEP-366 relayer).
+- One continuous voice/music/SFX bed.
+- Live interactions: report, steward award, bid reveal, inspector accept,
+  payment/accounting, passport and tech.
+- Close: paper-cut Sam + stick-figure Neighbor and a labelled QR placeholder. The v2
+  stick-figure cast remains in the v2 history.
 
-## Quick start
+## Render v3
 
 ```bash
 # from the repository root
 npm install
-node demo/ad/scripts/sync-v2.cjs
-npx remotion compositions demo/ad/src/index.ts
-npx remotion studio demo/ad/src/index.ts        # live preview
+node demo/ad/scripts/sync-v3.cjs          # copy script-v3.json into src/v3
+node scripts/demo/render-v3.mjs           # render silent v3 + mux mix-v3.m4a
+# -> demo/ad/out/mend-ad-v3-silent.mp4
+# -> demo/ad/out/mend-ad-v3-master.mp4
 ```
 
-Render the current v2 master:
+`sync-v3.cjs` writes `src/v3/script.generated.json` so Remotion can import the
+timeline statically. `render-v3.mjs` renders `MendAdV3` at 1920×1080/30fps, then
+calls `scripts/demo/build-audio-mix-v3.mjs` to build and mux the audio bed.
+
+## Capture v3 app clips
+
+The live clips are under `public/assets/live/` (ignored by git). The current v3
+cut expects the pothole case to be staged and then captured:
 
 ```bash
-node scripts/demo/render-v2.mjs
-# -> demo/ad/out/mend-ad-v2-master.mp4
+node scripts/demo/stage-pothole-case.mjs BIDDING
+node scripts/demo/capture-live-ad.mjs
+node scripts/demo/capture-payment-live.mjs   # app on :3100, case CLOSED
 ```
 
-The earlier v1 master can still be rendered with `MendAd`, `script.json` and
-`node scripts/demo/build-audio-mix.mjs`; it is kept as history.
+`capture-live-ad.mjs` records report, steward award, bid reveal, inspector accept,
+passport and tech. `capture-payment-live.mjs` records the CLOSED accounting view
+used by the payment beat. The capture scripts drive the real app; no runtime
+`?demo=` flag is used. Missing media falls back to a branded placeholder.
 
-## Iterating
+## V3 voice: trimmed v1 George, not a new synth
 
-- **Narration/timing (v2):** edit `script-v2.json` and re-run
-  `node demo/ad/scripts/sync-v2.cjs`. The v2 cut reuses the v1 George VO; see
-  `public/audio/v2/voice-selection.json`.
-- **Visuals (v2):** edit `src/v2/scenes/*` or `src/characters/*`; use
-  `npx remotion still demo/ad/src/index.ts MendAdV2 <out.png> --frame=<n>` for a
-  fast check.
-- **v1 history:** edit `script.json` / `src/scenes/*` and render `MendAd`.
-- **Assets (v2):** live app clips live under `public/assets/live/` (ignored by
-  git). Re-capture with `node scripts/demo/capture-live-ad.mjs`; run
-  `node demo/ad/scripts/sync-v2.cjs` so the manifest picks them up. Missing media
-  falls back to a branded placeholder.
-- **End card URL:** set `siteUrl` in `script-v2.json`; the QR placeholder and
-  `DEMO LINK IN DESCRIPTION` copy are generated from it. Re-render the close
-  scene (or the whole v2 film) when the hosted URL is ready.
-- **Cuts:** `script-v2.json` has `master`, `submission` and `teaser` lists.
-  Register more compositions in `src/Root.tsx` if needed.
+The v3 narration is **not a new voice take**. `scripts/demo/build-v3-voice.mjs`
+trims leading/trailing silence from the existing v1 ElevenLabs George lines
+(`public/audio/vo/*.mp3`), concatenates them with a 0.12 s air gap and writes
+`public/audio/v3/voice-v3.mp3` plus the scene timeline. ElevenLabs v2
+synthesis is blocked on the free tier (HTTP 401 `detected_unusual_activity`), so
+v3 reuses the proven v1 render. Do not describe it as a new v3 voice.
+
+## Render verification
+
+Final v3 master rendered 2026-11-14:
+
+- Duration 2:32.40 at 1920×1080, 30fps; H.264 video + AAC 48 kHz stereo audio;
+  54 MB.
+- Loudness `input_i −14.35 LUFS`, true peak `−1.30 dBTP`; no silence gap longer
+  than 1.2 s.
+- SHA-256
+  `351de62d41533d1b5c07718edf1d557eed3ccc74b4a59bb61a885dcf2cb46e91`.
+
+## History
+
+### v2 (5:00, retained)
+
+- `out/mend-ad-v2-master.mp4` — 5:00 v2 master, 1920×1080, 30fps, H.264/AAC.
+- `out/mend-ad-v2-thumbnail.png`, `out/mend-ad-v2-thumbnail-1280.jpg`.
+- `out/mend-ad-v2-contact-sheet.png`.
+- `out/mend-ad-v2.srt`, `out/mend-ad-v2.vtt`.
+- `out/mend-ad-v2-silent.mp4`.
+
+Render v2 as history:
+
+```bash
+node demo/ad/scripts/sync-v2.cjs
+node scripts/demo/render-v2.mjs
+```
+
+`script-v2.json` is the slower 5:00 timeline. It also reuses the v1 George VO
+lines; see `public/audio/v2/voice-selection.json`. The v2 close uses the
+stick-figure cast.
+
+### v1 (5:00, retained)
+
+- `out/mend-ad-5min.mp4`, `out/mend-ad-thumbnail.png`, `out/mend-ad.srt`,
+  `out/mend-ad.vtt`, `out/mend-ad-silent.mp4`.
+
+Render v1 with the `MendAd` composition, `script.json` and
+`node scripts/demo/build-audio-mix.mjs`.
 
 ## Audio
 
-- Voice: ElevenLabs, George (`JBFqnCBsd6RMkjVDRZzb`), `eleven_multilingual_v2`,
-  generated with timestamps. The account is on the Free tier, so output is
-  44.1 kHz/128 kbps MP3; the final mix is resampled to 48 kHz.
-- Music: “Mountains” by Andrew Ev (Mixkit Free License). ElevenLabs Music was
-  unavailable on the free plan (HTTP 402 `paid_plan_required`); the licensed
-  Mixkit fallback is used instead. See `public/audio/music-selection.json` and
-  `CREDITS.md`.
-- Final loudness: −13.8 LUFS integrated, true peak −0.8 dBFS.
+- **Voice (v3):** trimmed/concatenated v1 ElevenLabs George
+  (`JBFqnCBsd6RMkjVDRZzb`), not a new synthesis. Source v1 output is 44.1 kHz;
+  the v3 bed is 48 kHz.
+- **Music:** “Mountains” by Andrew Ev (Mixkit Free License). The licensed
+  `music-1.mp3` bed is trimmed to the v3 duration. See
+  `public/audio/music-selection.json` and `CREDITS.md`.
+- **Mix:** `build-audio-mix-v3.mjs` mixes one continuous voice track, ducked
+  music and action SFX, then normalizes to I=−14 LUFS / TP=−1 dBTP, 48 kHz
+  stereo AAC. The v3 bed is `out/mix-v3.m4a`.
 
 ## Honesty
 
-- The pothole software scenario is `REPLAY / SIMULATION`.
-- The pothole and repair footage is illustrative Pexels stock footage.
+- The pothole software scenario is `REPLAY / SIMULATION`; the UI says
+  `REPLAY DATA · REAL APP`.
+- The pothole and repair footage is illustrative Pexels stock footage, not a real
+  MEND repair.
 - The contracts, DAO vote, AI signature and Agent Market listing shown in the
-  tech scene are real testnet/production evidence; the end card says so.
+  tech beat are real testnet/production evidence; the film says so.
+- The v3 voice is a trimmed v1 George bed, not a new voice.
+- The end-card QR is a placeholder until `siteUrl` is set in `script-v3.json` and
+  the close is re-rendered. No hosted demo is claimed.
 - No transaction link is invented, no AI approval is claimed, and no city
   adoption is implied.
 
@@ -77,45 +128,8 @@ The earlier v1 master can still be rendered with `MendAd`, `script.json` and
 
 - Remotion `4.0.320` (root devDependency)
 - `ffmpeg-static` for audio/video processing
-- Playwright (from `tests/`) for `scripts/demo/capture-ad.mjs`
+- Playwright (from `tests/`) for `scripts/demo/capture-live-ad.mjs` and
+  `scripts/demo/capture-payment-live.mjs`
 
 Large media and generated outputs are intentionally not committed; keep them
 outside git or upload the final master to YouTube/unlisted.
-
-## v2 live cut (current)
-
-The v2 film is `MendAdV2` and is built from:
-
-- `script-v2.json` — faster 5:00 timeline; reuses the v1 George VO lines with J-cut offsets.
-- `public/audio/v2/voice-timeline.json` and `cue-sheet.json` — word-level cues from the existing v1 ElevenLabs timestamps.
-- `public/assets/live/*.mp4` — real app interactions: report, steward award, bid reveal, inspector accept, passport and `/how-it-works`.
-- `src/characters/*` — paper-cut Sam, stick-figure council/bidders/contractor/inspector/neighbor.
-- `src/v2/*` — v2 composition, scenes and cue helpers.
-
-Render v2:
-
-```bash
-node demo/ad/scripts/sync-v2.cjs
-node scripts/demo/render-v2.mjs
-# -> demo/ad/out/mend-ad-v2-master.mp4
-```
-
-Capture live app clips:
-
-```bash
-node scripts/demo/stage-pothole-case.mjs BIDDING
-node scripts/demo/capture-live-ad.mjs
-```
-
-The capture script stages `WO-PATH-001-0002` through `BIDDING`,
-`COMPLETION_SUBMITTED` and `CLOSED` so the steward award, bid reveal, inspector
-accept and passport are real app interactions at capture time. No runtime
-`?demo=` flag is used.
-
-The final v2 audio mix uses the existing v1 George VO because the ElevenLabs
-free tier returned HTTP 401 `detected_unusual_activity` for v2 synthesis. The
-voice is labelled in `public/audio/v2/voice-selection.json`; do not claim a new
-v2 voice take.
-
-The end card QR is a placeholder until `siteUrl` is set in `script-v2.json` and
-the close scene is re-rendered.

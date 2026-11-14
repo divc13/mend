@@ -57,7 +57,7 @@ Retrieved: 2026-11-13.
 | --- | --- | --- | --- | --- | --- |
 | Music bed | `public/audio/music/music-1.mp3` | Mountains | Andrew Ev | [Mixkit](https://mixkit.co/free-stock-music/mountains/) | [Mixkit Stock Music Free License](https://mixkit.co/license/#musicFree) |
 
-- Original track: 4:37 (`public/audio/music/mixkit-mountains.mp3`). The ad uses a 5:00 looped/edited bed (`music-1.mp3`).
+- Original track: 4:37 (`public/audio/music/mixkit-mountains.mp3`). The v2 cut used a 5:00 looped/edited bed (`music-1.mp3`); the current v3 cut trims the same licensed bed to 2:32.40.
 - Direct source audio: `https://assets.mixkit.co/music/187/187.mp3`
 - Retrieved: 2026-11-13.
 - The license permits commercial and non-commercial use, including download, copy, modification,
@@ -75,5 +75,5 @@ Retrieved: 2026-11-13.
 - **“Mountains” — Andrew Ev** (Mixkit)
 - Source: https://mixkit.co/free-stock-music/mood/uplifting/
 - License: Mixkit Free License — free for commercial use. https://mixkit.co/license/#musicFree
-- Edit: original 4:37.34 track plus a short tail, joined with a 3s crossfade to create a 5:00 bed.
+- Edit: original 4:37.34 track plus a short tail, joined with a 3s crossfade to create the 5:00 v2 bed; the v3 cut trims it to 2:32.40.
 - ElevenLabs Music was not available on the current free plan; this licensed track is the fallback.
