@@ -158,7 +158,7 @@ above must be reconciled with the final lockfile.
   deposit/settlement is not;
 - no mainnet execution;
 - no hosted demo;
-- the current demo cut is a **recorded 2:32.40 v3 product pitch** at `demo/ad/out/mend-ad-v3-master.mp4` (1920×1080/30fps, H.264/AAC, 48 kHz stereo, 54 MB; SHA-256 `351de62d41533d1b5c07718edf1d557eed3ccc74b4a59bb61a885dcf2cb46e91`): full-bleed live app, per-beat tech-stack callouts, one continuous voice/music/SFX bed, paper-cut close; the voice is the trimmed v1 George render, **not a new synth**, and the end-card QR is a placeholder until a hosted URL exists. The hosted demo, public repository and X post are pending;
+- the current demo cut is a **recorded 2:32.40 v3 product pitch** at `demo/ad/out/mend-ad-v3-master.mp4` (1920×1080/30fps, H.264/AAC, 48 kHz stereo, 59 MB; SHA-256 `9c9b0aae091d06e5b8c1b1df75c0f54fbe208ed517545ab6554d8a558a07a5d5`): full-bleed live app with animated paper-cut cast dioramas, per-beat tech-stack callouts, one continuous voice/music/SFX bed, paper-cut close; the voice is the trimmed v1 George render, **not a new synth**, and the end-card QR is a placeholder until a hosted URL exists. The hosted demo, public repository and X post are pending;
 - no physical repair or durability inspection;
 - no real users, city adoption or partnership;
 - no security audit or accessibility certification;

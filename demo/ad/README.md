@@ -7,16 +7,16 @@ as history; see [History](#history).
 ## Current cut: v3 (2:32.40)
 
 - `out/mend-ad-v3-master.mp4` — v3 master: 1920×1080, 30fps, H.264/AAC,
-  48 kHz stereo, 2:32.40, 54 MB. See [Render verification](#render-verification).
+  48 kHz stereo, 2:32.40, 59 MB. See [Render verification](#render-verification).
 - Composition `MendAdV3`, built from `script-v3.json`.
-- Full-bleed live app for the whole product tour, with tech-stack callouts inside
-  each beat (Next.js/React, Fastify/Postgres, NEAR AI, Rust on NEAR, Sputnik DAO,
+- Full-bleed live app for the whole product tour, with animated paper-cut cast
+  dioramas overlaid in the app margins and tech-stack callouts inside each beat (Next.js/React, Fastify/Postgres, NEAR AI, Rust on NEAR, Sputnik DAO,
   OutLayer, 1Click, Agent Market, NEP-366 relayer).
 - One continuous voice/music/SFX bed.
 - Live interactions: report, steward award, bid reveal, inspector accept,
   payment/accounting, passport and tech.
-- Close: paper-cut Sam + stick-figure Neighbor and a labelled QR placeholder. The v2
-  stick-figure cast remains in the v2 history.
+- Close: paper-cut Sam + stick-figure Neighbor and a labelled QR placeholder.
+  The v2 5:00 cast cut remains in the v2 history.
 
 ## Render v3
 
@@ -63,11 +63,11 @@ v3 reuses the proven v1 render. Do not describe it as a new v3 voice.
 Final v3 master rendered 2026-11-14:
 
 - Duration 2:32.40 at 1920×1080, 30fps; H.264 video + AAC 48 kHz stereo audio;
-  54 MB.
+  59 MB.
 - Loudness `input_i −14.35 LUFS`, true peak `−1.30 dBTP`; no silence gap longer
   than 1.2 s.
 - SHA-256
-  `351de62d41533d1b5c07718edf1d557eed3ccc74b4a59bb61a885dcf2cb46e91`.
+  `9c9b0aae091d06e5b8c1b1df75c0f54fbe208ed517545ab6554d8a558a07a5d5`.
 
 ## History
 

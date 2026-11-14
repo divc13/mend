@@ -2,6 +2,7 @@ import React from 'react';
 import { AbsoluteFill, interpolate, Sequence, useCurrentFrame } from 'remotion';
 import { AppScene, type LiveSceneConfig } from './components/AppScene';
 import { CloseV3 } from './scenes/CloseV3';
+import { CastOverlays } from './components/CastOverlays';
 import { FPS, sceneById, sceneFrames, TOTAL_FRAMES, v3Script, type V3Scene } from './lib/script';
 
 type AppSceneId = Exclude<V3Scene['id'], 'hook' | 'close'>;
@@ -144,6 +145,7 @@ export const AdV3: React.FC = () => {
           <CloseV3 scene={close} />
         </Cut>
       </Sequence>
+      <CastOverlays />
       <div style={{ display: 'none' }}>{TOTAL_FRAMES}{v3Script.durationSeconds}{v3Script.scenes.length}{sceneFrames(report)}</div>
     </AbsoluteFill>
   );
