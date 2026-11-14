@@ -40,6 +40,10 @@ function audioDuration(file) {
 }
 
 await mkdir(TMP, { recursive: true });
+const scriptPath = path.join(AD, 'script-v3.json');
+const previous = existsSync(scriptPath)
+  ? JSON.parse(readFileSync(scriptPath, 'utf8'))
+  : null;
 const v2 = JSON.parse(readFileSync(path.join(AD, 'script-v2.json'), 'utf8'));
 const source = Object.fromEntries(v2.scenes.map((scene) => [scene.id, scene]));
 const STACK = {
@@ -104,7 +108,9 @@ for (const id of ORDER) {
     '-i',
     input,
     '-af',
-    'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.10,areverse,aresample=48000,pan=stereo|c0=c0|c1=c1',
+    // v1 lines are mono. A stereo upmix must feed both outputs from channel 0;
+    // `c1=c1` reads a non-existent second input channel and silences the right side.
+    'silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.03,areverse,silenceremove=start_periods=1:start_threshold=-45dB:start_silence=0.10,areverse,aresample=48000,pan=stereo|c0=c0|c1=c0',
     '-c:a',
     'pcm_s16le',
     trimmed,
@@ -171,7 +177,7 @@ const script = {
   fps: 30,
   width: 1920,
   height: 1080,
-  siteUrl: '',
+  siteUrl: previous?.siteUrl ?? '',
   durationSeconds: total,
   voice: {
     name: 'George',

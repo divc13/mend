@@ -2,50 +2,35 @@ import React from 'react';
 import { AbsoluteFill, interpolate, spring, useCurrentFrame, useVideoConfig } from 'remotion';
 import { Neighbor, Sam } from '../../characters';
 import { Logo } from '../../components/Logo';
+import { QRGraphic } from '../../components/QRGraphic';
 import { SceneBackdrop } from '../../components/SceneBackdrop';
 import { fonts, palette } from '../../theme';
 import type { V3Scene } from '../lib/script';
 import { v3Script } from '../lib/script';
 
-const hash = (index: number): number => {
-  const value = Math.sin(index * 127.1 + 311.7) * 43758.5453;
-  return value - Math.floor(value);
-};
-
-const QrBlock: React.FC<{ size: number }> = ({ size }) => {
-  const grid = 21;
-  const cells: React.ReactNode[] = [];
-  for (let y = 0; y < grid; y += 1) {
-    for (let x = 0; x < grid; x += 1) {
-      const finder =
-        (x < 7 && y < 7) ||
-        (x >= grid - 7 && y < 7) ||
-        (x < 7 && y >= grid - 7);
-      const border =
-        finder && (x % 7 === 0 || x % 7 === 6 || y % 7 === 0 || y % 7 === 6);
-      const center = finder && x % 7 >= 2 && x % 7 <= 4 && y % 7 >= 2 && y % 7 <= 4;
-      const on = finder ? border || center : hash(y * grid + x) > 0.56;
-      if (on) {
-        cells.push(
-          <rect
-            key={`${x}-${y}`}
-            x={x * (size / grid)}
-            y={y * (size / grid)}
-            width={size / grid}
-            height={size / grid}
-            fill={palette.ink}
-          />,
-        );
-      }
-    }
-  }
-  return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: 'block', borderRadius: 8 }}>
-      <rect width={size} height={size} fill={palette.surface} />
-      {cells}
-    </svg>
-  );
-};
+const QrPlaceholder: React.FC<{ size: number }> = ({ size }) => (
+  <div
+    style={{
+      width: size,
+      height: size,
+      borderRadius: 12,
+      border: `2px dashed ${palette.lineStrong}`,
+      backgroundColor: palette.surfaceSoft,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 10,
+      color: palette.muted,
+      fontFamily: fonts.mono,
+      fontSize: 12,
+      letterSpacing: '0.16em',
+    }}
+  >
+    <span>QR PLACEHOLDER</span>
+    <span style={{ fontSize: 10, opacity: 0.7 }}>HOST PENDING</span>
+  </div>
+);
 
 const Metric: React.FC<{ value: string; label: string; accent?: boolean }> = ({
   value,
@@ -79,7 +64,6 @@ const Metric: React.FC<{ value: string; label: string; accent?: boolean }> = ({
 export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
-  const enter = spring({ frame, fps, config: { damping: 200, stiffness: 90 } });
   const card = spring({ frame: frame - 12, fps, config: { damping: 200, stiffness: 85 } });
   const hasUrl = v3Script.siteUrl.trim().length > 0;
   return (
@@ -94,7 +78,6 @@ export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
         style={{
           position: 'absolute',
           inset: 0,
-          opacity: enter,
           padding: '56px 64px 48px',
           display: 'flex',
           flexDirection: 'column',
@@ -171,7 +154,8 @@ export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
               <Metric value="100" label="USDC FUNDED" />
               <Metric value="20" label="REFUNDED AT AWARD" />
               <Metric value="72" label="PAID ON ACCEPT" accent />
-              <Metric value="8" label="DURABILITY HELD" />
+              <Metric value="8" label="RELEASED AFTER INSPECTION" />
+              <Metric value="42" label="TX VERIFIED" />
             </div>
             <div
               style={{
@@ -223,10 +207,11 @@ export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
                 style={{
                   marginTop: 10,
                   fontFamily: fonts.display,
-                  fontSize: 39,
-                  lineHeight: 0.97,
+                  fontSize: hasUrl ? 31 : 39,
+                  lineHeight: 1,
                   letterSpacing: '-0.03em',
                   color: palette.ink,
+                  overflowWrap: 'anywhere',
                 }}
               >
                 {hasUrl ? v3Script.siteUrl : 'DEMO LINK'}
@@ -235,7 +220,23 @@ export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 19, marginTop: 18 }}>
-              <QrBlock size={206} />
+              {hasUrl ? (
+                <QRGraphic value={v3Script.siteUrl} size={218} />
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                  <QrPlaceholder size={218} />
+                  <span
+                    style={{
+                      fontFamily: fonts.mono,
+                      fontSize: 11,
+                      letterSpacing: '0.16em',
+                      color: palette.muted,
+                    }}
+                  >
+                    QR PLACEHOLDER
+                  </span>
+                </div>
+              )}
               <div style={{ paddingBottom: 6 }}>
                 <div
                   style={{
@@ -245,9 +246,9 @@ export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
                     color: palette.muted,
                   }}
                 >
-                  QR PLACEHOLDER
+                  {hasUrl ? 'SCAN TO OPEN' : 'HOST PENDING'}
                   <br />
-                  HOST PENDING
+                  {hasUrl ? 'REPLAY DATA' : 'FINAL LINK PENDING'}
                 </div>
                 <div
                   style={{
@@ -257,7 +258,7 @@ export const CloseV3: React.FC<{ scene: V3Scene }> = ({ scene }) => {
                     color: palette.ink,
                   }}
                 >
-                  2:32 live tour
+                  2:32 product tour
                 </div>
               </div>
             </div>

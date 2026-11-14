@@ -1,10 +1,10 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import type { CSSProperties } from 'react';
 import { useCurrentFrame } from 'remotion';
-import QRCode from 'qrcode';
 import { fadeIn, popIn, riseIn } from '../motion';
 import { Chip } from './Chip';
 import { Logo } from './Logo';
+import { QRGraphic } from './QRGraphic';
 import { fonts, palette } from '../theme';
 
 type EndCardProps = {
@@ -108,52 +108,6 @@ const QRPlaceholder: React.FC = () => {
         }}
       >
         QR PLACEHOLDER
-      </span>
-    </div>
-  );
-};
-
-const QRGraphic: React.FC<{ value: string }> = ({ value }) => {
-  const qr = useMemo(() => QRCode.create(value, { errorCorrectionLevel: 'M' }), [value]);
-  const size = qr.modules.size;
-  const data = qr.modules.data;
-  const cells: React.ReactNode[] = [];
-  for (let y = 0; y < size; y += 1) {
-    for (let x = 0; x < size; x += 1) {
-      if (data[y * size + x]) {
-        cells.push(
-          <rect key={`q-${x}-${y}`} x={x} y={y} width={1} height={1} fill={palette.ink} />,
-        );
-      }
-    }
-  }
-  return (
-    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-      <div
-        style={{
-          width: 150,
-          height: 150,
-          padding: 10,
-          borderRadius: 16,
-          backgroundColor: palette.surface,
-          border: `1px solid ${palette.line}`,
-          boxShadow: '0 14px 36px rgba(17, 34, 29, 0.12)',
-        }}
-      >
-        <svg width="100%" height="100%" viewBox={`0 0 ${size} ${size}`} aria-label={`QR code for ${value}`}>
-          <rect width={size} height={size} fill={palette.surface} />
-          {cells}
-        </svg>
-      </div>
-      <span
-        style={{
-          fontFamily: fonts.mono,
-          fontSize: 11,
-          letterSpacing: '0.16em',
-          color: palette.muted,
-        }}
-      >
-        SCAN TO TRY
       </span>
     </div>
   );

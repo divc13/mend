@@ -4,7 +4,7 @@
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "siteUrl": "",
+  "siteUrl": "https://mend-demo.vercel.app",
   "durationSeconds": 152.41,
   "voice": {
     "name": "George",

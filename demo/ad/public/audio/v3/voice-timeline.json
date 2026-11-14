@@ -152,15 +152,15 @@
       "stack": [
         {
           "name": "Next.js + React",
-          "purpose": "client"
+          "purpose": "walletless client"
         },
         {
-          "name": "Fastify + Postgres",
-          "purpose": "intake + case state"
+          "name": "Fastify",
+          "purpose": "API + authorization"
         },
         {
-          "name": "NEAR AI",
-          "purpose": "private triage"
+          "name": "Postgres",
+          "purpose": "case + timeline state"
         },
         {
           "name": "Rust on NEAR",
@@ -171,16 +171,24 @@
           "purpose": "2-of-3 approval"
         },
         {
-          "name": "NEP-366 relayer",
-          "purpose": "gasless actions"
+          "name": "NEAR AI",
+          "purpose": "private triage"
         },
         {
           "name": "OutLayer",
-          "purpose": "execution receipts"
+          "purpose": "deterministic scorer + receipt"
+        },
+        {
+          "name": "1Click",
+          "purpose": "cross-chain quote / sponsorship"
         },
         {
           "name": "Agent Market",
-          "purpose": "contractor + inspector agents"
+          "purpose": "evidence review (self-hire disclosed)"
+        },
+        {
+          "name": "NEP-366 relayer",
+          "purpose": "gasless actions"
         }
       ],
       "sceneDuration": 28.93

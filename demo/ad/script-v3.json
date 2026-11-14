@@ -1,10 +1,10 @@
 {
   "version": 3,
-  "title": "MEND \u2014 live proof, no slides",
+  "title": "MEND — live proof, no slides",
   "fps": 30,
   "width": 1920,
   "height": 1080,
-  "siteUrl": "",
+  "siteUrl": "https://mend-demo.vercel.app",
   "durationSeconds": 152.41,
   "voice": {
     "name": "George",
@@ -84,7 +84,7 @@
       "voDuration": 14.32,
       "gap": 0.12,
       "vo": "Three contractors submit sealed bids. When the window closes, a hash-pinned policy scores price, warranty, duration and materials. B wins on total value, not the lowest sticker price. No language model picks the winner.",
-      "caption": "Sealed bids. Deterministic score.\nB 9270 \u00b7 C 5200 \u00b7 A 2873",
+      "caption": "Sealed bids. Deterministic score.\nB 9270 · C 5200 · A 2873",
       "stack": [
         {
           "name": "Deterministic scoring",
@@ -124,11 +124,11 @@
       "voDuration": 14.8,
       "gap": 0.12,
       "vo": "On acceptance, exactly seventy-two USDC goes to the contractor. Eight stays in a durability holdback. One hundred was funded. Twenty was refunded at award. The contractor gets paid. The community keeps leverage.",
-      "caption": "100 funded \u00b7 20 refunded\n72 paid \u00b7 8 held",
+      "caption": "100 funded · 20 refunded\n72 paid · 8 held",
       "stack": [
         {
           "name": "Rust escrow on NEAR",
-          "purpose": "100 funded \u2192 20 refund / 72 pay / 8 holdback"
+          "purpose": "100 funded → 20 refund / 72 pay / 8 holdback"
         }
       ],
       "sceneDuration": 14.92
@@ -212,7 +212,7 @@
       "voDuration": 12.07,
       "gap": 0.12,
       "vo": "This is maintenance with memory. Report it. Fix it. Remember it. For the price of a small repair, a neighborhood gets a memory. MEND. Get it fixed. Keep it fixed.",
-      "caption": "MEND \u2014 Maintenance with memory.\nGet it fixed. Keep it fixed.",
+      "caption": "MEND — Maintenance with memory.\nGet it fixed. Keep it fixed.",
       "stack": [
         {
           "name": "MEND",

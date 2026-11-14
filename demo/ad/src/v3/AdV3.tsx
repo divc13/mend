@@ -1,5 +1,5 @@
 import React from 'react';
-import { AbsoluteFill, interpolate, Sequence, useCurrentFrame } from 'remotion';
+import { AbsoluteFill, Sequence } from 'remotion';
 import { AppScene, type LiveSceneConfig } from './components/AppScene';
 import { CloseV3 } from './scenes/CloseV3';
 import { CastOverlays } from './components/CastOverlays';
@@ -11,7 +11,8 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   report: {
     sceneId: 'report',
     asset: 'assets/live/report-live.mp4',
-    playbackRate: 1,
+    sourceStart: 0.85,
+    playbackRate: 0.99,
     zoom: 1.02,
     chapter: '01 / INTAKE',
     headline: 'No wallet. No forms.',
@@ -26,6 +27,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   dao: {
     sceneId: 'dao',
     asset: 'assets/live/steward-live.mp4',
+    sourceStart: 0.85,
     playbackRate: 1,
     zoom: 1.035,
     origin: '50% 38%',
@@ -37,7 +39,8 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   bids: {
     sceneId: 'bids',
     asset: 'assets/live/bids-live.mp4',
-    playbackRate: 1,
+    sourceStart: 1.05,
+    playbackRate: 0.94,
     zoom: 1.045,
     origin: '50% 44%',
     chapter: '03 / COMPETE',
@@ -48,6 +51,7 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   repair: {
     sceneId: 'repair',
     asset: 'assets/live/inspector-live.mp4',
+    sourceStart: 1.05,
     playbackRate: 1,
     zoom: 1.04,
     offsetY: -84,
@@ -60,7 +64,8 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   payment: {
     sceneId: 'payment',
     asset: 'assets/live/payment-live.mp4',
-    playbackRate: 0.56,
+    sourceStart: 1.3,
+    playbackRate: 0.46,
     zoom: 1.075,
     origin: '63% 32%',
     chapter: '05 / SETTLE',
@@ -71,7 +76,8 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   passport: {
     sceneId: 'passport',
     asset: 'assets/live/passport-live.mp4',
-    playbackRate: 0.68,
+    sourceStart: 1.05,
+    playbackRate: 0.59,
     zoom: 1.055,
     origin: '48% 40%',
     chapter: '06 / REMEMBER',
@@ -82,7 +88,8 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   tech: {
     sceneId: 'tech',
     asset: 'assets/live/tech-live.mp4',
-    playbackRate: 0.34,
+    sourceStart: 0.45,
+    playbackRate: 0.32,
     zoom: 1.015,
     offsetY: -46,
     origin: '50% 40%',
@@ -93,14 +100,11 @@ const CONFIG: Record<AppSceneId, LiveSceneConfig> = {
   },
 };
 
-const Cut: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const frame = useCurrentFrame();
-  const opacity = interpolate(frame, [0, 3], [0, 1], {
-    extrapolateLeft: 'clamp',
-    extrapolateRight: 'clamp',
-  });
-  return <AbsoluteFill style={{ opacity, backgroundColor: '#071b15' }}>{children}</AbsoluteFill>;
-};
+// Cuts land directly on populated app content. A near-black fade here made the
+// first frames of every scene read as a blank app behind the floating cast card.
+const Cut: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <AbsoluteFill style={{ backgroundColor: '#071b15' }}>{children}</AbsoluteFill>
+);
 
 export const AdV3: React.FC = () => {
   const report = sceneById('report');

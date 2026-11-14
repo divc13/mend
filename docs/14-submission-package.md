@@ -44,7 +44,7 @@ transaction links and final confirmation are HUMAN SUPPLIED — DO NOT INVENT.**
 > (`WO-BENCH-V2-001-0002`, final `CLOSED`); an earlier 57-transaction run is
 > historical. Live NEAR AI inference/signature, a real Sputnik DAO, live OutLayer
 > execution, a live NEP-366 relayer transaction and a disclosed live Agent Market
-> self-hire have evidence. The Intents deposit/settlement, a hosted demo and
+> self-hire have evidence. The Intents deposit/settlement and
 > real physical repair evidence remain incomplete or human-gated. The
 > authoritative matrix is `STATUS.md`.
 
@@ -157,8 +157,8 @@ above must be reconciled with the final lockfile.
   disclosed Agent Market self-hire are proven with caveats; an Intents
   deposit/settlement is not;
 - no mainnet execution;
-- no hosted demo;
-- the current demo cut is a **recorded 2:32.40 v3 product pitch** at `demo/ad/out/mend-ad-v3-master.mp4` (1920×1080/30fps, H.264/AAC, 48 kHz stereo, 59 MB; SHA-256 `9c9b0aae091d06e5b8c1b1df75c0f54fbe208ed517545ab6554d8a558a07a5d5`): full-bleed live app with animated paper-cut cast dioramas, per-beat tech-stack callouts, one continuous voice/music/SFX bed, paper-cut close; the voice is the trimmed v1 George render, **not a new synth**, and the end-card QR is a placeholder until a hosted URL exists. The hosted demo, public repository and X post are pending;
+- the hosted REPLAY demo is live at https://mend-demo.vercel.app (Vercel Hobby, canonical CLOSED state; no live API);
+- the current demo cut is a **recorded 2:32.40 v3 product pitch** at `demo/ad/out/mend-ad-v3-master.mp4` (1920×1080/30fps, H.264/AAC, 48 kHz stereo, 60 MB; SHA-256 `a95a7aad6dfe05300182c30e605c1d3494eef899a7aeaaf214328a8d872f0626`): full-bleed live app with animated paper-cut cast dioramas, per-beat tech-stack callouts, one continuous voice/music/SFX bed, paper-cut close; the voice is the trimmed v1 George render, **not a new synth**, and the end-card QR encodes https://mend-demo.vercel.app. The public repository and X post are pending;
 - no physical repair or durability inspection;
 - no real users, city adoption or partnership;
 - no security audit or accessibility certification;

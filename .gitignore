@@ -15,3 +15,5 @@ target/
 playwright-report/
 test-results/
 orchestration/reports/tmp/
+
+.vercel/

@@ -12,11 +12,13 @@ import { Logo } from '../../components/Logo';
 import { fonts, palette } from '../../theme';
 import { liveMedia, mediaAt } from '../../v2/lib/assets';
 import type { SceneId } from '../../v2/lib/script';
-import type { V3Scene } from '../lib/script';
+import { FPS, type V3Scene } from '../lib/script';
 
 export type LiveSceneConfig = {
   sceneId: Exclude<V3Scene['id'], 'close'>;
   asset: string;
+  /** Seconds into the source clip where populated app content begins. */
+  sourceStart?: number;
   playbackRate?: number;
   zoom?: number;
   offsetY?: number;
@@ -80,7 +82,7 @@ const TopBar: React.FC<{ config: LiveSceneConfig; index: number }> = ({ config, 
               paddingLeft: 14,
             }}
           >
-            LIVE PRODUCT TOUR
+            PRODUCT TOUR · REPLAY DATA
           </span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 18 }}>
@@ -367,13 +369,9 @@ export const AppScene: React.FC<{ scene: V3Scene; config: LiveSceneConfig; index
   });
   const baseZoom = config.zoom ?? 1.035;
   const zoom = baseZoom + progress * 0.03;
-  const enter = spring({
-    frame,
-    fps: 30,
-    config: { damping: 200, stiffness: 120 },
-  });
+  const sourceStartFrame = Math.round((config.sourceStart ?? 0) * FPS);
   return (
-    <AbsoluteFill style={{ backgroundColor: palette.greenDeep, opacity: enter }}>
+    <AbsoluteFill style={{ backgroundColor: palette.greenDeep }}>
       <div
         style={{
           position: 'absolute',
@@ -394,6 +392,7 @@ export const AppScene: React.FC<{ scene: V3Scene; config: LiveSceneConfig; index
               <OffthreadVideo
                 src={media.src}
                 muted
+                startFrom={sourceStartFrame}
                 playbackRate={config.playbackRate ?? 1}
                 style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
               />

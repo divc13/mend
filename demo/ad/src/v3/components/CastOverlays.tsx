@@ -175,17 +175,17 @@ const CouncilCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
   const votes: ['yes' | 'abstain', 'yes' | 'abstain', 'yes' | 'abstain'] =
     progress > 0.48 ? ['yes', 'yes', 'abstain'] : ['yes', 'abstain', 'abstain'];
   return (
-    <Card label="THE COUNCIL" kicker="2 OF 3" style={{ right: 22, top: 126, width: 360, height: 252 }} rotate={1.1}>
+    <Card label="THE COUNCIL" kicker="2 OF 3" style={{ left: 22, top: 126, width: 306, height: 252 }} rotate={-1.1}>
       <CouncilTable
         votes={votes}
         revealProgress={Math.min(1, progress * 1.4)}
-        width={342}
-        height={188}
+        width={288}
+        height={186}
         frame={frame}
         fps={fps}
         style={{ position: 'absolute', left: 9, top: 4 }}
       />
-      <BottomLabel>YES · YES · ABSTAIN — NO AI PAYMENT AUTHORITY</BottomLabel>
+      <BottomLabel>YES · YES · ABSTAIN · NO AI VOTE</BottomLabel>
     </Card>
   );
 };
@@ -195,18 +195,18 @@ const BidderCast: React.FC<{ scene: V3Scene }> = ({ scene }) => {
   const { fps } = useVideoConfig();
   const progress = Math.min(1, frame / Math.max(1, scene.sceneDuration * fps));
   return (
-    <Card label="THE BIDDERS" kicker="SEALED" style={{ right: 22, bottom: 214, width: 380, height: 238 }} rotate={-0.8}>
+    <Card label="THE BIDDERS" kicker="SEALED" style={{ left: 22, bottom: 214, width: 306, height: 238 }} rotate={0.8}>
       <BidderRow
         revealed={Math.min(1, progress * 1.5)}
         winner={progress > 0.5 ? 'B' : null}
         bids={{ A: 2873, B: 9270, C: 5200 }}
-        width={362}
-        height={180}
+        width={288}
+        height={190}
         frame={frame}
         fps={fps}
         style={{ position: 'absolute', left: 8, top: 6 }}
       />
-      <BottomLabel>B 9,270 · VALUE WINNER · NOT LOWEST STICKER</BottomLabel>
+      <BottomLabel>B 9,270 · VALUE WINNER</BottomLabel>
     </Card>
   );
 };

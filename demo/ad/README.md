@@ -7,7 +7,7 @@ as history; see [History](#history).
 ## Current cut: v3 (2:32.40)
 
 - `out/mend-ad-v3-master.mp4` — v3 master: 1920×1080, 30fps, H.264/AAC,
-  48 kHz stereo, 2:32.40, 59 MB. See [Render verification](#render-verification).
+  48 kHz stereo, 2:32.40, 60 MB. See [Render verification](#render-verification).
 - Composition `MendAdV3`, built from `script-v3.json`.
 - Full-bleed live app for the whole product tour, with animated paper-cut cast
   dioramas overlaid in the app margins and tech-stack callouts inside each beat (Next.js/React, Fastify/Postgres, NEAR AI, Rust on NEAR, Sputnik DAO,
@@ -15,7 +15,7 @@ as history; see [History](#history).
 - One continuous voice/music/SFX bed.
 - Live interactions: report, steward award, bid reveal, inspector accept,
   payment/accounting, passport and tech.
-- Close: paper-cut Sam + stick-figure Neighbor and a labelled QR placeholder.
+- Close: paper-cut Sam + stick-figure Neighbor and a **real QR to https://mend-demo.vercel.app**.
   The v2 5:00 cast cut remains in the v2 history.
 
 ## Render v3
@@ -63,11 +63,11 @@ v3 reuses the proven v1 render. Do not describe it as a new v3 voice.
 Final v3 master rendered 2026-11-14:
 
 - Duration 2:32.40 at 1920×1080, 30fps; H.264 video + AAC 48 kHz stereo audio;
-  59 MB.
-- Loudness `input_i −14.35 LUFS`, true peak `−1.30 dBTP`; no silence gap longer
-  than 1.2 s.
+  60 MB.
+- Loudness `input_i −14.16 LUFS`, true peak `−2.61 dBTP`; no silence gap longer
+  than 1.2 s; stereo L/R are balanced.
 - SHA-256
-  `9c9b0aae091d06e5b8c1b1df75c0f54fbe208ed517545ab6554d8a558a07a5d5`.
+  `a95a7aad6dfe05300182c30e605c1d3494eef899a7aeaaf214328a8d872f0626`.
 
 ## History
 
@@ -119,8 +119,8 @@ Render v1 with the `MendAd` composition, `script.json` and
 - The contracts, DAO vote, AI signature and Agent Market listing shown in the
   tech beat are real testnet/production evidence; the film says so.
 - The v3 voice is a trimmed v1 George bed, not a new voice.
-- The end-card QR is a placeholder until `siteUrl` is set in `script-v3.json` and
-  the close is re-rendered. No hosted demo is claimed.
+- The end-card QR is generated from `siteUrl` in `script-v3.json`; the current
+  `siteUrl` is https://mend-demo.vercel.app. Re-render the close only if that URL changes.
 - No transaction link is invented, no AI approval is claimed, and no city
   adoption is implied.
 
