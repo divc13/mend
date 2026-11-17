@@ -197,18 +197,6 @@ and on NEAR testnet. Statuses distinguish verified paths from human-gated ones.
 | `npm test` (all workspaces) | Protocol, AI, Intents, API, DB, indexer, agents and web build pass | PASS |
 | `bash scripts/verify.sh` | Full local verification including contracts and secret scan | PASS — 18 checks |
 
-### Still human-gated or unavailable
-
-| Do X | See Y | Status |
-|---|---|---|
-| Approve a tiny mainnet Intents deposit | Real mainnet execution with an explorer link | `BLOCKED_ON_HUMAN` — signed quote is `PENDING_DEPOSIT`; no funds moved |
-| Publish the repository | A public GitHub repository | `BLOCKED_ON_HUMAN` — currently private |
-| Post the demo on X | A public post tagging `@NEARProtocol` and `#NEARHackathon` | `BLOCKED_ON_HUMAN` — draft only |
-| Submit the event form | A confirmation from the event | `BLOCKED_ON_HUMAN` — no submission performed |
-| Collect real repair media | Consented before/repair/after/durability evidence | `NOT COLLECTED` — the film uses labelled illustrative stock |
-| Fully verify the NEAR AI or OutLayer TEE report | Intel DCAP/ITA chain and RTMR replay | `UNAVAILABLE` — signature valid, report not retained |
-| Gasless escrow funding | `ft_transfer_call` with no deposit | `UNAVAILABLE` — a function-call key cannot attach the 1 yoctoNEAR deposit |
-
 ### REPLAY with no credentials
 
 Status: `IMPLEMENTED — verified locally in REPLAY` (see
